@@ -632,13 +632,15 @@ class Pauling3and4(PaulingConnection):
     def get_connections(self):
         """
         Gives connections
-        :return:
+        :return: Outputdict with number of connections
         """
         OutputDict={}
         OutputDict['no']=self.PolyhedronDict['Not']
         OutputDict['corner']=self.PolyhedronDict['Corner']
         OutputDict['edge']=self.PolyhedronDict['Edge']
         OutputDict['face']=self.PolyhedronDict['Face']
+        return OutputDict
+
 
 class Pauling3(Pauling3and4):
     def is_fulfilled(self):

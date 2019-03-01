@@ -100,7 +100,7 @@ class Pauling3and4_Test(unittest.TestCase):
     """class to test Pauling3and4"""
     def setUp(self):
 
-        self.matlist = ["mp-7000.json"]
+        self.matlist = ["mp-7000.json","mp-19418.json"]
         self.lse_dict = {}
         for mat in self.matlist:
             with open(mat, "r") as f:
@@ -111,10 +111,14 @@ class Pauling3and4_Test(unittest.TestCase):
         self.pauling3and4_dist1.newsetup(self.lse_dict["mp-7000.json"],save_to_file=False,filename=False,distance=4.5)
         self.pauling3and4_dist2 = Pauling3and4()
         self.pauling3and4_dist2.newsetup(self.lse_dict["mp-7000.json"],save_to_file=False,filename=False)
+        self.pauling3and4_dict3=Pauling3and4()
+        self.pauling3and4_dict3.newsetup(self.lse_dict["mp-19418.json"],save_to_file=False,filename=False,distance=4)
 
-    def test(self):
-        pass
 
+    def test_get_connections(self):
+        self.assertDictEqual(self.pauling3and4_dist1.get_connections(),{'no': 6, 'corner': 6, 'edge': 0, 'face': 0})
+        self.assertDictEqual(self.pauling3and4_dist2.get_connections(),{'no': 84, 'corner': 6, 'edge': 0, 'face': 0})
+        self.assertDictEqual(self.pauling3and4_dict3.get_connections(),{'no': 2, 'corner': 12, 'edge': 2, 'face': 0})
 
 
 
