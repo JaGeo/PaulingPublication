@@ -359,10 +359,8 @@ class PaulingConnection():
 class Pauling3and4(PaulingConnection):
     def __init__(self):
         pass
-        # get distance by a parameter
-        # self._newsetup(lse=lse, mat=filename, save=save_to_file, foldername=foldername)
 
-    def newsetup(self, lse, filename, save_to_file=True, foldername='ThirdRuleAnalysisConnections', distance=8.0):
+    def newsetup(self, lse, filename=None, save_to_file=True, foldername='ThirdRuleAnalysisConnections', distance=8.0):
         """
             :param lse: LightStructureEnvironment
             :param save_to_file: Boolean
@@ -371,6 +369,8 @@ class Pauling3and4(PaulingConnection):
             :param distance: float giving the distances of cations that is considered
         """
         super().__init__(DISTANCE=distance)
+        if filename is None:
+            save_to_file == False
         if save_to_file:
             if not os.path.isdir(foldername):
                 os.mkdir(foldername)
@@ -384,7 +384,7 @@ class Pauling3and4(PaulingConnection):
             pairedsites = self._get_pairedsites(allsites, DISTANCE)
             self.PolyhedronDict = self._get_connections(pairedsites, lse, DISTANCE)
             if save_to_file:
-                with open(os.join(foldername, self.mat + '.json'), 'w') as file:
+                with open(os.path.join(foldername, self.mat + '.json'), 'w') as file:
                     json.dump(self.PolyhedronDict, file)
 
     def fromfile(self, filename, foldername='ThirdRuleAnalysisConnections'):
@@ -392,6 +392,49 @@ class Pauling3and4(PaulingConnection):
         self.mat = filename
         with open(foldername + '/' + mat + '.json') as file:
             self.PolyhedronDict = json.load(file)
+
+    def _test_fulfillment(self, maxCN=None):
+        """
+        internal class to test fulfillment of rule
+        :param maxCN:
+        :return: returns connections as a dict
+        """
+        inputdict = self.PolyhedronDict
+        if self.DISTANCE != inputdict['MaxDistance']:
+            raise ValueError
+
+        additionalinfo = inputdict['Additional']
+        herepolyhedra = inputdict['PolyConnect']
+
+        not_connected = 0
+        corner = 0
+        edge = 0
+        face = 0
+        numberpolyhedra = 0
+        for iinfo in additionalinfo:
+            if maxCN is None:
+                if herepolyhedra[numberpolyhedra] == 0:
+                    not_connected += 1
+                if herepolyhedra[numberpolyhedra] == 1:
+                    corner += 1
+                if herepolyhedra[numberpolyhedra] == 2:
+                    edge += 1
+                if herepolyhedra[numberpolyhedra] >= 3:
+                    face += 1
+            else:
+                if (iinfo['CN'][0] <= maxCN) and (iinfo['CN'][1] <= maxCN):
+                    if herepolyhedra[numberpolyhedra] == 0:
+                        not_connected += 1
+                    if herepolyhedra[numberpolyhedra] == 1:
+                        corner += 1
+                    if herepolyhedra[numberpolyhedra] == 2:
+                        edge += 1
+                    if herepolyhedra[numberpolyhedra] >= 3:
+                        face += 1
+
+            numberpolyhedra += 1
+
+        return {"no": not_connected, "corner": corner, "edge": edge, "face": face}
 
     def _get_number_connected_oxygens_and_CN(self, index, index2, sitetupel, lse):
         """
@@ -611,17 +654,18 @@ class Pauling3and4(PaulingConnection):
                 coords = site.frac_coords
 
                 # get number of cells that have to be considered to find neighbors with a CERTAIN distance
-                ceila = int(np.ceil(DISTANCE / struct.lattice.a))
-                ceilb = int(np.ceil(DISTANCE / struct.lattice.b))
-                ceilc = int(np.ceil(DISTANCE / struct.lattice.c))
+                # inspired by Lattice class in pymatgen.core.lattice
+                recp_len = np.array(struct.lattice.reciprocal_lattice.abc) / (2 * np.pi)
+                nmax = float(DISTANCE) * recp_len + 0.01
 
-                # +1 fore safety
-                # TODO: take one with
-                # could be done in a safer way
-                # TODO: do it safer!!!
-                for i in range(0, (ceila + 1)):
-                    for j in range(0, (ceilb + 1)):
-                        for k in range(0, ceilc + 1):
+                # +1 due to the fact that also neighbors of an atom on (1,1,1) have to be considered
+                ceila = int(np.ceil(nmax[0]) + 1)
+                ceilb = int(np.ceil(nmax[1]) + 1)
+                ceilc = int(np.ceil(nmax[2]) + 1)
+
+                for i in range(0, ceila):
+                    for j in range(0, ceilb):
+                        for k in range(0, ceilc):
                             addcoord = [float(i), float(j), float(k)]
                             newcoords = coords + addcoord
                             allsites.append(PeriodicSite(
@@ -629,387 +673,123 @@ class Pauling3and4(PaulingConnection):
 
         return allsites
 
-    def get_connections(self):
+    def get_connections(self, maximumCN=None):
         """
         Gives connections
         :return: Outputdict with number of connections
         """
-        OutputDict={}
-        OutputDict['no']=self.PolyhedronDict['Not']
-        OutputDict['corner']=self.PolyhedronDict['Corner']
-        OutputDict['edge']=self.PolyhedronDict['Edge']
-        OutputDict['face']=self.PolyhedronDict['Face']
+        OutputDict = self._test_fulfillment(maxCN=maximumCN)
         return OutputDict
 
 
 class Pauling3(Pauling3and4):
-    def is_fulfilled(self):
-        # TODO: Kritrien, die erfuellt sein muessen
-        # only connections via corner and edges, no face connections
-        pass
+    def is_fulfilled(self, maximumCN=None):
+        """
+        tells you if third rule is fulfilled (i.e. no connections via faces!)
+        :param maximumCN: gives the maximal CN of cations that are considered
+        :return:
+        """
+        connections = self._test_fulfillment(maxCN=maximumCN)
 
-    def get_details(self):
-        # get details on the evaluation
-        pass
+        if connections["face"] == 0:
+            return True
+        else:
+            return False
 
-    def postevaluation3rdrule(self, maxCN=None):
+    def get_details(self, maximumCN=None):
+        """
+        returns a dict that looks the following {"Element string": "Valence as an int": {"no": number1, "corner": number2, "edge": number3, "face" number4} indicating the connections.}
+        :param maximumCN: maximum CN that is considered
+        :return: Outputdict with information on the types of connetions of pairs of polyhedra and with information on the valences, species that are connected via corners, edges, and faces or not connected
+
+        """
+        Outputdict=self._postevaluation3rdrule_evaluate_elementdependency(maxCN=maximumCN)
+        seconddict=self._test_fulfillment(maxCN=maximumCN)
+        seconddict["species"]=Outputdict
+
+        return seconddict
+    def _postevaluation3rdrule_evaluate_elementdependency(self, maxCN=None):
+        """
+        evaluates element and valence dependency of connected pairs of polyhedra
+        :param maxCN:
+        :return: a Outputdict that will be evaluated by other methods
+        """
         inputdict = self.PolyhedronDict
         if self.DISTANCE != inputdict['MaxDistance']:
             raise ValueError
 
         additionalinfo = inputdict['Additional']
         herepolyhedra = inputdict['PolyConnect']
-
-        allPolyhedra = len(herepolyhedra)
-        Polyhedra_notconnected = len([x for x in herepolyhedra if x == 0])
-        Polyhedra_corner = len([x for x in herepolyhedra if x == 1])
-        Polyhedra_edge = len([x for x in herepolyhedra if x == 2])
-        Polyhedra_face = len([x for x in herepolyhedra if x >= 3])
-
-        nocoulomb = []
-        cornercoulomb = []
-        edgecoulomb = []
-        facecoulomb = []
-        nodistances = []
-        cornerdistances = []
-        edgedistances = []
-        facedistances = []
-
-        highvalence_notconnected = 0
-        highvalence_corner = 0
-        highvalence_edge = 0
-        highvalence_face = 0
-        lowvalence_notconnected = 0
-        lowvalence_corner = 0
-        lowvalence_edge = 0
-        lowvalence_face = 0
-
-        numberpolyhedra = 0
-        for iinfo in additionalinfo:
-            if ((iinfo['valences'][0] * iinfo['valences'][1] > 4) and (iinfo['CN'][0] * iinfo['CN'][1] < 36)):
-
-                if herepolyhedra[numberpolyhedra] == 0:
-                    highvalence_notconnected = highvalence_notconnected + 1
-                    nocoulomb.append(
-                        iinfo['valences'][0] * iinfo['valences'][1] / iinfo['distance'])
-                    nodistances.append(iinfo['distance'])
-                elif herepolyhedra[numberpolyhedra] == 1:
-                    highvalence_corner = highvalence_corner + 1
-                    cornercoulomb.append(
-                        iinfo['valences'][0] * iinfo['valences'][1] / iinfo['distance'])
-                    cornerdistances.append(iinfo['distance'])
-                elif herepolyhedra[numberpolyhedra] == 2:
-                    highvalence_edge = highvalence_edge + 1
-                    edgecoulomb.append(
-                        iinfo['valences'][0] * iinfo['valences'][1] / iinfo['distance'])
-                    edgedistances.append(iinfo['distance'])
-                elif herepolyhedra[numberpolyhedra] > 2:
-                    highvalence_face = highvalence_face + 1
-                    facecoulomb.append(
-                        iinfo['valences'][0] * iinfo['valences'][1] / iinfo['distance'])
-                    facedistances.append(iinfo['distance'])
-            else:
-                if herepolyhedra[numberpolyhedra] == 0:
-                    lowvalence_notconnected = lowvalence_notconnected + 1
-                    nocoulomb.append(
-                        iinfo['valences'][0] * iinfo['valences'][1] / iinfo['distance'])
-                    nodistances.append(iinfo['distance'])
-                elif herepolyhedra[numberpolyhedra] == 1:
-                    lowvalence_corner = lowvalence_corner + 1
-                    cornercoulomb.append(
-                        iinfo['valences'][0] * iinfo['valences'][1] / iinfo['distance'])
-                    cornerdistances.append(iinfo['distance'])
-                elif herepolyhedra[numberpolyhedra] == 2:
-                    lowvalence_edge = lowvalence_edge + 1
-                    edgecoulomb.append(
-                        iinfo['valences'][0] * iinfo['valences'][1] / iinfo['distance'])
-                    edgedistances.append(iinfo['distance'])
-                elif herepolyhedra[numberpolyhedra] > 2:
-                    lowvalence_face = lowvalence_face + 1
-                    facecoulomb.append(
-                        iinfo['valences'][0] * iinfo['valences'][1] / iinfo['distance'])
-                    facedistances.append(iinfo['distance'])
-            numberpolyhedra = numberpolyhedra + 1
-
-        if maxCN is not None:
-            max_CN_all = 0
-            maxCN_notconnected = 0
-            maxCN_corner = 0
-            maxCN_edge = 0
-            maxCN_face = 0
-            numberpolyhedra = 0
-            for iinfo in additionalinfo:
-                if (iinfo['CN'][0] <= 8 and iinfo['CN'][1] <= 8):
-
-                    max_CN_all = max_CN_all + 1
-
-                    if herepolyhedra[numberpolyhedra] == 0:
-                        maxCN_notconnected = maxCN_notconnected + 1
-
-                    elif herepolyhedra[numberpolyhedra] == 1:
-                        maxCN_corner = maxCN_corner + 1
-
-                    elif herepolyhedra[numberpolyhedra] == 2:
-                        maxCN_edge = maxCN_edge + 1
-
-                    elif herepolyhedra[numberpolyhedra] > 2:
-                        maxCN_face = maxCN_face + 1
-
-                numberpolyhedra = numberpolyhedra + 1
-
-        Thirdruledict = {}
-        Thirdruledict['Polyhedra Pairs'] = allPolyhedra
-        Thirdruledict['not connected'] = Polyhedra_notconnected
-        Thirdruledict['corner sharing'] = Polyhedra_corner
-        Thirdruledict['edge sharing'] = Polyhedra_edge
-        Thirdruledict['face sharing'] = Polyhedra_face
-        Thirdruledict['high valence not connected'] = highvalence_notconnected
-        Thirdruledict['high valence corner sharing'] = highvalence_corner
-        Thirdruledict['high valence edge sharing'] = highvalence_edge
-        Thirdruledict['high valence face sharing'] = highvalence_face
-        Thirdruledict['low valence not connected'] = lowvalence_notconnected
-        Thirdruledict['low valence corner sharing'] = lowvalence_corner
-        Thirdruledict['low valence edge sharing'] = lowvalence_edge
-        Thirdruledict['low valence face sharing'] = lowvalence_face
-        Thirdruledict['q1q2/r12 not connected'] = nocoulomb
-        Thirdruledict['q1q2/r12 corner sharing'] = cornercoulomb
-        Thirdruledict['q1q2/r12 edge sharing'] = edgecoulomb
-        Thirdruledict['q1q2/r12 face sharing'] = facecoulomb
-        Thirdruledict['distances not connected'] = nodistances
-        Thirdruledict['distances corner sharing'] = cornerdistances
-        Thirdruledict['distances edge sharing'] = edgedistances
-        Thirdruledict['distances face sharing'] = facedistances
-
-        if maxCN is not None:
-            Thirdruledict['Polyhedra Pairs maxCN'] = max_CN_all
-            Thirdruledict['not connected maxCN'] = maxCN_notconnected
-            Thirdruledict['corner sharing maxCN'] = maxCN_corner
-            Thirdruledict['edge sharing maxCN'] = maxCN_edge
-            Thirdruledict['face sharing maxCN'] = maxCN_face
-
-        return Thirdruledict
-
-    def postevaluation3rdrule_valenceandCNdependend(self, LowerLimitValence=4, UpperLimitCN=36):
-        inputdict = self.PolyhedronDict
-        if self.DISTANCE != inputdict['MaxDistance']:
-            raise ValueError
-
-        additionalinfo = inputdict['Additional']
-        herepolyhedra = inputdict['PolyConnect']
-
-        highvalence_notconnected = 0
-        highvalence_corner = 0
-        highvalence_edge = 0
-        highvalence_face = 0
-        lowvalence_notconnected = 0
-        lowvalence_corner = 0
-        lowvalence_edge = 0
-        lowvalence_face = 0
-
-        numberpolyhedra = 0
-        for iinfo in additionalinfo:
-            if ((iinfo['valences'][0] * iinfo['valences'][1] > LowerLimitValence) and (
-                    iinfo['CN'][0] * iinfo['CN'][1] < UpperLimitCN)):
-
-                if herepolyhedra[numberpolyhedra] == 0:
-                    highvalence_notconnected = highvalence_notconnected + 1
-
-                elif herepolyhedra[numberpolyhedra] == 1:
-                    highvalence_corner = highvalence_corner + 1
-
-                elif herepolyhedra[numberpolyhedra] == 2:
-                    highvalence_edge = highvalence_edge + 1
-
-                elif herepolyhedra[numberpolyhedra] > 2:
-                    highvalence_face = highvalence_face + 1
-
-            else:
-                if herepolyhedra[numberpolyhedra] == 0:
-                    lowvalence_notconnected = lowvalence_notconnected + 1
-
-                elif herepolyhedra[numberpolyhedra] == 1:
-                    lowvalence_corner = lowvalence_corner + 1
-
-                elif herepolyhedra[numberpolyhedra] == 2:
-                    lowvalence_edge = lowvalence_edge + 1
-
-                elif herepolyhedra[numberpolyhedra] > 2:
-                    lowvalence_face = lowvalence_face + 1
-
-            numberpolyhedra = numberpolyhedra + 1
-
-        Thirdruledict = {}
-        Thirdruledict['high valence not connected'] = highvalence_notconnected
-        Thirdruledict['high valence corner sharing'] = highvalence_corner
-        Thirdruledict['high valence edge sharing'] = highvalence_edge
-        Thirdruledict['high valence face sharing'] = highvalence_face
-        Thirdruledict['low valence not connected'] = lowvalence_notconnected
-        Thirdruledict['low valence corner sharing'] = lowvalence_corner
-        Thirdruledict['low valence edge sharing'] = lowvalence_edge
-        Thirdruledict['low valence face sharing'] = lowvalence_face
-
-        return Thirdruledict
-
-    def postevaluation3rdrule_valenceandCNdependend_nogroups(self, ValenceProduct, CNProduct, maxCN=None):
-        inputdict = self.PolyhedronDict
-        if self.DISTANCE != inputdict['MaxDistance']:
-            raise ValueError
-
-        additionalinfo = inputdict['Additional']
-        herepolyhedra = inputdict['PolyConnect']
-
-        notconnected = 0
-        corner = 0
-        edge = 0
-        face = 0
 
         # Dict that includes cations sharing no connections, corners, edges, and faces
         # This can be used to evaluate the results per polyhedron pair
         Dict_ElementDependency = {}
-
-        numberpolyhedra = 0
-        for iinfo in additionalinfo:
-            if maxCN is None:
-                if ((iinfo['valences'][0] * iinfo['valences'][1] == ValenceProduct) and (
-                        iinfo['CN'][0] * iinfo['CN'][1] == CNProduct)):
-                    # if iinfo['cations'][0] not in Dict_ElementDependency:
-                    #     Dict_ElementDependency[iinfo['cations'][0]]={'no':0,'corner':0,'edge':0,'face':0}
-                    #
-                    # if iinfo['cations'][1] not in Dict_ElementDependency:
-                    #     Dict_ElementDependency[iinfo['cations'][1]]={'no':0,'corner':0,'edge':0,'face':0}
-
-                    if herepolyhedra[numberpolyhedra] == 0:
-                        notconnected = notconnected + 1
-                        # Dict_ElementDependency[iinfo['cations'][0]]['no']+=1
-                        # Dict_ElementDependency[iinfo['cations'][1]]['no']+=1
-
-                    elif herepolyhedra[numberpolyhedra] == 1:
-                        corner = corner + 1
-                        # Dict_ElementDependency[iinfo['cations'][0]]['corner'] += 1
-                        # Dict_ElementDependency[iinfo['cations'][1]]['corner'] += 1
-
-
-                    elif herepolyhedra[numberpolyhedra] == 2:
-                        edge = edge + 1
-                        # Dict_ElementDependency[iinfo['cations'][0]]['edge'] += 1
-                        # Dict_ElementDependency[iinfo['cations'][1]]['edge'] += 1
-
-
-                    elif herepolyhedra[numberpolyhedra] > 2:
-                        face = face + 1
-                        # Dict_ElementDependency[iinfo['cations'][0]]['face'] += 1
-                        # Dict_ElementDependency[iinfo['cations'][1]]['face'] += 1
-
-            else:
-                if iinfo["CN"][0] <= maxCN and iinfo["CN"][1] <= maxCN:
-                    if ((iinfo['valences'][0] * iinfo['valences'][1] == ValenceProduct) and (
-                            iinfo['CN'][0] * iinfo['CN'][1] == CNProduct)):
-                        # if iinfo['cations'][0] not in Dict_ElementDependency:
-                        #     Dict_ElementDependency[iinfo['cations'][0]] = {'no':0,'corner':0,'edge':0,'face':0}
-                        # if iinfo['cations'][1] not in Dict_ElementDependency:
-                        #     Dict_ElementDependency[iinfo['cations'][1]] = {'no':0,'corner':0,'edge':0,'face':0}
-
-                        if herepolyhedra[numberpolyhedra] == 0:
-                            notconnected = notconnected + 1
-                            # Dict_ElementDependency[iinfo['cations'][0]]['no'] += 1
-                            # Dict_ElementDependency[iinfo['cations'][1]]['no'] += 1
-
-                        elif herepolyhedra[numberpolyhedra] == 1:
-                            corner = corner + 1
-                            # Dict_ElementDependency[iinfo['cations'][0]]['corner'] += 1
-                            # Dict_ElementDependency[iinfo['cations'][1]]['corner'] += 1
-
-
-                        elif herepolyhedra[numberpolyhedra] == 2:
-                            edge = edge + 1
-                            # Dict_ElementDependency[iinfo['cations'][0]]['edge'] += 1
-                            # Dict_ElementDependency[iinfo['cations'][1]]['edge'] += 1
-
-
-                        elif herepolyhedra[numberpolyhedra] > 2:
-                            face = face + 1
-                            # Dict_ElementDependency[iinfo['cations'][0]]['face'] += 1
-                            # Dict_ElementDependency[iinfo['cations'][1]]['face'] += 1
-
-            numberpolyhedra = numberpolyhedra + 1
-
-        Thirdruledict = {}
-        Thirdruledict['not connected'] = notconnected
-        Thirdruledict['corner sharing'] = corner
-        Thirdruledict['edge sharing'] = edge
-        Thirdruledict['face sharing'] = face
-        # Thirdruledict['ElementDependency']=Dict_ElementDependency
-
-        return Thirdruledict
-
-    def postevaluation3rdrule_evaluate_elementdependency(self, maxCN=None):
-        inputdict = self.PolyhedronDict
-        if self.DISTANCE != inputdict['MaxDistance']:
-            raise ValueError
-
-        additionalinfo = inputdict['Additional']
-        herepolyhedra = inputdict['PolyConnect']
-
-        # notconnected = 0
-        # corner = 0
-        # edge = 0
-        # face = 0
-
-        # Dict that includes cations sharing no connections, corners, edges, and faces
-        # This can be used to evaluate the results per polyhedron pair
-        Dict_ElementDependency = {}
-
         numberpolyhedra = 0
         for iinfo in additionalinfo:
             if maxCN is None:
                 if iinfo['cations'][0] not in Dict_ElementDependency:
-                    Dict_ElementDependency[iinfo['cations'][0]] = {'no': 0, 'corner': 0, 'edge': 0, 'face': 0}
-
+                    Dict_ElementDependency[iinfo['cations'][0]] = {}
                 if iinfo['cations'][1] not in Dict_ElementDependency:
-                    Dict_ElementDependency[iinfo['cations'][1]] = {'no': 0, 'corner': 0, 'edge': 0, 'face': 0}
+                    Dict_ElementDependency[iinfo['cations'][1]] = {}
+
+                if iinfo['valences'][0] not in Dict_ElementDependency[iinfo['cations'][0]]:
+                    Dict_ElementDependency[iinfo['cations'][0]][iinfo['valences'][0]] = {'no': 0, 'corner': 0,
+                                                                                         'edge': 0, 'face': 0}
+
+                if iinfo['valences'][1] not in Dict_ElementDependency[iinfo['cations'][1]]:
+                    Dict_ElementDependency[iinfo['cations'][1]][iinfo['valences'][1]] = {'no': 0, 'corner': 0,
+                                                                                         'edge': 0, 'face': 0}
 
                 if herepolyhedra[numberpolyhedra] == 0:
-                    Dict_ElementDependency[iinfo['cations'][0]]['no'] += 1
-                    Dict_ElementDependency[iinfo['cations'][1]]['no'] += 1
+                    Dict_ElementDependency[iinfo['cations'][0]][iinfo['valences'][0]]['no'] += 1
+                    Dict_ElementDependency[iinfo['cations'][1]][iinfo['valences'][1]]['no'] += 1
 
                 elif herepolyhedra[numberpolyhedra] == 1:
-                    Dict_ElementDependency[iinfo['cations'][0]]['corner'] += 1
-                    Dict_ElementDependency[iinfo['cations'][1]]['corner'] += 1
+                    Dict_ElementDependency[iinfo['cations'][0]][iinfo['valences'][0]]['corner'] += 1
+                    Dict_ElementDependency[iinfo['cations'][1]][iinfo['valences'][1]]['corner'] += 1
 
 
                 elif herepolyhedra[numberpolyhedra] == 2:
-                    Dict_ElementDependency[iinfo['cations'][0]]['edge'] += 1
-                    Dict_ElementDependency[iinfo['cations'][1]]['edge'] += 1
+                    Dict_ElementDependency[iinfo['cations'][0]][iinfo['valences'][0]]['edge'] += 1
+                    Dict_ElementDependency[iinfo['cations'][1]][iinfo['valences'][1]]['edge'] += 1
 
 
                 elif herepolyhedra[numberpolyhedra] > 2:
-                    Dict_ElementDependency[iinfo['cations'][0]]['face'] += 1
-                    Dict_ElementDependency[iinfo['cations'][1]]['face'] += 1
+                    Dict_ElementDependency[iinfo['cations'][0]][iinfo['valences'][0]]['face'] += 1
+                    Dict_ElementDependency[iinfo['cations'][1]][iinfo['valences'][1]]['face'] += 1
 
             else:
                 if iinfo["CN"][0] <= maxCN and iinfo["CN"][1] <= maxCN:
                     if iinfo['cations'][0] not in Dict_ElementDependency:
-                        Dict_ElementDependency[iinfo['cations'][0]] = {'no': 0, 'corner': 0, 'edge': 0, 'face': 0}
+                        Dict_ElementDependency[iinfo['cations'][0]] = {}
                     if iinfo['cations'][1] not in Dict_ElementDependency:
-                        Dict_ElementDependency[iinfo['cations'][1]] = {'no': 0, 'corner': 0, 'edge': 0, 'face': 0}
+                        Dict_ElementDependency[iinfo['cations'][1]] = {}
+
+                    if iinfo['valences'][0] not in Dict_ElementDependency[iinfo['cations'][0]]:
+                        Dict_ElementDependency[iinfo['cations'][0]][iinfo['valences'][0]] = {'no': 0, 'corner': 0,
+                                                                                             'edge': 0, 'face': 0}
+
+                    if iinfo['valences'][1] not in Dict_ElementDependency[iinfo['cations'][1]]:
+                        Dict_ElementDependency[iinfo['cations'][1]][iinfo['valences'][1]] = {'no': 0, 'corner': 0,
+                                                                                             'edge': 0, 'face': 0}
 
                     if herepolyhedra[numberpolyhedra] == 0:
-                        Dict_ElementDependency[iinfo['cations'][0]]['no'] += 1
-                        Dict_ElementDependency[iinfo['cations'][1]]['no'] += 1
+                        Dict_ElementDependency[iinfo['cations'][0]][iinfo['valences'][0]]['no'] += 1
+                        Dict_ElementDependency[iinfo['cations'][1]][iinfo['valences'][1]]['no'] += 1
 
                     elif herepolyhedra[numberpolyhedra] == 1:
-                        Dict_ElementDependency[iinfo['cations'][0]]['corner'] += 1
-                        Dict_ElementDependency[iinfo['cations'][1]]['corner'] += 1
+                        Dict_ElementDependency[iinfo['cations'][0]][iinfo['valences'][0]]['corner'] += 1
+                        Dict_ElementDependency[iinfo['cations'][1]][iinfo['valences'][1]]['corner'] += 1
 
 
                     elif herepolyhedra[numberpolyhedra] == 2:
-                        Dict_ElementDependency[iinfo['cations'][0]]['edge'] += 1
-                        Dict_ElementDependency[iinfo['cations'][1]]['edge'] += 1
+                        Dict_ElementDependency[iinfo['cations'][0]][iinfo['valences'][0]]['edge'] += 1
+                        Dict_ElementDependency[iinfo['cations'][1]][iinfo['valences'][1]]['edge'] += 1
 
 
                     elif herepolyhedra[numberpolyhedra] > 2:
-                        Dict_ElementDependency[iinfo['cations'][0]]['face'] += 1
-                        Dict_ElementDependency[iinfo['cations'][1]]['face'] += 1
+                        Dict_ElementDependency[iinfo['cations'][0]][iinfo['valences'][0]]['face'] += 1
+                        Dict_ElementDependency[iinfo['cations'][1]][iinfo['valences'][1]]['face'] += 1
 
             numberpolyhedra = numberpolyhedra + 1
 
@@ -1017,210 +797,157 @@ class Pauling3(Pauling3and4):
 
 
 class Pauling4(Pauling3and4):
-    def postevaluation4thrule(self):
-        inputdict = self.PolyhedronDict
-
-        if self.DISTANCE != inputdict['MaxDistance']:
+    def is_fulfilled(self):
+        """
+        tells you if polyhedra of cations with highest valence and smallest CN don't show any connections within the structure
+        structure has to have cations with different valences and coordination numbers
+        :return: Boolean
+        :raises: ValueError if structure cannot will be accessed for this test (no cation that differ in valence and CN)
+        """
+        if not self._is_candidate_4thrule():
             raise ValueError
 
-        additionalinfo = inputdict['Additional']
-        herepolyhedra = inputdict['PolyConnect']
-        cationvalences = inputdict['cationvalences']
-        samevalences = inputdict['samevalences']
-        CNlist = inputdict['CNlist']
-        sameCN = inputdict['sameCN']
+        maxval = max(self.PolyhedronDict['cationvalences'])
+        minCN = min(self.PolyhedronDict['CNlist'])
+        print(maxval)
+        print(minCN)
 
-        PaulingRuleCanBeTested = False
-
-        #
-        if (not samevalences) or (not sameCN):
-
-            print(cationvalences)
-            print(CNlist)
-            maxCN = max(CNlist)
-            minCN = min(CNlist)
-            meanCN = (maxCN + minCN) / 2.0
-            print(meanCN)
-            maxVal = max(cationvalences)
-            minVal = min(cationvalences)
-            meanVal = (maxVal + minVal) / 2.0
-            print(meanVal)
-            smallnohere = 0
-            smallcornerhere = 0
-            smalledgehere = 0
-            smallfacehere = 0
-            numberpolyhedra = 0
-
-            for iinfo in additionalinfo:
-                if (iinfo['valences'][0] == maxVal and iinfo['CN'][0] == minCN) and (
-                        iinfo['valences'][1] == maxVal and iinfo['CN'][1] == minCN):
-
-                    if herepolyhedra[numberpolyhedra] == 0:
-                        smallnohere = smallnohere + 1
-                        print('no')
-                    elif herepolyhedra[numberpolyhedra] == 1:
-                        smallcornerhere = smallcornerhere + 1
-                        print('corner')
-                    elif herepolyhedra[numberpolyhedra] == 2:
-                        smalledgehere = smalledgehere + 1
-                        print('edge')
-                    elif herepolyhedra[numberpolyhedra] > 2:
-                        smallfacehere = smallfacehere + 1
-                        print('face')
-
-                numberpolyhedra = numberpolyhedra + 1
-
-            # save number of structures fulfilling the rule( that means only those with high coordition number and small valences built connections)
-            if smallcornerhere == 0 and smalledgehere == 0 and smallfacehere == 0:
-                Pauling4thruleokay = True
-                print('Pauling 4 okay')
-            else:
-                Pauling4thruleokay = False
-                print('Pauling 4 not okay')
-            PaulingRuleCanBeTested = True
-
-        FourthRuleDict = {}
-        if PaulingRuleCanBeTested:
-            FourthRuleDict['Can be tested'] = True
-            if Pauling4thruleokay:
-                FourthRuleDict['Positive Test'] = True
-            else:
-                FourthRuleDict['Positive Test'] = False
-
+        outputdict = self._postevaluation4thruleperpolyhedron_only_withoutproduct(minCN, minCN, maxval, maxval)
+        print(outputdict)
+        if outputdict['corner'] != 0 or outputdict['edge'] != 0 or outputdict['face'] != 0:
+            return False
         else:
-            FourthRuleDict['Can be tested'] = False
+            return True
 
-        return FourthRuleDict
-
-    def postevaluation4thruleperpolyhedron(self, CNlimit=36, valencelimit=4):
-        # TODO: include CNmax
-
-        inputdict = self.PolyhedronDict
-        if self.DISTANCE != inputdict['MaxDistance']:
+    def get_details(self):
+        """
+        gives you number of connections as a function of the coordination numbers and valences of the polyhedra pairs
+        :return: Dict of the following form: {"val1:valence1": {"val2:valence2": {"CN1:CN1": {"CN2:CN2": {"no": number1, "corner": number2, "edge": number3, "face" number4}}}}} indicating the connections depending on valences and CN
+        """
+        if not self._is_candidate_4thrule():
             raise ValueError
+
+        return self._postevaluation4thrule()
+
+    #what about element dependency?
+
+    def _is_candidate_4thrule(self):
+        inputdict = self.PolyhedronDict
+        samevalences = inputdict['samevalences']
+        sameCN = inputdict['sameCN']
+        if (not samevalences) or (not sameCN):
+            return True
+        else:
+            return False
+
+    # Add additional evaluation of 4th rule that does not depend on valence or CN product but on 2 valences, 2 CN
+    def _postevaluation4thrule(self):
+        """
+        :return: more information connected pairs of polyhedra
+        """
+        inputdict = self.PolyhedronDict
 
         additionalinfo = inputdict['Additional']
         herepolyhedra = inputdict['PolyConnect']
-
-        allPolyhedra = len(herepolyhedra)
-        Polyhedra_notconnected = len([x for x in herepolyhedra if x == 0])
-        Polyhedra_corner = len([x for x in herepolyhedra if x == 1])
-        Polyhedra_edge = len([x for x in herepolyhedra if x == 2])
-        Polyhedra_face = len([x for x in herepolyhedra if x >= 3])
-
         samevalences = inputdict['samevalences']
         sameCN = inputdict['sameCN']
 
-        #
-
-        nocoulomb = []
-        cornercoulomb = []
-        edgecoulomb = []
-        facecoulomb = []
-        nodistances = []
-        cornerdistances = []
-        edgedistances = []
-        facedistances = []
-
-        highvalence_notconnected = 0
-        highvalence_corner = 0
-        highvalence_edge = 0
-        highvalence_face = 0
-        lowvalence_notconnected = 0
-        lowvalence_corner = 0
-        lowvalence_edge = 0
-        lowvalence_face = 0
-
+        Outputdict = {}
         numberpolyhedra = 0
-        if (not samevalences) or (not sameCN):
-            # correctly evaluated?
+        #if (not samevalences) or (not sameCN):
+        for iinfo in additionalinfo:
+            # symmetry of valence and CN have to be considered
+            if not ("val1:" + str(iinfo['valences'][0])) in Outputdict:
+                Outputdict["val1:" + str(iinfo['valences'][0])] = {}
+            if not ("val1:" + str(iinfo['valences'][1])) in Outputdict:
+                Outputdict["val1:" + str(iinfo['valences'][1])] = {}
+            if not ("val2:" + str(iinfo['valences'][1])) in Outputdict["val1:" + str(iinfo['valences'][0])]:
+                Outputdict["val1:" + str(iinfo['valences'][0])]["val2:" + str(iinfo['valences'][1])] = {}
+            if not ("val2:" + str(iinfo['valences'][0])) in Outputdict["val1:" + str(iinfo['valences'][1])]:
+                Outputdict["val1:" + str(iinfo['valences'][1])]["val2:" + str(iinfo['valences'][0])] = {}
 
-            for iinfo in additionalinfo:
-                if ((iinfo['valences'][0] * iinfo['valences'][1] > valencelimit) and (
-                        iinfo['CN'][0] * iinfo['CN'][1] < CNlimit)):
+            if not ("CN1:" + str(iinfo['CN'][0])) in Outputdict["val1:" + str(iinfo['valences'][0])]["val2:" + str(iinfo['valences'][1])]:
+                Outputdict["val1:" + str(iinfo['valences'][0])]["val2:" + str(iinfo['valences'][1])]["CN1:" + str(iinfo['CN'][0])]={}
+            if not ("CN1:" + str(iinfo['CN'][0])) in Outputdict["val1:" + str(iinfo['valences'][1])]["val2:" + str(iinfo['valences'][0])]:
+                Outputdict["val1:" + str(iinfo['valences'][1])]["val2:" + str(iinfo['valences'][0])]["CN1:" + str(iinfo['CN'][0])]={}
+            if not ("CN1:" + str(iinfo['CN'][1])) in Outputdict["val1:" + str(iinfo['valences'][0])]["val2:" + str(iinfo['valences'][1])]:
+                Outputdict["val1:" + str(iinfo['valences'][0])]["val2:" + str(iinfo['valences'][1])]["CN1:" + str(iinfo['CN'][1])]={}
+            if not ("CN1:" + str(iinfo['CN'][1])) in Outputdict["val1:" + str(iinfo['valences'][1])]["val2:" + str(iinfo['valences'][0])]:
+                Outputdict["val1:" + str(iinfo['valences'][1])]["val2:" + str(iinfo['valences'][0])]["CN1:" + str(iinfo['CN'][1])]={}
 
-                    if herepolyhedra[numberpolyhedra] == 0:
-                        highvalence_notconnected = highvalence_notconnected + 1
-                        nocoulomb.append(
-                            iinfo['valences'][0] * iinfo['valences'][1] / iinfo['distance'])
-                        nodistances.append(iinfo['distance'])
-                    elif herepolyhedra[numberpolyhedra] == 1:
-                        highvalence_corner = highvalence_corner + 1
-                        cornercoulomb.append(
-                            iinfo['valences'][0] * iinfo['valences'][1] / iinfo['distance'])
-                        cornerdistances.append(iinfo['distance'])
-                    elif herepolyhedra[numberpolyhedra] == 2:
-                        highvalence_edge = highvalence_edge + 1
-                        edgecoulomb.append(
-                            iinfo['valences'][0] * iinfo['valences'][1] / iinfo['distance'])
-                        edgedistances.append(iinfo['distance'])
-                    elif herepolyhedra[numberpolyhedra] > 2:
-                        highvalence_face = highvalence_face + 1
-                        facecoulomb.append(
-                            iinfo['valences'][0] * iinfo['valences'][1] / iinfo['distance'])
-                        facedistances.append(iinfo['distance'])
-                else:
-                    if herepolyhedra[numberpolyhedra] == 0:
-                        lowvalence_notconnected = lowvalence_notconnected + 1
-                        nocoulomb.append(
-                            iinfo['valences'][0] * iinfo['valences'][1] / iinfo['distance'])
-                        nodistances.append(iinfo['distance'])
-                    elif herepolyhedra[numberpolyhedra] == 1:
-                        lowvalence_corner = lowvalence_corner + 1
-                        cornercoulomb.append(
-                            iinfo['valences'][0] * iinfo['valences'][1] / iinfo['distance'])
-                        cornerdistances.append(iinfo['distance'])
-                    elif herepolyhedra[numberpolyhedra] == 2:
-                        lowvalence_edge = lowvalence_edge + 1
-                        edgecoulomb.append(
-                            iinfo['valences'][0] * iinfo['valences'][1] / iinfo['distance'])
-                        edgedistances.append(iinfo['distance'])
-                    elif herepolyhedra[numberpolyhedra] > 2:
-                        lowvalence_face = lowvalence_face + 1
-                        facecoulomb.append(
-                            iinfo['valences'][0] * iinfo['valences'][1] / iinfo['distance'])
-                        facedistances.append(iinfo['distance'])
-                numberpolyhedra = numberpolyhedra + 1
+            if not ("CN2:" + str(iinfo['CN'][1])) in Outputdict["val1:" + str(iinfo['valences'][0])]["val2:" + str(iinfo['valences'][1])]["CN1:" + str(iinfo['CN'][0])]:
+                Outputdict["val1:" + str(iinfo['valences'][0])]["val2:" + str(iinfo['valences'][1])]["CN1:" + str(iinfo['CN'][0])]["CN2:" + str(iinfo['CN'][1])]={"no":0, "corner":0, "edge":0, "face":0}
+            if not ("CN2:" + str(iinfo['CN'][1])) in Outputdict["val1:" + str(iinfo['valences'][1])]["val2:" + str(iinfo['valences'][0])]["CN1:" + str(iinfo['CN'][0])]:
+                Outputdict["val1:" + str(iinfo['valences'][1])]["val2:" + str(iinfo['valences'][0])]["CN1:" + str(iinfo['CN'][0])]["CN2:" + str(iinfo['CN'][1])]={"no":0, "corner":0, "edge":0, "face":0}
+            if not ("CN2:" + str(iinfo['CN'][0])) in Outputdict["val1:" + str(iinfo['valences'][0])]["val2:" + str(iinfo['valences'][1])]["CN1:" + str(iinfo['CN'][1])]:
+                Outputdict["val1:" + str(iinfo['valences'][0])]["val2:" + str(iinfo['valences'][1])]["CN1:" + str(iinfo['CN'][1])]["CN2:" + str(iinfo['CN'][0])]={"no":0, "corner":0, "edge":0, "face":0}
+            if not ("CN2:" + str(iinfo['CN'][0])) in Outputdict["val1:" + str(iinfo['valences'][1])]["val2:" + str(iinfo['valences'][0])]["CN1:" + str(iinfo['CN'][1])]:
+                Outputdict["val1:" + str(iinfo['valences'][1])]["val2:" + str(iinfo['valences'][0])]["CN1:" + str(iinfo['CN'][1])]["CN2:" + str(iinfo['CN'][0])]={"no":0, "corner":0, "edge":0, "face":0}
 
-        Thirdruledict = {}
-        Thirdruledict['Polyhedra Pairs'] = allPolyhedra
-        Thirdruledict['not connected'] = Polyhedra_notconnected
-        Thirdruledict['corner sharing'] = Polyhedra_corner
-        Thirdruledict['edge sharing'] = Polyhedra_edge
-        Thirdruledict['face sharing'] = Polyhedra_face
-        Thirdruledict['high valence not connected'] = highvalence_notconnected
-        Thirdruledict['high valence corner sharing'] = highvalence_corner
-        Thirdruledict['high valence edge sharing'] = highvalence_edge
-        Thirdruledict['high valence face sharing'] = highvalence_face
-        Thirdruledict['low valence not connected'] = lowvalence_notconnected
-        Thirdruledict['low valence corner sharing'] = lowvalence_corner
-        Thirdruledict['low valence edge sharing'] = lowvalence_edge
-        Thirdruledict['low valence face sharing'] = lowvalence_face
-        Thirdruledict['q1q2/r12 not connected'] = nocoulomb
-        Thirdruledict['q1q2/r12 corner sharing'] = cornercoulomb
-        Thirdruledict['q1q2/r12 edge sharing'] = edgecoulomb
-        Thirdruledict['q1q2/r12 face sharing'] = facecoulomb
-        Thirdruledict['distances not connected'] = nodistances
-        Thirdruledict['distances corner sharing'] = cornerdistances
-        Thirdruledict['distances edge sharing'] = edgedistances
-        Thirdruledict['distances face sharing'] = facedistances
+            if herepolyhedra[numberpolyhedra] == 0:
+                Outputdict["val1:" + str(iinfo['valences'][0])]["val2:" + str(iinfo['valences'][1])]["CN1:" + str(iinfo['CN'][0])]["CN2:" + str(iinfo['CN'][1])]["no"]+=1
+                if not (iinfo['valences'][0]==iinfo['valences'][1]):
+                    Outputdict["val1:" + str(iinfo['valences'][1])]["val2:" + str(iinfo['valences'][0])]["CN1:" + str(iinfo['CN'][0])]["CN2:" + str(iinfo['CN'][1])]["no"]+=1
+                if not (iinfo['CN'][0]==iinfo['CN'][1]):
+                    Outputdict["val1:" + str(iinfo['valences'][0])]["val2:" + str(iinfo['valences'][1])]["CN1:" + str(iinfo['CN'][1])]["CN2:" + str(iinfo['CN'][0])]["no"]+=1
+                if not (iinfo['valences'][0]==iinfo['valences'][1]) or not (iinfo['CN'][0]==iinfo['CN'][1]):
+                    Outputdict["val1:" + str(iinfo['valences'][1])]["val2:" + str(iinfo['valences'][0])]["CN1:" + str(iinfo['CN'][1])]["CN2:" + str(iinfo['CN'][0])]["no"]+=1
+            elif herepolyhedra[numberpolyhedra] == 1:
+                Outputdict["val1:" + str(iinfo['valences'][0])]["val2:" + str(iinfo['valences'][1])][
+                    "CN1:" + str(iinfo['CN'][0])]["CN2:" + str(iinfo['CN'][1])]["corner"] += 1
+                if not (iinfo['valences'][0] == iinfo['valences'][1]):
+                    Outputdict["val1:" + str(iinfo['valences'][1])]["val2:" + str(iinfo['valences'][0])][
+                        "CN1:" + str(iinfo['CN'][0])]["CN2:" + str(iinfo['CN'][1])]["corner"] += 1
+                if not (iinfo['CN'][0] == iinfo['CN'][1]):
+                    Outputdict["val1:" + str(iinfo['valences'][0])]["val2:" + str(iinfo['valences'][1])][
+                        "CN1:" + str(iinfo['CN'][1])]["CN2:" + str(iinfo['CN'][0])]["corner"] += 1
+                if not (iinfo['valences'][0] == iinfo['valences'][1]) or not (iinfo['CN'][0] == iinfo['CN'][1]):
+                    Outputdict["val1:" + str(iinfo['valences'][1])]["val2:" + str(iinfo['valences'][0])][
+                        "CN1:" + str(iinfo['CN'][1])]["CN2:" + str(iinfo['CN'][0])]["corner"] += 1
 
-        return Thirdruledict
+            elif herepolyhedra[numberpolyhedra] == 2:
+                Outputdict["val1:" + str(iinfo['valences'][0])]["val2:" + str(iinfo['valences'][1])][
+                    "CN1:" + str(iinfo['CN'][0])]["CN2:" + str(iinfo['CN'][1])]["edge"] += 1
+                if not (iinfo['valences'][0] == iinfo['valences'][1]):
+                    Outputdict["val1:" + str(iinfo['valences'][1])]["val2:" + str(iinfo['valences'][0])][
+                        "CN1:" + str(iinfo['CN'][0])]["CN2:" + str(iinfo['CN'][1])]["edge"] += 1
+                if not (iinfo['CN'][0] == iinfo['CN'][1]):
+                    Outputdict["val1:" + str(iinfo['valences'][0])]["val2:" + str(iinfo['valences'][1])][
+                        "CN1:" + str(iinfo['CN'][1])]["CN2:" + str(iinfo['CN'][0])]["edge"] += 1
+                if not (iinfo['valences'][0] == iinfo['valences'][1]) or not (iinfo['CN'][0] == iinfo['CN'][1]):
+                    Outputdict["val1:" + str(iinfo['valences'][1])]["val2:" + str(iinfo['valences'][0])][
+                        "CN1:" + str(iinfo['CN'][1])]["CN2:" + str(iinfo['CN'][0])]["edge"] += 1
 
-    def postevaluation4thruleperpolyhedron_only(self, CNProduct, ValenceProduct):
+            elif herepolyhedra[numberpolyhedra] > 2:
+                Outputdict["val1:" + str(iinfo['valences'][0])]["val2:" + str(iinfo['valences'][1])][
+                    "CN1:" + str(iinfo['CN'][0])]["CN2:" + str(iinfo['CN'][1])]["face"] += 1
+                if not (info['valences'][0] == info['valences'][1]):
+                    Outputdict["val1:" + str(iinfo['valences'][1])]["val2:" + str(iinfo['valences'][0])][
+                        "CN1:" + str(iinfo['CN'][0])]["CN2:" + str(iinfo['CN'][1])]["face"] += 1
+                if not (info['CN'][0] == info['CN'][1]):
+                    Outputdict["val1:" + str(iinfo['valences'][0])]["val2:" + str(iinfo['valences'][1])][
+                        "CN1:" + str(iinfo['CN'][1])]["CN2:" + str(iinfo['CN'][0])]["face"] += 1
+                if not (info['valences'][0] == info['valences'][1]) or not (iinfo['CN'][0] == iinfo['CN'][1]):
+                    Outputdict["val1:" + str(iinfo['valences'][1])]["val2:" + str(iinfo['valences'][0])][
+                        "CN1:" + str(iinfo['CN'][1])]["CN2:" + str(iinfo['CN'][0])]["face"] += 1
+
+            numberpolyhedra = numberpolyhedra + 1
+
+        return Outputdict
+
+    def _postevaluation4thruleperpolyhedron_only_withoutproduct(self, CN1, CN2, val1, val2):
+        """
+        That is the one I used for the evaluation
+        :param CN1: CN1 of an atom in pair of polyhedra
+        :param CN2: CN2 of the other atom in pair of polyhedra
+        :param val1: valence 1 of an atom in pair of polyhedra
+        :param val2: valence 2 of an atom in pair of polyhedra
+        :return: more information connected pairs of polyhedra
+        """
         inputdict = self.PolyhedronDict
-        if self.DISTANCE != inputdict['MaxDistance']:
-            raise ValueError
 
         additionalinfo = inputdict['Additional']
         herepolyhedra = inputdict['PolyConnect']
-
-        allPolyhedra = len(herepolyhedra)
-        Polyhedra_notconnected = len([x for x in herepolyhedra if x == 0])
-        Polyhedra_corner = len([x for x in herepolyhedra if x == 1])
-        Polyhedra_edge = len([x for x in herepolyhedra if x == 2])
-        Polyhedra_face = len([x for x in herepolyhedra if x >= 3])
-
         samevalences = inputdict['samevalences']
         sameCN = inputdict['sameCN']
 
@@ -1230,14 +957,11 @@ class Pauling4(Pauling3and4):
         face = 0
 
         numberpolyhedra = 0
-        if (not samevalences) or (not sameCN):
-            # is this really okay like this?
-            # or should I evaluate not samevalences and not same CN seperately?
-
-            for iinfo in additionalinfo:
-                if ((iinfo['valences'][0] * iinfo['valences'][1] == ValenceProduct) and (
-                        iinfo['CN'][0] * iinfo['CN'][1] == CNProduct)):
-
+        for iinfo in additionalinfo:
+            if ((iinfo['valences'][0] == val1) and (iinfo['valences'][1] == val2)) or (
+                    (iinfo['valences'][1] == val1) and (iinfo['valences'][0] == val2)):
+                if ((iinfo['CN'][0] == CN1 and iinfo['CN'][1] == CN2) or (
+                        iinfo['CN'][0] == CN2 and iinfo['CN'][1] == CN1)):
                     if herepolyhedra[numberpolyhedra] == 0:
                         notconnected = notconnected + 1
                     elif herepolyhedra[numberpolyhedra] == 1:
@@ -1247,76 +971,13 @@ class Pauling4(Pauling3and4):
                     elif herepolyhedra[numberpolyhedra] > 2:
                         face = face + 1
 
-                numberpolyhedra = numberpolyhedra + 1
+            numberpolyhedra = numberpolyhedra + 1
 
         Thirdruledict = {}
-        Thirdruledict['Polyhedra Pairs'] = allPolyhedra
-        Thirdruledict['not connected'] = Polyhedra_notconnected
-        Thirdruledict['corner sharing'] = Polyhedra_corner
-        Thirdruledict['edge sharing'] = Polyhedra_edge
-        Thirdruledict['face sharing'] = Polyhedra_face
-        Thirdruledict['not connected'] = notconnected
-        Thirdruledict['corner sharing'] = corner
-        Thirdruledict['edge sharing'] = edge
-        Thirdruledict['face sharing'] = face
-
-        return Thirdruledict
-
-    # Add additional evaluation of 4th rule that does not depend on valence or CN product but on 2 valences, 2 CN
-    def postevaluation4thruleperpolyhedron_only_withoutproduct(self, CN1, CN2, val1, val2):
-        inputdict = self.PolyhedronDict
-        if self.DISTANCE != inputdict['MaxDistance']:
-            raise ValueError
-
-        additionalinfo = inputdict['Additional']
-        herepolyhedra = inputdict['PolyConnect']
-
-        allPolyhedra = len(herepolyhedra)
-        Polyhedra_notconnected = len([x for x in herepolyhedra if x == 0])
-        Polyhedra_corner = len([x for x in herepolyhedra if x == 1])
-        Polyhedra_edge = len([x for x in herepolyhedra if x == 2])
-        Polyhedra_face = len([x for x in herepolyhedra if x >= 3])
-
-        samevalences = inputdict['samevalences']
-        sameCN = inputdict['sameCN']
-
-        notconnected = 0
-        corner = 0
-        edge = 0
-        face = 0
-
-        numberpolyhedra = 0
-        if (not samevalences) or (not sameCN):
-            # is this really okay like this?
-            # or should I evaluate not samevalences and not same CN seperately?
-
-            for iinfo in additionalinfo:
-                # symmetry of valence
-                if ((iinfo['valences'][0] == val1) and (iinfo['valences'][1] == val2)) or (
-                        (iinfo['valences'][1] == val1) and (iinfo['valences'][0] == val2)):
-                    if ((iinfo['CN'][0] == CN1 and iinfo['CN'][1] == CN2) or (
-                            iinfo['CN'][0] == CN2 and iinfo['CN'][1] == CN1)):
-                        if herepolyhedra[numberpolyhedra] == 0:
-                            notconnected = notconnected + 1
-                        elif herepolyhedra[numberpolyhedra] == 1:
-                            corner = corner + 1
-                        elif herepolyhedra[numberpolyhedra] == 2:
-                            edge = edge + 1
-                        elif herepolyhedra[numberpolyhedra] > 2:
-                            face = face + 1
-
-                        numberpolyhedra = numberpolyhedra + 1
-
-        Thirdruledict = {}
-        Thirdruledict['Polyhedra Pairs'] = allPolyhedra
-        Thirdruledict['not connected'] = Polyhedra_notconnected
-        Thirdruledict['corner sharing'] = Polyhedra_corner
-        Thirdruledict['edge sharing'] = Polyhedra_edge
-        Thirdruledict['face sharing'] = Polyhedra_face
-        Thirdruledict['not connected'] = notconnected
-        Thirdruledict['corner sharing'] = corner
-        Thirdruledict['edge sharing'] = edge
-        Thirdruledict['face sharing'] = face
+        Thirdruledict['no'] = notconnected
+        Thirdruledict['corner'] = corner
+        Thirdruledict['edge'] = edge
+        Thirdruledict['face'] = face
 
         return Thirdruledict
 
