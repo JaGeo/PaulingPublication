@@ -14,11 +14,15 @@ pauling4.newsetup(lse=lse, save_to_file=False)
 
 #print(pauling4.is_fulfilled())
 #print(pauling4.get_details())
-print(pauling4._postevaluation4thrule())
-print(pauling4._postevaluation4thruleperpolyhedron_only_withoutproduct(6,6,1,3))
-print(pauling4._postevaluation4thruleperpolyhedron_only_withoutproduct(6,6,3,1))
-print(pauling4._postevaluation4thruleperpolyhedron_only_withoutproduct(6,6,1,1))
-print(pauling4._postevaluation4thruleperpolyhedron_only_withoutproduct(6,6,3,3))
+output=pauling4._postevaluation4thrule()
+
+for key,item in output['elementwise'].items():
+    for key2,item2 in item.items():
+        print(item2)
+#print(pauling4._postevaluation4thruleperpolyhedron_only_withoutproduct(6,6,1,3))
+#print(pauling4._postevaluation4thruleperpolyhedron_only_withoutproduct(6,6,3,1))
+#print(pauling4._postevaluation4thruleperpolyhedron_only_withoutproduct(6,6,1,1))
+#print(pauling4._postevaluation4thruleperpolyhedron_only_withoutproduct(6,6,3,3))
 #teste from file and to file again
 exit()
 # schoenes ausgabeformat überlegen

@@ -1,4 +1,4 @@
-from PaulingRules import Pauling1, Pauling2, PaulingConnection, Pauling3and4, Pauling3
+from PaulingRules import Pauling1, Pauling2, PaulingConnection, Pauling3and4, Pauling3,Pauling4
 from pymatgen.analysis.chemenv.coordination_environments.structure_environments import LightStructureEnvironments
 import unittest
 import json
@@ -171,21 +171,41 @@ class Pauling3_Test(unittest.TestCase):
 
 
 
-class Pauling3_Test(unittest.TestCase):
+class Pauling4_Test(unittest.TestCase):
     """class to test Pauling3"""
 
     def setUp(self):
-        pass
-        # self.matlist = ["mp-7000.json", "mp-5986.json"]
-        # self.lse_dict = {}
-        # self.Pauling_List = {}
-        # for mat in self.matlist:
-        #     with open(mat, "r") as f:
-        #         dict_lse = json.load(f)
-        #     lse = LightStructureEnvironments.from_dict(dict_lse)
-        #     self.lse_dict[mat] = lse
-        #     self.Pauling_List[mat] = Pauling3()
-        #     self.Pauling_List[mat].newsetup(lse=lse, save_to_file=False)
+        #test it for further candidates -> differing in CN, differing in val
+        self.matlist = ["mp-7000.json", "mp-19359.json","mp-1788.json"]
+        self.lse_dict = {}
+        self.Pauling_List = {}
+        for mat in self.matlist:
+            with open(mat, "r") as f:
+                dict_lse = json.load(f)
+            lse = LightStructureEnvironments.from_dict(dict_lse)
+            self.lse_dict[mat] = lse
+            self.Pauling_List[mat] = Pauling4()
+            self.Pauling_List[mat].newsetup(lse=lse, save_to_file=False)
+
+    def test_get_details(self):
+        firstdict=self.Pauling_List["mp-7000.json"]._postevaluation4thrule()
+        seconddict=self.Pauling_List["mp-7000.json"]._postevaluation4thruleperpolyhedron_only_withoutproduct(4,4,4,4)
+        self.assertDictEqual(firstdict["val1:4"]["val2:4"]["CN1:4"]["CN2:4"],seconddict)
+        self.assertEqual(firstdict["elementwise"]["Si"]["val1:4"]["val2:4"]["CN1:4"]["CN2:4"]["no"],seconddict["no"]*2)
+
+        thirddict=self.Pauling_List["mp-19359.json"]._postevaluation4thrule()
+        self.assertDictEqual(self.Pauling_List["mp-19359.json"]._postevaluation4thruleperpolyhedron_only_withoutproduct(6,6,1,3),self.Pauling_List["mp-19359.json"]._postevaluation4thruleperpolyhedron_only_withoutproduct(6,6,3,1))
+        self.assertDictEqual(thirddict["val1:1"]["val2:1"]["CN1:6"]["CN2:6"],self.Pauling_List["mp-19359.json"]._postevaluation4thruleperpolyhedron_only_withoutproduct(6,6,1,1))
+        self.assertDictEqual(thirddict["val1:1"]["val2:3"]["CN1:6"]["CN2:6"],self.Pauling_List["mp-19359.json"]._postevaluation4thruleperpolyhedron_only_withoutproduct(6,6,1,3))
+        self.assertDictEqual(thirddict["val1:3"]["val2:3"]["CN1:6"]["CN2:6"],self.Pauling_List["mp-19359.json"]._postevaluation4thruleperpolyhedron_only_withoutproduct(6,6,3,3))
+
+        fourthdict=self.Pauling_List["mp-1788.json"]._postevaluation4thrule()
+
+        self.assertDictEqual(fourthdict["val1:5"]["val2:5"]["CN1:4"]["CN2:4"],self.Pauling_List["mp-1788.json"]._postevaluation4thruleperpolyhedron_only_withoutproduct(4,4,5,5))
+        self.assertDictEqual(fourthdict["val1:5"]["val2:5"]["CN1:4"]["CN2:6"],self.Pauling_List["mp-1788.json"]._postevaluation4thruleperpolyhedron_only_withoutproduct(4,6,5,5))
+        self.assertDictEqual(fourthdict["val1:5"]["val2:5"]["CN1:6"]["CN2:6"],self.Pauling_List["mp-1788.json"]._postevaluation4thruleperpolyhedron_only_withoutproduct(6,6,5,5))
+        self.assertDictEqual(fourthdict["val1:5"]["val2:5"]["CN1:4"]["CN2:6"],
+        self.Pauling_List["mp-1788.json"]._postevaluation4thruleperpolyhedron_only_withoutproduct(4, 6, 5, 5))
 
 
 #

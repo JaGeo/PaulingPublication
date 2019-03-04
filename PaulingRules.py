@@ -827,6 +827,7 @@ class Pauling4(Pauling3and4):
         if not self._is_candidate_4thrule():
             raise ValueError
 
+        #would like to have element dependent stuff as well! similar to third rule -> maybe put it in Pauling3and4
         return self._postevaluation4thrule()
 
     #what about element dependency?
@@ -849,13 +850,227 @@ class Pauling4(Pauling3and4):
 
         additionalinfo = inputdict['Additional']
         herepolyhedra = inputdict['PolyConnect']
-        samevalences = inputdict['samevalences']
-        sameCN = inputdict['sameCN']
 
         Outputdict = {}
+        Elementwise={}
         numberpolyhedra = 0
-        #if (not samevalences) or (not sameCN):
         for iinfo in additionalinfo:
+
+            if not iinfo['cations'][0] in Elementwise:
+                Elementwise[iinfo['cations'][0]]={}
+            if not iinfo['cations'][1] in Elementwise:
+                Elementwise[iinfo['cations'][1]] = {}
+
+            
+            #here: consider elements:
+            # symmetry of valence and CN have to be considered
+            if not ("val1:" + str(iinfo['valences'][0])) in Elementwise[iinfo['cations'][0]]:
+                Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][0])] = {}
+            if not ("val1:" + str(iinfo['valences'][1])) in Elementwise[iinfo['cations'][0]]:
+                Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][1])] = {}
+            if not ("val2:" + str(iinfo['valences'][1])) in Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][0])]:
+                Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][0])]["val2:" + str(iinfo['valences'][1])] = {}
+            if not ("val2:" + str(iinfo['valences'][0])) in Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][1])]:
+                Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][1])]["val2:" + str(iinfo['valences'][0])] = {}
+
+            if not ("CN1:" + str(iinfo['CN'][0])) in Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][0])][
+                "val2:" + str(iinfo['valences'][1])]:
+                Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][0])]["val2:" + str(iinfo['valences'][1])][
+                    "CN1:" + str(iinfo['CN'][0])] = {}
+            if not ("CN1:" + str(iinfo['CN'][0])) in Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][1])][
+                "val2:" + str(iinfo['valences'][0])]:
+                Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][1])]["val2:" + str(iinfo['valences'][0])][
+                    "CN1:" + str(iinfo['CN'][0])] = {}
+            if not ("CN1:" + str(iinfo['CN'][1])) in Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][0])][
+                "val2:" + str(iinfo['valences'][1])]:
+                Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][0])]["val2:" + str(iinfo['valences'][1])][
+                    "CN1:" + str(iinfo['CN'][1])] = {}
+            if not ("CN1:" + str(iinfo['CN'][1])) in Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][1])][
+                "val2:" + str(iinfo['valences'][0])]:
+                Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][1])]["val2:" + str(iinfo['valences'][0])][
+                    "CN1:" + str(iinfo['CN'][1])] = {}
+
+            if not ("CN2:" + str(iinfo['CN'][1])) in \
+                   Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][0])]["val2:" + str(iinfo['valences'][1])][
+                       "CN1:" + str(iinfo['CN'][0])]:
+                Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][0])]["val2:" + str(iinfo['valences'][1])][
+                    "CN1:" + str(iinfo['CN'][0])]["CN2:" + str(iinfo['CN'][1])] = {"no": 0, "corner": 0, "edge": 0,
+                                                                                   "face": 0}
+            if not ("CN2:" + str(iinfo['CN'][1])) in \
+                   Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][1])]["val2:" + str(iinfo['valences'][0])][
+                       "CN1:" + str(iinfo['CN'][0])]:
+                Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][1])]["val2:" + str(iinfo['valences'][0])][
+                    "CN1:" + str(iinfo['CN'][0])]["CN2:" + str(iinfo['CN'][1])] = {"no": 0, "corner": 0, "edge": 0,
+                                                                                   "face": 0}
+            if not ("CN2:" + str(iinfo['CN'][0])) in \
+                   Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][0])]["val2:" + str(iinfo['valences'][1])][
+                       "CN1:" + str(iinfo['CN'][1])]:
+                Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][0])]["val2:" + str(iinfo['valences'][1])][
+                    "CN1:" + str(iinfo['CN'][1])]["CN2:" + str(iinfo['CN'][0])] = {"no": 0, "corner": 0, "edge": 0,
+                                                                                   "face": 0}
+            if not ("CN2:" + str(iinfo['CN'][0])) in \
+                   Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][1])]["val2:" + str(iinfo['valences'][0])][
+                       "CN1:" + str(iinfo['CN'][1])]:
+                Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][1])]["val2:" + str(iinfo['valences'][0])][
+                    "CN1:" + str(iinfo['CN'][1])]["CN2:" + str(iinfo['CN'][0])] = {"no": 0, "corner": 0, "edge": 0,
+                                                                                   "face": 0}
+
+            if herepolyhedra[numberpolyhedra] == 0:
+                Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][0])]["val2:" + str(iinfo['valences'][1])][
+                    "CN1:" + str(iinfo['CN'][0])]["CN2:" + str(iinfo['CN'][1])]["no"] += 1
+                if not (iinfo['valences'][0] == iinfo['valences'][1]):
+                    Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][1])]["val2:" + str(iinfo['valences'][0])][
+                        "CN1:" + str(iinfo['CN'][0])]["CN2:" + str(iinfo['CN'][1])]["no"] += 1
+                if not (iinfo['CN'][0] == iinfo['CN'][1]):
+                    Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][0])]["val2:" + str(iinfo['valences'][1])][
+                        "CN1:" + str(iinfo['CN'][1])]["CN2:" + str(iinfo['CN'][0])]["no"] += 1
+                if not (iinfo['valences'][0] == iinfo['valences'][1]) or not (iinfo['CN'][0] == iinfo['CN'][1]):
+                    Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][1])]["val2:" + str(iinfo['valences'][0])][
+                        "CN1:" + str(iinfo['CN'][1])]["CN2:" + str(iinfo['CN'][0])]["no"] += 1
+            elif herepolyhedra[numberpolyhedra] == 1:
+                Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][0])]["val2:" + str(iinfo['valences'][1])][
+                    "CN1:" + str(iinfo['CN'][0])]["CN2:" + str(iinfo['CN'][1])]["corner"] += 1
+                if not (iinfo['valences'][0] == iinfo['valences'][1]):
+                    Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][1])]["val2:" + str(iinfo['valences'][0])][
+                        "CN1:" + str(iinfo['CN'][0])]["CN2:" + str(iinfo['CN'][1])]["corner"] += 1
+                if not (iinfo['CN'][0] == iinfo['CN'][1]):
+                    Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][0])]["val2:" + str(iinfo['valences'][1])][
+                        "CN1:" + str(iinfo['CN'][1])]["CN2:" + str(iinfo['CN'][0])]["corner"] += 1
+                if not (iinfo['valences'][0] == iinfo['valences'][1]) or not (iinfo['CN'][0] == iinfo['CN'][1]):
+                    Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][1])]["val2:" + str(iinfo['valences'][0])][
+                        "CN1:" + str(iinfo['CN'][1])]["CN2:" + str(iinfo['CN'][0])]["corner"] += 1
+
+            elif herepolyhedra[numberpolyhedra] == 2:
+                Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][0])]["val2:" + str(iinfo['valences'][1])][
+                    "CN1:" + str(iinfo['CN'][0])]["CN2:" + str(iinfo['CN'][1])]["edge"] += 1
+                if not (iinfo['valences'][0] == iinfo['valences'][1]):
+                    Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][1])]["val2:" + str(iinfo['valences'][0])][
+                        "CN1:" + str(iinfo['CN'][0])]["CN2:" + str(iinfo['CN'][1])]["edge"] += 1
+                if not (iinfo['CN'][0] == iinfo['CN'][1]):
+                    Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][0])]["val2:" + str(iinfo['valences'][1])][
+                        "CN1:" + str(iinfo['CN'][1])]["CN2:" + str(iinfo['CN'][0])]["edge"] += 1
+                if not (iinfo['valences'][0] == iinfo['valences'][1]) or not (iinfo['CN'][0] == iinfo['CN'][1]):
+                    Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][1])]["val2:" + str(iinfo['valences'][0])][
+                        "CN1:" + str(iinfo['CN'][1])]["CN2:" + str(iinfo['CN'][0])]["edge"] += 1
+
+            elif herepolyhedra[numberpolyhedra] > 2:
+                Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][0])]["val2:" + str(iinfo['valences'][1])][
+                    "CN1:" + str(iinfo['CN'][0])]["CN2:" + str(iinfo['CN'][1])]["face"] += 1
+                if not (info['valences'][0] == info['valences'][1]):
+                    Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][1])]["val2:" + str(iinfo['valences'][0])][
+                        "CN1:" + str(iinfo['CN'][0])]["CN2:" + str(iinfo['CN'][1])]["face"] += 1
+                if not (info['CN'][0] == info['CN'][1]):
+                    Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][0])]["val2:" + str(iinfo['valences'][1])][
+                        "CN1:" + str(iinfo['CN'][1])]["CN2:" + str(iinfo['CN'][0])]["face"] += 1
+                if not (info['valences'][0] == info['valences'][1]) or not (iinfo['CN'][0] == iinfo['CN'][1]):
+                    Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][1])]["val2:" + str(iinfo['valences'][0])][
+                        "CN1:" + str(iinfo['CN'][1])]["CN2:" + str(iinfo['CN'][0])]["face"] += 1
+
+            #here: consider elements:
+            # symmetry of valence and CN have to be considered
+            if not ("val1:" + str(iinfo['valences'][0])) in Elementwise[iinfo['cations'][1]]:
+                Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][0])] = {}
+            if not ("val1:" + str(iinfo['valences'][1])) in Elementwise[iinfo['cations'][1]]:
+                Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][1])] = {}
+            if not ("val2:" + str(iinfo['valences'][1])) in Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][0])]:
+                Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][0])]["val2:" + str(iinfo['valences'][1])] = {}
+            if not ("val2:" + str(iinfo['valences'][0])) in Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][1])]:
+                Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][1])]["val2:" + str(iinfo['valences'][0])] = {}
+
+            if not ("CN1:" + str(iinfo['CN'][0])) in Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][0])][
+                "val2:" + str(iinfo['valences'][1])]:
+                Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][0])]["val2:" + str(iinfo['valences'][1])][
+                    "CN1:" + str(iinfo['CN'][0])] = {}
+            if not ("CN1:" + str(iinfo['CN'][0])) in Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][1])][
+                "val2:" + str(iinfo['valences'][0])]:
+                Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][1])]["val2:" + str(iinfo['valences'][0])][
+                    "CN1:" + str(iinfo['CN'][0])] = {}
+            if not ("CN1:" + str(iinfo['CN'][1])) in Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][0])][
+                "val2:" + str(iinfo['valences'][1])]:
+                Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][0])]["val2:" + str(iinfo['valences'][1])][
+                    "CN1:" + str(iinfo['CN'][1])] = {}
+            if not ("CN1:" + str(iinfo['CN'][1])) in Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][1])][
+                "val2:" + str(iinfo['valences'][0])]:
+                Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][1])]["val2:" + str(iinfo['valences'][0])][
+                    "CN1:" + str(iinfo['CN'][1])] = {}
+
+            if not ("CN2:" + str(iinfo['CN'][1])) in \
+                   Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][0])]["val2:" + str(iinfo['valences'][1])][
+                       "CN1:" + str(iinfo['CN'][0])]:
+                Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][0])]["val2:" + str(iinfo['valences'][1])][
+                    "CN1:" + str(iinfo['CN'][0])]["CN2:" + str(iinfo['CN'][1])] = {"no": 0, "corner": 0, "edge": 0,
+                                                                                   "face": 0}
+            if not ("CN2:" + str(iinfo['CN'][1])) in \
+                   Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][1])]["val2:" + str(iinfo['valences'][0])][
+                       "CN1:" + str(iinfo['CN'][0])]:
+                Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][1])]["val2:" + str(iinfo['valences'][0])][
+                    "CN1:" + str(iinfo['CN'][0])]["CN2:" + str(iinfo['CN'][1])] = {"no": 0, "corner": 0, "edge": 0,
+                                                                                   "face": 0}
+            if not ("CN2:" + str(iinfo['CN'][0])) in \
+                   Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][0])]["val2:" + str(iinfo['valences'][1])][
+                       "CN1:" + str(iinfo['CN'][1])]:
+                Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][0])]["val2:" + str(iinfo['valences'][1])][
+                    "CN1:" + str(iinfo['CN'][1])]["CN2:" + str(iinfo['CN'][0])] = {"no": 0, "corner": 0, "edge": 0,
+                                                                                   "face": 0}
+            if not ("CN2:" + str(iinfo['CN'][0])) in \
+                   Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][1])]["val2:" + str(iinfo['valences'][0])][
+                       "CN1:" + str(iinfo['CN'][1])]:
+                Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][1])]["val2:" + str(iinfo['valences'][0])][
+                    "CN1:" + str(iinfo['CN'][1])]["CN2:" + str(iinfo['CN'][0])] = {"no": 0, "corner": 0, "edge": 0,
+                                                                                   "face": 0}
+
+            if herepolyhedra[numberpolyhedra] == 0:
+                Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][0])]["val2:" + str(iinfo['valences'][1])][
+                    "CN1:" + str(iinfo['CN'][0])]["CN2:" + str(iinfo['CN'][1])]["no"] += 1
+                if not (iinfo['valences'][0] == iinfo['valences'][1]):
+                    Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][1])]["val2:" + str(iinfo['valences'][0])][
+                        "CN1:" + str(iinfo['CN'][0])]["CN2:" + str(iinfo['CN'][1])]["no"] += 1
+                if not (iinfo['CN'][0] == iinfo['CN'][1]):
+                    Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][0])]["val2:" + str(iinfo['valences'][1])][
+                        "CN1:" + str(iinfo['CN'][1])]["CN2:" + str(iinfo['CN'][0])]["no"] += 1
+                if not (iinfo['valences'][0] == iinfo['valences'][1]) or not (iinfo['CN'][0] == iinfo['CN'][1]):
+                    Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][1])]["val2:" + str(iinfo['valences'][0])][
+                        "CN1:" + str(iinfo['CN'][1])]["CN2:" + str(iinfo['CN'][0])]["no"] += 1
+            elif herepolyhedra[numberpolyhedra] == 1:
+                Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][0])]["val2:" + str(iinfo['valences'][1])][
+                    "CN1:" + str(iinfo['CN'][0])]["CN2:" + str(iinfo['CN'][1])]["corner"] += 1
+                if not (iinfo['valences'][0] == iinfo['valences'][1]):
+                    Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][1])]["val2:" + str(iinfo['valences'][0])][
+                        "CN1:" + str(iinfo['CN'][0])]["CN2:" + str(iinfo['CN'][1])]["corner"] += 1
+                if not (iinfo['CN'][0] == iinfo['CN'][1]):
+                    Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][0])]["val2:" + str(iinfo['valences'][1])][
+                        "CN1:" + str(iinfo['CN'][1])]["CN2:" + str(iinfo['CN'][0])]["corner"] += 1
+                if not (iinfo['valences'][0] == iinfo['valences'][1]) or not (iinfo['CN'][0] == iinfo['CN'][1]):
+                    Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][1])]["val2:" + str(iinfo['valences'][0])][
+                        "CN1:" + str(iinfo['CN'][1])]["CN2:" + str(iinfo['CN'][0])]["corner"] += 1
+
+            elif herepolyhedra[numberpolyhedra] == 2:
+                Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][0])]["val2:" + str(iinfo['valences'][1])][
+                    "CN1:" + str(iinfo['CN'][0])]["CN2:" + str(iinfo['CN'][1])]["edge"] += 1
+                if not (iinfo['valences'][0] == iinfo['valences'][1]):
+                    Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][1])]["val2:" + str(iinfo['valences'][0])][
+                        "CN1:" + str(iinfo['CN'][0])]["CN2:" + str(iinfo['CN'][1])]["edge"] += 1
+                if not (iinfo['CN'][0] == iinfo['CN'][1]):
+                    Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][0])]["val2:" + str(iinfo['valences'][1])][
+                        "CN1:" + str(iinfo['CN'][1])]["CN2:" + str(iinfo['CN'][0])]["edge"] += 1
+                if not (iinfo['valences'][0] == iinfo['valences'][1]) or not (iinfo['CN'][0] == iinfo['CN'][1]):
+                    Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][1])]["val2:" + str(iinfo['valences'][0])][
+                        "CN1:" + str(iinfo['CN'][1])]["CN2:" + str(iinfo['CN'][0])]["edge"] += 1
+
+            elif herepolyhedra[numberpolyhedra] > 2:
+                Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][0])]["val2:" + str(iinfo['valences'][1])][
+                    "CN1:" + str(iinfo['CN'][0])]["CN2:" + str(iinfo['CN'][1])]["face"] += 1
+                if not (info['valences'][0] == info['valences'][1]):
+                    Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][1])]["val2:" + str(iinfo['valences'][0])][
+                        "CN1:" + str(iinfo['CN'][0])]["CN2:" + str(iinfo['CN'][1])]["face"] += 1
+                if not (info['CN'][0] == info['CN'][1]):
+                    Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][0])]["val2:" + str(iinfo['valences'][1])][
+                        "CN1:" + str(iinfo['CN'][1])]["CN2:" + str(iinfo['CN'][0])]["face"] += 1
+                if not (info['valences'][0] == info['valences'][1]) or not (iinfo['CN'][0] == iinfo['CN'][1]):
+                    Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][1])]["val2:" + str(iinfo['valences'][0])][
+                        "CN1:" + str(iinfo['CN'][1])]["CN2:" + str(iinfo['CN'][0])]["face"] += 1
+
+
             # symmetry of valence and CN have to be considered
             if not ("val1:" + str(iinfo['valences'][0])) in Outputdict:
                 Outputdict["val1:" + str(iinfo['valences'][0])] = {}
@@ -932,6 +1147,8 @@ class Pauling4(Pauling3and4):
                         "CN1:" + str(iinfo['CN'][1])]["CN2:" + str(iinfo['CN'][0])]["face"] += 1
 
             numberpolyhedra = numberpolyhedra + 1
+
+        Outputdict['elementwise']=Elementwise
 
         return Outputdict
 
