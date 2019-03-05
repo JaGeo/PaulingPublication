@@ -1,21 +1,29 @@
 import json
-from pymatgen.core.periodic_table import Element
-from pymatgen.core.periodic_table import Specie
+import numpy as np
 from pymatgen.core import PeriodicSite
-import pymongo
-from pymatgen.ext.matproj import MPRester
-from pymatgen.analysis.magnetism.jahnteller import JahnTellerAnalyzer
-from pymatgen.core.structure import Structure
+import os
 
 
-# besserer aufbau der klassen?
-# init: enthaelt lse und wenige spezifikationen
-# get_details()
-# is_fulfilled()
+class RuleCannotBeAnalyzedError(Exception):
+    def __init__(self, value='The Rule cannot be analyzed'):
+        self.value = value
+
+    def __str__(self):
+        return repr(self.value)
+
+
+def is_an_oxide_and_no_env_for_O(lse):
+    for isite, site in enumerate(lse.structure):
+        if lse.valences[isite] < 0 and site.species_string != 'O':
+            raise ValueError("This is not an oxide. The assessment will be stopped.")
+    for isite, site_envs in enumerate(lse.coordination_environments):
+        if lse.structure[isite].species_string=='O':
+            if site_envs!=None:
+                raise ValueError("Site_envs of anions have been computed. The code has to stop. Use only_cations in compute_structure_environments")
+    return True
+
 
 class Pauling1:
-    # TODO: simplify class
-
     def __init__(self, lse, filenameradii="univalent_cat_radii.json", onlylowerlimit=False):
         """
         class to test Pauling's first rule
@@ -23,6 +31,8 @@ class Pauling1:
         :param filenameradii: name of the file containing radius ratios
         :param onlylowerlimit: If False, ratio windows are considered
         """
+        is_an_oxide_and_no_env_for_O(lse)
+
         # important parameters
         self.cat_list = {}
         self.cat_valence_list = {}
@@ -108,7 +118,7 @@ class Pauling1:
         raises TypeError if not all environments and cations can be considered
         """
         if self.no_env != 0 or self.no_cat != 0:
-            raise TypeError
+            raise RuleCannotBeAnalyzedError("The first rule cannot be evaluated.")
 
         if self.env_not == 0 and self.mat_pauling_fulfilled > 0:
             return True
@@ -201,6 +211,8 @@ class Pauling2:
         Class to test the electrostatic valence rule
         :param lse: LightStructureEnvironment
         """
+        is_an_oxide_and_no_env_for_O(lse)
+
         self.electrostatic_bond_strengths = {}
         for isite, site in enumerate(lse.structure):
             if lse.valences[isite] > 0:
@@ -368,6 +380,7 @@ class Pauling3and4(PaulingConnection):
             :param foldername: name of the folder
             :param distance: float giving the distances of cations that is considered
         """
+        is_an_oxide_and_no_env_for_O(lse)
         super().__init__(DISTANCE=distance)
         if filename is None:
             save_to_file == False
@@ -388,6 +401,8 @@ class Pauling3and4(PaulingConnection):
                     json.dump(self.PolyhedronDict, file)
 
     def fromfile(self, filename, foldername='ThirdRuleAnalysisConnections'):
+        #TODO: make the use of filename consistent!
+        #make sure you can use it like this
         # write it differently
         self.mat = filename
         with open(foldername + '/' + mat + '.json') as file:
@@ -400,9 +415,6 @@ class Pauling3and4(PaulingConnection):
         :return: returns connections as a dict
         """
         inputdict = self.PolyhedronDict
-        if self.DISTANCE != inputdict['MaxDistance']:
-            raise ValueError
-
         additionalinfo = inputdict['Additional']
         herepolyhedra = inputdict['PolyConnect']
 
@@ -703,11 +715,12 @@ class Pauling3(Pauling3and4):
         :return: Outputdict with information on the types of connetions of pairs of polyhedra and with information on the valences, species that are connected via corners, edges, and faces or not connected
 
         """
-        Outputdict=self._postevaluation3rdrule_evaluate_elementdependency(maxCN=maximumCN)
-        seconddict=self._test_fulfillment(maxCN=maximumCN)
-        seconddict["species"]=Outputdict
+        Outputdict = self._postevaluation3rdrule_evaluate_elementdependency(maxCN=maximumCN)
+        seconddict = self._test_fulfillment(maxCN=maximumCN)
+        seconddict["species"] = Outputdict
 
         return seconddict
+
     def _postevaluation3rdrule_evaluate_elementdependency(self, maxCN=None):
         """
         evaluates element and valence dependency of connected pairs of polyhedra
@@ -715,9 +728,6 @@ class Pauling3(Pauling3and4):
         :return: a Outputdict that will be evaluated by other methods
         """
         inputdict = self.PolyhedronDict
-        if self.DISTANCE != inputdict['MaxDistance']:
-            raise ValueError
-
         additionalinfo = inputdict['Additional']
         herepolyhedra = inputdict['PolyConnect']
 
@@ -802,18 +812,14 @@ class Pauling4(Pauling3and4):
         tells you if polyhedra of cations with highest valence and smallest CN don't show any connections within the structure
         structure has to have cations with different valences and coordination numbers
         :return: Boolean
-        :raises: ValueError if structure cannot will be accessed for this test (no cation that differ in valence and CN)
+        :raises: RuleCannotBeAnalyzedError if structure cannot will be accessed for this test (no cation that differ in valence and CN)
         """
         if not self._is_candidate_4thrule():
-            raise ValueError
+            raise RuleCannotBeAnalyzedError("The fourth rule cannot be evaluated")
 
         maxval = max(self.PolyhedronDict['cationvalences'])
         minCN = min(self.PolyhedronDict['CNlist'])
-        print(maxval)
-        print(minCN)
-
         outputdict = self._postevaluation4thruleperpolyhedron_only_withoutproduct(minCN, minCN, maxval, maxval)
-        print(outputdict)
         if outputdict['corner'] != 0 or outputdict['edge'] != 0 or outputdict['face'] != 0:
             return False
         else:
@@ -825,12 +831,8 @@ class Pauling4(Pauling3and4):
         :return: Dict of the following form: {"val1:valence1": {"val2:valence2": {"CN1:CN1": {"CN2:CN2": {"no": number1, "corner": number2, "edge": number3, "face" number4}}}}} indicating the connections depending on valences and CN
         """
         if not self._is_candidate_4thrule():
-            raise ValueError
-
-        #would like to have element dependent stuff as well! similar to third rule -> maybe put it in Pauling3and4
+            raise RuleCannotBeAnalyzedError()
         return self._postevaluation4thrule()
-
-    #what about element dependency?
 
     def _is_candidate_4thrule(self):
         inputdict = self.PolyhedronDict
@@ -852,224 +854,294 @@ class Pauling4(Pauling3and4):
         herepolyhedra = inputdict['PolyConnect']
 
         Outputdict = {}
-        Elementwise={}
+        Elementwise = {}
         numberpolyhedra = 0
         for iinfo in additionalinfo:
 
             if not iinfo['cations'][0] in Elementwise:
-                Elementwise[iinfo['cations'][0]]={}
+                Elementwise[iinfo['cations'][0]] = {}
             if not iinfo['cations'][1] in Elementwise:
                 Elementwise[iinfo['cations'][1]] = {}
 
-            
-            #here: consider elements:
+            # here: consider elements:
             # symmetry of valence and CN have to be considered
             if not ("val1:" + str(iinfo['valences'][0])) in Elementwise[iinfo['cations'][0]]:
                 Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][0])] = {}
             if not ("val1:" + str(iinfo['valences'][1])) in Elementwise[iinfo['cations'][0]]:
                 Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][1])] = {}
-            if not ("val2:" + str(iinfo['valences'][1])) in Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][0])]:
-                Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][0])]["val2:" + str(iinfo['valences'][1])] = {}
-            if not ("val2:" + str(iinfo['valences'][0])) in Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][1])]:
-                Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][1])]["val2:" + str(iinfo['valences'][0])] = {}
+            if not ("val2:" + str(iinfo['valences'][1])) in Elementwise[iinfo['cations'][0]][
+                "val1:" + str(iinfo['valences'][0])]:
+                Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][0])][
+                    "val2:" + str(iinfo['valences'][1])] = {}
+            if not ("val2:" + str(iinfo['valences'][0])) in Elementwise[iinfo['cations'][0]][
+                "val1:" + str(iinfo['valences'][1])]:
+                Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][1])][
+                    "val2:" + str(iinfo['valences'][0])] = {}
 
-            if not ("CN1:" + str(iinfo['CN'][0])) in Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][0])][
-                "val2:" + str(iinfo['valences'][1])]:
-                Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][0])]["val2:" + str(iinfo['valences'][1])][
+            if not ("CN1:" + str(iinfo['CN'][0])) in \
+                   Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][0])][
+                       "val2:" + str(iinfo['valences'][1])]:
+                Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][0])][
+                    "val2:" + str(iinfo['valences'][1])][
                     "CN1:" + str(iinfo['CN'][0])] = {}
-            if not ("CN1:" + str(iinfo['CN'][0])) in Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][1])][
-                "val2:" + str(iinfo['valences'][0])]:
-                Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][1])]["val2:" + str(iinfo['valences'][0])][
+            if not ("CN1:" + str(iinfo['CN'][0])) in \
+                   Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][1])][
+                       "val2:" + str(iinfo['valences'][0])]:
+                Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][1])][
+                    "val2:" + str(iinfo['valences'][0])][
                     "CN1:" + str(iinfo['CN'][0])] = {}
-            if not ("CN1:" + str(iinfo['CN'][1])) in Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][0])][
-                "val2:" + str(iinfo['valences'][1])]:
-                Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][0])]["val2:" + str(iinfo['valences'][1])][
+            if not ("CN1:" + str(iinfo['CN'][1])) in \
+                   Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][0])][
+                       "val2:" + str(iinfo['valences'][1])]:
+                Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][0])][
+                    "val2:" + str(iinfo['valences'][1])][
                     "CN1:" + str(iinfo['CN'][1])] = {}
-            if not ("CN1:" + str(iinfo['CN'][1])) in Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][1])][
-                "val2:" + str(iinfo['valences'][0])]:
-                Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][1])]["val2:" + str(iinfo['valences'][0])][
+            if not ("CN1:" + str(iinfo['CN'][1])) in \
+                   Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][1])][
+                       "val2:" + str(iinfo['valences'][0])]:
+                Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][1])][
+                    "val2:" + str(iinfo['valences'][0])][
                     "CN1:" + str(iinfo['CN'][1])] = {}
 
             if not ("CN2:" + str(iinfo['CN'][1])) in \
-                   Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][0])]["val2:" + str(iinfo['valences'][1])][
+                   Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][0])][
+                       "val2:" + str(iinfo['valences'][1])][
                        "CN1:" + str(iinfo['CN'][0])]:
-                Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][0])]["val2:" + str(iinfo['valences'][1])][
+                Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][0])][
+                    "val2:" + str(iinfo['valences'][1])][
                     "CN1:" + str(iinfo['CN'][0])]["CN2:" + str(iinfo['CN'][1])] = {"no": 0, "corner": 0, "edge": 0,
                                                                                    "face": 0}
             if not ("CN2:" + str(iinfo['CN'][1])) in \
-                   Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][1])]["val2:" + str(iinfo['valences'][0])][
+                   Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][1])][
+                       "val2:" + str(iinfo['valences'][0])][
                        "CN1:" + str(iinfo['CN'][0])]:
-                Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][1])]["val2:" + str(iinfo['valences'][0])][
+                Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][1])][
+                    "val2:" + str(iinfo['valences'][0])][
                     "CN1:" + str(iinfo['CN'][0])]["CN2:" + str(iinfo['CN'][1])] = {"no": 0, "corner": 0, "edge": 0,
                                                                                    "face": 0}
             if not ("CN2:" + str(iinfo['CN'][0])) in \
-                   Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][0])]["val2:" + str(iinfo['valences'][1])][
+                   Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][0])][
+                       "val2:" + str(iinfo['valences'][1])][
                        "CN1:" + str(iinfo['CN'][1])]:
-                Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][0])]["val2:" + str(iinfo['valences'][1])][
+                Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][0])][
+                    "val2:" + str(iinfo['valences'][1])][
                     "CN1:" + str(iinfo['CN'][1])]["CN2:" + str(iinfo['CN'][0])] = {"no": 0, "corner": 0, "edge": 0,
                                                                                    "face": 0}
             if not ("CN2:" + str(iinfo['CN'][0])) in \
-                   Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][1])]["val2:" + str(iinfo['valences'][0])][
+                   Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][1])][
+                       "val2:" + str(iinfo['valences'][0])][
                        "CN1:" + str(iinfo['CN'][1])]:
-                Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][1])]["val2:" + str(iinfo['valences'][0])][
+                Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][1])][
+                    "val2:" + str(iinfo['valences'][0])][
                     "CN1:" + str(iinfo['CN'][1])]["CN2:" + str(iinfo['CN'][0])] = {"no": 0, "corner": 0, "edge": 0,
                                                                                    "face": 0}
 
             if herepolyhedra[numberpolyhedra] == 0:
-                Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][0])]["val2:" + str(iinfo['valences'][1])][
+                Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][0])][
+                    "val2:" + str(iinfo['valences'][1])][
                     "CN1:" + str(iinfo['CN'][0])]["CN2:" + str(iinfo['CN'][1])]["no"] += 1
                 if not (iinfo['valences'][0] == iinfo['valences'][1]):
-                    Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][1])]["val2:" + str(iinfo['valences'][0])][
+                    Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][1])][
+                        "val2:" + str(iinfo['valences'][0])][
                         "CN1:" + str(iinfo['CN'][0])]["CN2:" + str(iinfo['CN'][1])]["no"] += 1
                 if not (iinfo['CN'][0] == iinfo['CN'][1]):
-                    Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][0])]["val2:" + str(iinfo['valences'][1])][
+                    Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][0])][
+                        "val2:" + str(iinfo['valences'][1])][
                         "CN1:" + str(iinfo['CN'][1])]["CN2:" + str(iinfo['CN'][0])]["no"] += 1
                 if not (iinfo['valences'][0] == iinfo['valences'][1]) or not (iinfo['CN'][0] == iinfo['CN'][1]):
-                    Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][1])]["val2:" + str(iinfo['valences'][0])][
+                    Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][1])][
+                        "val2:" + str(iinfo['valences'][0])][
                         "CN1:" + str(iinfo['CN'][1])]["CN2:" + str(iinfo['CN'][0])]["no"] += 1
             elif herepolyhedra[numberpolyhedra] == 1:
-                Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][0])]["val2:" + str(iinfo['valences'][1])][
+                Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][0])][
+                    "val2:" + str(iinfo['valences'][1])][
                     "CN1:" + str(iinfo['CN'][0])]["CN2:" + str(iinfo['CN'][1])]["corner"] += 1
                 if not (iinfo['valences'][0] == iinfo['valences'][1]):
-                    Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][1])]["val2:" + str(iinfo['valences'][0])][
+                    Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][1])][
+                        "val2:" + str(iinfo['valences'][0])][
                         "CN1:" + str(iinfo['CN'][0])]["CN2:" + str(iinfo['CN'][1])]["corner"] += 1
                 if not (iinfo['CN'][0] == iinfo['CN'][1]):
-                    Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][0])]["val2:" + str(iinfo['valences'][1])][
+                    Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][0])][
+                        "val2:" + str(iinfo['valences'][1])][
                         "CN1:" + str(iinfo['CN'][1])]["CN2:" + str(iinfo['CN'][0])]["corner"] += 1
                 if not (iinfo['valences'][0] == iinfo['valences'][1]) or not (iinfo['CN'][0] == iinfo['CN'][1]):
-                    Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][1])]["val2:" + str(iinfo['valences'][0])][
+                    Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][1])][
+                        "val2:" + str(iinfo['valences'][0])][
                         "CN1:" + str(iinfo['CN'][1])]["CN2:" + str(iinfo['CN'][0])]["corner"] += 1
 
             elif herepolyhedra[numberpolyhedra] == 2:
-                Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][0])]["val2:" + str(iinfo['valences'][1])][
+                Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][0])][
+                    "val2:" + str(iinfo['valences'][1])][
                     "CN1:" + str(iinfo['CN'][0])]["CN2:" + str(iinfo['CN'][1])]["edge"] += 1
                 if not (iinfo['valences'][0] == iinfo['valences'][1]):
-                    Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][1])]["val2:" + str(iinfo['valences'][0])][
+                    Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][1])][
+                        "val2:" + str(iinfo['valences'][0])][
                         "CN1:" + str(iinfo['CN'][0])]["CN2:" + str(iinfo['CN'][1])]["edge"] += 1
                 if not (iinfo['CN'][0] == iinfo['CN'][1]):
-                    Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][0])]["val2:" + str(iinfo['valences'][1])][
+                    Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][0])][
+                        "val2:" + str(iinfo['valences'][1])][
                         "CN1:" + str(iinfo['CN'][1])]["CN2:" + str(iinfo['CN'][0])]["edge"] += 1
                 if not (iinfo['valences'][0] == iinfo['valences'][1]) or not (iinfo['CN'][0] == iinfo['CN'][1]):
-                    Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][1])]["val2:" + str(iinfo['valences'][0])][
+                    Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][1])][
+                        "val2:" + str(iinfo['valences'][0])][
                         "CN1:" + str(iinfo['CN'][1])]["CN2:" + str(iinfo['CN'][0])]["edge"] += 1
 
             elif herepolyhedra[numberpolyhedra] > 2:
-                Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][0])]["val2:" + str(iinfo['valences'][1])][
+                Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][0])][
+                    "val2:" + str(iinfo['valences'][1])][
                     "CN1:" + str(iinfo['CN'][0])]["CN2:" + str(iinfo['CN'][1])]["face"] += 1
                 if not (info['valences'][0] == info['valences'][1]):
-                    Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][1])]["val2:" + str(iinfo['valences'][0])][
+                    Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][1])][
+                        "val2:" + str(iinfo['valences'][0])][
                         "CN1:" + str(iinfo['CN'][0])]["CN2:" + str(iinfo['CN'][1])]["face"] += 1
                 if not (info['CN'][0] == info['CN'][1]):
-                    Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][0])]["val2:" + str(iinfo['valences'][1])][
+                    Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][0])][
+                        "val2:" + str(iinfo['valences'][1])][
                         "CN1:" + str(iinfo['CN'][1])]["CN2:" + str(iinfo['CN'][0])]["face"] += 1
                 if not (info['valences'][0] == info['valences'][1]) or not (iinfo['CN'][0] == iinfo['CN'][1]):
-                    Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][1])]["val2:" + str(iinfo['valences'][0])][
+                    Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][1])][
+                        "val2:" + str(iinfo['valences'][0])][
                         "CN1:" + str(iinfo['CN'][1])]["CN2:" + str(iinfo['CN'][0])]["face"] += 1
 
-            #here: consider elements:
+            # here: consider elements:
             # symmetry of valence and CN have to be considered
             if not ("val1:" + str(iinfo['valences'][0])) in Elementwise[iinfo['cations'][1]]:
                 Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][0])] = {}
             if not ("val1:" + str(iinfo['valences'][1])) in Elementwise[iinfo['cations'][1]]:
                 Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][1])] = {}
-            if not ("val2:" + str(iinfo['valences'][1])) in Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][0])]:
-                Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][0])]["val2:" + str(iinfo['valences'][1])] = {}
-            if not ("val2:" + str(iinfo['valences'][0])) in Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][1])]:
-                Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][1])]["val2:" + str(iinfo['valences'][0])] = {}
+            if not ("val2:" + str(iinfo['valences'][1])) in Elementwise[iinfo['cations'][1]][
+                "val1:" + str(iinfo['valences'][0])]:
+                Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][0])][
+                    "val2:" + str(iinfo['valences'][1])] = {}
+            if not ("val2:" + str(iinfo['valences'][0])) in Elementwise[iinfo['cations'][1]][
+                "val1:" + str(iinfo['valences'][1])]:
+                Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][1])][
+                    "val2:" + str(iinfo['valences'][0])] = {}
 
-            if not ("CN1:" + str(iinfo['CN'][0])) in Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][0])][
-                "val2:" + str(iinfo['valences'][1])]:
-                Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][0])]["val2:" + str(iinfo['valences'][1])][
+            if not ("CN1:" + str(iinfo['CN'][0])) in \
+                   Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][0])][
+                       "val2:" + str(iinfo['valences'][1])]:
+                Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][0])][
+                    "val2:" + str(iinfo['valences'][1])][
                     "CN1:" + str(iinfo['CN'][0])] = {}
-            if not ("CN1:" + str(iinfo['CN'][0])) in Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][1])][
-                "val2:" + str(iinfo['valences'][0])]:
-                Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][1])]["val2:" + str(iinfo['valences'][0])][
+            if not ("CN1:" + str(iinfo['CN'][0])) in \
+                   Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][1])][
+                       "val2:" + str(iinfo['valences'][0])]:
+                Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][1])][
+                    "val2:" + str(iinfo['valences'][0])][
                     "CN1:" + str(iinfo['CN'][0])] = {}
-            if not ("CN1:" + str(iinfo['CN'][1])) in Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][0])][
-                "val2:" + str(iinfo['valences'][1])]:
-                Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][0])]["val2:" + str(iinfo['valences'][1])][
+            if not ("CN1:" + str(iinfo['CN'][1])) in \
+                   Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][0])][
+                       "val2:" + str(iinfo['valences'][1])]:
+                Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][0])][
+                    "val2:" + str(iinfo['valences'][1])][
                     "CN1:" + str(iinfo['CN'][1])] = {}
-            if not ("CN1:" + str(iinfo['CN'][1])) in Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][1])][
-                "val2:" + str(iinfo['valences'][0])]:
-                Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][1])]["val2:" + str(iinfo['valences'][0])][
+            if not ("CN1:" + str(iinfo['CN'][1])) in \
+                   Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][1])][
+                       "val2:" + str(iinfo['valences'][0])]:
+                Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][1])][
+                    "val2:" + str(iinfo['valences'][0])][
                     "CN1:" + str(iinfo['CN'][1])] = {}
 
             if not ("CN2:" + str(iinfo['CN'][1])) in \
-                   Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][0])]["val2:" + str(iinfo['valences'][1])][
+                   Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][0])][
+                       "val2:" + str(iinfo['valences'][1])][
                        "CN1:" + str(iinfo['CN'][0])]:
-                Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][0])]["val2:" + str(iinfo['valences'][1])][
+                Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][0])][
+                    "val2:" + str(iinfo['valences'][1])][
                     "CN1:" + str(iinfo['CN'][0])]["CN2:" + str(iinfo['CN'][1])] = {"no": 0, "corner": 0, "edge": 0,
                                                                                    "face": 0}
             if not ("CN2:" + str(iinfo['CN'][1])) in \
-                   Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][1])]["val2:" + str(iinfo['valences'][0])][
+                   Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][1])][
+                       "val2:" + str(iinfo['valences'][0])][
                        "CN1:" + str(iinfo['CN'][0])]:
-                Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][1])]["val2:" + str(iinfo['valences'][0])][
+                Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][1])][
+                    "val2:" + str(iinfo['valences'][0])][
                     "CN1:" + str(iinfo['CN'][0])]["CN2:" + str(iinfo['CN'][1])] = {"no": 0, "corner": 0, "edge": 0,
                                                                                    "face": 0}
             if not ("CN2:" + str(iinfo['CN'][0])) in \
-                   Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][0])]["val2:" + str(iinfo['valences'][1])][
+                   Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][0])][
+                       "val2:" + str(iinfo['valences'][1])][
                        "CN1:" + str(iinfo['CN'][1])]:
-                Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][0])]["val2:" + str(iinfo['valences'][1])][
+                Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][0])][
+                    "val2:" + str(iinfo['valences'][1])][
                     "CN1:" + str(iinfo['CN'][1])]["CN2:" + str(iinfo['CN'][0])] = {"no": 0, "corner": 0, "edge": 0,
                                                                                    "face": 0}
             if not ("CN2:" + str(iinfo['CN'][0])) in \
-                   Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][1])]["val2:" + str(iinfo['valences'][0])][
+                   Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][1])][
+                       "val2:" + str(iinfo['valences'][0])][
                        "CN1:" + str(iinfo['CN'][1])]:
-                Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][1])]["val2:" + str(iinfo['valences'][0])][
+                Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][1])][
+                    "val2:" + str(iinfo['valences'][0])][
                     "CN1:" + str(iinfo['CN'][1])]["CN2:" + str(iinfo['CN'][0])] = {"no": 0, "corner": 0, "edge": 0,
                                                                                    "face": 0}
 
             if herepolyhedra[numberpolyhedra] == 0:
-                Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][0])]["val2:" + str(iinfo['valences'][1])][
+                Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][0])][
+                    "val2:" + str(iinfo['valences'][1])][
                     "CN1:" + str(iinfo['CN'][0])]["CN2:" + str(iinfo['CN'][1])]["no"] += 1
                 if not (iinfo['valences'][0] == iinfo['valences'][1]):
-                    Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][1])]["val2:" + str(iinfo['valences'][0])][
+                    Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][1])][
+                        "val2:" + str(iinfo['valences'][0])][
                         "CN1:" + str(iinfo['CN'][0])]["CN2:" + str(iinfo['CN'][1])]["no"] += 1
                 if not (iinfo['CN'][0] == iinfo['CN'][1]):
-                    Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][0])]["val2:" + str(iinfo['valences'][1])][
+                    Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][0])][
+                        "val2:" + str(iinfo['valences'][1])][
                         "CN1:" + str(iinfo['CN'][1])]["CN2:" + str(iinfo['CN'][0])]["no"] += 1
                 if not (iinfo['valences'][0] == iinfo['valences'][1]) or not (iinfo['CN'][0] == iinfo['CN'][1]):
-                    Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][1])]["val2:" + str(iinfo['valences'][0])][
+                    Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][1])][
+                        "val2:" + str(iinfo['valences'][0])][
                         "CN1:" + str(iinfo['CN'][1])]["CN2:" + str(iinfo['CN'][0])]["no"] += 1
             elif herepolyhedra[numberpolyhedra] == 1:
-                Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][0])]["val2:" + str(iinfo['valences'][1])][
+                Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][0])][
+                    "val2:" + str(iinfo['valences'][1])][
                     "CN1:" + str(iinfo['CN'][0])]["CN2:" + str(iinfo['CN'][1])]["corner"] += 1
                 if not (iinfo['valences'][0] == iinfo['valences'][1]):
-                    Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][1])]["val2:" + str(iinfo['valences'][0])][
+                    Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][1])][
+                        "val2:" + str(iinfo['valences'][0])][
                         "CN1:" + str(iinfo['CN'][0])]["CN2:" + str(iinfo['CN'][1])]["corner"] += 1
                 if not (iinfo['CN'][0] == iinfo['CN'][1]):
-                    Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][0])]["val2:" + str(iinfo['valences'][1])][
+                    Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][0])][
+                        "val2:" + str(iinfo['valences'][1])][
                         "CN1:" + str(iinfo['CN'][1])]["CN2:" + str(iinfo['CN'][0])]["corner"] += 1
                 if not (iinfo['valences'][0] == iinfo['valences'][1]) or not (iinfo['CN'][0] == iinfo['CN'][1]):
-                    Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][1])]["val2:" + str(iinfo['valences'][0])][
+                    Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][1])][
+                        "val2:" + str(iinfo['valences'][0])][
                         "CN1:" + str(iinfo['CN'][1])]["CN2:" + str(iinfo['CN'][0])]["corner"] += 1
 
             elif herepolyhedra[numberpolyhedra] == 2:
-                Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][0])]["val2:" + str(iinfo['valences'][1])][
+                Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][0])][
+                    "val2:" + str(iinfo['valences'][1])][
                     "CN1:" + str(iinfo['CN'][0])]["CN2:" + str(iinfo['CN'][1])]["edge"] += 1
                 if not (iinfo['valences'][0] == iinfo['valences'][1]):
-                    Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][1])]["val2:" + str(iinfo['valences'][0])][
+                    Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][1])][
+                        "val2:" + str(iinfo['valences'][0])][
                         "CN1:" + str(iinfo['CN'][0])]["CN2:" + str(iinfo['CN'][1])]["edge"] += 1
                 if not (iinfo['CN'][0] == iinfo['CN'][1]):
-                    Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][0])]["val2:" + str(iinfo['valences'][1])][
+                    Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][0])][
+                        "val2:" + str(iinfo['valences'][1])][
                         "CN1:" + str(iinfo['CN'][1])]["CN2:" + str(iinfo['CN'][0])]["edge"] += 1
                 if not (iinfo['valences'][0] == iinfo['valences'][1]) or not (iinfo['CN'][0] == iinfo['CN'][1]):
-                    Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][1])]["val2:" + str(iinfo['valences'][0])][
+                    Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][1])][
+                        "val2:" + str(iinfo['valences'][0])][
                         "CN1:" + str(iinfo['CN'][1])]["CN2:" + str(iinfo['CN'][0])]["edge"] += 1
 
             elif herepolyhedra[numberpolyhedra] > 2:
-                Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][0])]["val2:" + str(iinfo['valences'][1])][
+                Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][0])][
+                    "val2:" + str(iinfo['valences'][1])][
                     "CN1:" + str(iinfo['CN'][0])]["CN2:" + str(iinfo['CN'][1])]["face"] += 1
                 if not (info['valences'][0] == info['valences'][1]):
-                    Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][1])]["val2:" + str(iinfo['valences'][0])][
+                    Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][1])][
+                        "val2:" + str(iinfo['valences'][0])][
                         "CN1:" + str(iinfo['CN'][0])]["CN2:" + str(iinfo['CN'][1])]["face"] += 1
                 if not (info['CN'][0] == info['CN'][1]):
-                    Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][0])]["val2:" + str(iinfo['valences'][1])][
+                    Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][0])][
+                        "val2:" + str(iinfo['valences'][1])][
                         "CN1:" + str(iinfo['CN'][1])]["CN2:" + str(iinfo['CN'][0])]["face"] += 1
                 if not (info['valences'][0] == info['valences'][1]) or not (iinfo['CN'][0] == iinfo['CN'][1]):
-                    Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][1])]["val2:" + str(iinfo['valences'][0])][
+                    Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][1])][
+                        "val2:" + str(iinfo['valences'][0])][
                         "CN1:" + str(iinfo['CN'][1])]["CN2:" + str(iinfo['CN'][0])]["face"] += 1
-
 
             # symmetry of valence and CN have to be considered
             if not ("val1:" + str(iinfo['valences'][0])) in Outputdict:
@@ -1081,32 +1153,60 @@ class Pauling4(Pauling3and4):
             if not ("val2:" + str(iinfo['valences'][0])) in Outputdict["val1:" + str(iinfo['valences'][1])]:
                 Outputdict["val1:" + str(iinfo['valences'][1])]["val2:" + str(iinfo['valences'][0])] = {}
 
-            if not ("CN1:" + str(iinfo['CN'][0])) in Outputdict["val1:" + str(iinfo['valences'][0])]["val2:" + str(iinfo['valences'][1])]:
-                Outputdict["val1:" + str(iinfo['valences'][0])]["val2:" + str(iinfo['valences'][1])]["CN1:" + str(iinfo['CN'][0])]={}
-            if not ("CN1:" + str(iinfo['CN'][0])) in Outputdict["val1:" + str(iinfo['valences'][1])]["val2:" + str(iinfo['valences'][0])]:
-                Outputdict["val1:" + str(iinfo['valences'][1])]["val2:" + str(iinfo['valences'][0])]["CN1:" + str(iinfo['CN'][0])]={}
-            if not ("CN1:" + str(iinfo['CN'][1])) in Outputdict["val1:" + str(iinfo['valences'][0])]["val2:" + str(iinfo['valences'][1])]:
-                Outputdict["val1:" + str(iinfo['valences'][0])]["val2:" + str(iinfo['valences'][1])]["CN1:" + str(iinfo['CN'][1])]={}
-            if not ("CN1:" + str(iinfo['CN'][1])) in Outputdict["val1:" + str(iinfo['valences'][1])]["val2:" + str(iinfo['valences'][0])]:
-                Outputdict["val1:" + str(iinfo['valences'][1])]["val2:" + str(iinfo['valences'][0])]["CN1:" + str(iinfo['CN'][1])]={}
+            if not ("CN1:" + str(iinfo['CN'][0])) in Outputdict["val1:" + str(iinfo['valences'][0])][
+                "val2:" + str(iinfo['valences'][1])]:
+                Outputdict["val1:" + str(iinfo['valences'][0])]["val2:" + str(iinfo['valences'][1])][
+                    "CN1:" + str(iinfo['CN'][0])] = {}
+            if not ("CN1:" + str(iinfo['CN'][0])) in Outputdict["val1:" + str(iinfo['valences'][1])][
+                "val2:" + str(iinfo['valences'][0])]:
+                Outputdict["val1:" + str(iinfo['valences'][1])]["val2:" + str(iinfo['valences'][0])][
+                    "CN1:" + str(iinfo['CN'][0])] = {}
+            if not ("CN1:" + str(iinfo['CN'][1])) in Outputdict["val1:" + str(iinfo['valences'][0])][
+                "val2:" + str(iinfo['valences'][1])]:
+                Outputdict["val1:" + str(iinfo['valences'][0])]["val2:" + str(iinfo['valences'][1])][
+                    "CN1:" + str(iinfo['CN'][1])] = {}
+            if not ("CN1:" + str(iinfo['CN'][1])) in Outputdict["val1:" + str(iinfo['valences'][1])][
+                "val2:" + str(iinfo['valences'][0])]:
+                Outputdict["val1:" + str(iinfo['valences'][1])]["val2:" + str(iinfo['valences'][0])][
+                    "CN1:" + str(iinfo['CN'][1])] = {}
 
-            if not ("CN2:" + str(iinfo['CN'][1])) in Outputdict["val1:" + str(iinfo['valences'][0])]["val2:" + str(iinfo['valences'][1])]["CN1:" + str(iinfo['CN'][0])]:
-                Outputdict["val1:" + str(iinfo['valences'][0])]["val2:" + str(iinfo['valences'][1])]["CN1:" + str(iinfo['CN'][0])]["CN2:" + str(iinfo['CN'][1])]={"no":0, "corner":0, "edge":0, "face":0}
-            if not ("CN2:" + str(iinfo['CN'][1])) in Outputdict["val1:" + str(iinfo['valences'][1])]["val2:" + str(iinfo['valences'][0])]["CN1:" + str(iinfo['CN'][0])]:
-                Outputdict["val1:" + str(iinfo['valences'][1])]["val2:" + str(iinfo['valences'][0])]["CN1:" + str(iinfo['CN'][0])]["CN2:" + str(iinfo['CN'][1])]={"no":0, "corner":0, "edge":0, "face":0}
-            if not ("CN2:" + str(iinfo['CN'][0])) in Outputdict["val1:" + str(iinfo['valences'][0])]["val2:" + str(iinfo['valences'][1])]["CN1:" + str(iinfo['CN'][1])]:
-                Outputdict["val1:" + str(iinfo['valences'][0])]["val2:" + str(iinfo['valences'][1])]["CN1:" + str(iinfo['CN'][1])]["CN2:" + str(iinfo['CN'][0])]={"no":0, "corner":0, "edge":0, "face":0}
-            if not ("CN2:" + str(iinfo['CN'][0])) in Outputdict["val1:" + str(iinfo['valences'][1])]["val2:" + str(iinfo['valences'][0])]["CN1:" + str(iinfo['CN'][1])]:
-                Outputdict["val1:" + str(iinfo['valences'][1])]["val2:" + str(iinfo['valences'][0])]["CN1:" + str(iinfo['CN'][1])]["CN2:" + str(iinfo['CN'][0])]={"no":0, "corner":0, "edge":0, "face":0}
+            if not ("CN2:" + str(iinfo['CN'][1])) in \
+                   Outputdict["val1:" + str(iinfo['valences'][0])]["val2:" + str(iinfo['valences'][1])][
+                       "CN1:" + str(iinfo['CN'][0])]:
+                Outputdict["val1:" + str(iinfo['valences'][0])]["val2:" + str(iinfo['valences'][1])][
+                    "CN1:" + str(iinfo['CN'][0])]["CN2:" + str(iinfo['CN'][1])] = {"no": 0, "corner": 0, "edge": 0,
+                                                                                   "face": 0}
+            if not ("CN2:" + str(iinfo['CN'][1])) in \
+                   Outputdict["val1:" + str(iinfo['valences'][1])]["val2:" + str(iinfo['valences'][0])][
+                       "CN1:" + str(iinfo['CN'][0])]:
+                Outputdict["val1:" + str(iinfo['valences'][1])]["val2:" + str(iinfo['valences'][0])][
+                    "CN1:" + str(iinfo['CN'][0])]["CN2:" + str(iinfo['CN'][1])] = {"no": 0, "corner": 0, "edge": 0,
+                                                                                   "face": 0}
+            if not ("CN2:" + str(iinfo['CN'][0])) in \
+                   Outputdict["val1:" + str(iinfo['valences'][0])]["val2:" + str(iinfo['valences'][1])][
+                       "CN1:" + str(iinfo['CN'][1])]:
+                Outputdict["val1:" + str(iinfo['valences'][0])]["val2:" + str(iinfo['valences'][1])][
+                    "CN1:" + str(iinfo['CN'][1])]["CN2:" + str(iinfo['CN'][0])] = {"no": 0, "corner": 0, "edge": 0,
+                                                                                   "face": 0}
+            if not ("CN2:" + str(iinfo['CN'][0])) in \
+                   Outputdict["val1:" + str(iinfo['valences'][1])]["val2:" + str(iinfo['valences'][0])][
+                       "CN1:" + str(iinfo['CN'][1])]:
+                Outputdict["val1:" + str(iinfo['valences'][1])]["val2:" + str(iinfo['valences'][0])][
+                    "CN1:" + str(iinfo['CN'][1])]["CN2:" + str(iinfo['CN'][0])] = {"no": 0, "corner": 0, "edge": 0,
+                                                                                   "face": 0}
 
             if herepolyhedra[numberpolyhedra] == 0:
-                Outputdict["val1:" + str(iinfo['valences'][0])]["val2:" + str(iinfo['valences'][1])]["CN1:" + str(iinfo['CN'][0])]["CN2:" + str(iinfo['CN'][1])]["no"]+=1
-                if not (iinfo['valences'][0]==iinfo['valences'][1]):
-                    Outputdict["val1:" + str(iinfo['valences'][1])]["val2:" + str(iinfo['valences'][0])]["CN1:" + str(iinfo['CN'][0])]["CN2:" + str(iinfo['CN'][1])]["no"]+=1
-                if not (iinfo['CN'][0]==iinfo['CN'][1]):
-                    Outputdict["val1:" + str(iinfo['valences'][0])]["val2:" + str(iinfo['valences'][1])]["CN1:" + str(iinfo['CN'][1])]["CN2:" + str(iinfo['CN'][0])]["no"]+=1
-                if not (iinfo['valences'][0]==iinfo['valences'][1]) or not (iinfo['CN'][0]==iinfo['CN'][1]):
-                    Outputdict["val1:" + str(iinfo['valences'][1])]["val2:" + str(iinfo['valences'][0])]["CN1:" + str(iinfo['CN'][1])]["CN2:" + str(iinfo['CN'][0])]["no"]+=1
+                Outputdict["val1:" + str(iinfo['valences'][0])]["val2:" + str(iinfo['valences'][1])][
+                    "CN1:" + str(iinfo['CN'][0])]["CN2:" + str(iinfo['CN'][1])]["no"] += 1
+                if not (iinfo['valences'][0] == iinfo['valences'][1]):
+                    Outputdict["val1:" + str(iinfo['valences'][1])]["val2:" + str(iinfo['valences'][0])][
+                        "CN1:" + str(iinfo['CN'][0])]["CN2:" + str(iinfo['CN'][1])]["no"] += 1
+                if not (iinfo['CN'][0] == iinfo['CN'][1]):
+                    Outputdict["val1:" + str(iinfo['valences'][0])]["val2:" + str(iinfo['valences'][1])][
+                        "CN1:" + str(iinfo['CN'][1])]["CN2:" + str(iinfo['CN'][0])]["no"] += 1
+                if not (iinfo['valences'][0] == iinfo['valences'][1]) or not (iinfo['CN'][0] == iinfo['CN'][1]):
+                    Outputdict["val1:" + str(iinfo['valences'][1])]["val2:" + str(iinfo['valences'][0])][
+                        "CN1:" + str(iinfo['CN'][1])]["CN2:" + str(iinfo['CN'][0])]["no"] += 1
             elif herepolyhedra[numberpolyhedra] == 1:
                 Outputdict["val1:" + str(iinfo['valences'][0])]["val2:" + str(iinfo['valences'][1])][
                     "CN1:" + str(iinfo['CN'][0])]["CN2:" + str(iinfo['CN'][1])]["corner"] += 1
@@ -1148,7 +1248,7 @@ class Pauling4(Pauling3and4):
 
             numberpolyhedra = numberpolyhedra + 1
 
-        Outputdict['elementwise']=Elementwise
+        Outputdict['elementwise'] = Elementwise
 
         return Outputdict
 
@@ -1201,12 +1301,28 @@ class Pauling4(Pauling3and4):
 
 class Pauling5(PaulingConnection):
 
-    def __init(self, lse, filename, foldername):
-        super().__init__(DISTANCE=distance)
-        self.newsetup(lse, filename, foldername)
+    def __init__(self):
+        pass
 
-    def newsetup(self, lse, mat, foldername):
+    def newsetup(self, lse, filename=None, save_to_file=True, foldername="FifthsRuleAnalysis", distance=8.0):
+
         # collects the coordination numbers, coordination environments and the number of connections via corners, edges and faces of each of the polyhedra for each of the cations
+        """
+                    :param lse: LightStructureEnvironment
+                    :param save_to_file: Boolean
+                    :param filename: beginning of the file name, without ".json"
+                    :param foldername: name of the folder
+                    :param distance: float giving the distances of cations that is considered
+        """
+        is_an_oxide_and_no_env_for_O(lse)
+        super().__init__(DISTANCE=distance)
+
+        if filename is None:
+            save_to_file == False
+        if save_to_file:
+            if not os.path.isdir(foldername):
+                os.mkdir(foldername)
+        self.mat = filename
 
         struct = lse.structure
         sites = struct.sites
@@ -1252,15 +1368,11 @@ class Pauling5(PaulingConnection):
                 connection_edges.append(edge)
                 connection_faces.append(face)
 
-        # print(connections)
-        # get unique catsite
-        # erst mal schauen, ob es uberhaupt mehr als 1 Kation mit entsprechenden gleicher Elementsorte und CN gibt
-        # check if there is more than one cation of the same element
+        # unique cations with valences
         uniquecat = []
         for cat in catid:
             if cat not in uniquecat:
                 uniquecat.append(cat)
-        print(uniquecat)
 
         outputdict = {}
         outputdict['connection_corners'] = connection_corners
@@ -1270,19 +1382,108 @@ class Pauling5(PaulingConnection):
         outputdict['catid'] = catid
         outputdict['uniquecat'] = uniquecat
 
-        with open(foldername + '/' + mat + '.json', 'w') as file:
-            json.dump(outputdict, file)
+        if save_to_file:
+            with open(os.path.join(foldername, self.mat + '.json'), 'w') as file:
+                json.dump(outputdict, file)
 
         self.FifthRuleDict = outputdict
 
     def fromfile(self, mat, foldername):
+        # have to test this part of the code as well
         self.mat = mat
         print(mat)
         with open(foldername + '/' + mat + '.json') as file:
             self.FifthRuleDict = json.load(file)
 
-    def postevaluation5thrule(self, mat, excluded, maxCN=None):
-        # ToDO: build in max-CN
+    def is_fulfilled(self, options="CN"):
+        """
+        tests if all chemically equivalent cations (same element, same valence) have the same CN, or environment, or environment and number of connections
+        if there is only one chemically equivalent cation, the method raises a RuleCannotBeAnalyzedError
+        if the wrong option is used, a ValueError is raised
+        :param options: can be "CN", "env", or "env+nconnections"
+        :return: Boolean
+        """
+        # test _is_candidate_5thrule
+        if not self._is_candidate_5thrule():
+            raise RuleCannotBeAnalyzedError("5th Rule cannot be evaluated")
+
+        outputdict = self._postevaluation5thrule()
+        if options == 'CN':
+            return outputdict['hassameCN']
+        elif options == 'env':
+            return outputdict['hassameenv']
+        elif options == 'env+nconnections':
+            return outputdict['hassameenvadsameconnectionnumber']
+        else:
+            raise ValueError("Wrong Option")
+
+    def get_details(self, options='CN'):
+        if not self._is_candidate_5thrule():
+            raise RuleCannotBeAnalyzedError("5th Rule cannot be evaluated")
+
+        outputdict = self._postevaluation5thrule_elementdependency()
+        output = {}
+        if options == 'CN':
+            for cat in outputdict['exceptionsCN']:
+                if not cat[0] in output:
+                    output[cat[0]] = {}
+                    output[cat[0]]['not_fulfilled'] = 0
+                    output[cat[0]]['fulfilled'] = 0
+                output[cat[0]]['not_fulfilled'] += 1
+            for cat in outputdict['fulfillingCN']:
+                if not cat[0] in output:
+                    output[cat[0]] = {}
+                    output[cat[0]]['not_fulfilled'] = 0
+                    output[cat[0]]['fulfilled'] = 0
+                output[cat[0]]['fulfilled'] += 1
+            return output
+        elif options == 'env':
+            for cat in outputdict['exceptionsenvs']:
+                if not cat[0] in output:
+                    output[cat[0]] = {}
+                    output[cat[0]]['not_fulfilled'] = 0
+                    output[cat[0]]['fulfilled'] = 0
+                output[cat[0]]['not_fulfilled'] += 1
+            for cat in outputdict['fulfillingenvs']:
+                if not cat[0] in output:
+                    output[cat[0]]['not_fulfilled'] = 0
+                    output[cat[0]]['fulfilled'] = 0
+                output[cat[0]]['fulfilled'] += 1
+            return output
+        elif options == 'env+nconnections':
+            for cat in outputdict['exceptionsenvs_connections']:
+                if not cat[0] in output:
+                    output[cat[0]] = {}
+                    output[cat[0]]['not_fulfilled'] = 0
+                    output[cat[0]]['fulfilled'] = 0
+                output[cat[0]]['not_fulfilled'] += 1
+            for cat in outputdict['fulfillingenvs_connections']:
+                if not cat[0] in output:
+                    output[cat[0]] = {}
+                    output[cat[0]]['not_fulfilled'] = 0
+                    output[cat[0]]['fulfilled'] = 0
+                output[cat[0]]['fulfilled'] += 1
+            return output
+        else:
+            raise ValueError("Wrong option")
+
+    def _is_candidate_5thrule(self):
+        """
+        tells you if 5th rule can be evaluated
+        :return: Boolean
+        """
+        catid = self.FifthRuleDict['catid']
+        uniquecat = self.FifthRuleDict['uniquecat']
+        if (len(uniquecat) != len(catid)):
+            return True
+        else:
+            return False
+
+    def _postevaluation5thrule(self):
+        """
+        evaluates the 5th rule
+        :return: outputdict with relevant information
+        """
         connection_corners = self.FifthRuleDict['connection_corners']
         connection_edges = self.FifthRuleDict['connection_edges']
         connection_faces = self.FifthRuleDict['connection_faces']
@@ -1294,566 +1495,103 @@ class Pauling5(PaulingConnection):
         hassameenv = True
         hassameCN = True
 
-        # print(catid)
-        # print(uniquecat)
+        # tells you if all cations that are the same have the same CN, CE, CE with no connections
+        # is this the correct test?
+        if len(uniquecat) != len(catid):
 
-        skip = True
-
-        # Checks if one of the unique cations is not in excluded and then proceeds
-        # That's how it should be
-        # Maybe make excluded also valence dependent.
-
-        for unicat in uniquecat:
-            if str(unicat) not in excluded:
-                print(str(unicat) + ' is not in excluded')
-                skip = False
-            else:
-                print(unicat)
-        if skip:
-            print(mat + " is excluded")
-
-        if not skip:
-            # tells you if all cations that are the same have the same CN, CE, CE with no connections
-            if len(uniquecat) != len(catid):
-
-                for icat, cat in enumerate(catid):
-                    for icat2, cat2 in enumerate(catid):
-                        if icat2 > icat:
-                            if cat == cat2:
-                                if not cat in excluded:
-                                    if not (int(str(catenv[icat].split(":")[1])) == int(
-                                            str(catenv[icat2].split(":")[1]))):
-                                        hassameCN = False
-
-                                    if not (str(catenv[icat]) == str(catenv[icat2])):
-                                        hassameenv = False
-                                    if not (connection_corners[icat] == connection_corners[icat2] and connection_edges[
-                                        icat] ==
-                                            connection_edges[icat2] and connection_faces[icat] == connection_faces[
-                                                icat2] and str(catenv[icat]) == str(catenv[icat2])):
-                                        # print('here falsch')
-                                        hassamechemenvandsameconnectionnumber = False
-                                        break
-
-                                else:
-                                    print("Test")
-
-        CNsokay = True
-        if maxCN != None:
             for icat, cat in enumerate(catid):
-                if int(str(catenv[icat].split(":")[1])) > maxCN:
-                    CNsokay = False
-                    print(catenv[icat])
-                    break;
-        Outputdict = {}
+                for icat2, cat2 in enumerate(catid):
+                    if icat2 > icat:
+                        if cat == cat2:
+                            if not (int(str(catenv[icat].split(":")[1])) == int(
+                                    str(catenv[icat2].split(":")[1]))):
+                                hassameCN = False
 
-        # checks if number of cations is equal to the number of unique cations
-        notincluded = not (len(uniquecat) != len(catid) and not skip and CNsokay)
-        Outputdict['not included in study'] = notincluded
-        if not skip:
-            Outputdict['hassameCN'] = hassameCN
-            Outputdict['hassameenv'] = hassameenv
-            Outputdict['hassameenvadsameconnectionnumber'] = hassamechemenvandsameconnectionnumber
+                            if not (str(catenv[icat]) == str(catenv[icat2])):
+                                hassameenv = False
+                            if not (connection_corners[icat] == connection_corners[icat2] and connection_edges[
+                                icat] ==
+                                    connection_edges[icat2] and connection_faces[icat] == connection_faces[
+                                        icat2] and str(catenv[icat]) == str(catenv[icat2])):
+                                hassamechemenvandsameconnectionnumber = False
+                                break
+
+        Outputdict = {}
+        Outputdict['hassameCN'] = hassameCN
+        Outputdict['hassameenv'] = hassameenv
+        Outputdict['hassameenvadsameconnectionnumber'] = hassamechemenvandsameconnectionnumber
 
         return Outputdict
 
-        # with open('exceptionsCN.json', 'w') as file2:
-        #     json.dump(exceptionsCN, file2)
-        #
-        # with open('exceptionsenv.json', 'w') as file2:
-        #     json.dump(exceptionsenv, file2)
-        #
-        # with open('exceptionsenv_con.json', 'w') as file3:
-        #     json.dump(exceptionsenv_con, file3)
-        #
-        # # TODO maybe good to save names of structures in an extra file the most important informtaion on atoms, coordination environment and number of connections.
-        # # also print the information?
-        #
-        # print('Pauling rule?')
-        # print(hassamechemenvandsameconnectionnumber)
-
-        pass
-
-
-# classes for plotting
-import os
-import matplotlib.pyplot as plt
-import numpy as np
-from matplotlib.gridspec import GridSpec
-import matplotlib as mpl
-
-mpl.rcParams["savefig.directory"] = os.chdir(os.getcwd())
-mpl.rcParams["savefig.format"] = 'pdf'
-
-
-class PlotterPSE:
-    """
-
-    """
-
-    # was soll das ding koennen
-    # plotte z.B. die Ergebnisse in Form des PSE?
-    # Mache diesen Plot fuer verschiedene Valenzen bei gleicher Atomsorte und sortiere nach Ordnungszahl
-
-    def __init__(self, cationlist, valuestoplot):
-        # valuestoplot is so far a dict with lists for each cation
-        # this list contains a positive and negative value
-        self.cationlist = cationlist
-        self.valuestoplot = valuestoplot
-
-    def _get_fulfilled(self, okay, notokay):
-        okayperc = np.float(okay) / np.float(okay + notokay)
-        return okayperc
-
-    def set_colormap(self, lowerlimit, upperlimit):
-        self.fig.colorbar(self.img1, ax=self.ax).set_clim(lowerlimit, upperlimit)
-        # self.ax.clim(lowerlimit, upperlimit)
-
-    def get_plot(self, xlim=[1, 18], ylim=[1, 9]):
-        import matplotlib
-        # TODO: cleanup
-        matplotlib.rcParams['pdf.fonttype'] = 42
-        matplotlib.rcParams['ps.fonttype'] = 42
-        matplotlib.rcParams['font.size'] = 3
-        mpl.rcParams['figure.dpi'] = 400
-        matplotlib.rc("savefig", dpi=400)
-        # font = {'family': 'normal',
-        #        'size': 10}
-
-        # matplotlib.rc('font', **font)
-
-        PSE = np.full((int(ylim[1] - ylim[0] + 2),
-                       int(xlim[1] - xlim[0] + 2)), np.nan)
-        # for cat in self.cationlist:
-        #     if not (self.valuestoplot[cat][0] == 0 and self.valuestoplot[cat][1] == 0):
-        #         PSE[Element(cat).row, Element(cat).group] = self._get_fulfilled(self.valuestoplot[cat][0],
-        #                                                                         self.valuestoplot[cat][1])
-        for cat in self.cationlist:
-            if not (self.valuestoplot[cat][0] == 0 and self.valuestoplot[cat][1] == 0):
-                PSE[Element(cat).row, Element(cat).group] = self._get_fulfilled(self.valuestoplot[cat][0],
-                                                                                self.valuestoplot[cat][1])
-            else:
-                print(cat)
-                print(self.valuestoplot[cat][0])
-                print(self.valuestoplot[cat][1])
-        # print(self.cationlist)
-        # neuer plotversuch: jetzt mit farbschema
-        fig, ax = plt.subplots()
-        # plt.clim(0,1)
-
-        mycm = plt.cm.get_cmap('cool', 24)
-        # mycm.set_clim(vmin=0.0, vmax=1.0)
-        img1 = ax.imshow(PSE, cmap=mycm)
-
-        # cbar = mpl.colorbar.ColorbarBase(ax, cmap=mycm)
-        # cbar.set_clim(0, 1.0)
-
-        # print(mycm.get_clim())
-
-        for cat in self.cationlist:
-            if not (self.valuestoplot[cat][0] == 0 and self.valuestoplot[cat][1] == 0):
-                ax.text(Element(cat).group - 0.3, Element(cat).row + 0.15, cat)
-
-        ax.set_ylim(np.float(ylim[1]) - 0.5, np.float(ylim[0] - 0.5))
-        ax.set_xlim(np.float(xlim[0] - 0.5), np.float(xlim[1] - 0.5))
-        ax.set_xticks(range(int(xlim[0]), int(xlim[1]), 1))
-        ax.set_yticks(range(int(ylim[0]), int(ylim[1]), 1))
-        current_cmap = mpl.cm.get_cmap()
-        current_cmap.set_bad(color='white')
-        # current_cmap.set_clim(vmin=0.0, vmax=1.0)
-        # fig.colorbar(img1, ax=ax).set_clim(0.0, 1.0)
-        self.fig = fig
-        self.img1 = img1
-        self.ax = ax
-        # ax.clim(0, 1)
-        return plt
-        # plt.show()
-
-    def show(self, xlim=[1, 18], ylim=[1, 9]):
-        self.get_plot(xlim=xlim, ylim=ylim).show()
-
-
-class PlotterPSE_Mendeleev(PlotterPSE):
-    """
-
-    """
-    # was soll das ding koennen
-    # plotte z.B. die Ergebnisse in Form des PSE?
-    # Mache diesen Plot fuer verschiedene Valenzen bei gleicher Atomsorte und sortiere nach Ordnungszahl
-
-    mendeleev_dict = {
-        "H": {"group": 1, "row": 1, "subrow": 1},
-        "Li": {"group": 1, "row": 2, "subrow": 2},
-        "Na": {"group": 1, "row": 3, "subrow": 3},
-        "K": {"group": 1, "row": 4, "subrow": 4},
-        "Cu": {"group": 1, "row": 4, "subrow": 5},
-        "Rb": {"group": 1, "row": 5, "subrow": 6},
-        "Ag": {"group": 1, "row": 5, "subrow": 7},
-        "Cs": {"group": 1, "row": 6, "subrow": 8},
-        "Au": {"group": 1, "row": 6, "subrow": 9},
-        "Fr": {"group": 1, "row": 7, "subrow": 10},
-        "Rg": {"group": 1, "row": 7, "subrow": 11},
-
-        "Be": {"group": 2, "row": 2, "subrow": 2},
-        "Mg": {"group": 2, "row": 3, "subrow": 3},
-        "Ca": {"group": 2, "row": 4, "subrow": 4},
-        "Zn": {"group": 2, "row": 4, "subrow": 5},
-        "Sr": {"group": 2, "row": 5, "subrow": 6},
-        "Cd": {"group": 2, "row": 5, "subrow": 7},
-        "Ba": {"group": 2, "row": 6, "subrow": 8},
-        "Hg": {"group": 2, "row": 6, "subrow": 9},
-        "Ra": {"group": 2, "row": 7, "subrow": 10},
-        "Cn": {"group": 2, "row": 7, "subrow": 11},
-
-        "B": {"group": 3, "row": 2, "subrow": 2},
-        "Al": {"group": 3, "row": 3, "subrow": 3},
-        "Sc": {"group": 3, "row": 4, "subrow": 4},
-        "Ga": {"group": 3, "row": 4, "subrow": 5},
-        "Y": {"group": 3, "row": 5, "subrow": 6},
-        "In": {"group": 3, "row": 5, "subrow": 7},
-        "La": {"group": 3, "row": 6, "subrow": 8},
-        "Tl": {"group": 3, "row": 6, "subrow": 9},
-        "Ac": {"group": 3, "row": 7, "subrow": 10},
-        "Nh": {"group": 3, "row": 7, "subrow": 11},
-
-        "C": {"group": 4, "row": 2, "subrow": 2},
-        "Si": {"group": 4, "row": 3, "subrow": 3},
-        "Ti": {"group": 4, "row": 4, "subrow": 4},
-        "Ge": {"group": 4, "row": 4, "subrow": 5},
-        "Zr": {"group": 4, "row": 5, "subrow": 6},
-        "Sn": {"group": 4, "row": 5, "subrow": 7},
-        "Hf": {"group": 4, "row": 6, "subrow": 8},
-        "Pb": {"group": 4, "row": 6, "subrow": 9},
-        "Rf": {"group": 4, "row": 7, "subrow": 10},
-        "Fl": {"group": 4, "row": 7, "subrow": 11},
-
-        "N": {"group": 5, "row": 2, "subrow": 2},
-        "P": {"group": 5, "row": 3, "subrow": 3},
-        "V": {"group": 5, "row": 4, "subrow": 4},
-        "As": {"group": 5, "row": 4, "subrow": 5},
-        "Nb": {"group": 5, "row": 5, "subrow": 6},
-        "Sb": {"group": 5, "row": 5, "subrow": 7},
-        "Ta": {"group": 5, "row": 6, "subrow": 8},
-        "Bi": {"group": 5, "row": 6, "subrow": 9},
-        "Db": {"group": 5, "row": 7, "subrow": 10},
-        "Mc": {"group": 5, "row": 7, "subrow": 11},
-
-        "O": {"group": 6, "row": 2, "subrow": 2},
-        "S": {"group": 6, "row": 3, "subrow": 3},
-        "Cr": {"group": 6, "row": 4, "subrow": 4},
-        "Se": {"group": 6, "row": 4, "subrow": 5},
-        "Mo": {"group": 6, "row": 5, "subrow": 6},
-        "Te": {"group": 6, "row": 5, "subrow": 7},
-        "W": {"group": 6, "row": 6, "subrow": 8},
-        "Po": {"group": 6, "row": 6, "subrow": 9},
-        "Sg": {"group": 6, "row": 7, "subrow": 10},
-        "Lv": {"group": 6, "row": 7, "subrow": 11},
-
-        "F": {"group": 7, "row": 2, "subrow": 2},
-        "Cl": {"group": 7, "row": 3, "subrow": 3},
-        "Mn": {"group": 7, "row": 4, "subrow": 4},
-        "Br": {"group": 7, "row": 4, "subrow": 5},
-        "Tc": {"group": 7, "row": 5, "subrow": 6},
-        "I": {"group": 7, "row": 5, "subrow": 7},
-        "Re": {"group": 7, "row": 6, "subrow": 8},
-        "At": {"group": 7, "row": 6, "subrow": 9},
-        "Bh": {"group": 7, "row": 7, "subrow": 10},
-        "Ts": {"group": 7, "row": 7, "subrow": 11},
-
-        "He": {"group": 8, "row": 1, "subrow": 1},
-        "Ne": {"group": 8, "row": 2, "subrow": 2},
-        "Ar": {"group": 8, "row": 3, "subrow": 3},
-        "Fe": {"group": 8, "row": 4, "subrow": 4},
-        "Kr": {"group": 8, "row": 4, "subrow": 5},
-        "Ru": {"group": 8, "row": 5, "subrow": 6},
-        "Xe": {"group": 8, "row": 5, "subrow": 7},
-        "Os": {"group": 8, "row": 6, "subrow": 8},
-        "Rn": {"group": 8, "row": 6, "subrow": 9},
-        "Hs": {"group": 8, "row": 7, "subrow": 10},
-        "Og": {"group": 8, "row": 7, "subrow": 11},
-
-        "Co": {"group": 9, "row": 4, "subrow": 4},
-        "Rh": {"group": 9, "row": 5, "subrow": 6},
-        "Ir": {"group": 9, "row": 6, "subrow": 8},
-        "Mt": {"group": 9, "row": 7, "subrow": 10},
-
-        "Ni": {"group": 10, "row": 4, "subrow": 4},
-        "Pd": {"group": 10, "row": 5, "subrow": 6},
-        "Pt": {"group": 10, "row": 6, "subrow": 8},
-        "Ds": {"group": 10, "row": 7, "subrow": 10},
-
-        "La": {"group": 1, "row": 8, "subrow": 11},
-        "Ac": {"group": 1, "row": 9, "subrow": 12},
-
-        "Ce": {"group": 2, "row": 8, "subrow": 11},
-        "Th": {"group": 2, "row": 9, "subrow": 12},
-
-        "Pr": {"group": 3, "row": 8, "subrow": 11},
-        "Pa": {"group": 3, "row": 9, "subrow": 12},
-
-        "Nd": {"group": 4, "row": 8, "subrow": 11},
-        "U": {"group": 4, "row": 9, "subrow": 12},
-
-        "Pm": {"group": 5, "row": 8, "subrow": 11},
-        "Np": {"group": 5, "row": 9, "subrow": 12},
-
-        "Sm": {"group": 6, "row": 8, "subrow": 11},
-        "Pu": {"group": 6, "row": 9, "subrow": 12},
-
-        "Eu": {"group": 7, "row": 8, "subrow": 11},
-        "Am": {"group": 7, "row": 9, "subrow": 12},
-
-        "Gd": {"group": 8, "row": 8, "subrow": 11},
-        "Cm": {"group": 8, "row": 9, "subrow": 12},
-
-        "Tb": {"group": 9, "row": 8, "subrow": 11},
-        "Bk": {"group": 9, "row": 9, "subrow": 12},
-
-        "Dy": {"group": 10, "row": 8, "subrow": 11},
-        "Cf": {"group": 10, "row": 9, "subrow": 12},
-
-        "Ho": {"group": 11, "row": 8, "subrow": 11},
-        "Es": {"group": 11, "row": 9, "subrow": 12},
-
-        "Er": {"group": 12, "row": 8, "subrow": 11},
-        "Fm": {"group": 12, "row": 9, "subrow": 12},
-
-        "Tm": {"group": 13, "row": 8, "subrow": 11},
-        "Md": {"group": 13, "row": 9, "subrow": 12},
-
-        "Yb": {"group": 14, "row": 8, "subrow": 11},
-        "No": {"group": 14, "row": 9, "subrow": 12},
-
-        "Lu": {"group": 15, "row": 8, "subrow": 11},
-        "Lr": {"group": 15, "row": 9, "subrow": 12},
-
-    }
-
-    def __init__(self, cationlist, valuestoplot):
-        # valuestoplot is so far a dict with lists for each cation
-        # this list contains a positive and negative value
-        self.cationlist = cationlist
-        self.valuestoplot = valuestoplot
-
-    def get_mendeleev_group(self, elementstring):
-        return self.mendeleev_dict[elementstring]["group"]
-
-    def get_mendeleev_subrow(self, elementstring):
-        return self.mendeleev_dict[elementstring]["subrow"]
-
-    def get_mendeleev_mainrow(self, elementstring):
-        return self.mendeleev_dict[elementstring]["row"]
-
-    def get_plot(self, xlim=[1, 15], ylim=[1, 12]):
-        import matplotlib
-        # TODO: cleanup
-        matplotlib.rcParams['pdf.fonttype'] = 42
-        matplotlib.rcParams['ps.fonttype'] = 42
-        matplotlib.rcParams['font.size'] = 3
-        mpl.rcParams['figure.dpi'] = 400
-        matplotlib.rc("savefig", dpi=400)
-        # font = {'family': 'normal',
-        #        'size': 10}
-
-        # matplotlib.rc('font', **font)
-
-        PSE = np.full((int(ylim[1] - ylim[0] + 2),
-                       int(xlim[1] - xlim[0] + 2)), np.nan)
-        # for cat in self.cationlist:
-        #     if not (self.valuestoplot[cat][0] == 0 and self.valuestoplot[cat][1] == 0):
-        #         PSE[Element(cat).row, Element(cat).group] = self._get_fulfilled(self.valuestoplot[cat][0],
-        #                                                                         self.valuestoplot[cat][1])
-        for cat in self.cationlist:
-            if not (self.valuestoplot[cat][0] == 0 and self.valuestoplot[cat][1] == 0):
-                print(cat)
-                PSE[self.get_mendeleev_subrow(str(cat)), self.get_mendeleev_group(str(cat))] = self._get_fulfilled(
-                    self.valuestoplot[cat][0],
-                    self.valuestoplot[cat][1])
-            else:
-                print(cat)
-                print(self.valuestoplot[cat][0])
-                print(self.valuestoplot[cat][1])
-        # print(self.cationlist)
-        # neuer plotversuch: jetzt mit farbschema
-        fig, ax = plt.subplots()
-        # plt.clim(0,1)
-
-        mycm = plt.cm.get_cmap('cool', 24)
-        # mycm.set_clim(vmin=0.0, vmax=1.0)
-        img1 = ax.imshow(PSE, cmap=mycm)
-
-        # cbar = mpl.colorbar.ColorbarBase(ax, cmap=mycm)
-        # cbar.set_clim(0, 1.0)
-
-        # print(mycm.get_clim())
-
-        for cat in self.cationlist:
-            if not (self.valuestoplot[cat][0] == 0 and self.valuestoplot[cat][1] == 0):
-                ax.text(self.get_mendeleev_group(str(cat)) - 0.3, self.get_mendeleev_subrow(str(cat)) + 0.15, cat)
-
-        ax.set_ylim(np.float(ylim[1]) - 0.5, np.float(ylim[0] - 0.5))
-        ax.set_xlim(np.float(xlim[0] - 0.5), np.float(xlim[1] - 0.5))
-        ax.set_xticks(range(int(xlim[0]), int(xlim[1]), 1))
-        ax.set_yticks(range(int(ylim[0]), int(ylim[1]), 1))
-        current_cmap = mpl.cm.get_cmap()
-        current_cmap.set_bad(color='white')
-        # current_cmap.set_clim(vmin=0.0, vmax=1.0)
-        # fig.colorbar(img1, ax=ax).set_clim(0.0, 1.0)
-        self.fig = fig
-        self.img1 = img1
-        self.ax = ax
-        # ax.clim(0, 1)
-        return plt
-        # plt.show()
-
-    def show(self, xlim=[1, 18], ylim=[1, 9]):
-        self.get_plot(xlim=xlim, ylim=ylim).show()
-
-
-class PlotterZdependent:
-    def __init__(self, cationlist, cat_valence_list, sort_by_Z=True, remove_cat_only_one_val=True, lowerlimit=0):
-        # sort cat_valence_list first by Z
-
-        if sort_by_Z:
-            sortedcationlist = []
-            for el in Element:
-                if str(el) in cationlist:
-                    sortedcationlist.append(str(el))
-            cationlist = sortedcationlist
-            pass
-            # sortedcationlist=[]
-            # for Z in range(1,103):
-            #     #if str(Element(Z)) in cationlist:
-            #     #    sortedcationlist.append(str(Element(Z)))
-
-        self.catswithval = []
-        # self.SIZE=len(cat_valence_list)
-        MAXVALENCE = 0
-        for icat, cat in enumerate(cationlist):
-            localmax = 0
-            for key in cat_valence_list[cat].keys():
-                if localmax < int(key):
-                    localmax = int(key)
-            if localmax > MAXVALENCE:
-                MAXVALENCE = localmax
-
-        self.MAXVALENCE = MAXVALENCE
-
-        for icat, cat in enumerate(cationlist):
-            hasmorethanonevalence = False
-            countvalences = 0
-            for val in range(0, MAXVALENCE + 1):
-                if val in cat_valence_list[cat]:
-                    if cat_valence_list[cat][val] != [0, 0]:
-                        countvalences = countvalences + 1
-
-            if (not (countvalences == 1 or countvalences == 0)) and remove_cat_only_one_val:
-                self.catswithval.append(cat)
-            elif (countvalences != 0) and (not remove_cat_only_one_val):
-                self.catswithval.append(cat)
-        self.valenzabh = np.full((MAXVALENCE + 1, len(self.catswithval)), np.nan)
-        for val in range(0, MAXVALENCE + 1):
-            for icat, cat in enumerate(self.catswithval):
-                if val in cat_valence_list[cat]:
-                    if cat_valence_list[cat][val] != [0, 0]:
-                        if (cat_valence_list[cat][val][0] + cat_valence_list[cat][val][1]) > lowerlimit:
-                            self.valenzabh[val, icat] = self._get_fulfilled(cat_valence_list[cat][val][0],
-                                                                            cat_valence_list[cat][val][1])
-        self.SIZE = len(self.catswithval)
-
-    def _get_fulfilled(self, okay, notokay):
-        okayperc = okay / np.float(okay + notokay)
-        return okayperc
-
-    def get_plot(self):
-        import matplotlib
-        matplotlib.rcParams['pdf.fonttype'] = 42
-        matplotlib.rcParams['ps.fonttype'] = 42
-        matplotlib.rcParams['font.size'] = 2
-
-        fig, ax = plt.subplots()
-        img1 = ax.imshow(self.valenzabh, origin="lower", cmap=plt.cm.get_cmap('cool', 24))
-        ax.set_xticks(range(0, self.SIZE + 1))
-        ax.set_xlim(-0.5, self.SIZE - 0.5)
-        ax.set_xticklabels(self.catswithval)
-        ax.set_ylim(0.5, self.MAXVALENCE + 0.5)
-        ax.set_yticks(range(1, self.MAXVALENCE + 1))
-        ax.set_ylabel('Valence')
-        current_cmap = mpl.cm.get_cmap()
-        current_cmap.set_bad(color='white')
-        fig.colorbar(img1, ax=ax)
-        return plt
-
-    def show(self):
-        self.get_plot()
-        plt.show()
-
-
-def get_compounds_lists():
-    ce_fraction = 0.95
-    csm = 2
-    anion = 'O'
-    charge = -2
-    e_above_hull = 0.025
-    filename = 'ce_fraction_' + \
-               str(ce_fraction) + 'plus_csm_' + str(csm) + 'plus_eabovehull' + str(e_above_hull) + '.json'
-
-    # to get it from the database:
-    Materials = is_clear_materials()
-    # list_compound=Materials.get_isclearmaterials_fromdatabase(ce_fraction=ce_fraction, csm=csm,anion=anion,charge=charge,e_above_hull=e_above_hull)
-    # Materials.save_infile(ce_fraction=ce_fraction,csm=csm,anion=anion,charge=charge,filename=filename,e_above_hull=e_above_hull)
-
-    list_compound = Materials.load_is_clear_materials_fromfile(filename=filename, ce_fraction=ce_fraction, csm=csm,
-                                                               anion=anion, charge=charge, e_above_hull=e_above_hull)
-
-    print(list_compound)
-
-    list_compound2 = get_materials_standard()
-
-    list_compound.extend(list_compound2)
-
-    print(len(set(list_compound)))
-
-
-def main():
-    #    pass
-    # secondrule_analyze_more_detailed()
-
-    # fourthrule_plotresults_CN_valence_sep()
-    # thirdrule_structureanalysis_plot()
-    # get_compounds_lists()
-
-    # thirdrule_plotresults_CN_valence_sep()
-
-    # extend this ratio stuff
-    # combine with and without shannon radii
-
-    firstrule(ratiosaccordingtoPauling=True, onlylowerlimit=True, e_above_hull=0.025)
-# firstrule_withShannon(ratiosaccordingtoPauling=False,onlylowerlimit=False)
-# plots have been tested
-
-# TODO: make prediction with mean Shannon radii?
-
-# TODO: Einheitliche Zahl Polyeder fuer erste Regel verwendet?
-# so far there is not lower limit for the number of cations considered
-# Pruefen
-# firstrulecheckup(ratiosaccordingtoPauling=True)
-# secondrule()
-# TODO: Diese hier genau testen und Plots anschauen
-# Auch Tortenplots machen
-# thirdrule()
-# thirdrule_analysestruct()
-# TODO: Skala von 0.0 bis 1.0 ausdehnen
-#
-# diesen teil in andere third rule einbeziehen
-# thirdrule_plotresults_each()
-## thirdrule_plotresults_worked()
-# fourthrule()
-# fourthrule_focusonpolyhedra()
-# fourthrule_plotresults_worked2()
-
-# fifthrule()
-
-# fifthruleaddition()
-
-# main()
+    def _postevaluation5thrule_elementdependency(self):
+        """
+        gives you information on the element dependency of the rule
+        :return:
+        """
+
+        connection_corners = self.FifthRuleDict['connection_corners']
+        connection_edges = self.FifthRuleDict['connection_edges']
+        connection_faces = self.FifthRuleDict['connection_faces']
+        catenv = self.FifthRuleDict['catenv']
+        catid = self.FifthRuleDict['catid']
+        uniquecat = self.FifthRuleDict['uniquecat']
+
+        hassamechemenvandsameconnectionnumber = True
+        hassameenv = True
+        hassameCN = True
+
+        exceptions_CN = []
+        exceptions_envs = []
+        exceptions_envs_connections = []
+
+        if len(uniquecat) != len(catid):
+
+            for icat, cat in enumerate(catid):
+                for icat2, cat2 in enumerate(catid):
+                    if icat2 > icat:
+                        if cat == cat2:
+                            if not (int(str(catenv[icat].split(":")[1])) == int(
+                                    str(catenv[icat2].split(":")[1]))):
+                                hassameCN = False
+                                if cat not in exceptions_CN:
+                                    exceptions_CN.append(cat)
+                            if not (str(catenv[icat]) == str(catenv[icat2])):
+                                hassameenv = False
+                                if cat not in exceptions_envs:
+                                    exceptions_envs.append(cat)
+                            if not (connection_corners[icat] == connection_corners[icat2] and connection_edges[
+                                icat] ==
+                                    connection_edges[icat2] and connection_faces[icat] == connection_faces[
+                                        icat2] and str(catenv[icat]) == str(catenv[icat2])):
+                                # print('here falsch')
+                                hassamechemenvandsameconnectionnumber = False
+
+                                if cat not in exceptions_envs_connections:
+                                    exceptions_envs_connections.append(cat)
+
+        fulfilling_CN = []
+        fulfilling_envs = []
+        fulfilling_envs_connections = []
+        for unicat in uniquecat:
+            if unicat not in exceptions_CN:
+                fulfilling_CN.append(unicat)
+            if unicat not in exceptions_envs:
+                fulfilling_envs.append(unicat)
+            if unicat not in exceptions_envs_connections:
+                fulfilling_envs_connections.append(unicat)
+
+        Outputdict = {}
+
+        # checks if number of cations is equal to the number of unique cations
+        # find a better way for this CNsokay part
+        Outputdict['hassameCN'] = hassameCN
+        Outputdict['hassameenv'] = hassameenv
+        Outputdict['hassameenvadsameconnectionnumber'] = hassamechemenvandsameconnectionnumber
+        Outputdict['exceptionsCN'] = exceptions_CN
+        Outputdict['exceptionsenvs'] = exceptions_envs
+        Outputdict['exceptionsenvs_connections'] = exceptions_envs_connections
+        Outputdict['fulfillingCN'] = fulfilling_CN
+        Outputdict['fulfillingenvs'] = fulfilling_envs
+        Outputdict['fulfillingenvs_connections'] = fulfilling_envs_connections
+
+        return Outputdict
