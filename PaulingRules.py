@@ -17,9 +17,10 @@ def is_an_oxide_and_no_env_for_O(lse):
         if lse.valences[isite] < 0 and site.species_string != 'O':
             raise ValueError("This is not an oxide. The assessment will be stopped.")
     for isite, site_envs in enumerate(lse.coordination_environments):
-        if lse.structure[isite].species_string=='O':
-            if site_envs!=None:
-                raise ValueError("Site_envs of anions have been computed. The code has to stop. Use only_cations in compute_structure_environments")
+        if lse.structure[isite].species_string == 'O':
+            if site_envs != None:
+                raise ValueError(
+                    "Site_envs of anions have been computed. The code has to stop. Use only_cations in compute_structure_environments")
     return True
 
 
@@ -44,57 +45,56 @@ class Pauling1:
 
         with open(filenameradii) as dd:
             dict_radii = json.load(dd)
-        if self._checkonlyoxygenanion(lse):
 
-            # TODO: could think of sorting lse.coordination_environments
-            for isite, site_envs in enumerate(lse.coordination_environments):
-                if site_envs != None:
-                    if len(site_envs) > 0:
+        for isite, site_envs in enumerate(lse.coordination_environments):
+            # identifies cationic sites - only cations have site_envs
+            if site_envs != None:
+                if len(site_envs) > 0:
+                    try:
                         try:
-                            try:
-                                iratio = dict_radii[lse.structure.species[isite].symbol]['ratio_oxide']
-                            except:
-                                raise ValueError(
-                                    lse.structure.species[isite].symbol + " not in the Pauling list")
-                            if self.first_rule(iratio, site_envs[0], onlylowerlimit=onlylowerlimit):
-                                cat_symbol = lse.structure.species[isite].symbol
-                                val = lse.valences[isite]
-                                # hier muss was rein
-                                if not cat_symbol in self.cat_list:
-                                    self.cat_list[cat_symbol] = [0, 0]
-                                if not cat_symbol in self.cat_valence_list:
-                                    self.cat_valence_list[cat_symbol] = {}
-                                if not val in self.cat_valence_list[cat_symbol]:
-                                    self.cat_valence_list[cat_symbol][val] = [0, 0]
+                            iratio = dict_radii[lse.structure.species[isite].symbol]['ratio_oxide']
+                        except:
+                            raise ValueError(
+                                lse.structure.species[isite].symbol + " not in the Pauling list")
+                        if self._first_rule(iratio, site_envs[0], onlylowerlimit=onlylowerlimit):
+                            cat_symbol = lse.structure.species[isite].symbol
+                            val = lse.valences[isite]
 
-                                self.cat_list[cat_symbol][0] = \
-                                    self.cat_list[cat_symbol][0] + 1
-                                self.cat_valence_list[cat_symbol][lse.valences[isite]][0] = \
-                                    self.cat_valence_list[cat_symbol][lse.valences[isite]][0] + 1
-                                self.mat_pauling_fulfilled += 1
-                            else:
-                                cat_symbol = lse.structure.species[isite].symbol
-                                val = lse.valences[isite]
-                                # hier muss was rein
-                                if not cat_symbol in self.cat_list:
-                                    self.cat_list[cat_symbol] = [0, 0]
-                                if not cat_symbol in self.cat_valence_list:
-                                    self.cat_valence_list[cat_symbol] = {}
-                                if not val in self.cat_valence_list[cat_symbol]:
-                                    self.cat_valence_list[cat_symbol][val] = [0, 0]
+                            if not cat_symbol in self.cat_list:
+                                self.cat_list[cat_symbol] = [0, 0]
+                            if not cat_symbol in self.cat_valence_list:
+                                self.cat_valence_list[cat_symbol] = {}
+                            if not val in self.cat_valence_list[cat_symbol]:
+                                self.cat_valence_list[cat_symbol][val] = [0, 0]
 
-                                self.cat_list[lse.structure.species[isite].symbol][1] = \
-                                    self.cat_list[lse.structure.species[isite].symbol][1] + 1
-                                self.cat_valence_list[lse.structure.species[isite].symbol][lse.valences[isite]][1] = \
-                                    self.cat_valence_list[lse.structure.species[isite].symbol][lse.valences[isite]][
-                                        1] + 1
+                            self.cat_list[cat_symbol][0] = \
+                                self.cat_list[cat_symbol][0] + 1
+                            self.cat_valence_list[cat_symbol][lse.valences[isite]][0] = \
+                                self.cat_valence_list[cat_symbol][lse.valences[isite]][0] + 1
+                            self.mat_pauling_fulfilled += 1
+                        else:
+                            cat_symbol = lse.structure.species[isite].symbol
+                            val = lse.valences[isite]
 
-                                self.env_not += 1
-                        except ValueError as err:
-                            if err.args[0] == "env not in Pauling book":
-                                self.no_env += 1
-                            else:
-                                self.no_cat += 1
+                            if not cat_symbol in self.cat_list:
+                                self.cat_list[cat_symbol] = [0, 0]
+                            if not cat_symbol in self.cat_valence_list:
+                                self.cat_valence_list[cat_symbol] = {}
+                            if not val in self.cat_valence_list[cat_symbol]:
+                                self.cat_valence_list[cat_symbol][val] = [0, 0]
+
+                            self.cat_list[lse.structure.species[isite].symbol][1] = \
+                                self.cat_list[lse.structure.species[isite].symbol][1] + 1
+                            self.cat_valence_list[lse.structure.species[isite].symbol][lse.valences[isite]][1] = \
+                                self.cat_valence_list[lse.structure.species[isite].symbol][lse.valences[isite]][
+                                    1] + 1
+
+                            self.env_not += 1
+                    except ValueError as err:
+                        if err.args[0] == "env not in Pauling book":
+                            self.no_env += 1
+                        else:
+                            self.no_cat += 1
 
     def get_details(self):
         """
@@ -159,26 +159,7 @@ class Pauling1:
             ListToReturn.append('C:12')  # Cuboctahedron
         return ListToReturn
 
-    def _checkonlyoxygenanion(self, lse):
-        """
-        check if oxide
-        :param lse: LightStructureEnvironment Object
-        :return:
-        """
-        onlyoxygen = True
-        sites = lse.structure.sites
-        valences = lse.valences
-        try:
-            for isite, site in enumerate(sites):
-                if sites[isite].species_string != 'O' and valences[isite] < 0:
-                    onlyoxygen = False
-
-        except:
-            onlyoxygen = False
-            print('Excluded material')
-        return onlyoxygen
-
-    def first_rule(self, iratio, site_env, onlylowerlimit):
+    def _first_rule(self, iratio, site_env, onlylowerlimit):
 
         environments = ['T:4', 'O:6', 'FO:7',
                         'SA:8', 'TT_1:9', 'C:8', 'C:12']
@@ -200,10 +181,6 @@ class Pauling1:
         else:
             raise ValueError("env not in Pauling book")
 
-    # predict_env_pauling_lowerlimit_extended
-
-
-# TODO: build in is_fulfilled, get_details
 
 class Pauling2:
     def __init__(self, lse):
@@ -266,11 +243,11 @@ class Pauling2:
         :return: OutputDict with information on each anion
         """
         OutputDict = {}
-        OutputDict["bvs_for_each_anion"] = self.get_anions_bvs()
-        OutputDict["cations_around_anion"] = self.get_cations_around_anion()
+        OutputDict["bvs_for_each_anion"] = self._get_anions_bvs()
+        OutputDict["cations_around_anion"] = self._get_cations_around_anion()
         return OutputDict
 
-    def get_anions_bvs(self):
+    def _get_anions_bvs(self):
         """
         get bond valences sums for each anion
         :return: list of bvs
@@ -284,7 +261,7 @@ class Pauling2:
                 ianionsite = ianionsite + 1
         return bvs
 
-    def get_cations_around_anion(self):
+    def _get_cations_around_anion(self):
         """
         returns list of list with elements around anion
         :return:
@@ -376,7 +353,7 @@ class Pauling3and4(PaulingConnection):
         """
             :param lse: LightStructureEnvironment
             :param save_to_file: Boolean
-            :param filename: beginning of the file name, without ".json"
+            :param filename: for example "file1.json"
             :param foldername: name of the folder
             :param distance: float giving the distances of cations that is considered
         """
@@ -385,27 +362,22 @@ class Pauling3and4(PaulingConnection):
         if filename is None:
             save_to_file == False
         if save_to_file:
-            if not os.path.isdir(foldername):
+            if not os.path.isdir(foldername) and (foldername != ''):
                 os.mkdir(foldername)
         DISTANCE = self.DISTANCE
-        self.mat = filename
-        lsegood = self._test_lse(lse)
-        if lsegood:
-            # get all relevant sites
-            allsites = self._get_allsites(lse, DISTANCE)
-            # search all pairs of sites that fulfill the DISTANCE criterion
-            pairedsites = self._get_pairedsites(allsites, DISTANCE)
-            self.PolyhedronDict = self._get_connections(pairedsites, lse, DISTANCE)
-            if save_to_file:
-                with open(os.path.join(foldername, self.mat + '.json'), 'w') as file:
-                    json.dump(self.PolyhedronDict, file)
 
-    def fromfile(self, filename, foldername='ThirdRuleAnalysisConnections'):
-        #TODO: make the use of filename consistent!
-        #make sure you can use it like this
-        # write it differently
-        self.mat = filename
-        with open(foldername + '/' + mat + '.json') as file:
+        # get all relevant sites
+        allsites = self._get_allsites(lse, DISTANCE)
+        # search all pairs of sites that fulfill the DISTANCE criterion
+        pairedsites = self._get_pairedsites(allsites, DISTANCE)
+        self.PolyhedronDict = self._get_connections(pairedsites, lse, DISTANCE)
+        if save_to_file:
+            with open(os.path.join(foldername, filename), 'w') as file:
+                json.dump(self.PolyhedronDict, file)
+
+    def from_file(self, filename, foldername='ThirdRuleAnalysisConnections'):
+
+        with open(os.path.join(foldername, filename)) as file:
             self.PolyhedronDict = json.load(file)
 
     def _test_fulfillment(self, maxCN=None):
@@ -512,12 +484,7 @@ class Pauling3and4(PaulingConnection):
         """
         struct = lse.structure
 
-        valences = []
-        try:
-            valences = lse.valences
-            # print(valences)
-        except:
-            print('Valences not working')
+        valences = lse.valences
 
         # get list of cation valences
         cationvalences = self._get_cationvalences(valences)
@@ -540,10 +507,9 @@ class Pauling3and4(PaulingConnection):
             index2 = self._get_site_index(sitetupel[1], struct)
             numberconnect, CN, CN2 = self._get_number_connected_oxygens_and_CN(
                 index, index2, sitetupel, lse)
-            try:
-                mydict['valences'] = [valences[index], valences[index2]]
-            except:
-                pass
+
+            mydict['valences'] = [valences[index], valences[index2]]
+
             mydict['CN'] = [CN, CN2]
 
             mydict['distance'] = np.linalg.norm(
@@ -576,23 +542,6 @@ class Pauling3and4(PaulingConnection):
 
         return outputdict
 
-    def _test_lse(self, lse):
-        """
-        tests whether a lse is present for each cation
-        :param lse: LightStructureEnvironment
-        :return: Boolean
-        """
-        lsegood = True
-        for isite, site in enumerate(lse.structure.sites):
-            if self._is_cationic_site(isite, valences=lse.valences):
-                try:
-                    lse.coordination_environments[isite]
-                except:
-                    print('Excluded:' + mat)
-                    lsegood = False
-                    break
-        return lsegood
-
     def _get_pairedsites(self, allsites, DISTANCE):
         """
 
@@ -615,7 +564,7 @@ class Pauling3and4(PaulingConnection):
                     # make sure that at least one coordinate lies in the first cell [0:1)
                     while fraccoorda[0] < 0.0 or fraccoorda[1] < 0.0 or fraccoorda[2] < 0.0 or fraccoordb[
                         0] < 0.0 or fraccoordb[1] < 0.0 or fraccoordb[2] < 0.0:
-                        # print('test')
+                        # this code part might be redundant
                         for ij in range(0, 3):
                             if fraccoorda[ij] < 0.0 or fraccoordb[ij] < 0.0:
                                 fraccoorda[ij] = fraccoorda[ij] + 1.0
@@ -848,6 +797,8 @@ class Pauling4(Pauling3and4):
         """
         :return: more information connected pairs of polyhedra
         """
+        # TODO: think about the symmetry of this arrays
+
         inputdict = self.PolyhedronDict
 
         additionalinfo = inputdict['Additional']
@@ -865,6 +816,7 @@ class Pauling4(Pauling3and4):
 
             # here: consider elements:
             # symmetry of valence and CN have to be considered
+            # have to think about symmetry again!!!!
             if not ("val1:" + str(iinfo['valences'][0])) in Elementwise[iinfo['cations'][0]]:
                 Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][0])] = {}
             if not ("val1:" + str(iinfo['valences'][1])) in Elementwise[iinfo['cations'][0]]:
@@ -940,14 +892,6 @@ class Pauling4(Pauling3and4):
                 Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][0])][
                     "val2:" + str(iinfo['valences'][1])][
                     "CN1:" + str(iinfo['CN'][0])]["CN2:" + str(iinfo['CN'][1])]["no"] += 1
-                if not (iinfo['valences'][0] == iinfo['valences'][1]):
-                    Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][1])][
-                        "val2:" + str(iinfo['valences'][0])][
-                        "CN1:" + str(iinfo['CN'][0])]["CN2:" + str(iinfo['CN'][1])]["no"] += 1
-                if not (iinfo['CN'][0] == iinfo['CN'][1]):
-                    Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][0])][
-                        "val2:" + str(iinfo['valences'][1])][
-                        "CN1:" + str(iinfo['CN'][1])]["CN2:" + str(iinfo['CN'][0])]["no"] += 1
                 if not (iinfo['valences'][0] == iinfo['valences'][1]) or not (iinfo['CN'][0] == iinfo['CN'][1]):
                     Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][1])][
                         "val2:" + str(iinfo['valences'][0])][
@@ -956,14 +900,6 @@ class Pauling4(Pauling3and4):
                 Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][0])][
                     "val2:" + str(iinfo['valences'][1])][
                     "CN1:" + str(iinfo['CN'][0])]["CN2:" + str(iinfo['CN'][1])]["corner"] += 1
-                if not (iinfo['valences'][0] == iinfo['valences'][1]):
-                    Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][1])][
-                        "val2:" + str(iinfo['valences'][0])][
-                        "CN1:" + str(iinfo['CN'][0])]["CN2:" + str(iinfo['CN'][1])]["corner"] += 1
-                if not (iinfo['CN'][0] == iinfo['CN'][1]):
-                    Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][0])][
-                        "val2:" + str(iinfo['valences'][1])][
-                        "CN1:" + str(iinfo['CN'][1])]["CN2:" + str(iinfo['CN'][0])]["corner"] += 1
                 if not (iinfo['valences'][0] == iinfo['valences'][1]) or not (iinfo['CN'][0] == iinfo['CN'][1]):
                     Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][1])][
                         "val2:" + str(iinfo['valences'][0])][
@@ -973,14 +909,6 @@ class Pauling4(Pauling3and4):
                 Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][0])][
                     "val2:" + str(iinfo['valences'][1])][
                     "CN1:" + str(iinfo['CN'][0])]["CN2:" + str(iinfo['CN'][1])]["edge"] += 1
-                if not (iinfo['valences'][0] == iinfo['valences'][1]):
-                    Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][1])][
-                        "val2:" + str(iinfo['valences'][0])][
-                        "CN1:" + str(iinfo['CN'][0])]["CN2:" + str(iinfo['CN'][1])]["edge"] += 1
-                if not (iinfo['CN'][0] == iinfo['CN'][1]):
-                    Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][0])][
-                        "val2:" + str(iinfo['valences'][1])][
-                        "CN1:" + str(iinfo['CN'][1])]["CN2:" + str(iinfo['CN'][0])]["edge"] += 1
                 if not (iinfo['valences'][0] == iinfo['valences'][1]) or not (iinfo['CN'][0] == iinfo['CN'][1]):
                     Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][1])][
                         "val2:" + str(iinfo['valences'][0])][
@@ -990,21 +918,12 @@ class Pauling4(Pauling3and4):
                 Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][0])][
                     "val2:" + str(iinfo['valences'][1])][
                     "CN1:" + str(iinfo['CN'][0])]["CN2:" + str(iinfo['CN'][1])]["face"] += 1
-                if not (info['valences'][0] == info['valences'][1]):
-                    Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][1])][
-                        "val2:" + str(iinfo['valences'][0])][
-                        "CN1:" + str(iinfo['CN'][0])]["CN2:" + str(iinfo['CN'][1])]["face"] += 1
-                if not (info['CN'][0] == info['CN'][1]):
-                    Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][0])][
-                        "val2:" + str(iinfo['valences'][1])][
-                        "CN1:" + str(iinfo['CN'][1])]["CN2:" + str(iinfo['CN'][0])]["face"] += 1
-                if not (info['valences'][0] == info['valences'][1]) or not (iinfo['CN'][0] == iinfo['CN'][1]):
+                if not (iinfo['valences'][0] == iinfo['valences'][1]) or not (iinfo['CN'][0] == iinfo['CN'][1]):
                     Elementwise[iinfo['cations'][0]]["val1:" + str(iinfo['valences'][1])][
                         "val2:" + str(iinfo['valences'][0])][
                         "CN1:" + str(iinfo['CN'][1])]["CN2:" + str(iinfo['CN'][0])]["face"] += 1
 
-            # here: consider elements:
-            # symmetry of valence and CN have to be considered
+            # now, let's consider the second cation:
             if not ("val1:" + str(iinfo['valences'][0])) in Elementwise[iinfo['cations'][1]]:
                 Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][0])] = {}
             if not ("val1:" + str(iinfo['valences'][1])) in Elementwise[iinfo['cations'][1]]:
@@ -1080,14 +999,6 @@ class Pauling4(Pauling3and4):
                 Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][0])][
                     "val2:" + str(iinfo['valences'][1])][
                     "CN1:" + str(iinfo['CN'][0])]["CN2:" + str(iinfo['CN'][1])]["no"] += 1
-                if not (iinfo['valences'][0] == iinfo['valences'][1]):
-                    Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][1])][
-                        "val2:" + str(iinfo['valences'][0])][
-                        "CN1:" + str(iinfo['CN'][0])]["CN2:" + str(iinfo['CN'][1])]["no"] += 1
-                if not (iinfo['CN'][0] == iinfo['CN'][1]):
-                    Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][0])][
-                        "val2:" + str(iinfo['valences'][1])][
-                        "CN1:" + str(iinfo['CN'][1])]["CN2:" + str(iinfo['CN'][0])]["no"] += 1
                 if not (iinfo['valences'][0] == iinfo['valences'][1]) or not (iinfo['CN'][0] == iinfo['CN'][1]):
                     Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][1])][
                         "val2:" + str(iinfo['valences'][0])][
@@ -1096,14 +1007,6 @@ class Pauling4(Pauling3and4):
                 Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][0])][
                     "val2:" + str(iinfo['valences'][1])][
                     "CN1:" + str(iinfo['CN'][0])]["CN2:" + str(iinfo['CN'][1])]["corner"] += 1
-                if not (iinfo['valences'][0] == iinfo['valences'][1]):
-                    Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][1])][
-                        "val2:" + str(iinfo['valences'][0])][
-                        "CN1:" + str(iinfo['CN'][0])]["CN2:" + str(iinfo['CN'][1])]["corner"] += 1
-                if not (iinfo['CN'][0] == iinfo['CN'][1]):
-                    Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][0])][
-                        "val2:" + str(iinfo['valences'][1])][
-                        "CN1:" + str(iinfo['CN'][1])]["CN2:" + str(iinfo['CN'][0])]["corner"] += 1
                 if not (iinfo['valences'][0] == iinfo['valences'][1]) or not (iinfo['CN'][0] == iinfo['CN'][1]):
                     Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][1])][
                         "val2:" + str(iinfo['valences'][0])][
@@ -1113,14 +1016,6 @@ class Pauling4(Pauling3and4):
                 Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][0])][
                     "val2:" + str(iinfo['valences'][1])][
                     "CN1:" + str(iinfo['CN'][0])]["CN2:" + str(iinfo['CN'][1])]["edge"] += 1
-                if not (iinfo['valences'][0] == iinfo['valences'][1]):
-                    Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][1])][
-                        "val2:" + str(iinfo['valences'][0])][
-                        "CN1:" + str(iinfo['CN'][0])]["CN2:" + str(iinfo['CN'][1])]["edge"] += 1
-                if not (iinfo['CN'][0] == iinfo['CN'][1]):
-                    Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][0])][
-                        "val2:" + str(iinfo['valences'][1])][
-                        "CN1:" + str(iinfo['CN'][1])]["CN2:" + str(iinfo['CN'][0])]["edge"] += 1
                 if not (iinfo['valences'][0] == iinfo['valences'][1]) or not (iinfo['CN'][0] == iinfo['CN'][1]):
                     Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][1])][
                         "val2:" + str(iinfo['valences'][0])][
@@ -1130,15 +1025,7 @@ class Pauling4(Pauling3and4):
                 Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][0])][
                     "val2:" + str(iinfo['valences'][1])][
                     "CN1:" + str(iinfo['CN'][0])]["CN2:" + str(iinfo['CN'][1])]["face"] += 1
-                if not (info['valences'][0] == info['valences'][1]):
-                    Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][1])][
-                        "val2:" + str(iinfo['valences'][0])][
-                        "CN1:" + str(iinfo['CN'][0])]["CN2:" + str(iinfo['CN'][1])]["face"] += 1
-                if not (info['CN'][0] == info['CN'][1]):
-                    Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][0])][
-                        "val2:" + str(iinfo['valences'][1])][
-                        "CN1:" + str(iinfo['CN'][1])]["CN2:" + str(iinfo['CN'][0])]["face"] += 1
-                if not (info['valences'][0] == info['valences'][1]) or not (iinfo['CN'][0] == iinfo['CN'][1]):
+                if not (iinfo['valences'][0] == iinfo['valences'][1]) or not (iinfo['CN'][0] == iinfo['CN'][1]):
                     Elementwise[iinfo['cations'][1]]["val1:" + str(iinfo['valences'][1])][
                         "val2:" + str(iinfo['valences'][0])][
                         "CN1:" + str(iinfo['CN'][1])]["CN2:" + str(iinfo['CN'][0])]["face"] += 1
@@ -1198,24 +1085,12 @@ class Pauling4(Pauling3and4):
             if herepolyhedra[numberpolyhedra] == 0:
                 Outputdict["val1:" + str(iinfo['valences'][0])]["val2:" + str(iinfo['valences'][1])][
                     "CN1:" + str(iinfo['CN'][0])]["CN2:" + str(iinfo['CN'][1])]["no"] += 1
-                if not (iinfo['valences'][0] == iinfo['valences'][1]):
-                    Outputdict["val1:" + str(iinfo['valences'][1])]["val2:" + str(iinfo['valences'][0])][
-                        "CN1:" + str(iinfo['CN'][0])]["CN2:" + str(iinfo['CN'][1])]["no"] += 1
-                if not (iinfo['CN'][0] == iinfo['CN'][1]):
-                    Outputdict["val1:" + str(iinfo['valences'][0])]["val2:" + str(iinfo['valences'][1])][
-                        "CN1:" + str(iinfo['CN'][1])]["CN2:" + str(iinfo['CN'][0])]["no"] += 1
                 if not (iinfo['valences'][0] == iinfo['valences'][1]) or not (iinfo['CN'][0] == iinfo['CN'][1]):
                     Outputdict["val1:" + str(iinfo['valences'][1])]["val2:" + str(iinfo['valences'][0])][
                         "CN1:" + str(iinfo['CN'][1])]["CN2:" + str(iinfo['CN'][0])]["no"] += 1
             elif herepolyhedra[numberpolyhedra] == 1:
                 Outputdict["val1:" + str(iinfo['valences'][0])]["val2:" + str(iinfo['valences'][1])][
                     "CN1:" + str(iinfo['CN'][0])]["CN2:" + str(iinfo['CN'][1])]["corner"] += 1
-                if not (iinfo['valences'][0] == iinfo['valences'][1]):
-                    Outputdict["val1:" + str(iinfo['valences'][1])]["val2:" + str(iinfo['valences'][0])][
-                        "CN1:" + str(iinfo['CN'][0])]["CN2:" + str(iinfo['CN'][1])]["corner"] += 1
-                if not (iinfo['CN'][0] == iinfo['CN'][1]):
-                    Outputdict["val1:" + str(iinfo['valences'][0])]["val2:" + str(iinfo['valences'][1])][
-                        "CN1:" + str(iinfo['CN'][1])]["CN2:" + str(iinfo['CN'][0])]["corner"] += 1
                 if not (iinfo['valences'][0] == iinfo['valences'][1]) or not (iinfo['CN'][0] == iinfo['CN'][1]):
                     Outputdict["val1:" + str(iinfo['valences'][1])]["val2:" + str(iinfo['valences'][0])][
                         "CN1:" + str(iinfo['CN'][1])]["CN2:" + str(iinfo['CN'][0])]["corner"] += 1
@@ -1223,12 +1098,6 @@ class Pauling4(Pauling3and4):
             elif herepolyhedra[numberpolyhedra] == 2:
                 Outputdict["val1:" + str(iinfo['valences'][0])]["val2:" + str(iinfo['valences'][1])][
                     "CN1:" + str(iinfo['CN'][0])]["CN2:" + str(iinfo['CN'][1])]["edge"] += 1
-                if not (iinfo['valences'][0] == iinfo['valences'][1]):
-                    Outputdict["val1:" + str(iinfo['valences'][1])]["val2:" + str(iinfo['valences'][0])][
-                        "CN1:" + str(iinfo['CN'][0])]["CN2:" + str(iinfo['CN'][1])]["edge"] += 1
-                if not (iinfo['CN'][0] == iinfo['CN'][1]):
-                    Outputdict["val1:" + str(iinfo['valences'][0])]["val2:" + str(iinfo['valences'][1])][
-                        "CN1:" + str(iinfo['CN'][1])]["CN2:" + str(iinfo['CN'][0])]["edge"] += 1
                 if not (iinfo['valences'][0] == iinfo['valences'][1]) or not (iinfo['CN'][0] == iinfo['CN'][1]):
                     Outputdict["val1:" + str(iinfo['valences'][1])]["val2:" + str(iinfo['valences'][0])][
                         "CN1:" + str(iinfo['CN'][1])]["CN2:" + str(iinfo['CN'][0])]["edge"] += 1
@@ -1236,13 +1105,7 @@ class Pauling4(Pauling3and4):
             elif herepolyhedra[numberpolyhedra] > 2:
                 Outputdict["val1:" + str(iinfo['valences'][0])]["val2:" + str(iinfo['valences'][1])][
                     "CN1:" + str(iinfo['CN'][0])]["CN2:" + str(iinfo['CN'][1])]["face"] += 1
-                if not (info['valences'][0] == info['valences'][1]):
-                    Outputdict["val1:" + str(iinfo['valences'][1])]["val2:" + str(iinfo['valences'][0])][
-                        "CN1:" + str(iinfo['CN'][0])]["CN2:" + str(iinfo['CN'][1])]["face"] += 1
-                if not (info['CN'][0] == info['CN'][1]):
-                    Outputdict["val1:" + str(iinfo['valences'][0])]["val2:" + str(iinfo['valences'][1])][
-                        "CN1:" + str(iinfo['CN'][1])]["CN2:" + str(iinfo['CN'][0])]["face"] += 1
-                if not (info['valences'][0] == info['valences'][1]) or not (iinfo['CN'][0] == iinfo['CN'][1]):
+                if not (iinfo['valences'][0] == iinfo['valences'][1]) or not (iinfo['CN'][0] == iinfo['CN'][1]):
                     Outputdict["val1:" + str(iinfo['valences'][1])]["val2:" + str(iinfo['valences'][0])][
                         "CN1:" + str(iinfo['CN'][1])]["CN2:" + str(iinfo['CN'][0])]["face"] += 1
 
@@ -1265,8 +1128,6 @@ class Pauling4(Pauling3and4):
 
         additionalinfo = inputdict['Additional']
         herepolyhedra = inputdict['PolyConnect']
-        samevalences = inputdict['samevalences']
-        sameCN = inputdict['sameCN']
 
         notconnected = 0
         corner = 0
@@ -1279,14 +1140,18 @@ class Pauling4(Pauling3and4):
                     (iinfo['valences'][1] == val1) and (iinfo['valences'][0] == val2)):
                 if ((iinfo['CN'][0] == CN1 and iinfo['CN'][1] == CN2) or (
                         iinfo['CN'][0] == CN2 and iinfo['CN'][1] == CN1)):
-                    if herepolyhedra[numberpolyhedra] == 0:
-                        notconnected = notconnected + 1
-                    elif herepolyhedra[numberpolyhedra] == 1:
-                        corner = corner + 1
-                    elif herepolyhedra[numberpolyhedra] == 2:
-                        edge = edge + 1
-                    elif herepolyhedra[numberpolyhedra] > 2:
-                        face = face + 1
+                    if (iinfo['valences'][0] == val1 and iinfo['CN'][0] == CN1) or (
+                            iinfo['valences'][1] == val1 and iinfo['CN'][1] == CN1) or (
+                            iinfo['valences'][0] == val2 and iinfo['CN'][0] == CN2) or (
+                            iinfo['valences'][1] == val2 and iinfo['CN'][1] == CN2):
+                        if herepolyhedra[numberpolyhedra] == 0:
+                            notconnected = notconnected + 1
+                        elif herepolyhedra[numberpolyhedra] == 1:
+                            corner = corner + 1
+                        elif herepolyhedra[numberpolyhedra] == 2:
+                            edge = edge + 1
+                        elif herepolyhedra[numberpolyhedra] > 2:
+                            face = face + 1
 
             numberpolyhedra = numberpolyhedra + 1
 
@@ -1320,13 +1185,10 @@ class Pauling5(PaulingConnection):
         if filename is None:
             save_to_file == False
         if save_to_file:
-            if not os.path.isdir(foldername):
+            if not os.path.isdir(foldername) and (foldername != ''):
                 os.mkdir(foldername)
-        self.mat = filename
-
         struct = lse.structure
         sites = struct.sites
-
         catid = []
         catenv = []
         connection_corners = []
@@ -1383,16 +1245,15 @@ class Pauling5(PaulingConnection):
         outputdict['uniquecat'] = uniquecat
 
         if save_to_file:
-            with open(os.path.join(foldername, self.mat + '.json'), 'w') as file:
+            with open(os.path.join(foldername, filename), 'w') as file:
                 json.dump(outputdict, file)
 
         self.FifthRuleDict = outputdict
 
-    def fromfile(self, mat, foldername):
+    def from_file(self, filename, foldername):
         # have to test this part of the code as well
-        self.mat = mat
-        print(mat)
-        with open(foldername + '/' + mat + '.json') as file:
+
+        with open(os.path.join(foldername, filename)) as file:
             self.FifthRuleDict = json.load(file)
 
     def is_fulfilled(self, options="CN"):
@@ -1446,6 +1307,7 @@ class Pauling5(PaulingConnection):
                 output[cat[0]]['not_fulfilled'] += 1
             for cat in outputdict['fulfillingenvs']:
                 if not cat[0] in output:
+                    output[cat[0]] = {}
                     output[cat[0]]['not_fulfilled'] = 0
                     output[cat[0]]['fulfilled'] = 0
                 output[cat[0]]['fulfilled'] += 1

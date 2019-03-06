@@ -10,7 +10,7 @@ lse = LightStructureEnvironments.from_dict(dict_lse)
 # print(lse.structure)
 
 pauling5 = Pauling5()
-pauling5.newsetup(lse=lse, save_to_file=False)
+pauling5.newsetup(lse=lse, save_to_file=True,"mp-19359.json")
 
 print(pauling5.is_fulfilled())
 #print(pauling5.get_details(options='CN'))
