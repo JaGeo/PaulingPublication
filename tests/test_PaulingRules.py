@@ -4,6 +4,7 @@ from pymatgen.analysis.chemenv.coordination_environments.coordination_geometry_f
 from pymatgen.analysis.chemenv.coordination_environments.chemenv_strategies import MultiWeightsChemenvStrategy
 from pymatgen.analysis.chemenv.coordination_environments.structure_environments import LightStructureEnvironments
 from pymatgen.analysis.bond_valence import BVAnalyzer
+from collections import Counter
 import unittest
 import json
 import tempfile
@@ -132,16 +133,23 @@ class PaulingRule2_Test(unittest.TestCase):
         self.assertDictEqual(self.Pauling_dict["mp-7000.json"].get_details(),
                              {'bvs_for_each_anion': [2.0, 2.0, 2.0, 2.0, 2.0, 2.0],
                               'cations_around_anion': [['Si', 'Si'], ['Si', 'Si'], ['Si', 'Si'], ['Si', 'Si'],
-                                                       ['Si', 'Si'], ['Si', 'Si']]})
+                                                       ['Si', 'Si'], ['Si', 'Si']],
+                              'elementwise_fulfillment': {'Si': [12, 0]},
+                              'cations_in_structure': Counter({'Si': 3})
+                              })
         self.assertDictEqual(self.Pauling_dict["mp-19418.json"].get_details(),
                              {'bvs_for_each_anion': [2.25, 2.25, 2.25, 2.25, 1.75, 1.75, 1.75, 1.75],
                               'cations_around_anion': [['V', 'Cr', 'Cr'], ['V', 'Cr', 'Cr'], ['V', 'Cr', 'Cr'],
                                                        ['V', 'Cr', 'Cr'], ['V', 'Cr'], ['V', 'Cr'], ['V', 'Cr'],
-                                                       ['V', 'Cr']]})
+                                                       ['V', 'Cr']],
+                              'elementwise_fulfillment': {'Cr': [0, 12], 'V': [0, 8]},
+                              'cations_in_structure': Counter({'V': 2, 'Cr': 2})
+                              })
 
     def test_is_fulfilled(self):
         self.assertTrue(self.Pauling_dict["mp-7000.json"].is_fulfilled())
         self.assertFalse(self.Pauling_dict["mp-19418.json"].is_fulfilled())
+        self.assertTrue(self.Pauling_dict["mp-19418.json"].is_fulfilled(tolerance=1))
 
 
 class PaulingConnection_Test(unittest.TestCase):

@@ -2,7 +2,7 @@ import json
 import numpy as np
 from pymatgen.core import PeriodicSite
 import os
-
+from collections import Counter
 
 class RuleCannotBeAnalyzedError(Exception):
     def __init__(self, value='The Rule cannot be analyzed'):
@@ -23,6 +23,26 @@ def is_an_oxide_and_no_env_for_O(lse):
                     "Site_envs of anions have been computed. The code has to stop. Use only_cations in compute_structure_environments")
     return True
 
+class MostFrequentEnvironment:
+
+    def __init__(self):
+        """
+        class to analyze the most frequent environment for a certain element
+        """
+        pass
+    #TODO: has to be written and tested
+
+
+class Pauling0:
+    def __init__(self,lse):
+        self.lse=lse
+
+    def _get_cations_in_structure(self):
+        elements = []
+        for isite, site in enumerate(self.lse.structure):
+            if self.lse.valences[isite]>=0:
+                elements.append(self.lse.structure[isite].species_string)
+        return Counter(elements)
 
 class Pauling1:
     def __init__(self, lse, filenameradii="univalent_cat_radii.json", onlylowerlimit=False):
@@ -182,7 +202,17 @@ class Pauling1:
             raise ValueError("env not in Pauling book")
 
 
-class Pauling2:
+class Pauling1_general_limit_rule:
+    def __init__(self,lse):
+        pass
+        #TODO: calculate the general limit of the rule by computing the most frequent environment
+
+    def get_details(self):
+        #returns a dict with an entry for each cation and number of env per cation
+        pass
+
+
+class Pauling2(Pauling0):
     def __init__(self, lse):
         """
         Class to test the electrostatic valence rule
@@ -206,7 +236,7 @@ class Pauling2:
                                                                         'bond_strength': float(
                                                                             lse.valences[isite]) / cn})
         self.anions_bond_strengths = []
-        self.satisfied = True
+        #self.satisfied = True
         self.lse = lse
         for isite, site in enumerate(lse.structure):
             if lse.valences[isite] < 0:
@@ -219,32 +249,46 @@ class Pauling2:
                     bond_strengths = []
                     cations_isites = []
                 bond_strengths_sum = sum(bond_strengths)
-                site_is_satisfied = bool(np.isclose(
-                    bond_strengths_sum, -lse.valences[isite]))
+                #site_is_satisfied = bool(np.isclose(
+                #    bond_strengths_sum, -lse.valences[isite]))
                 self.anions_bond_strengths.append({'anion_isite': isite,
                                                    'bond_strengths': bond_strengths,
                                                    'cations_isites': cations_isites,
                                                    'nominal_oxidation_state': lse.valences[isite],
-                                                   'bond_strengths_sum': bond_strengths_sum,
-                                                   'electrostatic_rule_satisfied': site_is_satisfied})
-                if not site_is_satisfied:
-                    self.satisfied = False
+                                                   'bond_strengths_sum': bond_strengths_sum}
+                                                   )
+                #if not site_is_satisfied:
+                #    self.satisfied = False
 
-    def is_fulfilled(self):
+    def is_fulfilled(self,tolerance=1e-2):
         """
         Tells you if rule is fulfilled for the whole structure
+        :param: tolerance for deviation from 2.
         :return: Boolean
         """
+        self.satisfied=True
+        ianionsite = 0
+        for isite, site in enumerate(self.lse.structure):
+            if self.lse.valences[isite] < 0:
+                if (abs(self.anions_bond_strengths[ianionsite]['bond_strengths_sum']-2.0)) > tolerance:
+                    self.satisfied=False
+
+                ianionsite = ianionsite + 1
+
+
         return self.satisfied
 
-    def get_details(self):
+    def get_details(self,tolerance=10e-2):
         """
         Gives you an output dict with information on each anion
+        :param tolerance: tolerance for evaluation of fulfillment for each oxygen
         :return: OutputDict with information on each anion
         """
         OutputDict = {}
         OutputDict["bvs_for_each_anion"] = self._get_anions_bvs()
         OutputDict["cations_around_anion"] = self._get_cations_around_anion()
+        OutputDict["elementwise_fulfillment"] =self._get_elementwise_fulfillment(tolerance=tolerance)
+        OutputDict["cations_in_structure"]=self._get_cations_in_structure()
         return OutputDict
 
     def _get_anions_bvs(self):
@@ -275,6 +319,29 @@ class Pauling2:
                 elements.append(elements_around)
                 ianionsite = ianionsite + 1
         return elements
+
+
+
+
+    def _get_elementwise_fulfillment(self,tolerance=10e-2):
+        #TODO: think about the tolerance!
+        cations_around_anion=self._get_cations_around_anion()
+        Elementwise_fulfillment={}
+        for ibvs, bvs in enumerate(self._get_anions_bvs()):
+            if abs(bvs-2.0)<=tolerance:
+                for cat in cations_around_anion[ibvs]:
+                    if cat not in Elementwise_fulfillment:
+                        Elementwise_fulfillment[cat]=[0,0]
+                    Elementwise_fulfillment[cat][0]+=1
+            else:
+                for cat in cations_around_anion[ibvs]:
+                    if cat not in Elementwise_fulfillment:
+                        Elementwise_fulfillment[cat]=[0,0]
+                    Elementwise_fulfillment[cat][1]+=1
+        return Elementwise_fulfillment
+
+
+
 
 
 class PaulingConnection():
@@ -608,7 +675,6 @@ class Pauling3and4(PaulingConnection):
         allsites = []
         for isite, site in enumerate(sites):
             if self._is_cationic_site(isite, valences=valences):
-                # TODO: reprogram this part!
                 # get infos from site
                 atoms_n_occu = site.species_string
                 lattice = site.lattice
@@ -797,7 +863,6 @@ class Pauling4(Pauling3and4):
         """
         :return: more information connected pairs of polyhedra
         """
-        # TODO: think about the symmetry of this arrays
 
         inputdict = self.PolyhedronDict
 
