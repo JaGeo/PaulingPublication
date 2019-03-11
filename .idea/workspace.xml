@@ -14,8 +14,8 @@
       <file leaf-file-name="PaulingRules.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/PaulingRules.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="221">
-              <caret line="13" lean-forward="true" selection-end-line="1459" />
+            <state relative-caret-position="546">
+              <caret line="280" lean-forward="true" selection-start-line="280" selection-end-line="280" />
               <folding>
                 <element signature="e#0#11#0" expanded="true" />
               </folding>
@@ -23,23 +23,44 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="test_PaulingRules.py" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/test_PaulingRules.py">
+      <file leaf-file-name="Classes_for_statistics.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Classes_for_statistics.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="208">
-              <caret line="30" lean-forward="true" selection-start-line="30" selection-end-line="30" />
+            <state relative-caret-position="397">
+              <caret line="384" column="27" selection-start-line="384" selection-start-column="27" selection-end-line="384" selection-end-column="27" />
               <folding>
-                <element signature="e#0#169#0" expanded="true" />
+                <element signature="e#0#100#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Sample_File.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Sample_File.py">
+      <file leaf-file-name="Graph_Test.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Graph_Test.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="34">
-              <caret line="2" selection-start-line="2" selection-end-line="6" selection-end-column="53" />
+            <state relative-caret-position="245">
+              <caret line="54" column="52" selection-start-line="54" selection-start-column="52" selection-end-line="54" selection-end-column="52" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Final_Run.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/Auswertung/Final_Run.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="170">
+              <caret line="10" column="79" selection-start-line="10" selection-start-column="79" selection-end-line="10" selection-end-column="79" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="test_PaulingRules.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/tests/test_PaulingRules.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="329">
+              <caret line="145" column="80" selection-start-line="145" selection-start-column="80" selection-end-line="145" selection-end-column="80" />
+              <folding>
+                <element signature="e#0#169#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -48,9 +69,21 @@
         <entry file="file://$PROJECT_DIR$/test_run.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="204">
-              <caret line="12" column="25" selection-start-line="12" selection-start-column="25" selection-end-line="12" selection-end-column="25" />
+              <caret line="12" column="27" selection-start-line="12" selection-start-column="27" selection-end-line="12" selection-end-column="27" />
               <folding>
-                <element signature="e#0#33#0" expanded="true" />
+                <element signature="e#0#39#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="PlotClasses.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/PlotClasses.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="170">
+              <caret line="10" selection-start-line="10" selection-end-line="10" />
+              <folding>
+                <element signature="e#23#32#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -67,36 +100,36 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>excluded</find>
-      <find>RuleCannotBeAnalyzedError</find>
-      <find>KeyError</find>
-      <find>ValueError</find>
-      <find>Pauling3</find>
-      <find>Pauling5</find>
-      <find>fromfile</find>
-      <find>is_an_oxi</find>
-      <find>environ</find>
-      <find>Raises</find>
-      <find>filename</find>
-      <find>file</find>
-      <find>outfile_path</find>
-      <find>foldername</find>
-      <find>CN</find>
-      <find>info['valences'</find>
+      <find>path_to</find>
+      <find>lot</find>
+      <find>_plot_</find>
+      <find>bvs</find>
+      <find>get_details</find>
+      <find>Pauling2</find>
+      <find>lowest</find>
+      <find>_add_dict_cat_dependency</find>
+      <find>_add_dict</find>
+      <find>cations</find>
+      <find>_plot_PSE</find>
+      <find>title</find>
+      <find>_plot</find>
+      <find>exit</find>
+      <find>_second</find>
+      <find>dev_array</find>
+      <find>self.present</find>
+      <find>save</find>
+      <find>mat</find>
+      <find>tot_std</find>
+      <find>_get_sim</find>
+      <find>_get_similar</find>
+      <find>get</find>
+      <find>Results</find>
+      <find>Results_Second_Rule.json</find>
+      <find>path</find>
+      <find>get_similar</find>
+      <find>Counter</find>
       <find>print</find>
-      <find>(info['valences'</find>
-      <find>window</find>
-      <find>_test_fulfillment</find>
-      <find>get_connections</find>
-      <find>_test_lse</find>
-      <find>edge</find>
-      <find>test_write</find>
-      <find>pauling4</find>
-      <find>dir</find>
-      <find>Pauling_list</find>
-      <find>se</find>
-      <find>Valu</find>
-      <find>&quot;no&quot;</find>
+      <find>_print</find>
     </findStrings>
     <replaceStrings>
       <replace>lowerlimit</replace>
@@ -110,17 +143,22 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/Sample_File.py" />
-        <option value="$PROJECT_DIR$/test_run.py" />
-        <option value="$PROJECT_DIR$/PaulingRules.py" />
         <option value="$PROJECT_DIR$/test_PaulingRules.py" />
+        <option value="$PROJECT_DIR$/test_run.py" />
+        <option value="$PROJECT_DIR$/Graph_Test.py" />
+        <option value="$PROJECT_DIR$/Auswertung/Function_to_get_statistics.py" />
+        <option value="$PROJECT_DIR$/Auswertung/Classes_for_statistics.py" />
+        <option value="$PROJECT_DIR$/tests/test_PaulingRules.py" />
+        <option value="$PROJECT_DIR$/PlotClasses.py" />
+        <option value="$PROJECT_DIR$/PaulingRules.py" />
+        <option value="$PROJECT_DIR$/Classes_for_statistics.py" />
+        <option value="$PROJECT_DIR$/Auswertung/Final_Run.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="7">
-    <option name="x" value="-5" />
-    <option name="y" value="-5" />
-    <option name="width" value="520" />
-    <option name="height" value="415" />
+    <option name="width" value="324" />
+    <option name="height" value="166" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -130,7 +168,7 @@
     <panes />
   </component>
   <component name="PropertiesComponent">
-    <property name="settings.editor.selected.configurable" value="configurable.group.editor" />
+    <property name="settings.editor.selected.configurable" value="pyconsole" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -144,7 +182,25 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.test_PaulingRules">
+  <component name="RunManager" selected="Python.Final_Run">
+    <configuration name="Final_Run" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="PaulingLibrary" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Auswertung" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Auswertung/Final_Run.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+    </configuration>
     <configuration name="Sample_File" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="PaulingLibrary" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -199,16 +255,34 @@
       <option name="EMULATE_TERMINAL" value="false" />
       <option name="MODULE_MODE" value="false" />
     </configuration>
+    <configuration name="py.test in test_PaulingRules.py" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+      <module name="PaulingLibrary" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_keywords" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;$PROJECT_DIR$/tests/test_PaulingRules.py&quot;" />
+      <option name="_new_targetType" value="&quot;PATH&quot;" />
+    </configuration>
     <list>
       <item itemvalue="Python.test_PaulingRules" />
       <item itemvalue="Python.test_run" />
       <item itemvalue="Python.Sample_File" />
+      <item itemvalue="Python tests.py.test in test_PaulingRules.py" />
+      <item itemvalue="Python.Final_Run" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.Final_Run" />
+        <item itemvalue="Python tests.py.test in test_PaulingRules.py" />
         <item itemvalue="Python.test_PaulingRules" />
-        <item itemvalue="Python.Sample_File" />
         <item itemvalue="Python.test_run" />
+        <item itemvalue="Python.Sample_File" />
       </list>
     </recent_temporary>
   </component>
@@ -225,19 +299,59 @@
     </task>
     <servers />
   </component>
+  <component name="TestHistory">
+    <history-entry file="py_test_in_test_PaulingRules_py - 2019.03.11 at 11h 01m 34s.xml">
+      <configuration name="py.test in test_PaulingRules.py" configurationId="tests" />
+    </history-entry>
+    <history-entry file="py_test_in_test_PaulingRules_py - 2019.03.11 at 11h 02m 02s.xml">
+      <configuration name="py.test in test_PaulingRules.py" configurationId="tests" />
+    </history-entry>
+    <history-entry file="py_test_in_test_PaulingRules_py - 2019.03.11 at 11h 03m 10s.xml">
+      <configuration name="py.test in test_PaulingRules.py" configurationId="tests" />
+    </history-entry>
+    <history-entry file="py_test_in_test_PaulingRules_py - 2019.03.11 at 11h 04m 43s.xml">
+      <configuration name="py.test in test_PaulingRules.py" configurationId="tests" />
+    </history-entry>
+    <history-entry file="py_test_in_test_PaulingRules_py - 2019.03.11 at 11h 04m 46s.xml">
+      <configuration name="py.test in test_PaulingRules.py" configurationId="tests" />
+    </history-entry>
+    <history-entry file="py_test_in_test_PaulingRules_py - 2019.03.11 at 11h 07m 25s.xml">
+      <configuration name="py.test in test_PaulingRules.py" configurationId="tests" />
+    </history-entry>
+    <history-entry file="py_test_in_test_PaulingRules_py - 2019.03.11 at 11h 10m 49s.xml">
+      <configuration name="py.test in test_PaulingRules.py" configurationId="tests" />
+    </history-entry>
+    <history-entry file="py_test_in_test_PaulingRules_py - 2019.03.11 at 12h 56m 36s.xml">
+      <configuration name="py.test in test_PaulingRules.py" configurationId="tests" />
+    </history-entry>
+    <history-entry file="py_test_in_test_PaulingRules_py - 2019.03.11 at 12h 57m 38s.xml">
+      <configuration name="py.test in test_PaulingRules.py" configurationId="tests" />
+    </history-entry>
+    <history-entry file="py_test_in_test_PaulingRules_py - 2019.03.11 at 13h 00m 13s.xml">
+      <configuration name="py.test in test_PaulingRules.py" configurationId="tests" />
+    </history-entry>
+  </component>
+  <component name="TodoView">
+    <todo-panel id="selected-file">
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+    <todo-panel id="all">
+      <are-packages-shown value="true" />
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+  </component>
   <component name="ToolWindowManager">
-    <frame x="-6" y="-6" width="1293" height="733" extended-state="6" />
+    <frame x="-8" y="-8" width="1296" height="1040" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.1119403" weight="0.24960254" />
-      <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.1278409" weight="0.24960254" />
+      <window_info anchor="bottom" id="TODO" order="6" weight="0.32888147" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
-      <window_info anchor="bottom" id="Find" order="1" weight="0.32554257" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.21535893" />
-      <window_info anchor="bottom" id="Version Control" order="9" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.27383593" />
+      <window_info anchor="bottom" id="Version Control" order="9" weight="0.32888147" />
       <window_info anchor="bottom" id="Python Console" order="7" weight="0.32888147" />
-      <window_info id="Structure" order="1" sideWeight="0.8880597" side_tool="true" visible="true" weight="0.24960254" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="8" visible="true" weight="0.32888147" />
+      <window_info id="Structure" order="1" sideWeight="0.87215906" side_tool="true" visible="true" weight="0.24960254" />
+      <window_info anchor="bottom" id="Terminal" order="8" weight="0.32888147" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -246,24 +360,25 @@
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.32554257" />
     </layout>
     <layout-to-restore>
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.21535893" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.27383593" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.1119403" weight="0.24960254" />
-      <window_info id="Structure" order="1" sideWeight="0.8880597" side_tool="true" visible="true" weight="0.24960254" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.1278409" weight="0.24960254" />
+      <window_info id="Structure" order="1" sideWeight="0.87215906" side_tool="true" visible="true" weight="0.24960254" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
-      <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="bottom" id="TODO" order="6" weight="0.32888147" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.32554257" />
       <window_info anchor="bottom" id="Python Console" order="7" weight="0.32888147" />
-      <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Terminal" order="8" weight="0.32888147" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
-      <window_info anchor="bottom" id="Version Control" order="9" />
-      <window_info anchor="bottom" id="Find" order="1" weight="0.32554257" />
+      <window_info anchor="bottom" id="Version Control" order="9" weight="0.32888147" />
+      <window_info anchor="bottom" id="Message" order="0" />
       <window_info id="Favorites" order="2" side_tool="true" />
     </layout-to-restore>
   </component>
@@ -271,6 +386,152 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/PaulingRules.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="19720">
+          <caret line="1163" selection-start-line="1163" selection-end-line="1163" />
+          <folding>
+            <element signature="e#0#11#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Classes_for_statistics.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="714">
+          <caret line="45" column="35" selection-start-line="45" selection-start-column="35" selection-end-line="45" selection-end-column="35" />
+          <folding>
+            <element signature="e#0#100#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Graph_Test.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1343">
+          <caret line="79" selection-start-line="79" selection-end-line="79" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Auswertung/Final_Run.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="34">
+          <caret line="2" column="32" selection-start-line="2" selection-start-column="32" selection-end-line="2" selection-end-column="32" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tests/test_PaulingRules.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="4" selection-start-line="4" selection-end-line="4" selection-end-column="113" />
+          <folding>
+            <element signature="e#0#169#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test_run.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="170">
+          <caret line="12" column="27" selection-start-line="12" selection-start-column="27" selection-end-line="12" selection-end-column="27" />
+          <folding>
+            <element signature="e#0#39#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PlotClasses.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="5" column="48" selection-start-line="5" selection-start-column="48" selection-end-line="5" selection-end-column="48" />
+          <folding>
+            <element signature="e#23#32#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PaulingRules.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="19771">
+          <caret line="1163" selection-start-line="1163" selection-end-line="1163" />
+          <folding>
+            <element signature="e#0#11#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Graph_Test.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1343">
+          <caret line="79" selection-start-line="79" selection-end-line="79" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Auswertung/Final_Run.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="39" selection-start-column="39" selection-end-column="39" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tests/test_PaulingRules.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="4" selection-start-line="4" selection-end-line="4" selection-end-column="113" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test_run.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="12" column="27" selection-start-line="12" selection-start-column="27" selection-end-line="12" selection-end-column="27" />
+          <folding>
+            <element signature="e#0#39#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PaulingRules.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="19771">
+          <caret line="1163" lean-forward="true" selection-start-line="1163" selection-end-line="1163" />
+          <folding>
+            <element signature="e#0#11#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Graph_Test.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1343">
+          <caret line="79" lean-forward="true" selection-start-line="79" selection-end-line="79" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Auswertung/Final_Run.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="39" selection-start-column="39" selection-end-column="39" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tests/test_PaulingRules.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="4" lean-forward="true" selection-start-line="4" selection-end-line="4" selection-end-column="113" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test_run.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="12" column="27" lean-forward="true" selection-start-line="12" selection-start-column="27" selection-end-line="12" selection-end-column="27" />
+          <folding>
+            <element signature="e#0#39#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/PaulingRules.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="21131">
@@ -281,22 +542,13 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/test_PaulingRules.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3876">
-          <caret line="228" column="1" lean-forward="true" selection-start-line="228" selection-start-column="1" selection-end-line="228" selection-end-column="1" />
-          <folding>
-            <element signature="e#0#169#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/test_PaulingRules.py" />
     <entry file="file://$PROJECT_DIR$/test_run.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="85">
           <caret line="5" column="18" selection-start-line="5" selection-start-column="18" selection-end-line="5" selection-end-column="18" />
           <folding>
-            <element signature="e#0#33#0" expanded="true" />
+            <element signature="e#0#39#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -311,16 +563,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/test_PaulingRules.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="4" column="26" selection-start-line="4" selection-start-column="26" selection-end-line="4" selection-end-column="26" />
-          <folding>
-            <element signature="e#0#169#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/test_PaulingRules.py" />
     <entry file="file://C:/ProgramData/Anaconda3/Lib/unittest/case.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="623">
@@ -328,47 +571,77 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/Sample_File.py" />
+    <entry file="file://$PROJECT_DIR$/test_PaulingRules.py" />
+    <entry file="file://$PROJECT_DIR$/Auswertung/Classes_for_statistics.py" />
     <entry file="file://$USER_HOME$/.PyCharmCE2018.1/system/python_stubs/-168686529/builtins.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="118">
-          <caret line="795" column="8" selection-start-line="795" selection-start-column="8" selection-end-line="795" selection-end-column="8" />
+          <caret line="741" column="8" selection-start-line="741" selection-start-column="8" selection-end-line="741" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PlotClasses.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="170">
+          <caret line="10" selection-start-line="10" selection-end-line="10" />
+          <folding>
+            <element signature="e#23#32#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/test_run.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="204">
-          <caret line="12" column="25" selection-start-line="12" selection-start-column="25" selection-end-line="12" selection-end-column="25" />
+          <caret line="12" column="27" selection-start-line="12" selection-start-column="27" selection-end-line="12" selection-end-column="27" />
           <folding>
-            <element signature="e#0#33#0" expanded="true" />
+            <element signature="e#0#39#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Sample_File.py">
+    <entry file="file://$PROJECT_DIR$/tests/test_PaulingRules.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="34">
-          <caret line="2" selection-start-line="2" selection-end-line="6" selection-end-column="53" />
+        <state relative-caret-position="329">
+          <caret line="145" column="80" selection-start-line="145" selection-start-column="80" selection-end-line="145" selection-end-column="80" />
+          <folding>
+            <element signature="e#0#169#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Graph_Test.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="245">
+          <caret line="54" column="52" selection-start-line="54" selection-start-column="52" selection-end-line="54" selection-end-column="52" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/PaulingRules.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="221">
-          <caret line="13" lean-forward="true" selection-end-line="1459" />
+        <state relative-caret-position="546">
+          <caret line="280" lean-forward="true" selection-start-line="280" selection-end-line="280" />
           <folding>
             <element signature="e#0#11#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/test_PaulingRules.py">
+    <entry file="file://$PROJECT_DIR$/Classes_for_statistics.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="208">
-          <caret line="30" lean-forward="true" selection-start-line="30" selection-end-line="30" />
+        <state relative-caret-position="397">
+          <caret line="384" column="27" selection-start-line="384" selection-start-column="27" selection-end-line="384" selection-end-column="27" />
           <folding>
-            <element signature="e#0#169#0" expanded="true" />
+            <element signature="e#0#100#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Auswertung/Final_Run.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="170">
+          <caret line="10" column="79" selection-start-line="10" selection-start-column="79" selection-end-line="10" selection-end-column="79" />
         </state>
       </provider>
     </entry>
