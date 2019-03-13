@@ -344,7 +344,7 @@ class Pauling2(Pauling0):
 
 
 
-class PaulingConnection():
+class PaulingConnection:
     """Class that can analyze connections of polyhedra"""
 
     def __init__(self, DISTANCE):
@@ -424,6 +424,7 @@ class Pauling3and4(PaulingConnection):
             :param foldername: name of the folder
             :param distance: float giving the distances of cations that is considered
         """
+        self.lse=lse
         is_an_oxide_and_no_env_for_O(lse)
         super().__init__(DISTANCE=distance)
         if filename is None:
@@ -443,7 +444,6 @@ class Pauling3and4(PaulingConnection):
                 json.dump(self.PolyhedronDict, file)
 
     def from_file(self, filename, foldername='ThirdRuleAnalysisConnections'):
-
         with open(os.path.join(foldername, filename)) as file:
             self.PolyhedronDict = json.load(file)
 
@@ -869,6 +869,7 @@ class Pauling4(Pauling3and4):
         additionalinfo = inputdict['Additional']
         herepolyhedra = inputdict['PolyConnect']
 
+
         Outputdict = {}
         Elementwise = {}
         numberpolyhedra = 0
@@ -1175,6 +1176,10 @@ class Pauling4(Pauling3and4):
                         "CN1:" + str(iinfo['CN'][1])]["CN2:" + str(iinfo['CN'][0])]["face"] += 1
 
             numberpolyhedra = numberpolyhedra + 1
+
+        Outputdict['maxval']= max(self.PolyhedronDict['cationvalences'])
+        Outputdict['minCN'] = min(self.PolyhedronDict['CNlist'])
+
 
         Outputdict['elementwise'] = Elementwise
 

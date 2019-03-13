@@ -375,7 +375,8 @@ class Pauling4_Test(unittest.TestCase):
             'val2:5': {'CN1:4': {'CN2:4': {'no': 88, 'corner': 0, 'edge': 0, 'face': 0},
                                  'CN2:6': {'no': 192, 'corner': 32, 'edge': 0, 'face': 0}},
                        'CN1:6': {'CN2:4': {'no': 192, 'corner': 32, 'edge': 0, 'face': 0},
-                                 'CN2:6': {'no': 96, 'corner': 8, 'edge': 0, 'face': 0}}}}}}})
+                                 'CN2:6': {'no': 96, 'corner': 8, 'edge': 0, 'face': 0}}}}}},
+            'maxval': 5, 'minCN': 4})
 
         with self.assertRaises(RuleCannotBeAnalyzedError):
             self.Pauling_List["mp-7000.json"].get_details()
