@@ -3,6 +3,10 @@ import numpy as np
 from pymatgen.core import PeriodicSite
 import os
 from collections import Counter
+from collections import OrderedDict
+import math
+from pymatgen.analysis.chemenv.coordination_environments.coordination_geometries import CoordinationGeometry
+
 
 class RuleCannotBeAnalyzedError(Exception):
     def __init__(self, value='The Rule cannot be analyzed'):
@@ -23,26 +27,84 @@ def is_an_oxide_and_no_env_for_O(lse):
                     "Site_envs of anions have been computed. The code has to stop. Use only_cations in compute_structure_environments")
     return True
 
-class MostFrequentEnvironment:
 
-    def __init__(self):
-        """
-        class to analyze the most frequent environment for a certain element
-        """
-        pass
-    #TODO: has to be written and tested
+class FrequencyEnvironmentPauling1:
+    # TODO: test classes
+    def __init__(self, lse):
+        is_an_oxide_and_no_env_for_O(lse)
+
+        self.output_dict = {}
+        for isite, site_envs in enumerate(lse.coordination_environments):
+            # identifies cationic sites - only cations have site_envs
+            if site_envs != None:
+                if len(site_envs) > 0:
+                    if not lse.structure[isite].species_string in self.output_dict:
+                        self.output_dict[lse.structure[isite].species_string] = []
+                    self.output_dict[lse.structure[isite].species_string].append(site_envs[0]['ce_symbol'])
+
+    def get_details(self):
+        return self.output_dict
+
+    def get_entropy_from_frequencies(self, dict_all_environments):
+        MAX_ENV = 66
+        all = {}
+        frequencies = {}
+        entropy = {}
+        for key, value in dict_all_environments.items():
+            all[key] = 0
+            frequencies[key] = {}
+            entropy[key] = 0.0
+            for key1, value1 in Counter(value).items():
+                all[key] += value1
+            for key1, value1 in Counter(value).items():
+                frequencies[key][key1] = float(value1) / float(all[key])
+            for key1, value in frequencies[key].items():
+                entropy[key] += -math.log(value, 2) * value
+
+        # print(Coordination)
+        maxentropy = 0.0
+        for i in range(1, MAX_ENV + 1):
+            maxentropy += -math.log(1.0 / float(i), 2) * 1.0 / float(i)
+
+        perc_entropy = {}
+        for key, value in entropy.items():
+            perc_entropy[key] = (float(maxentropy) - float(value)) / float(maxentropy)
+
+        return perc_entropy
+
+    def get_most_frequent_environment(self, dict_all_environments):
+        all = {}
+        frequencies = {}
+        perc_most_frequent = {}
+        perc_ready = {}
+        for key, value in dict_all_environments.items():
+            all[key] = 0
+            frequencies[key] = {}
+
+            for key1, value1 in Counter(value).items():
+                all[key] += value1
+            for key1, value1 in Counter(value).items():
+                frequencies[key][key1] = float(value1) / float(all[key])
+            perc_most_frequent[key] = OrderedDict(sorted(frequencies[key].items(), key=lambda x: x[1], reverse=True))
+
+            for value1 in perc_most_frequent[key].values():
+                perc_ready[key] = value1
+                break;
+        return perc_ready
 
 
 class Pauling0:
-    def __init__(self,lse):
-        self.lse=lse
+    def __init__(self, lse):
+        is_an_oxide_and_no_env_for_O(lse)
+        self.lse = lse
 
     def _get_cations_in_structure(self):
         elements = []
         for isite, site in enumerate(self.lse.structure):
-            if self.lse.valences[isite]>=0:
+            if self.lse.valences[isite] >= 0:
                 elements.append(self.lse.structure[isite].species_string)
         return Counter(elements)
+
 
 class Pauling1:
     def __init__(self, lse, filenameradii="univalent_cat_radii.json", onlylowerlimit=False):
@@ -203,13 +265,47 @@ class Pauling1:
 
 
 class Pauling1_general_limit_rule:
-    def __init__(self,lse):
-        pass
-        #TODO: calculate the general limit of the rule by computing the most frequent environment
+    def __init__(self, lse):
+        # TODO: implement something based on information theory to assess the number of environments!
+
+        # with valences
+        outputdict = {}
+        for isite, site_envs in enumerate(lse.coordination_environments):
+            # identifies cationic sites - only cations have site_envs
+            if site_envs != None:
+                if len(site_envs) > 0:
+                    if not lse.structure[isite].species_string in outputdict:
+                        outputdict[lse.structure[isite].species_string] = {}
+                    if not lse.valences[isite] in outputdict[lse.structure[isite].species_string]:
+                        outputdict[lse.structure[isite].species_string][lse.valences[isite]] = {}
+                    if not site_envs[0]['ce_symbol'] in outputdict[lse.structure[isite].species_string][
+                        lse.valences[isite]]:
+                        outputdict[lse.structure[isite].species_string][lse.valences[isite]][
+                            site_envs[0]['ce_symbol']] = 1
+                    else:
+                        outputdict[lse.structure[isite].species_string][lse.valences[isite]][
+                            site_envs[0]['ce_symbol']] += 1
+
+        self.outputdict = outputdict
+
+        # without valences
+        outputdict_without_val = {}
+        for isite, site_envs in enumerate(lse.coordination_environments):
+            # identifies cationic sites - only cations have site_envs
+            if site_envs != None:
+                if len(site_envs) > 0:
+                    if not lse.structure[isite].species_string in outputdict_without_val:
+                        outputdict_without_val[lse.structure[isite].species_string] = {}
+                    if not site_envs[0]['ce_symbol'] in outputdict_without_val[lse.structure[isite].species_string]:
+                        outputdict_without_val[lse.structure[isite].species_string][site_envs[0]['ce_symbol']] = 1
+                    else:
+                        outputdict_without_val[lse.structure[isite].species_string][site_envs[0]['ce_symbol']] += 1
+
+        self.outputdict_without_val = outputdict_without_val
 
     def get_details(self):
-        #returns a dict with an entry for each cation and number of env per cation
-        pass
+
+        return {"only_elements": self.outputdict_without_val, "with_val": self.outputdict}
 
 
 class Pauling2(Pauling0):
@@ -236,7 +332,7 @@ class Pauling2(Pauling0):
                                                                         'bond_strength': float(
                                                                             lse.valences[isite]) / cn})
         self.anions_bond_strengths = []
-        #self.satisfied = True
+        # self.satisfied = True
         self.lse = lse
         for isite, site in enumerate(lse.structure):
             if lse.valences[isite] < 0:
@@ -249,36 +345,35 @@ class Pauling2(Pauling0):
                     bond_strengths = []
                     cations_isites = []
                 bond_strengths_sum = sum(bond_strengths)
-                #site_is_satisfied = bool(np.isclose(
+                # site_is_satisfied = bool(np.isclose(
                 #    bond_strengths_sum, -lse.valences[isite]))
                 self.anions_bond_strengths.append({'anion_isite': isite,
                                                    'bond_strengths': bond_strengths,
                                                    'cations_isites': cations_isites,
                                                    'nominal_oxidation_state': lse.valences[isite],
                                                    'bond_strengths_sum': bond_strengths_sum}
-                                                   )
-                #if not site_is_satisfied:
+                                                  )
+                # if not site_is_satisfied:
                 #    self.satisfied = False
 
-    def is_fulfilled(self,tolerance=1e-2):
+    def is_fulfilled(self, tolerance=1e-2):
         """
         Tells you if rule is fulfilled for the whole structure
         :param: tolerance for deviation from 2.
         :return: Boolean
         """
-        self.satisfied=True
+        self.satisfied = True
         ianionsite = 0
         for isite, site in enumerate(self.lse.structure):
             if self.lse.valences[isite] < 0:
-                if (abs(self.anions_bond_strengths[ianionsite]['bond_strengths_sum']-2.0)) > tolerance:
-                    self.satisfied=False
+                if (abs(self.anions_bond_strengths[ianionsite]['bond_strengths_sum'] - 2.0)) > tolerance:
+                    self.satisfied = False
 
                 ianionsite = ianionsite + 1
 
-
         return self.satisfied
 
-    def get_details(self,tolerance=10e-2):
+    def get_details(self, tolerance=10e-2):
         """
         Gives you an output dict with information on each anion
         :param tolerance: tolerance for evaluation of fulfillment for each oxygen
@@ -287,8 +382,8 @@ class Pauling2(Pauling0):
         OutputDict = {}
         OutputDict["bvs_for_each_anion"] = self._get_anions_bvs()
         OutputDict["cations_around_anion"] = self._get_cations_around_anion()
-        OutputDict["elementwise_fulfillment"] =self._get_elementwise_fulfillment(tolerance=tolerance)
-        OutputDict["cations_in_structure"]=self._get_cations_in_structure()
+        OutputDict["elementwise_fulfillment"] = self._get_elementwise_fulfillment(tolerance=tolerance)
+        OutputDict["cations_in_structure"] = self._get_cations_in_structure()
         return OutputDict
 
     def _get_anions_bvs(self):
@@ -320,28 +415,22 @@ class Pauling2(Pauling0):
                 ianionsite = ianionsite + 1
         return elements
 
-
-
-
-    def _get_elementwise_fulfillment(self,tolerance=10e-2):
-        #TODO: think about the tolerance!
-        cations_around_anion=self._get_cations_around_anion()
-        Elementwise_fulfillment={}
+    def _get_elementwise_fulfillment(self, tolerance=10e-2):
+        # TODO: think about the tolerance!
+        cations_around_anion = self._get_cations_around_anion()
+        Elementwise_fulfillment = {}
         for ibvs, bvs in enumerate(self._get_anions_bvs()):
-            if abs(bvs-2.0)<=tolerance:
+            if abs(bvs - 2.0) <= tolerance:
                 for cat in cations_around_anion[ibvs]:
                     if cat not in Elementwise_fulfillment:
-                        Elementwise_fulfillment[cat]=[0,0]
-                    Elementwise_fulfillment[cat][0]+=1
+                        Elementwise_fulfillment[cat] = [0, 0]
+                    Elementwise_fulfillment[cat][0] += 1
             else:
                 for cat in cations_around_anion[ibvs]:
                     if cat not in Elementwise_fulfillment:
-                        Elementwise_fulfillment[cat]=[0,0]
-                    Elementwise_fulfillment[cat][1]+=1
+                        Elementwise_fulfillment[cat] = [0, 0]
+                    Elementwise_fulfillment[cat][1] += 1
         return Elementwise_fulfillment
-
-
-
 
 
 class PaulingConnection:
@@ -424,7 +513,7 @@ class Pauling3and4(PaulingConnection):
             :param foldername: name of the folder
             :param distance: float giving the distances of cations that is considered
         """
-        self.lse=lse
+        self.lse = lse
         is_an_oxide_and_no_env_for_O(lse)
         super().__init__(DISTANCE=distance)
         if filename is None:
@@ -621,8 +710,8 @@ class Pauling3and4(PaulingConnection):
         for i in range(0, len(allsites)):
             for j in range(i, len(allsites)):
                 #
-                fraccoorda = allsites[i].frac_coords
-                fraccoordb = allsites[j].frac_coords
+                fraccoorda = allsites[i].frac_coords.copy()
+                fraccoordb = allsites[j].frac_coords.copy()
 
                 if not (np.linalg.norm(allsites[i].coords - allsites[j].coords) > DISTANCE or (
                         fraccoorda[0] == fraccoordb[0] and fraccoorda[1] == fraccoordb[1] and fraccoorda[2] ==
@@ -822,7 +911,7 @@ class Pauling3(Pauling3and4):
 
 
 class Pauling4(Pauling3and4):
-    def is_fulfilled(self):
+    def is_fulfilled(self, leave_out_list=None):
         """
         tells you if polyhedra of cations with highest valence and smallest CN don't show any connections within the structure
         structure has to have cations with different valences and coordination numbers
@@ -868,7 +957,6 @@ class Pauling4(Pauling3and4):
 
         additionalinfo = inputdict['Additional']
         herepolyhedra = inputdict['PolyConnect']
-
 
         Outputdict = {}
         Elementwise = {}
@@ -1177,9 +1265,8 @@ class Pauling4(Pauling3and4):
 
             numberpolyhedra = numberpolyhedra + 1
 
-        Outputdict['maxval']= max(self.PolyhedronDict['cationvalences'])
+        Outputdict['maxval'] = max(self.PolyhedronDict['cationvalences'])
         Outputdict['minCN'] = min(self.PolyhedronDict['CNlist'])
-
 
         Outputdict['elementwise'] = Elementwise
 
@@ -1326,7 +1413,9 @@ class Pauling5(PaulingConnection):
         with open(os.path.join(foldername, filename)) as file:
             self.FifthRuleDict = json.load(file)
 
-    def is_fulfilled(self, options="CN"):
+    def is_fulfilled(self, options="CN", leave_out_list=[]):
+        # TODO: include lists of exceptions!
+        # hand it over to is_candidate_5thrule
         """
         tests if all chemically equivalent cations (same element, same valence) have the same CN, or environment, or environment and number of connections
         if there is only one chemically equivalent cation, the method raises a RuleCannotBeAnalyzedError
@@ -1335,7 +1424,7 @@ class Pauling5(PaulingConnection):
         :return: Boolean
         """
         # test _is_candidate_5thrule
-        if not self._is_candidate_5thrule():
+        if not self._is_candidate_5thrule(leave_out_list=leave_out_list):
             raise RuleCannotBeAnalyzedError("5th Rule cannot be evaluated")
 
         outputdict = self._postevaluation5thrule()
@@ -1348,68 +1437,93 @@ class Pauling5(PaulingConnection):
         else:
             raise ValueError("Wrong Option")
 
-    def get_details(self, options='CN'):
-        if not self._is_candidate_5thrule():
+    def get_details(self, options='CN', leave_out_list=[]):
+        if not self._is_candidate_5thrule(leave_out_list=leave_out_list):
             raise RuleCannotBeAnalyzedError("5th Rule cannot be evaluated")
 
         outputdict = self._postevaluation5thrule_elementdependency()
         output = {}
+
+        # TODO: only allow cat that are not in leave_out_list
         if options == 'CN':
             for cat in outputdict['exceptionsCN']:
-                if not cat[0] in output:
-                    output[cat[0]] = {}
-                    output[cat[0]]['not_fulfilled'] = 0
-                    output[cat[0]]['fulfilled'] = 0
-                output[cat[0]]['not_fulfilled'] += 1
+                if not cat[0] in leave_out_list:
+                    if not cat[0] in output:
+                        output[cat[0]] = {}
+                        output[cat[0]]['not_fulfilled'] = 0
+                        output[cat[0]]['fulfilled'] = 0
+                    output[cat[0]]['not_fulfilled'] += 1
             for cat in outputdict['fulfillingCN']:
-                if not cat[0] in output:
-                    output[cat[0]] = {}
-                    output[cat[0]]['not_fulfilled'] = 0
-                    output[cat[0]]['fulfilled'] = 0
-                output[cat[0]]['fulfilled'] += 1
+                if not cat[0] in leave_out_list:
+                    if not cat[0] in output:
+                        output[cat[0]] = {}
+                        output[cat[0]]['not_fulfilled'] = 0
+                        output[cat[0]]['fulfilled'] = 0
+                    output[cat[0]]['fulfilled'] += 1
             return output
         elif options == 'env':
             for cat in outputdict['exceptionsenvs']:
-                if not cat[0] in output:
-                    output[cat[0]] = {}
-                    output[cat[0]]['not_fulfilled'] = 0
-                    output[cat[0]]['fulfilled'] = 0
-                output[cat[0]]['not_fulfilled'] += 1
+                if not cat[0] in leave_out_list:
+                    if not cat[0] in output:
+                        output[cat[0]] = {}
+                        output[cat[0]]['not_fulfilled'] = 0
+                        output[cat[0]]['fulfilled'] = 0
+                    output[cat[0]]['not_fulfilled'] += 1
             for cat in outputdict['fulfillingenvs']:
-                if not cat[0] in output:
-                    output[cat[0]] = {}
-                    output[cat[0]]['not_fulfilled'] = 0
-                    output[cat[0]]['fulfilled'] = 0
-                output[cat[0]]['fulfilled'] += 1
+                if not cat[0] in leave_out_list:
+                    if not cat[0] in output:
+                        output[cat[0]] = {}
+                        output[cat[0]]['not_fulfilled'] = 0
+                        output[cat[0]]['fulfilled'] = 0
+                    output[cat[0]]['fulfilled'] += 1
             return output
         elif options == 'env+nconnections':
             for cat in outputdict['exceptionsenvs_connections']:
-                if not cat[0] in output:
-                    output[cat[0]] = {}
-                    output[cat[0]]['not_fulfilled'] = 0
-                    output[cat[0]]['fulfilled'] = 0
-                output[cat[0]]['not_fulfilled'] += 1
+                if not cat[0] in leave_out_list:
+                    if not cat[0] in output:
+                        output[cat[0]] = {}
+                        output[cat[0]]['not_fulfilled'] = 0
+                        output[cat[0]]['fulfilled'] = 0
+                    output[cat[0]]['not_fulfilled'] += 1
             for cat in outputdict['fulfillingenvs_connections']:
-                if not cat[0] in output:
-                    output[cat[0]] = {}
-                    output[cat[0]]['not_fulfilled'] = 0
-                    output[cat[0]]['fulfilled'] = 0
-                output[cat[0]]['fulfilled'] += 1
+                if not cat[0] in leave_out_list:
+                    if not cat[0] in output:
+                        output[cat[0]] = {}
+                        output[cat[0]]['not_fulfilled'] = 0
+                        output[cat[0]]['fulfilled'] = 0
+                    output[cat[0]]['fulfilled'] += 1
             return output
         else:
             raise ValueError("Wrong option")
 
-    def _is_candidate_5thrule(self):
+    def _is_candidate_5thrule(self, leave_out_list=[]):
+        # TODO, deal with exceptions list
         """
         tells you if 5th rule can be evaluated
+        :param leave_out_list:
         :return: Boolean
         """
+
         catid = self.FifthRuleDict['catid']
         uniquecat = self.FifthRuleDict['uniquecat']
-        if (len(uniquecat) != len(catid)):
-            return True
+        if leave_out_list == []:
+            if (len(uniquecat) != len(catid)):
+                return True
+            else:
+                return False
         else:
-            return False
+            newcatid = []
+            newuniquecat = []
+            for cat in catid:
+                if cat[0] not in leave_out_list:
+                    newcatid.append(cat)
+            for cat in uniquecat:
+                if cat[0] not in leave_out_list:
+                    newuniquecat.append(cat)
+            if (len(newuniquecat) != len(newcatid)):
+                return True
+            else:
+                return False
 
     def _postevaluation5thrule(self):
         """

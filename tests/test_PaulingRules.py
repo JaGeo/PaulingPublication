@@ -36,6 +36,22 @@ class is_an_oxide_and_no_env_for_O_Test(unittest.TestCase):
         with self.assertRaises(ValueError):
             is_an_oxide_and_no_env_for_O(self.lse2)
 
+class FrequencyEnvironmentPauling1_Test(unittest.TestCase):
+    #TODO: fill this in
+    def setUp(self):
+        pass
+    def test_one(self):
+        pass
+
+
+class Pauling0_Test(unittest.TestCase):
+    #TODO: fill this in
+    def setUp(self):
+        pass
+
+    def test_one(self):
+        pass
+
 
 class PaulingRule1_Test(unittest.TestCase):
     """Tests class PaulingRule1 """
@@ -441,16 +457,28 @@ class Pauling5_Test(unittest.TestCase):
             (self.Pauling_List["mp-5986.json"].is_fulfilled())
         with self.assertRaises(RuleCannotBeAnalyzedError):
             self.Pauling_List["mp-19359.json"].is_fulfilled()
+        with self.assertRaises(RuleCannotBeAnalyzedError):
+            self.Pauling_List["mp-7000.json"].is_fulfilled(leave_out_list=["Si"])
+        with self.assertRaises(RuleCannotBeAnalyzedError):
+            self.Pauling_List["mp-12236.json"].is_fulfilled(leave_out_list=["Er","Ga"])
+
+
         self.assertFalse(self.Pauling_List["mp-1788.json"].is_fulfilled())
         self.assertFalse(self.Pauling_List["mp-12236.json"].is_fulfilled())
+        self.assertTrue(self.Pauling_List["mp-12236.json"].is_fulfilled(leave_out_list=["Er"]))
+        self.assertFalse(self.Pauling_List["mp-12236.json"].is_fulfilled(leave_out_list=["Ga"]))
         self.assertTrue(self.Pauling_List["mp-7000.json"].is_fulfilled())
 
         self.assertFalse(self.Pauling_List["mp-1788.json"].is_fulfilled(options='env'))
         self.assertFalse(self.Pauling_List["mp-12236.json"].is_fulfilled(options='env'))
+        self.assertTrue(self.Pauling_List["mp-12236.json"].is_fulfilled(options='env',leave_out_list=["Er"]))
+        self.assertFalse(self.Pauling_List["mp-12236.json"].is_fulfilled(options='env',leave_out_list=["Ga"]))
         self.assertTrue(self.Pauling_List["mp-7000.json"].is_fulfilled(options='env'))
 
         self.assertFalse(self.Pauling_List["mp-1788.json"].is_fulfilled(options='env+nconnections'))
         self.assertFalse(self.Pauling_List["mp-12236.json"].is_fulfilled(options='env+nconnections'))
+        self.assertTrue(self.Pauling_List["mp-12236.json"].is_fulfilled(options='env+nconnections',leave_out_list=["Er"]))
+        self.assertFalse(self.Pauling_List["mp-12236.json"].is_fulfilled(options='env+nconnections',leave_out_list=["Ga"]))
         self.assertTrue(self.Pauling_List["mp-7000.json"].is_fulfilled(options='env+nconnections'))
 
         with self.assertRaises(ValueError):
@@ -477,6 +505,19 @@ class Pauling5_Test(unittest.TestCase):
                              {'Si': {'not_fulfilled': 0, 'fulfilled': 1}})
         self.assertDictEqual(self.Pauling_List["mp-1788.json"].get_details(options='env+nconnections'),
                              {'As': {'not_fulfilled': 1, 'fulfilled': 0}})
+        self.assertDictEqual(self.Pauling_List["mp-12236.json"].get_details(leave_out_list=["Ga"]),
+                             {'Er': {'not_fulfilled': 0, 'fulfilled': 1}})
+        self.assertDictEqual(self.Pauling_List["mp-12236.json"].get_details(leave_out_list=["Er"]),
+                             {'Ga': {'not_fulfilled': 1, 'fulfilled': 0}})
+        self.assertDictEqual(self.Pauling_List["mp-12236.json"].get_details(options='env',leave_out_list=["Ga"]),
+                             {'Er': {'not_fulfilled': 0, 'fulfilled': 1}})
+        self.assertDictEqual(self.Pauling_List["mp-12236.json"].get_details(options='env',leave_out_list=["Er"]),
+                             {'Ga': {'not_fulfilled': 1, 'fulfilled': 0}})
+        self.assertDictEqual(self.Pauling_List["mp-12236.json"].get_details(options='env+nconnections', leave_out_list=["Ga"]),
+                             {'Er': {'not_fulfilled': 0, 'fulfilled': 1}})
+        self.assertDictEqual(self.Pauling_List["mp-12236.json"].get_details(options='env+nconnections', leave_out_list=["Er"]),
+                             {'Ga': {'not_fulfilled': 1, 'fulfilled': 0}})
+
         with self.assertRaises(ValueError):
             self.Pauling_List["mp-7000.json"].get_details(options='something')
 
