@@ -28,6 +28,55 @@ def is_an_oxide_and_no_env_for_O(lse):
     return True
 
 
+def get_entropy_from_frequencies(dict_all_environments,max_env=66):
+    MAX_ENV = max_env
+    all = {}
+    frequencies = {}
+    entropy = {}
+    for key, value in dict_all_environments.items():
+        all[key] = 0
+        frequencies[key] = {}
+        entropy[key] = 0.0
+        for key1, value1 in Counter(value).items():
+            all[key] += value1
+        for key1, value1 in Counter(value).items():
+            frequencies[key][key1] = float(value1) / float(all[key])
+        for key1, value in frequencies[key].items():
+            entropy[key] += -math.log(value, 2) * value
+
+    # print(Coordination)
+    #something wrong here!
+    maxentropy =  (-math.log(1.0 / float(MAX_ENV), 2) * 1.0 / float(MAX_ENV))*MAX_ENV
+
+    perc_entropy = {}
+    for key, value in entropy.items():
+        perc_entropy[key] = (float(maxentropy) - float(value)) / float(maxentropy)
+
+    return perc_entropy
+
+def get_most_frequent_environment(dict_all_environments):
+    all = {}
+    frequencies = {}
+    perc_most_frequent = {}
+    perc_ready = {}
+    for key, value in dict_all_environments.items():
+        all[key] = 0
+        frequencies[key] = {}
+
+        for key1, value1 in Counter(value).items():
+            all[key] += value1
+        for key1, value1 in Counter(value).items():
+            frequencies[key][key1] = float(value1) / float(all[key])
+        perc_most_frequent[key] = OrderedDict(sorted(frequencies[key].items(), key=lambda x: x[1], reverse=True))
+
+        for value1 in perc_most_frequent[key].values():
+            perc_ready[key] = value1
+            break;
+    return perc_ready
+
+
+
+
 class FrequencyEnvironmentPauling1:
     # TODO: test classes
     def __init__(self, lse):
@@ -45,52 +94,7 @@ class FrequencyEnvironmentPauling1:
     def get_details(self):
         return self.output_dict
 
-    def get_entropy_from_frequencies(self, dict_all_environments):
-        MAX_ENV = 66
-        all = {}
-        frequencies = {}
-        entropy = {}
-        for key, value in dict_all_environments.items():
-            all[key] = 0
-            frequencies[key] = {}
-            entropy[key] = 0.0
-            for key1, value1 in Counter(value).items():
-                all[key] += value1
-            for key1, value1 in Counter(value).items():
-                frequencies[key][key1] = float(value1) / float(all[key])
-            for key1, value in frequencies[key].items():
-                entropy[key] += -math.log(value, 2) * value
 
-        # print(Coordination)
-        maxentropy = 0.0
-        for i in range(1, MAX_ENV + 1):
-            maxentropy += -math.log(1.0 / float(i), 2) * 1.0 / float(i)
-
-        perc_entropy = {}
-        for key, value in entropy.items():
-            perc_entropy[key] = (float(maxentropy) - float(value)) / float(maxentropy)
-
-        return perc_entropy
-
-    def get_most_frequent_environment(self, dict_all_environments):
-        all = {}
-        frequencies = {}
-        perc_most_frequent = {}
-        perc_ready = {}
-        for key, value in dict_all_environments.items():
-            all[key] = 0
-            frequencies[key] = {}
-
-            for key1, value1 in Counter(value).items():
-                all[key] += value1
-            for key1, value1 in Counter(value).items():
-                frequencies[key][key1] = float(value1) / float(all[key])
-            perc_most_frequent[key] = OrderedDict(sorted(frequencies[key].items(), key=lambda x: x[1], reverse=True))
-
-            for value1 in perc_most_frequent[key].values():
-                perc_ready[key] = value1
-                break;
-        return perc_ready
 
 
 class Pauling0:
@@ -98,7 +102,7 @@ class Pauling0:
         is_an_oxide_and_no_env_for_O(lse)
         self.lse = lse
 
-    def _get_cations_in_structure(self):
+    def get_cations_in_structure(self):
         elements = []
         for isite, site in enumerate(self.lse.structure):
             if self.lse.valences[isite] >= 0:
@@ -264,48 +268,48 @@ class Pauling1:
             raise ValueError("env not in Pauling book")
 
 
-class Pauling1_general_limit_rule:
-    def __init__(self, lse):
-        # TODO: implement something based on information theory to assess the number of environments!
-
-        # with valences
-        outputdict = {}
-        for isite, site_envs in enumerate(lse.coordination_environments):
-            # identifies cationic sites - only cations have site_envs
-            if site_envs != None:
-                if len(site_envs) > 0:
-                    if not lse.structure[isite].species_string in outputdict:
-                        outputdict[lse.structure[isite].species_string] = {}
-                    if not lse.valences[isite] in outputdict[lse.structure[isite].species_string]:
-                        outputdict[lse.structure[isite].species_string][lse.valences[isite]] = {}
-                    if not site_envs[0]['ce_symbol'] in outputdict[lse.structure[isite].species_string][
-                        lse.valences[isite]]:
-                        outputdict[lse.structure[isite].species_string][lse.valences[isite]][
-                            site_envs[0]['ce_symbol']] = 1
-                    else:
-                        outputdict[lse.structure[isite].species_string][lse.valences[isite]][
-                            site_envs[0]['ce_symbol']] += 1
-
-        self.outputdict = outputdict
-
-        # without valences
-        outputdict_without_val = {}
-        for isite, site_envs in enumerate(lse.coordination_environments):
-            # identifies cationic sites - only cations have site_envs
-            if site_envs != None:
-                if len(site_envs) > 0:
-                    if not lse.structure[isite].species_string in outputdict_without_val:
-                        outputdict_without_val[lse.structure[isite].species_string] = {}
-                    if not site_envs[0]['ce_symbol'] in outputdict_without_val[lse.structure[isite].species_string]:
-                        outputdict_without_val[lse.structure[isite].species_string][site_envs[0]['ce_symbol']] = 1
-                    else:
-                        outputdict_without_val[lse.structure[isite].species_string][site_envs[0]['ce_symbol']] += 1
-
-        self.outputdict_without_val = outputdict_without_val
-
-    def get_details(self):
-
-        return {"only_elements": self.outputdict_without_val, "with_val": self.outputdict}
+# class Pauling1_general_limit_rule:
+#     def __init__(self, lse):
+#         # TODO: implement something based on information theory to assess the number of environments!
+#
+#         # with valences
+#         outputdict = {}
+#         for isite, site_envs in enumerate(lse.coordination_environments):
+#             # identifies cationic sites - only cations have site_envs
+#             if site_envs != None:
+#                 if len(site_envs) > 0:
+#                     if not lse.structure[isite].species_string in outputdict:
+#                         outputdict[lse.structure[isite].species_string] = {}
+#                     if not lse.valences[isite] in outputdict[lse.structure[isite].species_string]:
+#                         outputdict[lse.structure[isite].species_string][lse.valences[isite]] = {}
+#                     if not site_envs[0]['ce_symbol'] in outputdict[lse.structure[isite].species_string][
+#                         lse.valences[isite]]:
+#                         outputdict[lse.structure[isite].species_string][lse.valences[isite]][
+#                             site_envs[0]['ce_symbol']] = 1
+#                     else:
+#                         outputdict[lse.structure[isite].species_string][lse.valences[isite]][
+#                             site_envs[0]['ce_symbol']] += 1
+#
+#         self.outputdict = outputdict
+#
+#         # without valences
+#         outputdict_without_val = {}
+#         for isite, site_envs in enumerate(lse.coordination_environments):
+#             # identifies cationic sites - only cations have site_envs
+#             if site_envs != None:
+#                 if len(site_envs) > 0:
+#                     if not lse.structure[isite].species_string in outputdict_without_val:
+#                         outputdict_without_val[lse.structure[isite].species_string] = {}
+#                     if not site_envs[0]['ce_symbol'] in outputdict_without_val[lse.structure[isite].species_string]:
+#                         outputdict_without_val[lse.structure[isite].species_string][site_envs[0]['ce_symbol']] = 1
+#                     else:
+#                         outputdict_without_val[lse.structure[isite].species_string][site_envs[0]['ce_symbol']] += 1
+#
+#         self.outputdict_without_val = outputdict_without_val
+#
+#     def get_details(self):
+#
+#         return {"only_elements": self.outputdict_without_val, "with_val": self.outputdict}
 
 
 class Pauling2(Pauling0):
@@ -383,7 +387,7 @@ class Pauling2(Pauling0):
         OutputDict["bvs_for_each_anion"] = self._get_anions_bvs()
         OutputDict["cations_around_anion"] = self._get_cations_around_anion()
         OutputDict["elementwise_fulfillment"] = self._get_elementwise_fulfillment(tolerance=tolerance)
-        OutputDict["cations_in_structure"] = self._get_cations_in_structure()
+        OutputDict["cations_in_structure"] = self.get_cations_in_structure()
         return OutputDict
 
     def _get_anions_bvs(self):
@@ -911,7 +915,7 @@ class Pauling3(Pauling3and4):
 
 
 class Pauling4(Pauling3and4):
-    def is_fulfilled(self, leave_out_list=None):
+    def is_fulfilled(self):
         """
         tells you if polyhedra of cations with highest valence and smallest CN don't show any connections within the structure
         structure has to have cations with different valences and coordination numbers
@@ -1427,15 +1431,13 @@ class Pauling5(PaulingConnection):
         if not self._is_candidate_5thrule(leave_out_list=leave_out_list):
             raise RuleCannotBeAnalyzedError("5th Rule cannot be evaluated")
 
-        outputdict = self._postevaluation5thrule()
-        if options == 'CN':
-            return outputdict['hassameCN']
-        elif options == 'env':
-            return outputdict['hassameenv']
-        elif options == 'env+nconnections':
-            return outputdict['hassameenvadsameconnectionnumber']
-        else:
-            raise ValueError("Wrong Option")
+        details=self.get_details(options=options,leave_out_list=leave_out_list)
+
+        for key, items in details.items():
+            #print(key)
+            if items['not_fulfilled']>0:
+                return False
+        return True
 
     def get_details(self, options='CN', leave_out_list=[]):
         if not self._is_candidate_5thrule(leave_out_list=leave_out_list):
@@ -1525,49 +1527,49 @@ class Pauling5(PaulingConnection):
             else:
                 return False
 
-    def _postevaluation5thrule(self):
-        """
-        evaluates the 5th rule
-        :return: outputdict with relevant information
-        """
-        connection_corners = self.FifthRuleDict['connection_corners']
-        connection_edges = self.FifthRuleDict['connection_edges']
-        connection_faces = self.FifthRuleDict['connection_faces']
-        catenv = self.FifthRuleDict['catenv']
-        catid = self.FifthRuleDict['catid']
-        uniquecat = self.FifthRuleDict['uniquecat']
-
-        hassamechemenvandsameconnectionnumber = True
-        hassameenv = True
-        hassameCN = True
-
-        # tells you if all cations that are the same have the same CN, CE, CE with no connections
-        # is this the correct test?
-        if len(uniquecat) != len(catid):
-
-            for icat, cat in enumerate(catid):
-                for icat2, cat2 in enumerate(catid):
-                    if icat2 > icat:
-                        if cat == cat2:
-                            if not (int(str(catenv[icat].split(":")[1])) == int(
-                                    str(catenv[icat2].split(":")[1]))):
-                                hassameCN = False
-
-                            if not (str(catenv[icat]) == str(catenv[icat2])):
-                                hassameenv = False
-                            if not (connection_corners[icat] == connection_corners[icat2] and connection_edges[
-                                icat] ==
-                                    connection_edges[icat2] and connection_faces[icat] == connection_faces[
-                                        icat2] and str(catenv[icat]) == str(catenv[icat2])):
-                                hassamechemenvandsameconnectionnumber = False
-                                break
-
-        Outputdict = {}
-        Outputdict['hassameCN'] = hassameCN
-        Outputdict['hassameenv'] = hassameenv
-        Outputdict['hassameenvadsameconnectionnumber'] = hassamechemenvandsameconnectionnumber
-
-        return Outputdict
+    # def _postevaluation5thrule(self):
+    #     """
+    #     evaluates the 5th rule
+    #     :return: outputdict with relevant information
+    #     """
+    #     connection_corners = self.FifthRuleDict['connection_corners']
+    #     connection_edges = self.FifthRuleDict['connection_edges']
+    #     connection_faces = self.FifthRuleDict['connection_faces']
+    #     catenv = self.FifthRuleDict['catenv']
+    #     catid = self.FifthRuleDict['catid']
+    #     uniquecat = self.FifthRuleDict['uniquecat']
+    #
+    #     hassamechemenvandsameconnectionnumber = True
+    #     hassameenv = True
+    #     hassameCN = True
+    #
+    #     # tells you if all cations that are the same have the same CN, CE, CE with no connections
+    #     # is this the correct test?
+    #     if len(uniquecat) != len(catid):
+    #
+    #         for icat, cat in enumerate(catid):
+    #             for icat2, cat2 in enumerate(catid):
+    #                 if icat2 > icat:
+    #                     if cat == cat2:
+    #                         if not (int(str(catenv[icat].split(":")[1])) == int(
+    #                                 str(catenv[icat2].split(":")[1]))):
+    #                             hassameCN = False
+    #
+    #                         if not (str(catenv[icat]) == str(catenv[icat2])):
+    #                             hassameenv = False
+    #                         if not (connection_corners[icat] == connection_corners[icat2] and connection_edges[
+    #                             icat] ==
+    #                                 connection_edges[icat2] and connection_faces[icat] == connection_faces[
+    #                                     icat2] and str(catenv[icat]) == str(catenv[icat2])):
+    #                             hassamechemenvandsameconnectionnumber = False
+    #                             break
+    #
+    #     Outputdict = {}
+    #     Outputdict['hassameCN'] = hassameCN
+    #     Outputdict['hassameenv'] = hassameenv
+    #     Outputdict['hassameenvadsameconnectionnumber'] = hassamechemenvandsameconnectionnumber
+    #
+    #     return Outputdict
 
     def _postevaluation5thrule_elementdependency(self):
         """

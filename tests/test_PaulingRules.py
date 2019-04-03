@@ -1,5 +1,5 @@
 from PaulingRules import Pauling1, Pauling2, PaulingConnection, Pauling3and4, Pauling3, Pauling4, Pauling5, \
-    RuleCannotBeAnalyzedError, is_an_oxide_and_no_env_for_O
+    RuleCannotBeAnalyzedError, is_an_oxide_and_no_env_for_O, FrequencyEnvironmentPauling1, Pauling0, get_entropy_from_frequencies,  get_most_frequent_environment
 from pymatgen.analysis.chemenv.coordination_environments.coordination_geometry_finder import LocalGeometryFinder
 from pymatgen.analysis.chemenv.coordination_environments.chemenv_strategies import MultiWeightsChemenvStrategy
 from pymatgen.analysis.chemenv.coordination_environments.structure_environments import LightStructureEnvironments
@@ -7,8 +7,10 @@ from pymatgen.analysis.bond_valence import BVAnalyzer
 from collections import Counter
 import unittest
 import json
+import math
 import tempfile
 import os
+
 
 
 class is_an_oxide_and_no_env_for_O_Test(unittest.TestCase):
@@ -36,21 +38,66 @@ class is_an_oxide_and_no_env_for_O_Test(unittest.TestCase):
         with self.assertRaises(ValueError):
             is_an_oxide_and_no_env_for_O(self.lse2)
 
+class Get_entropy_from_frequencies_Test(unittest.TestCase):
+    def test_get_entropy_from_frequencies(self):
+
+        compare1=1-(-math.log(0.5, 2)*0.5*2/(-math.log(1/66.0, 2)*1.0/66.0*66.0))
+        self.assertAlmostEqual(get_entropy_from_frequencies({'Ga': ['O:6', 'O:6', 'T:4', 'T:4']})["Ga"],compare1)
+        self.assertDictEqual(get_entropy_from_frequencies({'Ga': ['O:6', 'O:6', 'T:4', 'T:4']}),{'Ga': 0.8345574460809416})
+        self.assertAlmostEqual(get_entropy_from_frequencies({'Ga': ['O:6', 'O:6', 'T:4', 'T:4']},max_env=2)["Ga"],0.0)
+        self.assertAlmostEqual(get_entropy_from_frequencies({'Ga': ['O:6', 'O:6', 'O:6', 'O:6']},max_env=2)["Ga"],1.0)
+        self.assertAlmostEqual(get_entropy_from_frequencies({'Ga': ['O:6', 'T:4', 'T:4', 'A:2','O:6','O:6','L:2','O:6']},max_env=4)["Ga"],1.0-1.75/2.0)
+        self.assertAlmostEqual(get_entropy_from_frequencies({'Ga': ['O:6', 'T:4', 'T:4', 'A:2','O:6','O:6','L:2','L:2'],'Sn': ['O:6', 'T:4', 'T:4', 'A:2','O:6','O:6','L:2','O:6']},max_env=4)["Sn"],1.0-1.75/2.0)
+
+class Get_most_frequent_environment_Test(unittest.TestCase):
+    def test_get_most_frequent_environment(self):
+        self.assertEqual(get_most_frequent_environment({'Ga': ['O:6', 'O:6', 'T:4', 'T:4']})["Ga"],0.5)
+        self.assertDictEqual(get_most_frequent_environment({'Ga': ['O:6', 'O:6', 'T:4', 'T:4']}),{'Ga': 0.5})
+        self.assertDictEqual(get_most_frequent_environment({'Ga': ['O:6', 'O:6', 'O:6', 'O:6'],'Sn': ['O:6', 'O:6', 'O:6', 'O:6']}),{'Ga': 1.0, 'Sn':1.0})
+
 class FrequencyEnvironmentPauling1_Test(unittest.TestCase):
-    #TODO: fill this in
     def setUp(self):
-        pass
-    def test_one(self):
-        pass
+        self.matlist = ["mp-1788.json", "mp-7000.json", "mp-19359.json", "mp-306.json", "mp-886.json", "mp-2605.json"]
+        self.lse_dict = {}
+        self.Pauling_dict = {}
+        for mat in self.matlist:
+            with open(mat, "r") as f:
+                dict_lse = json.load(f)
+            lse = LightStructureEnvironments.from_dict(dict_lse)
+            self.lse_dict[mat] = lse
+            self.Pauling_dict[mat] = FrequencyEnvironmentPauling1(self.lse_dict[mat])
+
+    def test_get_details(self):
+        self.assertDictEqual(self.Pauling_dict["mp-1788.json"].get_details(),{'As': ['T:4', 'T:4', 'T:4', 'T:4', 'O:6', 'O:6', 'O:6', 'O:6']})
+        self.assertDictEqual(self.Pauling_dict["mp-7000.json"].get_details(),{'Si': ['T:4', 'T:4', 'T:4']})
+        self.assertDictEqual(self.Pauling_dict["mp-19359.json"].get_details(),{'Na': ['O:6'], 'Fe': ['O:6']})
+        self.assertDictEqual(self.Pauling_dict["mp-306.json"].get_details(),{'B': ['TL:3', 'TL:3', 'TL:3', 'TL:3', 'TL:3', 'TL:3']})
+        self.assertDictEqual(self.Pauling_dict["mp-886.json"].get_details(),{'Ga': ['O:6', 'O:6', 'T:4', 'T:4']})
+        self.assertDictEqual(self.Pauling_dict["mp-2605.json"].get_details(),{'Ca': ['O:6']})
+
+
+
 
 
 class Pauling0_Test(unittest.TestCase):
-    #TODO: fill this in
     def setUp(self):
-        pass
+        self.matlist = ["mp-1788.json", "mp-7000.json", "mp-19359.json", "mp-306.json", "mp-886.json", "mp-2605.json"]
+        self.lse_dict = {}
+        self.Pauling_dict = {}
+        for mat in self.matlist:
+            with open(mat, "r") as f:
+                dict_lse = json.load(f)
+            lse = LightStructureEnvironments.from_dict(dict_lse)
+            self.lse_dict[mat] = lse
+            self.Pauling_dict[mat] = Pauling0(self.lse_dict[mat])
 
     def test_one(self):
-        pass
+        self.assertDictEqual(dict(self.Pauling_dict["mp-1788.json"].get_cations_in_structure()),{'As': 8})
+        self.assertDictEqual(dict(self.Pauling_dict["mp-7000.json"].get_cations_in_structure()),{'Si': 3})
+        self.assertDictEqual(dict(self.Pauling_dict["mp-19359.json"].get_cations_in_structure()),{'Na': 1, 'Fe': 1})
+        self.assertDictEqual(dict(self.Pauling_dict["mp-306.json"].get_cations_in_structure()),{'B': 6})
+        self.assertDictEqual(dict(self.Pauling_dict["mp-886.json"].get_cations_in_structure()),{'Ga': 4})
+        self.assertDictEqual(dict(self.Pauling_dict["mp-2605.json"].get_cations_in_structure()),{'Ca': 1})
 
 
 class PaulingRule1_Test(unittest.TestCase):
@@ -460,25 +507,29 @@ class Pauling5_Test(unittest.TestCase):
         with self.assertRaises(RuleCannotBeAnalyzedError):
             self.Pauling_List["mp-7000.json"].is_fulfilled(leave_out_list=["Si"])
         with self.assertRaises(RuleCannotBeAnalyzedError):
-            self.Pauling_List["mp-12236.json"].is_fulfilled(leave_out_list=["Er","Ga"])
-
+            self.Pauling_List["mp-12236.json"].is_fulfilled(leave_out_list=["Er", "Ga"])
 
         self.assertFalse(self.Pauling_List["mp-1788.json"].is_fulfilled())
         self.assertFalse(self.Pauling_List["mp-12236.json"].is_fulfilled())
-        self.assertTrue(self.Pauling_List["mp-12236.json"].is_fulfilled(leave_out_list=["Er"]))
-        self.assertFalse(self.Pauling_List["mp-12236.json"].is_fulfilled(leave_out_list=["Ga"]))
+        # TODO: fix problems here
+
+        self.assertTrue(self.Pauling_List["mp-12236.json"].is_fulfilled(leave_out_list=["Ga"]))
+
+        self.assertFalse(self.Pauling_List["mp-12236.json"].is_fulfilled(leave_out_list=["Er"]))
         self.assertTrue(self.Pauling_List["mp-7000.json"].is_fulfilled())
 
         self.assertFalse(self.Pauling_List["mp-1788.json"].is_fulfilled(options='env'))
         self.assertFalse(self.Pauling_List["mp-12236.json"].is_fulfilled(options='env'))
-        self.assertTrue(self.Pauling_List["mp-12236.json"].is_fulfilled(options='env',leave_out_list=["Er"]))
-        self.assertFalse(self.Pauling_List["mp-12236.json"].is_fulfilled(options='env',leave_out_list=["Ga"]))
+        self.assertTrue(self.Pauling_List["mp-12236.json"].is_fulfilled(options='env', leave_out_list=["Ga"]))
+        self.assertFalse(self.Pauling_List["mp-12236.json"].is_fulfilled(options='env', leave_out_list=["Er"]))
         self.assertTrue(self.Pauling_List["mp-7000.json"].is_fulfilled(options='env'))
 
         self.assertFalse(self.Pauling_List["mp-1788.json"].is_fulfilled(options='env+nconnections'))
         self.assertFalse(self.Pauling_List["mp-12236.json"].is_fulfilled(options='env+nconnections'))
-        self.assertTrue(self.Pauling_List["mp-12236.json"].is_fulfilled(options='env+nconnections',leave_out_list=["Er"]))
-        self.assertFalse(self.Pauling_List["mp-12236.json"].is_fulfilled(options='env+nconnections',leave_out_list=["Ga"]))
+        self.assertTrue(
+            self.Pauling_List["mp-12236.json"].is_fulfilled(options='env+nconnections', leave_out_list=["Ga"]))
+        self.assertFalse(
+            self.Pauling_List["mp-12236.json"].is_fulfilled(options='env+nconnections', leave_out_list=["Er"]))
         self.assertTrue(self.Pauling_List["mp-7000.json"].is_fulfilled(options='env+nconnections'))
 
         with self.assertRaises(ValueError):
@@ -509,14 +560,16 @@ class Pauling5_Test(unittest.TestCase):
                              {'Er': {'not_fulfilled': 0, 'fulfilled': 1}})
         self.assertDictEqual(self.Pauling_List["mp-12236.json"].get_details(leave_out_list=["Er"]),
                              {'Ga': {'not_fulfilled': 1, 'fulfilled': 0}})
-        self.assertDictEqual(self.Pauling_List["mp-12236.json"].get_details(options='env',leave_out_list=["Ga"]),
+        self.assertDictEqual(self.Pauling_List["mp-12236.json"].get_details(options='env', leave_out_list=["Ga"]),
                              {'Er': {'not_fulfilled': 0, 'fulfilled': 1}})
-        self.assertDictEqual(self.Pauling_List["mp-12236.json"].get_details(options='env',leave_out_list=["Er"]),
+        self.assertDictEqual(self.Pauling_List["mp-12236.json"].get_details(options='env', leave_out_list=["Er"]),
                              {'Ga': {'not_fulfilled': 1, 'fulfilled': 0}})
-        self.assertDictEqual(self.Pauling_List["mp-12236.json"].get_details(options='env+nconnections', leave_out_list=["Ga"]),
-                             {'Er': {'not_fulfilled': 0, 'fulfilled': 1}})
-        self.assertDictEqual(self.Pauling_List["mp-12236.json"].get_details(options='env+nconnections', leave_out_list=["Er"]),
-                             {'Ga': {'not_fulfilled': 1, 'fulfilled': 0}})
+        self.assertDictEqual(
+            self.Pauling_List["mp-12236.json"].get_details(options='env+nconnections', leave_out_list=["Ga"]),
+            {'Er': {'not_fulfilled': 0, 'fulfilled': 1}})
+        self.assertDictEqual(
+            self.Pauling_List["mp-12236.json"].get_details(options='env+nconnections', leave_out_list=["Er"]),
+            {'Ga': {'not_fulfilled': 1, 'fulfilled': 0}})
 
         with self.assertRaises(ValueError):
             self.Pauling_List["mp-7000.json"].get_details(options='something')
