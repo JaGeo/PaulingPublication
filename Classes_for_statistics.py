@@ -16,12 +16,16 @@ from pymatgen.analysis.chemenv.coordination_environments.coordination_geometries
 from pymatgen.core.sites import PeriodicSite
 from pymatgen.vis.structure_vtk import StructureVis
 from yaml import load, dump
+
 try:
     from yaml import CLoader as Loader, CDumper as Dumper
 except ImportError:
     from yaml import Loader, Dumper
 
 import csv
+
+
+#TODO: discard non primitive structures, discard theoretical structures, update energy above hull for structures and discard structures not below or equal to 0.025 eV
 
 class OverAllAnalysis:
 
@@ -49,8 +53,7 @@ class OverAllAnalysis:
         self.lower_limit_plot = lower_limit_plot
         self.upper_limit_plot = upper_limit_plot
         self.use_prematching = use_prematching
-        if list_of_materials_to_investiage is not None:
-            self.list_of_materials_to_investiage=list_of_materials_to_investiage
+        self.list_of_materials_to_investiage = list_of_materials_to_investiage
 
         # could include a function that starts plotting from saved data?
         # how should one do this in the best way
@@ -92,8 +95,8 @@ class OverAllAnalysis:
                 else:
                     list_compound = list_compound_dict["is_clear_compounds"][start_material:stop_material]
 
-        elif source=='my_own_list':
-            self._get_precomputed_results(self.list_of_materials_to_investiage)
+        elif source == 'my_own_list':
+            list_compound = self._get_precomputed_results(self.list_of_materials_to_investiage)
 
         # here: be careful that you are aware of start and stop_material !!
         if onlybinaries:
@@ -113,7 +116,7 @@ class OverAllAnalysis:
             return list_compound
 
     def _get_lse_from_folder(self, mat, source='MP'):
-        if source == 'MP' or source == 'MP_very_symmetric':
+        if source == 'MP' or source == 'MP_very_symmetric' or source == 'my_own_list':
             with open("../../DB_chem_env/1st_rule/" + mat + ".json", 'r') as f:
                 data = json.load(f)
 
@@ -183,7 +186,9 @@ class OverAllAnalysis:
 
     def _get_similar_structures(self, list_mat_id, source='MP', save_to_file=True,
                                 path_to_save='Similar_Structures.json', fetch_results_only=False,
-                                start_from_Matching=False, path_to_precomputed_matching="Should_not_be_changed/Matching_All_Structures.json", restart_from_matching=False):
+                                start_from_Matching=False,
+                                path_to_precomputed_matching="Should_not_be_changed/Matching_All_Structures.json",
+                                restart_from_matching=False):
         """
 
         :param list_mat_id:
@@ -242,8 +247,7 @@ class OverAllAnalysis:
             else:
                 pass
         elif start_from_Matching:
-            prematching=self._get_precomputed_results(path_to_precomputed_matching)
-
+            prematching = self._get_precomputed_results(path_to_precomputed_matching)
 
             information_mat = {}
             new_dict = {}
@@ -263,7 +267,7 @@ class OverAllAnalysis:
                     # else:
                     #     raise ValueError
                 if not in_there:
-                    structure=lse.structure
+                    structure = lse.structure
                     Matcher = StructureMatcher(attempt_supercell=True, comparator=FrameworkComparator())
                     found = False
                     foundmat = ''
@@ -284,7 +288,7 @@ class OverAllAnalysis:
                             new_dict[foundmat].append(mat)
                     else:
                         if not mat in new_dict:
-                            new_dict[mat]=[]
+                            new_dict[mat] = []
                         if mat not in new_dict[mat]:
                             new_dict[mat].append(mat)
             dictstructures = {}
@@ -292,8 +296,6 @@ class OverAllAnalysis:
                 dictstructures[values[0]] = values
 
             dictstructures = OrderedDict(sorted(dictstructures.items(), key=lambda t: len(t[1]), reverse=True))
-
-
 
         if not fetch_results_only:
             new_list_mat_id = []
@@ -306,7 +308,6 @@ class OverAllAnalysis:
             outputdict['list_mat_id'] = new_list_mat_id
             outputdict['structure_matching'] = dictstructures
             outputdict['additional_info'] = information_mat
-
 
         if save_to_file and (not fetch_results_only) and (path_to_save is not None):
             self._save_results_to_file(outputdict, path_to_save)
@@ -330,7 +331,7 @@ class OverAllAnalysis:
             for item in items:
                 if add_properties_from_lse:
                     lse = self._get_lse_from_folder(mat=item, source=source)
-                    valence = [i for i in lse.valences if i >0]
+                    valence = [i for i in lse.valences if i > 0]
                     # get CN:
                     CN = []
                     for isite, site_envs in enumerate(lse.coordination_environments):
@@ -338,30 +339,29 @@ class OverAllAnalysis:
                         if site_envs != None:
                             if len(site_envs) > 0:
                                 CN.append(site_envs[0]['ce_symbol'].split(':')[1])
-                    # print(valence)
-                    # print(CN)
-                    print(item + ' (' + str(dict_to_print['additional_info'][item]) + ', CNs:' +str(CN)+', valences: '+str(valence)+'), ', end='')
+                    print(item + ' (' + str(dict_to_print['additional_info'][item]) + ', CNs:' + str(
+                        CN) + ', valences: ' + str(valence) + '), ', end='')
                 print(item + ' (' + str(dict_to_print['additional_info'][item]) + '), ', end='')
 
             print()
 
-    def _print_to_file_similar_structures(self,dict_to_print,source='MP',filename='Test.yaml',fmt='yml'):
+    def _print_to_file_similar_structures(self, dict_to_print, source='MP', filename='Test.yaml', fmt='yml'):
 
-        #TODO: include cations in relevant order -> make it a csv instead
+        # TODO: include cations in relevant order -> make it a csv instead
 
-        if fmt=='yml':
-            new_dict_to_print=OrderedDict()
+        if fmt == 'yml':
+            new_dict_to_print = OrderedDict()
             for key, items in OrderedDict(
                     sorted(dict_to_print['structure_matching'].items(), key=lambda t: len(t[1]), reverse=True)).items():
 
-                new_dict_to_print[key]={}
+                new_dict_to_print[key] = {}
 
                 for item in items:
 
                     lse = self._get_lse_from_folder(mat=item, source=source)
-                    valence = [i for i in lse.valences if i >0]
+                    valence = [i for i in lse.valences if i > 0]
                     # get CN:
-                    cat=[]
+                    cat = []
                     CN = []
                     for isite, site_envs in enumerate(lse.coordination_environments):
 
@@ -369,15 +369,14 @@ class OverAllAnalysis:
                             if len(site_envs) > 0:
                                 CN.append(site_envs[0]['ce_symbol'].split(':')[1])
                                 cat.append(lse.structure[isite].species_string)
-                    new_dict_to_print[key][item]={"formula":dict_to_print['additional_info'][item],"CN":CN,"valences": valence, "cations": cat}
+                    new_dict_to_print[key][item] = {"formula": dict_to_print['additional_info'][item], "CN": CN,
+                                                    "valences": valence, "cations": cat}
 
+            with open(filename, 'w') as f:
+                dump(OrderedDict(new_dict_to_print), f)
 
-
-            with open(filename,'w') as f:
-                dump(OrderedDict(new_dict_to_print),f)
-
-        elif fmt=='csv':
-            new_dict_to_print=[]
+        elif fmt == 'csv':
+            new_dict_to_print = []
             for key, items in OrderedDict(
                     sorted(dict_to_print['structure_matching'].items(), key=lambda t: len(t[1]), reverse=True)).items():
 
@@ -394,17 +393,18 @@ class OverAllAnalysis:
                             if len(site_envs) > 0:
                                 CN.append(site_envs[0]['ce_symbol'].split(':')[1])
                                 cat.append(lse.structure[isite].species_string)
-                    new_dict_to_print.append({"mpid":str(item),"formula": dict_to_print['additional_info'][item], "CN": CN,
-                                                    "valences": valence, "cations": cat, "structure_type": key})
+                    new_dict_to_print.append(
+                        {"mpid": str(item), "formula": dict_to_print['additional_info'][item], "CN": CN,
+                         "valences": valence, "cations": cat, "structure_type": key})
 
             with open(filename, 'w') as csvfile:
                 filewriter = csv.writer(csvfile, delimiter=';',
                                         quotechar='|', quoting=csv.QUOTE_MINIMAL)
-                filewriter.writerow(['mp-id','formula','structure_type','cations','valences','CNs'])
+                filewriter.writerow(['mp-id', 'formula', 'structure_type', 'cations', 'valences', 'CNs'])
                 for line in new_dict_to_print:
-                    filewriter.writerow([str(line["mpid"]),str(line["formula"]),str(line["structure_type"]),str(line["cations"]),str(line["valences"]),str(line["CN"])])
-
-
+                    filewriter.writerow(
+                        [str(line["mpid"]), str(line["formula"]), str(line["structure_type"]), str(line["cations"]),
+                         str(line["valences"]), str(line["CN"])])
 
     def _pieplot_connections(self, corner, edge, face, title="All"):
 
@@ -466,7 +466,7 @@ class OverAllAnalysis:
         vis.show()
 
 
-#Not sure this should be tested - let's see
+# Not sure this should be tested - let's see
 class MatchAllStructures(OverAllAnalysis):
     def __init__(self, source='MP', startmaterial=None, stopmaterial=None, restart_from_matching=False):
         self.source = source
@@ -485,7 +485,8 @@ class Pauling1Frequency(OverAllAnalysis):
     """Analyses the 1-percentropy of certain cation"""
 
     def __init__(self, source='MP', onlybinaries=False, plot_element_dependend_analysis=True,
-                 lowest_number_environments_for_plot=50, lower_limit_plot=0.0, upper_limit_plot=1.0):
+                 lowest_number_environments_for_plot=50, lower_limit_plot=0.0, upper_limit_plot=1.0,
+                 list_of_materials_to_investiage=None):
         """
             :param source:
             :param onlybinaries: only binary structures will be analysed
@@ -501,11 +502,15 @@ class Pauling1Frequency(OverAllAnalysis):
         self.lowest_number_environments_for_plot = lowest_number_environments_for_plot
         self.lower_limit_plot = lower_limit_plot
         self.upper_limit_plot = upper_limit_plot
+        if list_of_materials_to_investiage is not None:
+            self.list_of_materials_to_investiage = list_of_materials_to_investiage
 
     def run(self, start_from_results=False, save_result_data=True, path_to_save='Results/Results_First_Limits.json'):
 
         if not start_from_results:
             self._new_setup()
+            self.Plot_PSE_most_frequent = get_most_frequent_environment(self.All_Details)
+
         else:
             pass
             inputdict = self._get_precomputed_results(path_to_save)
@@ -531,7 +536,7 @@ class Pauling1Frequency(OverAllAnalysis):
         self.All_Details = {}
         self.present_env = {}
         for mat in list_mat:
-            print(mat)
+            # print(mat)
             lse = self._get_lse_from_folder(mat, source=self.source)
             pauling0 = Pauling0(lse)
             pauling1_limit = FrequencyEnvironmentPauling1(lse=lse)
@@ -541,14 +546,13 @@ class Pauling1Frequency(OverAllAnalysis):
             self._add_dict_cat_dependency(self.present_env, pauling0.get_cations_in_structure(),
                                           number_of_elements_to_add=1)
 
-        self.Plot_PSE_most_frequent = get_most_frequent_environment(self.All_Details)
 
-
-class Pauling1Entropy(OverAllAnalysis):
+class Pauling1Entropy(Pauling1Frequency):
     """Analyses the 1-percentropy of certain cation"""
 
     def __init__(self, source='MP', onlybinaries=False, plot_element_dependend_analysis=True,
-                 lowest_number_environments_for_plot=50, lower_limit_plot=0.0, upper_limit_plot=1.0):
+                 lowest_number_environments_for_plot=50, lower_limit_plot=0.0, upper_limit_plot=1.0,
+                 list_of_materials_to_investiage=None):
         """
             :param source:
             :param onlybinaries: only binary structures will be analysed
@@ -557,18 +561,26 @@ class Pauling1Entropy(OverAllAnalysis):
             :param save_result_data: all results will be saved so that results can easily be recreated
             :return:
         """
+        super(Pauling1Entropy, self).__init__(source=source, onlybinaries=onlybinaries,
+                                              plot_element_dependend_analysis=plot_element_dependend_analysis,
+                                              lowest_number_environments_for_plot=lowest_number_environments_for_plot,
+                                              lower_limit_plot=lower_limit_plot, upper_limit_plot=upper_limit_plot,
+                                              list_of_materials_to_investiage=list_of_materials_to_investiage)
 
-        self.source = source
-        self.onlybinaries = onlybinaries
-        self.plot_element_dependend_analysis = plot_element_dependend_analysis
-        self.lowest_number_environments_for_plot = lowest_number_environments_for_plot
-        self.lower_limit_plot = lower_limit_plot
-        self.upper_limit_plot = upper_limit_plot
+    #     self.source = source
+    #     self.onlybinaries = onlybinaries
+    #     self.plot_element_dependend_analysis = plot_element_dependend_analysis
+    #     self.lowest_number_environments_for_plot = lowest_number_environments_for_plot
+    #     self.lower_limit_plot = lower_limit_plot
+    #     self.upper_limit_plot = upper_limit_plot
+    #     if list_of_materials_to_investiage is not None:
+    #         self.list_of_materials_to_investiage=list_of_materials_to_investiage
 
     def run(self, start_from_results=False, save_result_data=True, path_to_save='Results/Results_First_Limits.json'):
 
         if not start_from_results:
-            self._new_setup()
+            super(Pauling1Entropy, self)._new_setup()
+            self.Plot_PSE_entropy = get_entropy_from_frequencies(self.All_Details)
         else:
             inputdict = self._get_precomputed_results(path_to_save)
             self.Plot_PSE_entropy = inputdict['PSE_Dict']
@@ -588,28 +600,27 @@ class Pauling1Entropy(OverAllAnalysis):
             outputdict['Counter_cation'] = dict(self.present_env)
             self._save_results_to_file(outputdict, path_to_save)
 
-    def _new_setup(self):
-        list_mat = self._get_list_materials(source=self.source, onlybinaries=self.onlybinaries)
-
-        self.All_Details = {}
-        self.present_env = {}
-        for mat in list_mat:
-            print(mat)
-            lse = self._get_lse_from_folder(mat, source=self.source)
-            pauling0 = Pauling0(lse)
-            pauling1_limit = FrequencyEnvironmentPauling1(lse=lse)
-            Details = pauling1_limit.get_details()
-            self._add_dict_cat_dependency(start_dict=self.All_Details, dict_to_add=Details, number_of_elements_to_add=4)
-            self._add_dict_cat_dependency(self.present_env, pauling0.get_cations_in_structure(),
-                                          number_of_elements_to_add=1)
-
-        self.Plot_PSE_entropy = get_entropy_from_frequencies(self.All_Details)
+    # def _new_setup(self):
+    #     list_mat = self._get_list_materials(source=self.source, onlybinaries=self.onlybinaries)
+    #
+    #     self.All_Details = {}
+    #     self.present_env = {}
+    #     for mat in list_mat:
+    #         print(mat)
+    #         lse = self._get_lse_from_folder(mat, source=self.source)
+    #         pauling0 = Pauling0(lse)
+    #         pauling1_limit = FrequencyEnvironmentPauling1(lse=lse)
+    #         Details = pauling1_limit.get_details()
+    #         self._add_dict_cat_dependency(start_dict=self.All_Details, dict_to_add=Details, number_of_elements_to_add=4)
+    #         self._add_dict_cat_dependency(self.present_env, pauling0.get_cations_in_structure(),
+    #                                       number_of_elements_to_add=1)
 
 
 class Pauling1OverAllAnalysis(OverAllAnalysis):
 
     def run(self, start_from_results=False, save_result_data=True, save_structure_analysis=True,
-            restart_from_saved_structure_analyisis=False, path_to_save='Results/Results_First_Rule.json'):
+            restart_from_saved_structure_analyisis=False,
+            path_to_save='Results/Results_First_Rule.json'):
 
         if not start_from_results:
             self._new_setup()
@@ -652,30 +663,25 @@ class Pauling1OverAllAnalysis(OverAllAnalysis):
                                                                              fetch_results_only=restart_from_saved_structure_analyisis,
                                                                              start_from_Matching=self.use_prematching)
 
-            print("Exceptions")
-            self._print_to_screen_similar_structures(dict_similarstructures_exceptions)
-            print("Structures fulfilling the rule:")
-            self._print_to_screen_similar_structures(dict_similarstructures_fulfilling)
-            self._print_to_file_similar_structures(dict_similarstructures_exceptions,filename=path_to_save.split('.')[
-                                                                                              0] + "_structural_exceptions_readable.yaml")
+            self.dict_similarstructures_exceptions = dict_similarstructures_exceptions
+            self.dict_similarstructures_fulfilling = dict_similarstructures_fulfilling
 
-            self._print_to_file_similar_structures(dict_similarstructures_exceptions, filename=path_to_save.split('.')[
-                                                                                                   0] + "_structures_fulfilling_readable.yaml")
+            if save_structure_analysis:
+                self._print_to_file_similar_structures(dict_similarstructures_exceptions,
+                                                       filename=path_to_save.split('.')[
+                                                                    0] + "_structural_exceptions_readable.yaml")
 
-            self._print_to_file_similar_structures(dict_similarstructures_exceptions,fmt='csv',filename=path_to_save.split('.')[
-                                                                                              0] + "_structural_exceptions_readable.csv")
+                self._print_to_file_similar_structures(dict_similarstructures_exceptions,
+                                                       filename=path_to_save.split('.')[
+                                                                    0] + "_structures_fulfilling_readable.yaml")
 
-            self._print_to_file_similar_structures(dict_similarstructures_exceptions,fmt='csv', filename=path_to_save.split('.')[
-                                                                                                   0] + "_structures_fulfilling_readable.csv")
+                self._print_to_file_similar_structures(dict_similarstructures_exceptions, fmt='csv',
+                                                       filename=path_to_save.split('.')[
+                                                                    0] + "_structural_exceptions_readable.csv")
 
-
-        # print('Structures that fulfill rule')
-        # print(self.structures_fulfillingrule)
-        # print('Structures that do not fulfill rule')
-        # print(self.structures_exceptions)
-        # print('Structures that have environments/cations not covered')
-        # print(self.structures_cannot_be_evaluated)
-        # print(self.Plot_PSE_DICT)
+                self._print_to_file_similar_structures(dict_similarstructures_exceptions, fmt='csv',
+                                                       filename=path_to_save.split('.')[
+                                                                    0] + "_structures_fulfilling_readable.csv")
 
     def _new_setup(self):
         # could include: newsetup or from file here!
@@ -689,12 +695,10 @@ class Pauling1OverAllAnalysis(OverAllAnalysis):
         # valence dependency can be introduced later
 
         for mat in list_mat:
-            print(mat)
+            # print(mat)
             lse = self._get_lse_from_folder(mat, source=self.source)
 
             pauling1 = Pauling1(lse=lse, filenameradii='../univalent_cat_radii.json', onlylowerlimit=False)
-
-            # one could also put this in a method!
             try:
                 if pauling1.is_fulfilled():
                     self.structures_fulfillingrule.append(mat)
@@ -702,7 +706,7 @@ class Pauling1OverAllAnalysis(OverAllAnalysis):
                     self.structures_exceptions.append(mat)
             except RuleCannotBeAnalyzedError:
                 self.structures_cannot_be_evaluated.append(mat)
-                print('Cannot be analyzed')
+                # print('Cannot be analyzed')
 
             # get details and add them
             Details = pauling1.get_details()['cat_dependency']
@@ -712,7 +716,8 @@ class Pauling1OverAllAnalysis(OverAllAnalysis):
 class Pauling2OverAllAnalysis(OverAllAnalysis):
 
     def run(self, show_plot=True, start_from_results=False, save_result_data=True,
-            restart_from_saved_structure_analyisis=False, save_structure_analysis=True,
+            restart_from_saved_structure_analyisis=False,
+            save_structure_analysis=True,
             path_to_save='Results/Results_Second_Rule.json'):
 
         if not start_from_results:
@@ -773,41 +778,62 @@ class Pauling2OverAllAnalysis(OverAllAnalysis):
                                                                              start_from_Matching=self.use_prematching,
                                                                              fetch_results_only=restart_from_saved_structure_analyisis)
 
-            # TODO: write a file with the output
-            print('Exceptions:')
-            self._print_to_screen_similar_structures(dict_similarstructures_exceptions)
-            print('Structures fulfilling the rule')
-            self._print_to_screen_similar_structures(dict_similarstructures_fulfilling)
-            self._print_to_file_similar_structures(dict_similarstructures_exceptions,filename=path_to_save.split('.')[
-                                                                                              0] + "_structural_exceptions_readable.yaml")
+            self.dict_similarstructures_exceptions = dict_similarstructures_exceptions
+            self.dict_similarstructures_fulfilling = dict_similarstructures_fulfilling
 
-            self._print_to_file_similar_structures(dict_similarstructures_exceptions, filename=path_to_save.split('.')[
-                                                                                                   0] + "_structures_fulfilling_readable.yaml")
+            if save_structure_analysis:
+                self._print_to_file_similar_structures(dict_similarstructures_exceptions,
+                                                       filename=path_to_save.split('.')[
+                                                                    0] + "_structural_exceptions_readable.yaml")
 
-            self._print_to_file_similar_structures(dict_similarstructures_exceptions,fmt='csv',filename=path_to_save.split('.')[
-                                                                                              0] + "_structural_exceptions_readable.csv")
+                self._print_to_file_similar_structures(dict_similarstructures_exceptions,
+                                                       filename=path_to_save.split('.')[
+                                                                    0] + "_structures_fulfilling_readable.yaml")
 
-            self._print_to_file_similar_structures(dict_similarstructures_exceptions,fmt='csv', filename=path_to_save.split('.')[
-                                                                                                   0] + "_structures_fulfilling_readable.csv")
+                self._print_to_file_similar_structures(dict_similarstructures_exceptions, fmt='csv',
+                                                       filename=path_to_save.split('.')[
+                                                                    0] + "_structural_exceptions_readable.csv")
 
+                self._print_to_file_similar_structures(dict_similarstructures_exceptions, fmt='csv',
+                                                       filename=path_to_save.split('.')[
+                                                                    0] + "_structures_fulfilling_readable.csv")
 
-
-    def stddev(self, lst, mean):
-        """percental standard deviation of a sample"""
+    def _stddev(self, lst, mean):
+        """percental standard deviation of a sample in a list format"""
+        # TODO: get rid of the list format
         sum = 0.0
         mn = mean
         for i in range(len(lst)):
             sum += pow((lst[i] - mn), 2)
         return np.sqrt([sum / (len(lst) - 1)]) / mn
 
-    def stddev_normal(self, lst, mean):
-        """?"""
-        """standard deviation of a sample"""
-        sum = 0.0
-        mn = mean
-        for i in range(len(lst)):
-            sum += pow((lst[i] - mn), 2)
-        return np.sqrt([sum / (len(lst) - 1)])
+    # def _stddev_normal(self, lst, mean):
+    #     """?"""
+    #     """standard deviation of a sample"""
+    #     sum = 0.0
+    #     mn = mean
+    #     for i in range(len(lst)):
+    #         sum += pow((lst[i] - mn), 2)
+    #     return np.sqrt([sum / (len(lst) - 1)])
+
+    def _get_deviation_from_ideal_value(self, inputarray, ideal):
+        return [abs(float(x) - float(ideal)) for x in inputarray]
+
+    def _get_frequency_of_values(self, arraydeviations, stepsize):
+        frequency = []
+        # TODO: think about it again
+        dev_array = np.arange(0, max(arraydeviations) + stepsize, stepsize)
+
+        for step in dev_array:
+            # print(step)
+
+            frequency.append(len([x for x in arraydeviations if x <= step]))
+            # print(frequency)
+
+        return dev_array, frequency
+
+    def _list_to_np_array_and_divide_by_value(self, inputarray, valuetodivide):
+        return (np.array(inputarray) / float(valuetodivide))
 
     def _secondrule_plot(self, arraydev, relativefreqarray, tot_stddev, maxpercentage=70, save_plot=False,
                          filename='second_rule.svg'):
@@ -842,7 +868,7 @@ class Pauling2OverAllAnalysis(OverAllAnalysis):
         # valence dependency can be introduced later
 
         for mat in list_mat:
-            #print(mat)
+            # print(mat)
             lse = self._get_lse_from_folder(mat, source=self.source)
 
             pauling2 = Pauling2(lse=lse)
@@ -870,25 +896,19 @@ class Pauling2OverAllAnalysis(OverAllAnalysis):
 
             # print(self.array_bvs)
 
-        # alles stueck fuer stueck durchschauen - vor allem den plot!
+        self.array_bvs = array_bvs
         self.bs_sum_mean = np.mean(array_bvs)
 
-        self.tot_stddev = self.stddev(array_bvs, np.mean(array_bvs))
+        self.tot_stddev = self._stddev(array_bvs, np.mean(array_bvs))
         ideal_bs = 2.0
-        bs_dev = [abs(x - ideal_bs) for x in array_bvs]
-        # print(bs_dev)
-        # print(bs_sum_mean)
-        # print(tot_stddev)
-        self.frequency = []
-        dev_array = np.arange(0, max(bs_dev), 0.01)
-        for step in dev_array:
-            self.frequency.append(len([x for x in bs_dev if x < step]))
+        bs_dev = self._get_deviation_from_ideal_value(inputarray=array_bvs, ideal=ideal_bs)
+        self.bs_dev = bs_dev
+        dev_array, self.frequency = self._get_frequency_of_values(arraydeviations=bs_dev, stepsize=0.01)
 
-        # print(self.frequency)
-        # print(self.dev_array)
+        self.arraydev_share = self._list_to_np_array_and_divide_by_value(np.array(dev_array), ideal_bs)
+        self.relativefrequency = self._list_to_np_array_and_divide_by_value(np.array(self.frequency),
+                                                                            float(len(array_bvs)))
 
-        self.arraydev_share = np.array(dev_array) / ideal_bs
-        self.relativefrequency = np.array(self.frequency) / float(len(array_bvs))
 
 
 class Pauling3OverAllAnalysis(OverAllAnalysis):
@@ -896,7 +916,7 @@ class Pauling3OverAllAnalysis(OverAllAnalysis):
 
     def run(self, show_plot=True, start_from_connections=False, save_connections=True,
             connections_folder='AnalysisConnections', start_from_results=False, save_result_data=True,
-            restart_from_saved_structure_analyisis=False, save_structure_analysis=True,
+            restart_from_saved_structure_analyisis=False,  save_structure_analysis=True,
             path_to_save='Results/Results_Second_Rule.json', start_material=None, stop_material=None):
 
         self.connections_folder = connections_folder
@@ -959,24 +979,25 @@ class Pauling3OverAllAnalysis(OverAllAnalysis):
                                                                                               0] + "_structurres_fulfilling.json",
                                                                              fetch_results_only=restart_from_saved_structure_analyisis,
                                                                              start_from_Matching=self.use_prematching)
+            self.dict_similarstructures_exceptions = dict_similarstructures_exceptions
+            self.dict_similarstructures_fulfilling = dict_similarstructures_fulfilling
 
-            # #TODO: write a file with the output
-            print('Exceptions:')
-            self._print_to_screen_similar_structures(dict_similarstructures_exceptions)
-            print('Structures fulfilling the rule')
-            self._print_to_screen_similar_structures(dict_similarstructures_fulfilling)
-            self._print_to_file_similar_structures(dict_similarstructures_exceptions,filename=path_to_save.split('.')[
-                                                                                              0] + "_structural_exceptions_readable.yaml")
 
-            self._print_to_file_similar_structures(dict_similarstructures_exceptions, filename=path_to_save.split('.')[
-                                                                                                   0] + "_structures_fulfilling_readable.yaml")
+            if save_structure_analysis:
+                self._print_to_screen_similar_structures(dict_similarstructures_fulfilling)
+                self._print_to_file_similar_structures(dict_similarstructures_exceptions, filename=path_to_save.split('.')[
+                                                                                                       0] + "_structural_exceptions_readable.yaml")
 
-            self._print_to_file_similar_structures(dict_similarstructures_exceptions,fmt='csv',filename=path_to_save.split('.')[
-                                                                                              0] + "_structural_exceptions_readable.csv")
+                self._print_to_file_similar_structures(dict_similarstructures_exceptions, filename=path_to_save.split('.')[
+                                                                                                       0] + "_structures_fulfilling_readable.yaml")
 
-            self._print_to_file_similar_structures(dict_similarstructures_exceptions,fmt='csv', filename=path_to_save.split('.')[
-                                                                                                   0] + "_structures_fulfilling_readable.csv")
+                self._print_to_file_similar_structures(dict_similarstructures_exceptions, fmt='csv',
+                                                       filename=path_to_save.split('.')[
+                                                                    0] + "_structural_exceptions_readable.csv")
 
+                self._print_to_file_similar_structures(dict_similarstructures_exceptions, fmt='csv',
+                                                       filename=path_to_save.split('.')[
+                                                                    0] + "_structures_fulfilling_readable.csv")
 
     def _new_setup(self):
         list_mat = self._get_list_materials(source=self.source, onlybinaries=self.onlybinaries,
@@ -992,7 +1013,7 @@ class Pauling3OverAllAnalysis(OverAllAnalysis):
         # valence dependency can be introduced later
 
         for mat in list_mat:
-            print(mat)
+            #print(mat)
             lse = self._get_lse_from_folder(mat, source=self.source)
             pauling0 = Pauling0(lse)
             pauling3 = Pauling3()
@@ -1030,9 +1051,9 @@ class Pauling3OverAllAnalysis(OverAllAnalysis):
 
             # bvs = Details['bvs_for_each_anion']
 
-        print(self.Plot_PSE_DICT)
-        print(self.connections)
-        print(self.present_env)
+        # print(self.Plot_PSE_DICT)
+        # print(self.connections)
+        # print(self.present_env)
         # add cations to each other, to count total number of cations
         # self._add_dict_cat_dependency(self.present_env, Details['cations_in_structure'],
         #                              number_of_elements_to_add=1)
@@ -1061,11 +1082,11 @@ class Pauling3OverAllAnalysis(OverAllAnalysis):
 
 
 class Pauling4OverAllAnalysis(OverAllAnalysis):
-    # TODO: check connection files with David's database at the end!
-    # TODO: check information
+    #TODO: think about elementwise analysis instead -> could also just count for fulfilling or unfulfilling for cations that have lowest CN and highest valence
+
     def run(self, show_plot=True, start_from_connections=False, save_connections=True,
             connections_folder='AnalysisConnections', start_from_results=False, save_result_data=True,
-            restart_from_saved_structure_analyisis=False, save_structure_analysis=True,
+            restart_from_saved_structure_analyisis=False,save_structure_analysis=True,
             path_to_save='Results/Results_Second_Rule.json', start_material=None, stop_material=None):
 
         self.connections_folder = connections_folder
@@ -1089,7 +1110,7 @@ class Pauling4OverAllAnalysis(OverAllAnalysis):
             self.Dict_CN = inputdict['CN_dep_for_plot']
 
         if show_plot:
-            #print(self.Dict_val)
+            # print(self.Dict_val)
             plot = self._fourthrule_plot(self.Dict_val, option='val', vmin=0.70, vmax=1.0)
             plot.show()
             plot = self._fourthrule_plot(self.Dict_CN, option='CN', vmin=0.4, vmax=1.0)
@@ -1133,25 +1154,24 @@ class Pauling4OverAllAnalysis(OverAllAnalysis):
                                                                              fetch_results_only=restart_from_saved_structure_analyisis,
                                                                              start_from_Matching=self.use_prematching)
 
-            # #TODO: write a file with the output
-            print('Exceptions:')
-            self._print_to_screen_similar_structures(dict_similarstructures_exceptions,add_properties_from_lse=True)
-            print('Structures fulfilling the rule')
-            self._print_to_screen_similar_structures(dict_similarstructures_fulfilling)
-
-            self._print_to_file_similar_structures(dict_similarstructures_exceptions,filename=path_to_save.split('.')[
-                                                                                              0] + "_structural_exceptions_readable.yaml")
-
-            self._print_to_file_similar_structures(dict_similarstructures_exceptions, filename=path_to_save.split('.')[
-                                                                                                   0] + "_structures_fulfilling_readable.yaml")
+            self.dict_similarstructures_exceptions = dict_similarstructures_exceptions
+            self.dict_similarstructures_fulfilling = dict_similarstructures_fulfilling
 
 
-            self._print_to_file_similar_structures(dict_similarstructures_exceptions,fmt='csv',filename=path_to_save.split('.')[
-                                                                                              0] + "_structural_exceptions_readable.csv")
+            if save_structure_analysis:
+                self._print_to_file_similar_structures(dict_similarstructures_exceptions, filename=path_to_save.split('.')[
+                                                                                                       0] + "_structural_exceptions_readable.yaml")
 
-            self._print_to_file_similar_structures(dict_similarstructures_exceptions,fmt='csv', filename=path_to_save.split('.')[
-                                                                                                   0] + "_structures_fulfilling_readable.csv")
+                self._print_to_file_similar_structures(dict_similarstructures_exceptions, filename=path_to_save.split('.')[
+                                                                                                       0] + "_structures_fulfilling_readable.yaml")
 
+                self._print_to_file_similar_structures(dict_similarstructures_exceptions, fmt='csv',
+                                                       filename=path_to_save.split('.')[
+                                                                    0] + "_structural_exceptions_readable.csv")
+
+                self._print_to_file_similar_structures(dict_similarstructures_exceptions, fmt='csv',
+                                                       filename=path_to_save.split('.')[
+                                                                    0] + "_structures_fulfilling_readable.csv")
 
     def _new_setup(self):
         list_mat = self._get_list_materials(source=self.source, onlybinaries=self.onlybinaries,
@@ -1189,16 +1209,16 @@ class Pauling4OverAllAnalysis(OverAllAnalysis):
             try:
                 Details = pauling4.get_details()
 
+
                 # think about symmetry - there might be something wrong here
                 New_Details_val = self._reformat_details_val(Details)
                 New_Details_CN = self._reformat_details_CN(Details)
 
-                #tests if matrices are symmetric!
+                # tests if matrices are symmetric!
                 if not self._check_details_symmetric(New_Details_val):
                     raise ValueError
                 if not self._check_details_symmetric(New_Details_CN):
                     raise ValueError
-
 
                 self._add_dict_CN_val(self.Dict_val, New_Details_val)
                 self._add_dict_CN_val(self.Dict_CN, New_Details_CN)
@@ -1206,14 +1226,16 @@ class Pauling4OverAllAnalysis(OverAllAnalysis):
                 Elementwise_analysis = self._reformat_details_elementwise(Details)
 
                 self._add_dict_cat_dependency(self.Plot_PSE_DICT, Elementwise_analysis)
+                #print(Details['elementwise'])
+                #print(Details['maxval'])
+                #print(Details['minCN'])
+                #print(Elementwise_analysis)
 
                 self._add_dict_cat_dependency(self.present_env, pauling0.get_cations_in_structure(),
                                               number_of_elements_to_add=1)
 
             except RuleCannotBeAnalyzedError:
-                print("Exception")
-        # print(self.Plot_PSE_DICT)
-        # print(self.present_env)
+                pass
 
     def _reformat_details_elementwise(self, Details):
         maxval1 = 'val1:' + str(Details['maxval'])
@@ -1233,14 +1255,15 @@ class Pauling4OverAllAnalysis(OverAllAnalysis):
                             if connections > 0:
                                 if el not in outputdict:
                                     outputdict[el] = [0, 0]
+                                outputdict[el][0] += item[maxval1][maxval2][minCN1][minCN2]['no']
                                 outputdict[el][1] += connections
                             else:
                                 if el not in outputdict:
                                     outputdict[el] = [0, 0]
                                 outputdict[el][0] += item[maxval1][maxval2][minCN1][minCN2]['no']
+                                outputdict[el][1] += connections
+
         return outputdict
-
-
 
     def _add_dict_CN_val(self, start_dict, to_add_dict):
         for key, item in to_add_dict.items():
@@ -1275,23 +1298,22 @@ class Pauling4OverAllAnalysis(OverAllAnalysis):
                             New_Details[val1][val2][1] += item4["corner"]
                             New_Details[val1][val2][1] += item4["edge"]
                             New_Details[val1][val2][1] += item4["face"]
-                            New_Details[val2][val1][0] += item4["no"]
-                            New_Details[val2][val1][1] += item4["corner"]
-                            New_Details[val2][val1][1] += item4["edge"]
-                            New_Details[val2][val1][1] += item4["face"]
+                            if val1!=val2:
+                                New_Details[val2][val1][0] += item4["no"]
+                                New_Details[val2][val1][1] += item4["corner"]
+                                New_Details[val2][val1][1] += item4["edge"]
+                                New_Details[val2][val1][1] += item4["face"]
 
         return New_Details
 
-
-    def _check_details_symmetric(self,inputdict):
-        #teste, ob ausgabe symmetrisch
+    def _check_details_symmetric(self, inputdict):
+        # teste, ob ausgabe symmetrisch
         for key1, item in inputdict.items():
             for key2, item2 in item.items():
-                if key1<=key2:
+                if key1 <= key2:
                     if not item2 == inputdict[key2][key1]:
                         return False
         return True
-
 
     def _reformat_details_CN(self, Details):
         New_Details = {}
@@ -1319,14 +1341,15 @@ class Pauling4OverAllAnalysis(OverAllAnalysis):
                             New_Details[CN1][CN2][1] += item4["corner"]
                             New_Details[CN1][CN2][1] += item4["edge"]
                             New_Details[CN1][CN2][1] += item4["face"]
-                            New_Details[CN2][CN1][0] += item4["no"]
-                            New_Details[CN2][CN1][1] += item4["corner"]
-                            New_Details[CN2][CN1][1] += item4["edge"]
-                            New_Details[CN2][CN1][1] += item4["face"]
+                            if CN1!=CN2:
+                                New_Details[CN2][CN1][0] += item4["no"]
+                                New_Details[CN2][CN1][1] += item4["corner"]
+                                New_Details[CN2][CN1][1] += item4["edge"]
+                                New_Details[CN2][CN1][1] += item4["face"]
 
         return New_Details
 
-    def _fourthrule_plot(self, inputdict, option='CN', vmin=0.0, vmax=1.0, lowervalue=50,leaveoutCN13=True):
+    def _fourthrule_plot(self, inputdict, option='CN', vmin=0.0, vmax=1.0, lowervalue=50, leaveoutCN13=True):
         """
         #leaves out CN 13 for option "CN" -> too few entries
         :param inputdict:
@@ -1336,17 +1359,17 @@ class Pauling4OverAllAnalysis(OverAllAnalysis):
 
         # get valmax
         valCNmax = max([int(x) for x in inputdict.keys()])
-        #print(valCNmax)
+        # print(valCNmax)
 
-        if option=='val':
+        if option == 'val':
             PlotEndDict = np.full((valCNmax + 1, valCNmax + 1), np.nan)
-        elif option=='CN':
+        elif option == 'CN':
             if not leaveoutCN13:
                 PlotEndDict = np.full((valCNmax + 2, valCNmax + 2), np.nan)
             else:
                 PlotEndDict = np.full((valCNmax + 2, valCNmax + 2), np.nan)
 
-        #print(list(inputdict.keys()))
+        # print(list(inputdict.keys()))
 
         for key, item in inputdict.items():
             for key2, item2 in item.items():
@@ -1361,7 +1384,6 @@ class Pauling4OverAllAnalysis(OverAllAnalysis):
                 'size': 3}
 
         matplotlib.rc('font', **font)
-
 
         fig, (ax1) = plt.subplots(figsize=(1, 1), ncols=1)
 
@@ -1379,9 +1401,9 @@ class Pauling4OverAllAnalysis(OverAllAnalysis):
             if not leaveoutCN13:
                 ax1.set_xticks(range(2, valCNmax + 2))
                 ax1.set_xticklabels(range(2, valCNmax + 2))
-                ax1.set_xlim(1.5, valCNmax +1- 0.5)
+                ax1.set_xlim(1.5, valCNmax + 1 - 0.5)
                 ax1.set_yticks(range(2, valCNmax + 2))
-                ax1.set_ylim(1.5, valCNmax +1 - 0.5)
+                ax1.set_ylim(1.5, valCNmax + 1 - 0.5)
                 ax1.set_yticklabels(range(2, valCNmax + 2))
             else:
                 ax1.set_xticks(range(2, valCNmax + 1))
@@ -1410,18 +1432,19 @@ class Pauling4OverAllAnalysis(OverAllAnalysis):
 
 
 class Pauling5OverAllAnalysis(OverAllAnalysis):
-    #TODO: include analysis of entropy
-    #TODO: test everything!!!!!!
+    # TODO: include analysis of entropy
+    # TODO: test everything!!!!!!
+    # TODO: make sure that we always use the primitive cell?!?
 
-
-    def run(self, remove_elements_low_entropy=True,show_plot=True, start_from_connections=False, save_connections=True,
+    def run(self, remove_elements_low_entropy=True, show_plot=True, start_from_connections=False, save_connections=True,
             connections_folder='AnalysisConnections_5thRule', start_from_results=False, save_result_data=True,
             restart_from_saved_structure_analyisis=False, save_structure_analysis=True,
-            path_to_save='Results/Results_Second_Rule.json', start_material=None, stop_material=None,threshold_remove_elements=0.95):
-        #threshold_remove_elements: 1-entropy that removes elements with only very few environments
+            path_to_save='Results/Results_Second_Rule.json', start_material=None, stop_material=None,
+            threshold_remove_elements=0.95):
+        # threshold_remove_elements: 1-entropy that removes elements with only very few environments
 
-        self.remove_elements_low_entropy=remove_elements_low_entropy
-        #TODO. Inlude this in all parts
+        self.remove_elements_low_entropy = remove_elements_low_entropy
+        # TODO. Inlude this in all parts
         self.connections_folder = connections_folder
         self.start_from_connections = start_from_connections
         self.save_connections = save_connections
@@ -1430,15 +1453,19 @@ class Pauling5OverAllAnalysis(OverAllAnalysis):
         self.start_material = start_material
         self.stop_material = stop_material
 
-        #TODO: make it possible to start from precomputed data
+        # TODO: make it possible to start from precomputed data
         if not start_from_results:
             if self.remove_elements_low_entropy:
-                #TODO: make sure this constant is okay
-                constant=0.95
-                newclass=Pauling1Entropy(source=self.source,onlybinaries=self.onlybinaries,plot_element_dependend_analysis=False)
-                newclass.run(start_from_results=False,save_result_data=False)
-                self.list_to_remove=[el for el,item in newclass.Plot_PSE_entropy.items() if item>threshold_remove_elements]
-
+                # TODO: make sure this constant is okay
+                newclass = Pauling1Entropy(source=self.source, onlybinaries=self.onlybinaries,
+                                           plot_element_dependend_analysis=False, list_of_materials_to_investiage=self.list_of_materials_to_investiage)
+                newclass.run(start_from_results=False, save_result_data=False)
+                self.list_to_remove = [el for el, item in newclass.Plot_PSE_entropy.items() if
+                                       item > threshold_remove_elements]
+                #print(newclass.Plot_PSE_entropy)
+                #print(self.list_to_remove)
+            else:
+                self.list_to_remove=[]
             self._new_setup()
         else:
             inputdict = self._get_precomputed_results(path_to_save)
@@ -1456,11 +1483,11 @@ class Pauling5OverAllAnalysis(OverAllAnalysis):
         if self.plot_element_dependend_analysis:
             if self.remove_elements_low_entropy and not start_from_results:
 
-                new_env={}
-                for key,item in self.present_env.items():
+                new_env = {}
+                for key, item in self.present_env.items():
                     if key not in self.list_to_remove:
-                        new_env[key]=item
-                self.present_env=new_env
+                        new_env[key] = item
+                self.present_env = new_env
 
             plt = self._plot_PSE(self.Plot_PSE_DICT, xlim=[1, 18], ylim=[1, 10],
                                  lowest_number_of_environments_considered=self.lowest_number_environments_for_plot,
@@ -1494,24 +1521,25 @@ class Pauling5OverAllAnalysis(OverAllAnalysis):
                                                                              fetch_results_only=restart_from_saved_structure_analyisis,
                                                                              start_from_Matching=self.use_prematching)
 
-            # # #TODO: write a file with the output
-            print('Exceptions:')
-            self._print_to_screen_similar_structures(dict_similarstructures_exceptions)
-            print('Structures fulfilling the rule')
-            self._print_to_screen_similar_structures(dict_similarstructures_fulfilling)
 
-            self._print_to_file_similar_structures(dict_similarstructures_exceptions,filename=path_to_save.split('.')[
-                                                                                              0] + "_structural_exceptions_readable.yaml")
+            self.dict_similarstructures_exceptions = dict_similarstructures_exceptions
+            self.dict_similarstructures_fulfilling = dict_similarstructures_fulfilling
 
-            self._print_to_file_similar_structures(dict_similarstructures_exceptions, filename=path_to_save.split('.')[
-                                                                                                   0] + "_structures_fulfilling_readable.yaml")
 
-            self._print_to_file_similar_structures(dict_similarstructures_exceptions,fmt='csv',filename=path_to_save.split('.')[
-                                                                                              0] + "_structural_exceptions_readable.csv")
+            if save_structure_analysis:
+                self._print_to_file_similar_structures(dict_similarstructures_exceptions, filename=path_to_save.split('.')[
+                                                                                                       0] + "_structural_exceptions_readable.yaml")
 
-            self._print_to_file_similar_structures(dict_similarstructures_exceptions,fmt='csv', filename=path_to_save.split('.')[
-                                                                                                   0] + "_structures_fulfilling_readable.csv")
+                self._print_to_file_similar_structures(dict_similarstructures_exceptions, filename=path_to_save.split('.')[
+                                                                                                       0] + "_structures_fulfilling_readable.yaml")
 
+                self._print_to_file_similar_structures(dict_similarstructures_exceptions, fmt='csv',
+                                                       filename=path_to_save.split('.')[
+                                                                    0] + "_structural_exceptions_readable.csv")
+
+                self._print_to_file_similar_structures(dict_similarstructures_exceptions, fmt='csv',
+                                                       filename=path_to_save.split('.')[
+                                                                    0] + "_structures_fulfilling_readable.csv")
 
     def _new_setup(self):
         list_mat = self._get_list_materials(source=self.source, onlybinaries=self.onlybinaries,
@@ -1521,15 +1549,19 @@ class Pauling5OverAllAnalysis(OverAllAnalysis):
         self.structures_exceptions = []
         self.structures_cannot_be_evaluated = []
 
-        self.Dict_val = {}
-        self.Dict_CN = {}
         self.Plot_PSE_DICT = {}
         self.present_env = {}
         # valence dependency can be introduced later
-
+        # counter_not_primitive=0
         for mat in list_mat:
-            print(mat)
+            #print(mat)
             lse = self._get_lse_from_folder(mat, source=self.source)
+            # prim_struct=lse.structure.get_primitive_structure()
+            # print(prim_struct.composition)
+            # print(lse.structure.composition)
+            # if prim_struct.composition==lse.structure.composition:
+
+
             pauling0 = Pauling0(lse)
             pauling5 = Pauling5()
             if not self.start_from_connections or not os.path.isfile(
@@ -1549,22 +1581,19 @@ class Pauling5OverAllAnalysis(OverAllAnalysis):
 
             try:
                 Details = pauling5.get_details(leave_out_list=self.list_to_remove)
+                #print(Details)
                 New_Details = self._reformat_details_elementdependency(Details)
-                #print(New_Details)
 
                 self._add_dict_cat_dependency(self.Plot_PSE_DICT, New_Details)
-
-                #TODO: here, still a problem present
-                #TODO: rework this!!!!
-                #!!!!! not working correcntly
-                print("Problem")
                 self._add_dict_cat_dependency(self.present_env, pauling0.get_cations_in_structure(),
                                               number_of_elements_to_add=1)
-            #
+
             except RuleCannotBeAnalyzedError:
-                print("Exception")
-        # print(self.Plot_PSE_DICT)
-        # print(self.present_env)
+                pass
+
+            # else:
+            #     counter_not_primitive+=1
+            #     print(counter_not_primitive)
 
     def _fifth_rule_plot(self, okay, notokay, title="Tested Structures"):
         import matplotlib.pyplot as plt
@@ -1589,18 +1618,19 @@ class Pauling5OverAllAnalysis(OverAllAnalysis):
         return new_dict
 
 
-
 class AllPaulingOverAllAnalysis(OverAllAnalysis):
-    def run(self, remove_elements_low_entropy=False, show_plot=True, start_from_connections=False, save_connections=True,
-            connections_folder34='AnalysisConnections',connections_folder5='AnalysisConnections_5thRule', start_from_results=False, save_result_data=True,
+    def run(self, remove_elements_low_entropy=False, show_plot=True, start_from_connections=False,
+            save_connections=True,
+            connections_folder34='AnalysisConnections', connections_folder5='AnalysisConnections_5thRule',
+            start_from_results=False, save_result_data=True,
             restart_from_saved_structure_analyisis=False, save_structure_analysis=True,
             path_to_save='Results/Results_AllRules.json', start_material=None, stop_material=None,
             threshold_remove_elements=0.95):
-        #TODO: implement this part
-        #analyse all 5 Pauling rules!
-        #include -> make sure you use list from second rule
-        #get a set of structures that can be analyzed in all 5 rules!
-        #got through them
+        # TODO: implement this part
+        # analyse all 5 Pauling rules!
+        # include -> make sure you use list from second rule
+        # get a set of structures that can be analyzed in all 5 rules!
+        # got through them
 
         self.remove_elements_low_entropy = remove_elements_low_entropy
         # TODO. Inlude this in all parts
@@ -1615,19 +1645,18 @@ class AllPaulingOverAllAnalysis(OverAllAnalysis):
         #
         # # TODO: make it possible to start from precomputed data
         if not start_from_results:
-            # if self.remove_elements_low_entropy:
-        #         # TODO: make sure this constant is okay
-        #         constant = 0.95
-        #         newclass = Pauling1Entropy(source=self.source, onlybinaries=self.onlybinaries,
-        #                                    plot_element_dependend_analysis=False)
-        #         newclass.run(start_from_results=False, save_result_data=False)
-        #         self.list_to_remove = [el for el, item in newclass.Plot_PSE_entropy.items() if
-        #                                item > threshold_remove_elements]
-        #
-             self._new_setup()
+            if self.remove_elements_low_entropy:
+                     # TODO: make sure this constant is okay
+                     constant = 0.95
+                     newclass = Pauling1Entropy(source=self.source, onlybinaries=self.onlybinaries,
+                                                plot_element_dependend_analysis=False)
+                     newclass.run(start_from_results=False, save_result_data=False)
+                     self.list_to_remove = [el for el, item in newclass.Plot_PSE_entropy.items() if
+                                            item > threshold_remove_elements]
+
+            self._new_setup()
         else:
             pass
-
 
         #     inputdict = self._get_precomputed_results(path_to_save)
         #     self.structures_fulfillingrule = inputdict['fullingstructures']
@@ -1681,8 +1710,8 @@ class AllPaulingOverAllAnalysis(OverAllAnalysis):
                                                                                               0] + "_structurres_fulfilling.json",
                                                                              fetch_results_only=restart_from_saved_structure_analyisis,
                                                                              start_from_Matching=self.use_prematching)
-        #
-        #     # # #TODO: write a file with the output
+            #
+            #     # # #TODO: write a file with the output
             print('Exceptions:')
             self._print_to_screen_similar_structures(dict_similarstructures_exceptions)
             print('Structures fulfilling the rule')
@@ -1702,7 +1731,6 @@ class AllPaulingOverAllAnalysis(OverAllAnalysis):
         #                                            filename=path_to_save.split('.')[
         #                                                         0] + "_structures_fulfilling_readable.csv")
 
-
     def _new_setup(self):
         list_mat = self._get_list_materials(source=self.source, onlybinaries=self.onlybinaries,
                                             start_material=self.start_material, stop_material=self.stop_material)
@@ -1711,7 +1739,7 @@ class AllPaulingOverAllAnalysis(OverAllAnalysis):
         self.structures_exceptions = []
         self.structures_cannot_be_evaluated = []
 
-        #how to do an elementwise analysis?
+        # how to do an elementwise analysis?
         # self.Dict_val = {}
         # self.Dict_CN = {}
         # self.Plot_PSE_DICT = {}
@@ -1721,34 +1749,35 @@ class AllPaulingOverAllAnalysis(OverAllAnalysis):
         for mat in list_mat:
             print(mat)
             lse = self._get_lse_from_folder(mat, source=self.source)
-            pauling1=Pauling1(lse,filenameradii='../univalent_cat_radii.json', onlylowerlimit=False)
-            pauling2=Pauling2(lse)
-            pauling3=Pauling3()
-            pauling4=Pauling4()
-            pauling5=Pauling5()
-            if not self.start_from_connections or not os.path.isfile(os.path.join(self.connections_folder34, mat + '.json')) or not os.path.isfile(os.path.join(self.connections_folder5, mat + '.json')):
+            pauling1 = Pauling1(lse, filenameradii='../univalent_cat_radii.json', onlylowerlimit=False)
+            pauling2 = Pauling2(lse)
+            pauling3 = Pauling3()
+            pauling4 = Pauling4()
+            pauling5 = Pauling5()
+            if not self.start_from_connections or not os.path.isfile(
+                    os.path.join(self.connections_folder34, mat + '.json')) or not os.path.isfile(
+                os.path.join(self.connections_folder5, mat + '.json')):
                 print(mat)
                 pauling3.newsetup(lse, filename=mat + '.json', save_to_file=self.save_connections,
                                   foldername=self.connections_folder34, distance=8.0)
-                pauling4.from_file(filename=mat + '.json',foldername=self.connections_folder34)
+                pauling4.from_file(filename=mat + '.json', foldername=self.connections_folder34)
                 pauling5.newsetup(lse, filename=mat + '.json', save_to_file=self.save_connections,
-                                       foldername=self.connections_folder5, distance=8.0)
+                                  foldername=self.connections_folder5, distance=8.0)
             else:
                 pauling3.from_file(filename=mat + '.json', foldername=self.connections_folder34)
                 pauling4.from_file(filename=mat + '.json', foldername=self.connections_folder34)
                 pauling5.from_file(filename=mat + '.json', foldername=self.connections_folder5)
 
-
             # pauling0 = Pauling0(lse)
             try:
                 if pauling1.is_fulfilled() and pauling2.is_fulfilled() and pauling3.is_fulfilled() and pauling4.is_fulfilled() and pauling5.is_fulfilled():
-                     self.structures_fulfillingrule.append(mat)
+                    self.structures_fulfillingrule.append(mat)
                 else:
-                     self.structures_exceptions.append(mat)
+                    self.structures_exceptions.append(mat)
             except RuleCannotBeAnalyzedError:
                 self.structures_cannot_be_evaluated.append(mat)
 
-            #How to analyse elements in more detail?s
+            # How to analyse elements in more detail?s
 
             #
             # try:

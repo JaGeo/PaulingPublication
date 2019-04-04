@@ -384,40 +384,57 @@ class Pauling4_Test(unittest.TestCase):
         self.assertFalse(self.Pauling_List["mp-5986.json"].is_fulfilled())
 
     def test_get_details(self):
+        #TODO: make sure this really works for every possible case
+
         firstdict = self.Pauling_List["mp-7000.json"]._postevaluation4thrule()
         seconddict = self.Pauling_List["mp-7000.json"]._postevaluation4thruleperpolyhedron_only_withoutproduct(4, 4, 4,
                                                                                                                4)
+        #totally symmetric
         self.assertDictEqual(firstdict["val1:4"]["val2:4"]["CN1:4"]["CN2:4"], seconddict)
         self.assertEqual(firstdict["elementwise"]["Si"]["val1:4"]["val2:4"]["CN1:4"]["CN2:4"]["no"],
                          seconddict["no"] * 2)
 
         thirddict = self.Pauling_List["mp-19359.json"]._postevaluation4thrule()
+
+        #results for 6 6 13 and 6 6 3 1 should be the same
         self.assertDictEqual(
             self.Pauling_List["mp-19359.json"]._postevaluation4thruleperpolyhedron_only_withoutproduct(6, 6, 1, 3),
             self.Pauling_List["mp-19359.json"]._postevaluation4thruleperpolyhedron_only_withoutproduct(6, 6, 3, 1))
-        self.assertDictEqual(thirddict["val1:1"]["val2:1"]["CN1:6"]["CN2:6"],
-                             self.Pauling_List["mp-19359.json"]._postevaluation4thruleperpolyhedron_only_withoutproduct(
-                                 6, 6, 1, 1))
-        self.assertDictEqual(thirddict["val1:1"]["val2:3"]["CN1:6"]["CN2:6"],
-                             self.Pauling_List["mp-19359.json"]._postevaluation4thruleperpolyhedron_only_withoutproduct(
-                                 6, 6, 1, 3))
         self.assertDictEqual(thirddict["val1:1"]["val2:3"]["CN1:6"]["CN2:6"],
                              thirddict["val1:3"]["val2:1"]["CN1:6"]["CN2:6"])
 
+        #two methods should result in the same results
+        self.assertDictEqual(thirddict["val1:1"]["val2:3"]["CN1:6"]["CN2:6"],
+                             self.Pauling_List["mp-19359.json"]._postevaluation4thruleperpolyhedron_only_withoutproduct(
+                                 6, 6, 1, 3))
+
+        self.assertDictEqual(thirddict["val1:1"]["val2:1"]["CN1:6"]["CN2:6"],
+                             self.Pauling_List["mp-19359.json"]._postevaluation4thruleperpolyhedron_only_withoutproduct(
+                                 6, 6, 1, 1))
         self.assertDictEqual(thirddict["val1:3"]["val2:3"]["CN1:6"]["CN2:6"],
                              self.Pauling_List["mp-19359.json"]._postevaluation4thruleperpolyhedron_only_withoutproduct(
                                  6, 6, 3, 3))
 
+
+
         fourthdict = self.Pauling_List["mp-1788.json"]._postevaluation4thrule()
 
+
+        #symmetry should be there!
+        self.assertDictEqual(fourthdict["val1:5"]["val2:5"]["CN1:4"]["CN2:6"],
+                             fourthdict["val1:5"]["val2:5"]["CN1:6"]["CN2:4"])
+
+        self.assertDictEqual(self.Pauling_List["mp-1788.json"]._postevaluation4thruleperpolyhedron_only_withoutproduct(
+            4, 6, 5, 5),
+            self.Pauling_List["mp-1788.json"]._postevaluation4thruleperpolyhedron_only_withoutproduct(
+                6, 4, 5, 5))
         self.assertDictEqual(fourthdict["val1:5"]["val2:5"]["CN1:4"]["CN2:4"],
                              self.Pauling_List["mp-1788.json"]._postevaluation4thruleperpolyhedron_only_withoutproduct(
                                  4, 4, 5, 5))
         self.assertDictEqual(fourthdict["val1:5"]["val2:5"]["CN1:4"]["CN2:6"],
                              self.Pauling_List["mp-1788.json"]._postevaluation4thruleperpolyhedron_only_withoutproduct(
                                  4, 6, 5, 5))
-        self.assertDictEqual(fourthdict["val1:5"]["val2:5"]["CN1:4"]["CN2:6"],
-                             fourthdict["val1:5"]["val2:5"]["CN1:6"]["CN2:4"])
+
 
         self.assertDictEqual(fourthdict["val1:5"]["val2:5"]["CN1:6"]["CN2:6"],
                              self.Pauling_List["mp-1788.json"]._postevaluation4thruleperpolyhedron_only_withoutproduct(
@@ -425,10 +442,6 @@ class Pauling4_Test(unittest.TestCase):
         self.assertDictEqual(fourthdict["val1:5"]["val2:5"]["CN1:4"]["CN2:6"],
                              self.Pauling_List["mp-1788.json"]._postevaluation4thruleperpolyhedron_only_withoutproduct(
                                  4, 6, 5, 5))
-        self.assertDictEqual(self.Pauling_List["mp-1788.json"]._postevaluation4thruleperpolyhedron_only_withoutproduct(
-            4, 6, 5, 5),
-            self.Pauling_List["mp-1788.json"]._postevaluation4thruleperpolyhedron_only_withoutproduct(
-                6, 4, 5, 5))
 
         self.assertDictEqual(self.Pauling_List["mp-1788.json"].get_details(), {'val1:5': {'val2:5': {
             'CN1:4': {'CN2:4': {'no': 44, 'corner': 0, 'edge': 0, 'face': 0},
@@ -445,40 +458,53 @@ class Pauling4_Test(unittest.TestCase):
             self.Pauling_List["mp-7000.json"].get_details()
 
         Dict_new = self.Pauling_List["mp-5986.json"].get_details()
-        self.assertDictEqual(Dict_new['val1:4']['val2:4']["CN1:6"]["CN2:6"],
-                             self.Pauling_List["mp-5986.json"]._postevaluation4thruleperpolyhedron_only_withoutproduct(
-                                 6, 6, 4, 4))
+
+        #should not be symmetric
         self.assertDictEqual(Dict_new['val1:4']['val2:2']["CN1:6"]["CN2:12"],
                              self.Pauling_List["mp-5986.json"]._postevaluation4thruleperpolyhedron_only_withoutproduct(
                                  6, 12, 4, 2))
+        self.assertDictEqual(Dict_new['val1:2']['val2:4']["CN1:6"]["CN2:12"],
+                             self.Pauling_List["mp-5986.json"]._postevaluation4thruleperpolyhedron_only_withoutproduct(
+                                 6, 12, 2, 4))
+
+        self.assertDictEqual(Dict_new['val1:4']['val2:2']["CN1:12"]["CN2:6"],
+                             self.Pauling_List["mp-5986.json"]._postevaluation4thruleperpolyhedron_only_withoutproduct(
+                                 12, 6, 4, 2))
+
+        self.assertDictEqual(Dict_new['val1:4']['val2:4']["CN1:6"]["CN2:6"],
+                             self.Pauling_List["mp-5986.json"]._postevaluation4thruleperpolyhedron_only_withoutproduct(
+                                 6, 6, 4, 4))
 
         self.assertDictEqual(Dict_new['val1:2']['val2:2']["CN1:12"]["CN2:12"],
                              self.Pauling_List["mp-5986.json"]._postevaluation4thruleperpolyhedron_only_withoutproduct(
                                  12, 12, 2, 2))
-        self.assertDictEqual(Dict_new['val1:4']['val2:2']["CN1:6"]["CN2:12"],
-                             self.Pauling_List["mp-5986.json"]._postevaluation4thruleperpolyhedron_only_withoutproduct(
-                                 6, 12, 4, 2))
-        self.assertDictEqual(Dict_new['val1:4']['val2:2']["CN1:12"]["CN2:6"],
-                             self.Pauling_List["mp-5986.json"]._postevaluation4thruleperpolyhedron_only_withoutproduct(
-                                 12, 6, 4, 2))
+
         self.assertDictEqual(Dict_new['val1:4']['val2:4']["CN1:6"]["CN2:6"],
                              self.Pauling_List["mp-5986.json"]._postevaluation4thruleperpolyhedron_only_withoutproduct(
                                  6, 6, 4, 4))
         self.assertDictEqual(Dict_new['val1:4']['val2:2']['CN1:6']['CN2:12'],
                              Dict_new['val1:2']['val2:4']['CN1:12']['CN2:6'])
+
         Dict2_new = self.Pauling_List["mp-19418.json"].get_details()
-        self.assertDictEqual(Dict2_new['val1:5']['val2:5']['CN1:4']['CN2:4'],
-                             self.Pauling_List["mp-19418.json"]._postevaluation4thruleperpolyhedron_only_withoutproduct(
-                                 4, 4, 5, 5))
+        #should not be symmetric:
         self.assertDictEqual(Dict2_new['val1:5']['val2:3']['CN1:4']['CN2:6'],
                              self.Pauling_List["mp-19418.json"]._postevaluation4thruleperpolyhedron_only_withoutproduct(
                                  4, 6, 5, 3))
+        self.assertDictEqual(self.Pauling_List["mp-19418.json"]._postevaluation4thruleperpolyhedron_only_withoutproduct(
+                                 4, 6, 5, 3),{'no': 52, 'corner': 12, 'edge': 0, 'face': 0})
+        self.assertDictEqual(self.Pauling_List["mp-19418.json"]._postevaluation4thruleperpolyhedron_only_withoutproduct(
+                                 4, 6, 3, 5),{'no': 0, 'corner': 0, 'edge': 0, 'face': 0})
         self.assertDictEqual(Dict2_new['val1:3']['val2:5']['CN1:6']['CN2:4'],
                              self.Pauling_List["mp-19418.json"]._postevaluation4thruleperpolyhedron_only_withoutproduct(
                                  6, 4, 3, 5))
         self.assertDictEqual(Dict2_new['val1:3']['val2:5']['CN1:4']['CN2:6'],
                              self.Pauling_List["mp-19418.json"]._postevaluation4thruleperpolyhedron_only_withoutproduct(
                                  6, 4, 5, 3))
+
+        self.assertDictEqual(Dict2_new['val1:5']['val2:5']['CN1:4']['CN2:4'],
+                             self.Pauling_List["mp-19418.json"]._postevaluation4thruleperpolyhedron_only_withoutproduct(
+                                 4, 4, 5, 5))
+
         self.assertDictEqual(Dict2_new['val1:3']['val2:3']['CN1:6']['CN2:6'],
                              self.Pauling_List["mp-19418.json"]._postevaluation4thruleperpolyhedron_only_withoutproduct(
                                  6, 6, 3, 3))

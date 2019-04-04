@@ -88,6 +88,7 @@ is_an_oxide_and_no_env_for_O(lse)
 #
 
 # test Fifth Rule
+#TODO: we typically exclude the following materials from the assessment
 leave_out_list = ["Er"]
 pauling5 = Pauling5()
 pauling5.newsetup(lse, save_to_file=False)
