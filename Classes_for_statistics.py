@@ -72,31 +72,42 @@ class OverAllAnalysis:
             with open("Should_not_be_changed/allmaterials.json", "r") as f:
                 list_compound_dict = json.load(f)
                 list_compound_dict["is_clear_compounds"] = list(set(list_compound_dict["is_clear_compounds"]))
-                if start_material is None and stop_material is None:
-                    list_compound = list_compound_dict["is_clear_compounds"]
-                elif start_material is None and stop_material is not None:
-                    list_compound = list_compound_dict["is_clear_compounds"][0:stop_material]
-                elif start_material is not None and stop_material is None:
-                    list_compound = list_compound_dict["is_clear_compounds"][start_material:]
-                else:
-                    list_compound = list_compound_dict["is_clear_compounds"][start_material:stop_material]
+                if not onlybinaries:
+                    if start_material is None and stop_material is None:
+                        list_compound = list_compound_dict["is_clear_compounds"]
+                    elif start_material is None and stop_material is not None:
+                        list_compound = list_compound_dict["is_clear_compounds"][0:stop_material]
+                    elif start_material is not None and stop_material is None:
+                        list_compound = list_compound_dict["is_clear_compounds"][start_material:]
+                    else:
+                        list_compound = list_compound_dict["is_clear_compounds"][start_material:stop_material]
 
 
         elif source == 'MP_very_symmetric':
             with open("Should_not_be_changed/ce_fraction_0.95plus_csm_0.1plus_eabovehull0.025plus_discardS1.json",
                       "r") as f:
                 list_compound_dict = json.load(f)
-                if start_material is None and stop_material is None:
-                    list_compound = list_compound_dict["is_clear_compounds"]
-                elif start_material is None and stop_material is not None:
-                    list_compound = list_compound_dict["is_clear_compounds"][0:stop_material]
-                elif start_material is not None and stop_material is None:
-                    list_compound = list_compound_dict["is_clear_compounds"][start_material:]
-                else:
-                    list_compound = list_compound_dict["is_clear_compounds"][start_material:stop_material]
+                if not onlybinaries:
+                    if start_material is None and stop_material is None:
+                        list_compound = list_compound_dict["is_clear_compounds"]
+                    elif start_material is None and stop_material is not None:
+                        list_compound = list_compound_dict["is_clear_compounds"][0:stop_material]
+                    elif start_material is not None and stop_material is None:
+                        list_compound = list_compound_dict["is_clear_compounds"][start_material:]
+                    else:
+                        list_compound = list_compound_dict["is_clear_compounds"][start_material:stop_material]
 
         elif source == 'my_own_list':
             list_compound = self._get_precomputed_results(self.list_of_materials_to_investiage)
+            if not onlybinaries:
+                if start_material is None and stop_material is None:
+                    list_compound = list_compound
+                elif start_material is None and stop_material is not None:
+                    list_compound = list_compound[0:stop_material]
+                elif start_material is not None and stop_material is None:
+                    list_compound = list_compound[start_material:]
+                else:
+                    list_compound = list_compound[start_material:stop_material]
 
         # here: be careful that you are aware of start and stop_material !!
         if onlybinaries:
@@ -109,8 +120,16 @@ class OverAllAnalysis:
                         numberofcat += 1
                 if numberofcat == 1:
                     list_compound_binaries.append(mat)
+            if start_material is None and stop_material is None:
+                list_compound = list_compound_binaries
+            elif start_material is None and stop_material is not None:
+                list_compound = list_compound_binaries[0:stop_material]
+            elif start_material is not None and stop_material is None:
+                list_compound = list_compound_binaries[start_material:]
+            else:
+                list_compound = list_compound_binaries[start_material:stop_material]
 
-            return list_compound_binaries
+            return list_compound
 
         else:
             return list_compound
@@ -1619,9 +1638,8 @@ class Pauling5OverAllAnalysis(OverAllAnalysis):
 
 
 class AllPaulingOverAllAnalysis(OverAllAnalysis):
-    def run(self, remove_elements_low_entropy=False, show_plot=True, start_from_connections=False,
-            save_connections=True,
-            connections_folder34='AnalysisConnections', connections_folder5='AnalysisConnections_5thRule',
+    def run(self, remove_elements_low_entropy=False, start_from_connections=False,
+            save_connections=True, connections_folder34='AnalysisConnections', connections_folder5='AnalysisConnections_5thRule',
             start_from_results=False, save_result_data=True,
             restart_from_saved_structure_analyisis=False, save_structure_analysis=True,
             path_to_save='Results/Results_AllRules.json', start_material=None, stop_material=None,
@@ -1647,7 +1665,6 @@ class AllPaulingOverAllAnalysis(OverAllAnalysis):
         if not start_from_results:
             if self.remove_elements_low_entropy:
                      # TODO: make sure this constant is okay
-                     constant = 0.95
                      newclass = Pauling1Entropy(source=self.source, onlybinaries=self.onlybinaries,
                                                 plot_element_dependend_analysis=False)
                      newclass.run(start_from_results=False, save_result_data=False)
@@ -1656,43 +1673,17 @@ class AllPaulingOverAllAnalysis(OverAllAnalysis):
 
             self._new_setup()
         else:
-            pass
+            inputdict = self._get_precomputed_results(path_to_save)
+            self.structures_fulfillingrule = inputdict['fullingstructures']
+            self.structures_exceptions = inputdict['exceptions']
+            self.structures_cannot_be_evaluated = inputdict['nottested']
 
-        #     inputdict = self._get_precomputed_results(path_to_save)
-        #     self.structures_fulfillingrule = inputdict['fullingstructures']
-        #     self.structures_exceptions = inputdict['exceptions']
-        #     self.structures_cannot_be_evaluated = inputdict['nottested']
-        #     self.Plot_PSE_DICT = inputdict['PSE_Dict']
-        #     self.present_env = Counter(inputdict['Counter_cation'])
-        #
-        # if show_plot:
-        #     plot = self._fifth_rule_plot(okay=len(self.structures_fulfillingrule),
-        #                                  notokay=len(self.structures_exceptions))
-        #     plot.show()
-        #
-        # if self.plot_element_dependend_analysis:
-        #     if self.remove_elements_low_entropy and not start_from_results:
-        #
-        #         new_env = {}
-        #         for key, item in self.present_env.items():
-        #             if key not in self.list_to_remove:
-        #                 new_env[key] = item
-        #         self.present_env = new_env
-        #
-        #     plt = self._plot_PSE(self.Plot_PSE_DICT, xlim=[1, 18], ylim=[1, 10],
-        #                          lowest_number_of_environments_considered=self.lowest_number_environments_for_plot,
-        #                          lowerlimit=self.lower_limit_plot, upperlimit=self.upper_limit_plot,
-        #                          counter_cations_env=self.present_env)
-        #     plt.show()
-        #
-        # if save_result_data and not start_from_results:
-        #     outputdict = {}
-        #     outputdict['fullingstructures'] = self.structures_fulfillingrule
-        #     outputdict['exceptions'] = self.structures_exceptions
-        #     outputdict['nottested'] = self.structures_cannot_be_evaluated
-        #     outputdict['PSE_Dict'] = self.Plot_PSE_DICT
-        #     outputdict['Counter_cation'] = dict(self.present_env)
-        #     self._save_results_to_file(outputdict, path_to_save)
+        if save_result_data and not start_from_results:
+            outputdict = {}
+            outputdict['fullingstructures'] = self.structures_fulfillingrule
+            outputdict['exceptions'] = self.structures_exceptions
+            outputdict['nottested'] = self.structures_cannot_be_evaluated
+            self._save_results_to_file(outputdict,path_to_save)
 
         if self.analyse_structures:
             dict_similarstructures_exceptions = self._get_similar_structures(self.structures_exceptions,
@@ -1710,26 +1701,21 @@ class AllPaulingOverAllAnalysis(OverAllAnalysis):
                                                                                               0] + "_structurres_fulfilling.json",
                                                                              fetch_results_only=restart_from_saved_structure_analyisis,
                                                                              start_from_Matching=self.use_prematching)
-            #
-            #     # # #TODO: write a file with the output
-            print('Exceptions:')
-            self._print_to_screen_similar_structures(dict_similarstructures_exceptions)
-            print('Structures fulfilling the rule')
-            self._print_to_screen_similar_structures(dict_similarstructures_fulfilling)
 
-        #     self._print_to_file_similar_structures(dict_similarstructures_exceptions, filename=path_to_save.split('.')[
-        #                                                                                            0] + "_structural_exceptions_readable.yaml")
-        #
-        #     self._print_to_file_similar_structures(dict_similarstructures_exceptions, filename=path_to_save.split('.')[
-        #                                                                                            0] + "_structures_fulfilling_readable.yaml")
-        #
-        #     self._print_to_file_similar_structures(dict_similarstructures_exceptions, fmt='csv',
-        #                                            filename=path_to_save.split('.')[
-        #                                                         0] + "_structural_exceptions_readable.csv")
-        #
-        #     self._print_to_file_similar_structures(dict_similarstructures_exceptions, fmt='csv',
-        #                                            filename=path_to_save.split('.')[
-        #                                                         0] + "_structures_fulfilling_readable.csv")
+        if save_structure_analysis:
+            self._print_to_file_similar_structures(dict_similarstructures_exceptions, filename=path_to_save.split('.')[
+                                                                                                   0] + "_structural_exceptions_readable.yaml")
+
+            self._print_to_file_similar_structures(dict_similarstructures_exceptions, filename=path_to_save.split('.')[
+                                                                                                   0] + "_structures_fulfilling_readable.yaml")
+
+            self._print_to_file_similar_structures(dict_similarstructures_exceptions, fmt='csv',
+                                                   filename=path_to_save.split('.')[
+                                                                0] + "_structural_exceptions_readable.csv")
+
+            self._print_to_file_similar_structures(dict_similarstructures_exceptions, fmt='csv',
+                                                   filename=path_to_save.split('.')[
+                                                                0] + "_structures_fulfilling_readable.csv")
 
     def _new_setup(self):
         list_mat = self._get_list_materials(source=self.source, onlybinaries=self.onlybinaries,
@@ -1760,7 +1746,8 @@ class AllPaulingOverAllAnalysis(OverAllAnalysis):
                 print(mat)
                 pauling3.newsetup(lse, filename=mat + '.json', save_to_file=self.save_connections,
                                   foldername=self.connections_folder34, distance=8.0)
-                pauling4.from_file(filename=mat + '.json', foldername=self.connections_folder34)
+                pauling4.newsetup(lse, filename=mat + '.json', save_to_file=self.save_connections,
+                                  foldername=self.connections_folder34, distance=8.0)
                 pauling5.newsetup(lse, filename=mat + '.json', save_to_file=self.save_connections,
                                   foldername=self.connections_folder5, distance=8.0)
             else:

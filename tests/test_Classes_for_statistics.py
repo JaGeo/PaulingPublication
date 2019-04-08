@@ -3,6 +3,7 @@ from Classes_for_statistics import OverAllAnalysis, Pauling1Frequency, Pauling1E
     AllPaulingOverAllAnalysis
 from collections import OrderedDict
 import unittest
+import os
 import tempfile
 import numpy as np
 
@@ -407,10 +408,66 @@ class TestAllPaulingOverAllAnalysis(unittest.TestCase):
     #TODO: implmement this testcase and make sure it works for everything and every setting!
     #TODO: implement class in correct manner
     def setUp(self):
-        pass
+        self.paulingall=AllPaulingOverAllAnalysis(source='my_own_list', onlybinaries=False,
+                                                       plot_element_dependend_analysis=False,
+                                                       list_of_materials_to_investiage='test_list.json',
+                                                       analyse_structures=True, use_prematching=True)
+        if not os.path.isdir("tmp_folder3"):
+            os.mkdir("tmp_folder3")
 
     def test_run(self):
-        pass
+        # self.paulingall.run(remove_elements_low_entropy=False, start_from_connections=False,
+        #     save_connections=False, connections_folder34='AnalysisConnections', connections_folder5='AnalysisConnections_5thRule',
+        #     start_from_results=False, save_result_data=False,
+        #     restart_from_saved_structure_analyisis=False, save_structure_analysis=False,
+        #     path_to_save='', start_material=None, stop_material=None,
+        #     threshold_remove_elements=0.95)
+        #
+        # self.assertListEqual(self.paulingall.structures_cannot_be_evaluated,['mp-7000', 'mp-19359', 'mp-306'])
+        # self.assertListEqual(self.paulingall.structures_fulfillingrule,[])
+        # self.assertListEqual(self.paulingall.structures_exceptions,['mp-1788', 'mp-886', 'mp-2605'])
+
+        self.paulingall.run(remove_elements_low_entropy=False,start_from_connections=False,
+                            save_connections=True,connections_folder34='tmp_folder1',connections_folder5='tmp_folder2',
+                            start_from_results=False,save_result_data=False,path_to_save='Results.json', save_structure_analysis=False,
+                            start_material=None,stop_material=1
+                            )
+
+        self.paulingall.run(remove_elements_low_entropy=False, start_from_connections=True,
+                            save_connections=True, connections_folder34='tmp_folder1', connections_folder5='tmp_folder2',
+                            start_from_results=False, save_result_data=True, path_to_save='Results.json',
+                            save_structure_analysis=False,start_material=None,stop_material=1
+                            )
+
+
+        self.paulingall.run(remove_elements_low_entropy=False, start_from_connections=True,
+                           save_connections=True, connections_folder34='tmp_folder1', connections_folder5='tmp_folder2',
+                           start_from_results=True, save_result_data=False, path_to_save='Results.json',
+                           save_structure_analysis=True,start_material=None,stop_material=1
+                           )
+        self.assertListEqual(self.paulingall.structures_cannot_be_evaluated,[])
+        self.assertListEqual(self.paulingall.structures_fulfillingrule,[])
+        self.assertListEqual(self.paulingall.structures_exceptions,['mp-1788'])
+
+
+
+        #test reading and writing of all files
+        #do that with teardown at the end and clean all files
+
+    def tearDown(self):
+        os.remove("Results.json")
+        os.remove("Results_structural_exceptions.json")
+        os.remove("Results_structural_exceptions_readable.csv")
+        os.remove("Results_structural_exceptions_readable.yaml")
+        os.remove("Results_structural_fulfilling_readable.yaml")
+        os.remove("Results_structural_fulfilling_readable.csv")
+        os.remove("Results_structural_fulfilling.json")
+
+        if os.path.isdir("tmp_folder1"):
+            os.rmdir("tmp_folder1")
+
+        if os.path.isdir("tmp_folder2"):
+            os.rmdir("tmp_folder2")
 
 
 if __name__ == '__main__':
