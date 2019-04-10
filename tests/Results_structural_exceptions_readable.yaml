@@ -1,7 +1,0 @@
-!!python/object/apply:collections.OrderedDict
-- - - mp-1788
-    - mp-1788:
-        CN: ['4', '4', '4', '4', '6', '6', '6', '6']
-        cations: [As, As, As, As, As, As, As, As]
-        formula: As2O5
-        valences: [5, 5, 5, 5, 5, 5, 5, 5]
