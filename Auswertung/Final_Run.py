@@ -1,5 +1,5 @@
 from Classes_for_statistics import Pauling1OverAllAnalysis, Pauling2OverAllAnalysis, Pauling3OverAllAnalysis, \
-    Pauling4OverAllAnalysis, Pauling5OverAllAnalysis,  Pauling1Entropy, Pauling1Frequency, AllPaulingOverAllAnalysis
+    Pauling4OverAllAnalysis, Pauling5OverAllAnalysis, Pauling1Entropy, Pauling1Frequency, AllPaulingOverAllAnalysis
 
 from Classes_for_statistics import OverAllAnalysis
 
@@ -12,65 +12,74 @@ from Classes_for_statistics import OverAllAnalysis
 # TODO: clean this
 #
 #
-# newclass=Pauling1OverAllAnalysis(source='MP',onlybinaries=False,plot_element_dependend_analysis=True,analyse_structures=True,use_prematching=True)
+# newclass=Pauling1OverAllAnalysis(source='MP',onlybinaries=False,plot_element_dependend_analysis=True,analyse_structures=True,use_prematching=True,lowest_number_environments_for_plot=50)
 # newclass.run(start_from_results=False,save_result_data=True,save_structure_analysis=True,restart_from_saved_structure_analyisis=False)
-
+#
 # newclass=Pauling1Frequency(source='MP',onlybinaries=False,plot_element_dependend_analysis=True, lowest_number_environments_for_plot=50,lower_limit_plot=0.0, upper_limit_plot=1.0)
 # newclass.run(start_from_results=False,save_result_data=True,path_to_save='Results/Results_First_Rule_Most_Frequent.json')
-
-
+#
+#
 # newclass=Pauling1Entropy(source='MP',onlybinaries=False,plot_element_dependend_analysis=True, lowest_number_environments_for_plot=50,lower_limit_plot=0.1, upper_limit_plot=1.0)
 # newclass.run(start_from_results=False,save_result_data=True,path_to_save='Results/Results_First_Rule_Entropy.json')
 
 
-# newclass = Pauling2OverAllAnalysis(source='MP', onlybinaries=False, plot_element_dependend_analysis=True,lowest_number_environments_for_plot=50, lower_limit_plot=0.1,upper_limit_plot=0.7,analyse_structures=True,use_prematching=True)
+# newclass = Pauling2OverAllAnalysis(source='MP', onlybinaries=False, plot_element_dependend_analysis=True,lowest_number_environments_for_plot=50, lower_limit_plot=0.1,upper_limit_plot=0.8,analyse_structures=True,use_prematching=True)
 # newclass.run(start_from_results=False, save_result_data=True,path_to_save='Results/Results_Second_Rule.json',save_structure_analysis=True,restart_from_saved_structure_analyisis=False)
+#
 
-
+# newclass = Pauling2OverAllAnalysis(source='MP_very_symmetric', onlybinaries=False, plot_element_dependend_analysis=True,lowest_number_environments_for_plot=50, lower_limit_plot=0.5,upper_limit_plot=1.0,analyse_structures=True,use_prematching=True)
+# newclass.run(start_from_results=False, save_result_data=True,path_to_save='Results/Results_Second_Rule_very_symmetric.json',save_structure_analysis=True,restart_from_saved_structure_analyisis=False)
 
 #
-# # TODO: third rule and fourth rule!
-# # TODO: make it possible to restart fourth rule from connections from third rule
-# # save_connection_data as well as save_result_data
-# # start_from_connections as well as start_from_results
-# # has to run very long on a computer in the computing center
-newclass = Pauling3OverAllAnalysis(source='MP', onlybinaries=False, plot_element_dependend_analysis=True,
-                                   lowest_number_environments_for_plot=50, lower_limit_plot=0.6, upper_limit_plot=1.0,
-                                   analyse_structures=True,use_prematching=True)
-newclass.run(start_from_connections=True, save_connections=True, connections_folder='AnalysisConnections',
-             start_from_results=True, save_result_data=True, restart_from_saved_structure_analyisis=False,
-             save_structure_analysis=True, path_to_save='Results/Results_Third_Rule.json')
+# newclass = Pauling3OverAllAnalysis(source='MP', onlybinaries=False, plot_element_dependend_analysis=True,
+#                                    lowest_number_environments_for_plot=50, lower_limit_plot=0.6, upper_limit_plot=1.0,
+#                                    analyse_structures=True, use_prematching=True)
+# newclass.run(start_from_connections=True, save_connections=True, connections_folder='AnalysisConnections',
+#              start_from_results=False, save_result_data=True, restart_from_saved_structure_analyisis=False,
+#              save_structure_analysis=True, path_to_save='Results/Results_Third_Rule.json')
 #
 # newclass = Pauling4OverAllAnalysis(source='MP', onlybinaries=False, plot_element_dependend_analysis=True,
-#                                    lowest_number_environments_for_plot=50, lower_limit_plot=0.7, upper_limit_plot=1.0,
-#                                    analyse_structures=True,use_prematching=True)
-# newclass.run(show_plot=True,start_from_connections=True, save_connections=True, connections_folder='AnalysisConnections',
+#                                    lowest_number_environments_for_plot=50, lower_limit_plot=0.8, upper_limit_plot=1.0,
+#                                    analyse_structures=True, use_prematching=True)
+# newclass.run(show_plot=True, start_from_connections=True, save_connections=True,
+#              connections_folder='AnalysisConnections',
 #              start_from_results=False, save_result_data=True, restart_from_saved_structure_analyisis=False,
 #              save_structure_analysis=True, path_to_save='Results/Results_Fourth_Rule.json')
 
-#
-#
 
 # newclass = Pauling5OverAllAnalysis(source='MP', onlybinaries=False, plot_element_dependend_analysis=True,
 #                                    lowest_number_environments_for_plot=50, lower_limit_plot=0.6, upper_limit_plot=1.0,
-#                                    analyse_structures=False, use_prematching=True)
+#                                    analyse_structures=True, use_prematching=True)
 #
-# newclass.run(show_plot=True,remove_elements_low_entropy=True,threshold_remove_elements=1.0, start_from_connections=True, save_connections=True,
+# newclass.run(show_plot=True, remove_elements_low_entropy=False, threshold_remove_elements=0.9,
+#              start_from_connections=True, save_connections=True,
 #              connections_folder='AnalysisConnections_5thRule',
 #              start_from_results=False, save_result_data=True, restart_from_saved_structure_analyisis=False,
 #              save_structure_analysis=True, path_to_save='Results/Results_Fifth_Rule.json')
 
+# remove elements with low entropy!
+# newclass = Pauling5OverAllAnalysis(source='MP', onlybinaries=False, plot_element_dependend_analysis=True,
+#                                    lowest_number_environments_for_plot=50, lower_limit_plot=0.6, upper_limit_plot=1.0,
+#                                    analyse_structures=True, use_prematching=True)
+#
+# newclass.run(show_plot=True, remove_elements_low_entropy=True, threshold_remove_elements=0.9,
+#              start_from_connections=True, save_connections=True,
+#              connections_folder='AnalysisConnections_5thRule',
+#              start_from_results=False, save_result_data=True, restart_from_saved_structure_analyisis=False,
+#              save_structure_analysis=True, path_to_save='Results/Results_Fifth_Rule_remove_low_entropy.json')
+#
+# newclass = AllPaulingOverAllAnalysis(source='MP', onlybinaries=False, plot_element_dependend_analysis=True,
+#                                      lowest_number_environments_for_plot=50, lower_limit_plot=0.6, upper_limit_plot=1.0,
+#                                      analyse_structures=True, use_prematching=True)
+#
+# newclass.run(remove_elements_low_entropy=False, start_from_connections=True, save_connections=True,
+#              connections_folder34='AnalysisConnections', connections_folder5='AnalysisConnections_5thRule',
+#              start_from_results=False, save_result_data=True,
+#              restart_from_saved_structure_analyisis=False, save_structure_analysis=True,
+#              path_to_save='Results/Results_AllRules.json', start_material=None, stop_material=None,
+#              threshold_remove_elements=0.95)
 
 
-newclass = AllPaulingOverAllAnalysis(source='MP', onlybinaries=False, plot_element_dependend_analysis=True,
-                                 lowest_number_environments_for_plot=50, lower_limit_plot=0.6, upper_limit_plot=1.0,
-                                 analyse_structures=True, use_prematching=True)
-
-
-newclass.run(remove_elements_low_entropy=False, start_from_connections=True, save_connections=True,connections_folder34='AnalysisConnections',connections_folder5='AnalysisConnections_5thRule', start_from_results=False, save_result_data=True,
-            restart_from_saved_structure_analyisis=False, save_structure_analysis=True,
-            path_to_save='Results/Results_AllRules.json', start_material=None, stop_material=None,
-            threshold_remove_elements=0.95)
 
 # #To Match all structures:
 # MatchAllStructures(source='MP',startmaterial=0,stopmaterial=10,restart_from_matching=False)

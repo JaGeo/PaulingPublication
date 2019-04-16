@@ -29,6 +29,12 @@ import csv
 
 #TODO: discard non primitive structures, discard theoretical structures, update energy above hull for structures and discard structures not below or equal to 0.025 eV
 
+#TODO: Get structures that are very symmetric
+
+#TODO: include an option to do the calculations for experimental structures based on the ICSD and so on. -> Search database of Guido.
+
+#TODO: cohp NaFeO2 -> have a look at metal-metal interactions, make sure the structural description is okay
+
 class OverAllAnalysis:
 
     def __init__(self, source='MP', onlybinaries=False, plot_element_dependend_analysis=True,
@@ -115,6 +121,21 @@ class OverAllAnalysis:
                     list_compound = list_compound[start_material:stop_material]
             else:
                 list_compound = list_compound
+
+        elif source =='experimental':
+            #TODO: put in right adress
+            list_compound = self._get_precomputed_results("../Auswertung/Should_not_be_changed/List_ICSD_oxides.json")
+            if not onlybinaries:
+                if start_material is None and stop_material is None:
+                    list_compound = list_compound
+                elif start_material is None and stop_material is not None:
+                    list_compound = list_compound[0:stop_material]
+                elif start_material is not None and stop_material is None:
+                    list_compound = list_compound[start_material:]
+                else:
+                    list_compound = list_compound[start_material:stop_material]
+            else:
+                list_compound = list_compound
         #TODO: test all possibilities
         # here: be careful that you are aware of start and stop_material !!
         if onlybinaries:
@@ -143,8 +164,11 @@ class OverAllAnalysis:
 
     def _get_lse_from_folder(self, mat, source='MP'):
         if source == 'MP' or source == 'MP_very_symmetric' or source == 'my_own_list':
-            with open("../../DB_chem_env/1st_rule/" + mat + ".json", 'r') as f:
+            with open(os.path.join("../../DB_chem_env/1st_rule",  mat + ".json"), 'r') as f:
                 data = json.load(f)
+        elif source=='experimental':
+            with open(os.path.join("../../SearchGuidoDatabase_Final/lse_new/",mat+".json"),'r') as f:
+                data=json.load(f)
 
         lse = LightStructureEnvironments.from_dict(data)
         return lse
@@ -893,10 +917,10 @@ class Pauling2OverAllAnalysis(OverAllAnalysis):
         self.Plot_PSE_DICT = {}
         self.present_env = {}
         # valence dependency can be introduced later
-        for mat in list_mat:
-            # print(mat)
-            lse = self._get_lse_from_folder(mat, source=self.source)
 
+        for mat in list_mat:
+
+            lse = self._get_lse_from_folder(mat, source=self.source)
             pauling2 = Pauling2(lse=lse)
 
             # one could also put this in a method!
@@ -917,8 +941,10 @@ class Pauling2OverAllAnalysis(OverAllAnalysis):
 
             array_bvs.extend(bvs)
 
-            # print(self.array_bvs)
-
+                # print(self.array_bvs)
+            # except IndexError:
+            #     print("IndexError: "+mat)
+            #     to_remove.append(mat)
         self.array_bvs = array_bvs
         self.bs_sum_mean = np.mean(array_bvs)
 
@@ -931,7 +957,7 @@ class Pauling2OverAllAnalysis(OverAllAnalysis):
         self.arraydev_share = self._list_to_np_array_and_divide_by_value(np.array(dev_array), ideal_bs)
         self.relativefrequency = self._list_to_np_array_and_divide_by_value(np.array(self.frequency),
                                                                             float(len(array_bvs)))
-
+        # self.to_remove=to_remove
 
 
 class Pauling3OverAllAnalysis(OverAllAnalysis):
@@ -963,7 +989,6 @@ class Pauling3OverAllAnalysis(OverAllAnalysis):
         if show_plot:
             self._plot_influence_atomic_radii(self.Plot_PSE_DICT)
 
-            exit()
             plot = self._pieplot_connections(self.connections['corner'], self.connections['edge'],
                                              self.connections['face'], 'Connected Pairs of Polyhedra')
             plot.show()
@@ -1035,6 +1060,8 @@ class Pauling3OverAllAnalysis(OverAllAnalysis):
             for number in range(0,item[1]):
                 face_histo.append(Element(key).atomic_radius)
 
+        #TODO: make a statistical test and test for the different distributions
+        #TODO: utilize a smilar plot for 4th rule
         print(np.mean(corneredge_histo))
         print(np.std(corneredge_histo,ddof=1))
         print(np.mean(face_histo))
@@ -1042,20 +1069,25 @@ class Pauling3OverAllAnalysis(OverAllAnalysis):
 
         #range noch korrekt anpassen
         plt.subplot(2,1,1)
-        plt.hist(corneredge_histo,bins=len(range(int(min(corneredge_histo)*100),int(max(corneredge_histo)*100)+5)),align='mid',alpha=1)
+        plt.hist(corneredge_histo,bins=[i/float(1000) for i in range(int(min([min(corneredge_histo),min(face_histo)])*1000), int(max([max(corneredge_histo),max(face_histo)])*1000) + 20, 20)],align='mid',alpha=1)
         plt.axvline(np.mean(corneredge_histo),color='r')
-
+        plt.ylabel("Connections via corners and edges")
         #plt.plot([0, 1000], [np.mean(corneredge_histo), np.mean(corneredge_histo)], 'b-')
         # n,bins,patches=plt.hist(x=corneredge_histo,bins=len(range(int(min(corneredge_histo)*100),int(max(corneredge_histo)*100)+5)))
         # y =sp.stats.norm.pdf(bins,np.mean(corneredge_histo),np.std(corneredge_histo,ddof=1))
         # plt.plot(bins,y,'r--',linewidth=1)
         #
+
         plt.subplot(2,1,2)
-        plt.hist(face_histo, bins=len(range(int(min(face_histo) * 100), int(max(face_histo) * 100) + 5)), align='mid',
+        plt.hist(face_histo, bins=[i/float(1000) for i in range(int(min([min(corneredge_histo),min(face_histo)])*1000), int(max([max(corneredge_histo),max(face_histo)])*1000) + 20, 20)], align='mid',
                  alpha=1)
         plt.axvline(np.mean(face_histo), color='r')
+        plt.ylabel("Connections via faces")
+        plt.xlabel("Atomic radius in Angstrom")
         #plt.plot([0,1000],[np.mean(face_histo),np.mean(face_histo)],'b-')
         plt.show()
+
+
     def _new_setup(self):
         list_mat = self._get_list_materials(source=self.source, onlybinaries=self.onlybinaries,
                                             start_material=self.start_material, stop_material=self.stop_material)
@@ -1070,7 +1102,7 @@ class Pauling3OverAllAnalysis(OverAllAnalysis):
         # valence dependency can be introduced later
         #TODO: should search for an exception to third rule
         for mat in list_mat:
-            #print(mat)
+            print(mat)
             lse = self._get_lse_from_folder(mat, source=self.source)
             pauling0 = Pauling0(lse)
             pauling3 = Pauling3()
@@ -1529,12 +1561,15 @@ class Pauling5OverAllAnalysis(OverAllAnalysis):
             self.list_to_remove=inputdict['elements_low_entropy']
 
         if show_plot:
+            #print(len(self.structures_fulfillingrule))
+            #print(len(self.structures_exceptions))
             plot = self._fifth_rule_plot(okay=len(self.structures_fulfillingrule),
                                          notokay=len(self.structures_exceptions))
             plot.show()
 
-        if self.remove_elements_low_entropy and not start_from_results:
 
+
+        if not start_from_results:
             new_env = {}
             for key, item in self.present_env.items():
                 if key not in self.list_to_remove:
@@ -1641,6 +1676,7 @@ class Pauling5OverAllAnalysis(OverAllAnalysis):
                 self._add_dict_cat_dependency(self.Plot_PSE_DICT, New_Details)
                 self._add_dict_cat_dependency(self.present_env, pauling0.get_cations_in_structure(),
                                               number_of_elements_to_add=1)
+
 
             except RuleCannotBeAnalyzedError:
                 pass

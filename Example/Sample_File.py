@@ -24,7 +24,7 @@ lgf.setup_structure(structure=struct)
 
 # Get the StructureEnvironments
 # only the environments of the cations should be computed, otherwise, the code will fail
-se = lgf.compute_structure_environments(maximum_distance_factor=1.41, only_cations=True, valences=valences)
+se = lgf.compute_structure_environments(only_cations=True, valences=valences)
 
 strategy = MultiWeightsChemenvStrategy.stats_article_weights_parameters()
 
