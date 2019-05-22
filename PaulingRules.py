@@ -17,6 +17,7 @@ class RuleCannotBeAnalyzedError(Exception):
 
 
 def is_an_oxide_and_no_env_for_O(lse):
+    #TODO: should also check if there are neighbors for every cation!
     for isite, site in enumerate(lse.structure):
         if lse.valences[isite] < 0 and site.species_string != 'O':
             raise ValueError("This is not an oxide. The assessment will be stopped.")
@@ -74,7 +75,18 @@ def get_most_frequent_environment(dict_all_environments):
             break;
     return perc_ready
 
+def get_mean_CN_from_frequencies(dict_all_environments):
+    numbers_ready = {}
+    dict_all_CN={}
+    for key, value in dict_all_environments.items():
+        if not key in dict_all_CN:
+            dict_all_CN[key]=[]
+        for value2 in value:
+            dict_all_CN[key].append(int(value2.split(":")[1]))#)
 
+    for key, value in dict_all_CN.items():
+        numbers_ready[key]=np.mean(value)
+    return numbers_ready
 
 
 class FrequencyEnvironmentPauling1:

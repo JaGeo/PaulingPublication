@@ -1,5 +1,6 @@
 from PaulingRules import Pauling1, Pauling2, PaulingConnection, Pauling3and4, Pauling3, Pauling4, Pauling5, \
-    RuleCannotBeAnalyzedError, is_an_oxide_and_no_env_for_O, FrequencyEnvironmentPauling1, Pauling0, get_entropy_from_frequencies,  get_most_frequent_environment
+    RuleCannotBeAnalyzedError, is_an_oxide_and_no_env_for_O, FrequencyEnvironmentPauling1, Pauling0, \
+    get_entropy_from_frequencies, get_most_frequent_environment, get_mean_CN_from_frequencies
 from pymatgen.analysis.chemenv.coordination_environments.coordination_geometry_finder import LocalGeometryFinder
 from pymatgen.analysis.chemenv.coordination_environments.chemenv_strategies import MultiWeightsChemenvStrategy
 from pymatgen.analysis.chemenv.coordination_environments.structure_environments import LightStructureEnvironments
@@ -10,7 +11,6 @@ import json
 import math
 import tempfile
 import os
-
 
 
 class is_an_oxide_and_no_env_for_O_Test(unittest.TestCase):
@@ -38,22 +38,37 @@ class is_an_oxide_and_no_env_for_O_Test(unittest.TestCase):
         with self.assertRaises(ValueError):
             is_an_oxide_and_no_env_for_O(self.lse2)
 
+
 class Get_entropy_from_frequencies_Test(unittest.TestCase):
     def test_get_entropy_from_frequencies(self):
+        compare1 = 1 - (-math.log(0.5, 2) * 0.5 * 2 / (-math.log(1 / 66.0, 2) * 1.0 / 66.0 * 66.0))
+        self.assertAlmostEqual(get_entropy_from_frequencies({'Ga': ['O:6', 'O:6', 'T:4', 'T:4']})["Ga"], compare1)
+        self.assertDictEqual(get_entropy_from_frequencies({'Ga': ['O:6', 'O:6', 'T:4', 'T:4']}),
+                             {'Ga': 0.8345574460809416})
+        self.assertAlmostEqual(get_entropy_from_frequencies({'Ga': ['O:6', 'O:6', 'T:4', 'T:4']}, max_env=2)["Ga"], 0.0)
+        self.assertAlmostEqual(get_entropy_from_frequencies({'Ga': ['O:6', 'O:6', 'O:6', 'O:6']}, max_env=2)["Ga"], 1.0)
+        self.assertAlmostEqual(
+            get_entropy_from_frequencies({'Ga': ['O:6', 'T:4', 'T:4', 'A:2', 'O:6', 'O:6', 'L:2', 'O:6']}, max_env=4)[
+                "Ga"], 1.0 - 1.75 / 2.0)
+        self.assertAlmostEqual(get_entropy_from_frequencies(
+            {'Ga': ['O:6', 'T:4', 'T:4', 'A:2', 'O:6', 'O:6', 'L:2', 'L:2'],
+             'Sn': ['O:6', 'T:4', 'T:4', 'A:2', 'O:6', 'O:6', 'L:2', 'O:6']}, max_env=4)["Sn"], 1.0 - 1.75 / 2.0)
 
-        compare1=1-(-math.log(0.5, 2)*0.5*2/(-math.log(1/66.0, 2)*1.0/66.0*66.0))
-        self.assertAlmostEqual(get_entropy_from_frequencies({'Ga': ['O:6', 'O:6', 'T:4', 'T:4']})["Ga"],compare1)
-        self.assertDictEqual(get_entropy_from_frequencies({'Ga': ['O:6', 'O:6', 'T:4', 'T:4']}),{'Ga': 0.8345574460809416})
-        self.assertAlmostEqual(get_entropy_from_frequencies({'Ga': ['O:6', 'O:6', 'T:4', 'T:4']},max_env=2)["Ga"],0.0)
-        self.assertAlmostEqual(get_entropy_from_frequencies({'Ga': ['O:6', 'O:6', 'O:6', 'O:6']},max_env=2)["Ga"],1.0)
-        self.assertAlmostEqual(get_entropy_from_frequencies({'Ga': ['O:6', 'T:4', 'T:4', 'A:2','O:6','O:6','L:2','O:6']},max_env=4)["Ga"],1.0-1.75/2.0)
-        self.assertAlmostEqual(get_entropy_from_frequencies({'Ga': ['O:6', 'T:4', 'T:4', 'A:2','O:6','O:6','L:2','L:2'],'Sn': ['O:6', 'T:4', 'T:4', 'A:2','O:6','O:6','L:2','O:6']},max_env=4)["Sn"],1.0-1.75/2.0)
 
 class Get_most_frequent_environment_Test(unittest.TestCase):
     def test_get_most_frequent_environment(self):
-        self.assertEqual(get_most_frequent_environment({'Ga': ['O:6', 'O:6', 'T:4', 'T:4']})["Ga"],0.5)
-        self.assertDictEqual(get_most_frequent_environment({'Ga': ['O:6', 'O:6', 'T:4', 'T:4']}),{'Ga': 0.5})
-        self.assertDictEqual(get_most_frequent_environment({'Ga': ['O:6', 'O:6', 'O:6', 'O:6'],'Sn': ['O:6', 'O:6', 'O:6', 'O:6']}),{'Ga': 1.0, 'Sn':1.0})
+        self.assertEqual(get_most_frequent_environment({'Ga': ['O:6', 'O:6', 'T:4', 'T:4']})["Ga"], 0.5)
+        self.assertDictEqual(get_most_frequent_environment({'Ga': ['O:6', 'O:6', 'T:4', 'T:4']}), {'Ga': 0.5})
+        self.assertDictEqual(
+            get_most_frequent_environment({'Ga': ['O:6', 'O:6', 'O:6', 'O:6'], 'Sn': ['O:6', 'O:6', 'O:6', 'O:6']}),
+            {'Ga': 1.0, 'Sn': 1.0})
+
+
+class Get_get_mean_CN_from_frequencies_Test(unittest.TestCase):
+    def test_get_mean_CN_from_frequencies(self):
+        self.assertAlmostEqual(get_mean_CN_from_frequencies({'Ga': ['O:6', 'O:6', 'T:4', 'T:4']})["Ga"], 5)
+        self.assertAlmostEqual(get_mean_CN_from_frequencies({'Ga': ['O:6', 'O:6', 'O:6', 'T:4']})["Ga"], 5.5)
+
 
 class FrequencyEnvironmentPauling1_Test(unittest.TestCase):
     def setUp(self):
@@ -68,15 +83,14 @@ class FrequencyEnvironmentPauling1_Test(unittest.TestCase):
             self.Pauling_dict[mat] = FrequencyEnvironmentPauling1(self.lse_dict[mat])
 
     def test_get_details(self):
-        self.assertDictEqual(self.Pauling_dict["mp-1788.json"].get_details(),{'As': ['T:4', 'T:4', 'T:4', 'T:4', 'O:6', 'O:6', 'O:6', 'O:6']})
-        self.assertDictEqual(self.Pauling_dict["mp-7000.json"].get_details(),{'Si': ['T:4', 'T:4', 'T:4']})
-        self.assertDictEqual(self.Pauling_dict["mp-19359.json"].get_details(),{'Na': ['O:6'], 'Fe': ['O:6']})
-        self.assertDictEqual(self.Pauling_dict["mp-306.json"].get_details(),{'B': ['TL:3', 'TL:3', 'TL:3', 'TL:3', 'TL:3', 'TL:3']})
-        self.assertDictEqual(self.Pauling_dict["mp-886.json"].get_details(),{'Ga': ['O:6', 'O:6', 'T:4', 'T:4']})
-        self.assertDictEqual(self.Pauling_dict["mp-2605.json"].get_details(),{'Ca': ['O:6']})
-
-
-
+        self.assertDictEqual(self.Pauling_dict["mp-1788.json"].get_details(),
+                             {'As': ['T:4', 'T:4', 'T:4', 'T:4', 'O:6', 'O:6', 'O:6', 'O:6']})
+        self.assertDictEqual(self.Pauling_dict["mp-7000.json"].get_details(), {'Si': ['T:4', 'T:4', 'T:4']})
+        self.assertDictEqual(self.Pauling_dict["mp-19359.json"].get_details(), {'Na': ['O:6'], 'Fe': ['O:6']})
+        self.assertDictEqual(self.Pauling_dict["mp-306.json"].get_details(),
+                             {'B': ['TL:3', 'TL:3', 'TL:3', 'TL:3', 'TL:3', 'TL:3']})
+        self.assertDictEqual(self.Pauling_dict["mp-886.json"].get_details(), {'Ga': ['O:6', 'O:6', 'T:4', 'T:4']})
+        self.assertDictEqual(self.Pauling_dict["mp-2605.json"].get_details(), {'Ca': ['O:6']})
 
 
 class Pauling0_Test(unittest.TestCase):
@@ -92,12 +106,12 @@ class Pauling0_Test(unittest.TestCase):
             self.Pauling_dict[mat] = Pauling0(self.lse_dict[mat])
 
     def test_one(self):
-        self.assertDictEqual(dict(self.Pauling_dict["mp-1788.json"].get_cations_in_structure()),{'As': 8})
-        self.assertDictEqual(dict(self.Pauling_dict["mp-7000.json"].get_cations_in_structure()),{'Si': 3})
-        self.assertDictEqual(dict(self.Pauling_dict["mp-19359.json"].get_cations_in_structure()),{'Na': 1, 'Fe': 1})
-        self.assertDictEqual(dict(self.Pauling_dict["mp-306.json"].get_cations_in_structure()),{'B': 6})
-        self.assertDictEqual(dict(self.Pauling_dict["mp-886.json"].get_cations_in_structure()),{'Ga': 4})
-        self.assertDictEqual(dict(self.Pauling_dict["mp-2605.json"].get_cations_in_structure()),{'Ca': 1})
+        self.assertDictEqual(dict(self.Pauling_dict["mp-1788.json"].get_cations_in_structure()), {'As': 8})
+        self.assertDictEqual(dict(self.Pauling_dict["mp-7000.json"].get_cations_in_structure()), {'Si': 3})
+        self.assertDictEqual(dict(self.Pauling_dict["mp-19359.json"].get_cations_in_structure()), {'Na': 1, 'Fe': 1})
+        self.assertDictEqual(dict(self.Pauling_dict["mp-306.json"].get_cations_in_structure()), {'B': 6})
+        self.assertDictEqual(dict(self.Pauling_dict["mp-886.json"].get_cations_in_structure()), {'Ga': 4})
+        self.assertDictEqual(dict(self.Pauling_dict["mp-2605.json"].get_cations_in_structure()), {'Ca': 1})
 
 
 class PaulingRule1_Test(unittest.TestCase):
@@ -384,26 +398,26 @@ class Pauling4_Test(unittest.TestCase):
         self.assertFalse(self.Pauling_List["mp-5986.json"].is_fulfilled())
 
     def test_get_details(self):
-        #TODO: make sure this really works for every possible case
+        # TODO: make sure this really works for every possible case
 
         firstdict = self.Pauling_List["mp-7000.json"]._postevaluation4thrule()
         seconddict = self.Pauling_List["mp-7000.json"]._postevaluation4thruleperpolyhedron_only_withoutproduct(4, 4, 4,
                                                                                                                4)
-        #totally symmetric
+        # totally symmetric
         self.assertDictEqual(firstdict["val1:4"]["val2:4"]["CN1:4"]["CN2:4"], seconddict)
         self.assertEqual(firstdict["elementwise"]["Si"]["val1:4"]["val2:4"]["CN1:4"]["CN2:4"]["no"],
                          seconddict["no"] * 2)
 
         thirddict = self.Pauling_List["mp-19359.json"]._postevaluation4thrule()
 
-        #results for 6 6 13 and 6 6 3 1 should be the same
+        # results for 6 6 13 and 6 6 3 1 should be the same
         self.assertDictEqual(
             self.Pauling_List["mp-19359.json"]._postevaluation4thruleperpolyhedron_only_withoutproduct(6, 6, 1, 3),
             self.Pauling_List["mp-19359.json"]._postevaluation4thruleperpolyhedron_only_withoutproduct(6, 6, 3, 1))
         self.assertDictEqual(thirddict["val1:1"]["val2:3"]["CN1:6"]["CN2:6"],
                              thirddict["val1:3"]["val2:1"]["CN1:6"]["CN2:6"])
 
-        #two methods should result in the same results
+        # two methods should result in the same results
         self.assertDictEqual(thirddict["val1:1"]["val2:3"]["CN1:6"]["CN2:6"],
                              self.Pauling_List["mp-19359.json"]._postevaluation4thruleperpolyhedron_only_withoutproduct(
                                  6, 6, 1, 3))
@@ -415,12 +429,9 @@ class Pauling4_Test(unittest.TestCase):
                              self.Pauling_List["mp-19359.json"]._postevaluation4thruleperpolyhedron_only_withoutproduct(
                                  6, 6, 3, 3))
 
-
-
         fourthdict = self.Pauling_List["mp-1788.json"]._postevaluation4thrule()
 
-
-        #symmetry should be there!
+        # symmetry should be there!
         self.assertDictEqual(fourthdict["val1:5"]["val2:5"]["CN1:4"]["CN2:6"],
                              fourthdict["val1:5"]["val2:5"]["CN1:6"]["CN2:4"])
 
@@ -434,7 +445,6 @@ class Pauling4_Test(unittest.TestCase):
         self.assertDictEqual(fourthdict["val1:5"]["val2:5"]["CN1:4"]["CN2:6"],
                              self.Pauling_List["mp-1788.json"]._postevaluation4thruleperpolyhedron_only_withoutproduct(
                                  4, 6, 5, 5))
-
 
         self.assertDictEqual(fourthdict["val1:5"]["val2:5"]["CN1:6"]["CN2:6"],
                              self.Pauling_List["mp-1788.json"]._postevaluation4thruleperpolyhedron_only_withoutproduct(
@@ -459,7 +469,7 @@ class Pauling4_Test(unittest.TestCase):
 
         Dict_new = self.Pauling_List["mp-5986.json"].get_details()
 
-        #should not be symmetric
+        # should not be symmetric
         self.assertDictEqual(Dict_new['val1:4']['val2:2']["CN1:6"]["CN2:12"],
                              self.Pauling_List["mp-5986.json"]._postevaluation4thruleperpolyhedron_only_withoutproduct(
                                  6, 12, 4, 2))
@@ -486,14 +496,14 @@ class Pauling4_Test(unittest.TestCase):
                              Dict_new['val1:2']['val2:4']['CN1:12']['CN2:6'])
 
         Dict2_new = self.Pauling_List["mp-19418.json"].get_details()
-        #should not be symmetric:
+        # should not be symmetric:
         self.assertDictEqual(Dict2_new['val1:5']['val2:3']['CN1:4']['CN2:6'],
                              self.Pauling_List["mp-19418.json"]._postevaluation4thruleperpolyhedron_only_withoutproduct(
                                  4, 6, 5, 3))
         self.assertDictEqual(self.Pauling_List["mp-19418.json"]._postevaluation4thruleperpolyhedron_only_withoutproduct(
-                                 4, 6, 5, 3),{'no': 52, 'corner': 12, 'edge': 0, 'face': 0})
+            4, 6, 5, 3), {'no': 52, 'corner': 12, 'edge': 0, 'face': 0})
         self.assertDictEqual(self.Pauling_List["mp-19418.json"]._postevaluation4thruleperpolyhedron_only_withoutproduct(
-                                 4, 6, 3, 5),{'no': 0, 'corner': 0, 'edge': 0, 'face': 0})
+            4, 6, 3, 5), {'no': 0, 'corner': 0, 'edge': 0, 'face': 0})
         self.assertDictEqual(Dict2_new['val1:3']['val2:5']['CN1:6']['CN2:4'],
                              self.Pauling_List["mp-19418.json"]._postevaluation4thruleperpolyhedron_only_withoutproduct(
                                  6, 4, 3, 5))
