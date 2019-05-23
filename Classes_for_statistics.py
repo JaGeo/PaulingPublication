@@ -44,15 +44,15 @@ class OverAllAnalysis:
                  analyse_structures=True, use_prematching=True, list_of_materials_to_investigate=None):
         """
 
-        :param source:
+        :param source: 'MP' (Materials Project), 'MP_very_symmetric' (only structures with very symmetric coordiation environments), or 'experimental' (structures from COD) can be used
         :param onlybinaries: only binary structures will be analysed
-        :param plot_element_dependend_analysis:
-        :param lowest_number_environments_for_plot: elements that have a lower number of environments in the evaluation will not be plotted
-        :param lower_limit_plot:
-        :param upper_limit_plot:
-        :param analyse_structures: fulfiling and exceptional structures will be analysed
-        :param use_prematching:
-        :param list_of_materials_to_investigate:
+        :param plot_element_dependend_analysis: will plot element dependent anlysis
+        :param lowest_number_environments_for_plot: decides which elements will be considered in element dependent plot with the help of the lowest number of environments
+        :param lower_limit_plot: decides the lower limit for plotting this
+        :param upper_limit_plot: decides the upper limit for plotting this
+        :param analyse_structures: should the structures be analysed and matched
+        :param use_prematching: decides whether a already existing matching will be used, only available for data from Materials Project
+        :param list_of_materials_to_investigate: you can also a reference to a list of materials that should be investigated, e.g. "test.json"
         """
 
         self.source = source
@@ -67,14 +67,14 @@ class OverAllAnalysis:
         # could include a function that starts plotting from saved data?
         # how should one do this in the best way
 
-    def _get_list_materials(self, source='MP', onlybinaries=False, start_material=None, stop_material=None):
+    def _get_list_materials(self, source='MP', onlybinaries=False, start_material=None, stop_material=None) -> list:
         """
-
-        :param source:
+        will read lists of materials from file
+        :param source: 'MP' (Materials Project), 'MP_very_symmetric' (only structures with very symmetric coordiation environments), or 'experimental' (structures from COD) can be used
         :param onlybinaries: from the list of materials, only binaries are used
-        :param start_material: cuts the list of all materials not the binary list
-        :param stop_material: cuts the list of all materials not the binary list
-        :return:
+        :param start_material: number that cuts the list of all materials
+        :param stop_material: number that cuts the list of all materials
+        :return: list of materials
         """
         # TODO: test this part
         if source == 'MP':
@@ -93,7 +93,6 @@ class OverAllAnalysis:
                 else:
                     list_compound = list_compound_dict["is_clear_compounds"]
 
-        # TODO: generate new list of materials with these criteria!!!
         elif source == 'MP_very_symmetric':
             with open(
                     "../Auswertung/Should_not_be_changed/ce_fraction_0.95plus_csm_0.1plus_eabovehull0.025plus_discardS1.json",
@@ -110,7 +109,7 @@ class OverAllAnalysis:
                         list_compound = list_compound_dict["is_clear_compounds"][start_material:stop_material]
                 else:
                     list_compound = list_compound_dict["is_clear_compounds"]
-        # TODO: include test for start_material != None and stop_material==None
+
         elif source == 'my_own_list':
             list_compound = self._get_precomputed_results(self.list_of_materials_to_investigate)
             if not onlybinaries:
@@ -126,8 +125,7 @@ class OverAllAnalysis:
                 list_compound = list_compound
 
         elif source == 'experimental':
-            # TODO: put in right address
-            # TODO: ICSD data might not have been processed correctly -> check this -> could be extended if necessary
+            # TODO: update
             list_compound = self._get_precomputed_results(
                 "../Auswertung/Should_not_be_changed/List_experimental_oxides.json")
             if not onlybinaries:
@@ -141,8 +139,6 @@ class OverAllAnalysis:
                     list_compound = list_compound[start_material:stop_material]
             else:
                 list_compound = list_compound
-        # TODO: test all possibilities
-        # here: be careful that you are aware of start and stop_material !!
         if onlybinaries:
             list_compound_binaries = []
             for mat in list_compound:
@@ -167,20 +163,38 @@ class OverAllAnalysis:
         else:
             return list_compound
 
-    def _get_lse_from_folder(self, mat, source='MP'):
+    def _get_lse_from_folder(self, mat: str, source='MP') -> LightStructureEnvironments:
+        """
+        will fetch lse from a folder
+        :param mat: name of the material, e.g. "mp-7000"
+        :param source: 'MP' (Materials Project), 'MP_very_symmetric' (only structures with very symmetric coordiation environments), or 'experimental' (structures from COD) can be used
+        :return: LightStructureEnvironments
+        """
         if source == 'MP' or source == 'MP_very_symmetric' or source == 'my_own_list':
             with open(os.path.join("../../DB_chem_env/1st_rule", mat + ".json"), 'r') as f:
                 data = json.load(f)
         elif source == 'experimental':
-            with open(os.path.join("../../SearchGuidoDatabase_Final/lse_new/", mat + ".json"), 'r') as f:
+            with open(os.path.join("../../SearchGuidoDatabase_Final/lse_primitive_cell", mat + ".json"), 'r') as f:
                 data = json.load(f)
 
         lse = LightStructureEnvironments.from_dict(data)
         return lse
 
-    def _plot_PSE(self, Dict_to_Plot, lowest_number_of_environments_considered, xlim=[1, 18], ylim=[1, 10],
+    def _plot_PSE(self, Dict_to_Plot: dict, lowest_number_of_environments_considered: int, xlim=[1, 18], ylim=[1, 10],
                   lowerlimit=0,
-                  upperlimit=1, counter_cations_env=None, plot_directly_from_freq=False):
+                  upperlimit=1, counter_cations_env=None, plot_directly_from_freq=False) -> plt:
+        """
+        will plot data in a periodic table
+        :param Dict_to_Plot: dict that will be plotted
+        :param lowest_number_of_environments_considered:
+        :param xlim: xrange for periodic table
+        :param ylim: yrange for periodic table
+        :param lowerlimit: lower limit for plot
+        :param upperlimit: upper limit for plot
+        :param counter_cations_env: dict that tells you how many environments are present for each cation
+        :param plot_directly_from_freq: will directly plot the entry for each element in the dict
+        :return: plot
+        """
 
         plotterpse = PlotterPSE(valuestoplot=Dict_to_Plot, counter_cations_env=counter_cations_env,
                                 plot_directly_from_freq=plot_directly_from_freq)
@@ -200,7 +214,7 @@ class OverAllAnalysis:
             dict_here = json.load(f)
         return dict_here
 
-    def _add_dict_cat_dependency(self, start_dict, dict_to_add, number_of_elements_to_add=2):
+    def _add_dict_cat_dependency(self, start_dict: dict, dict_to_add: dict, number_of_elements_to_add=2):
         """
 
         :param start_dict: dict that will be extended
@@ -208,7 +222,6 @@ class OverAllAnalysis:
         :param number_of_elements_to_add:
              ==1: following dicts can be summed, integers for each key will be summed: {"Ga":1, "Sn":2}
              ==2: following dicts can be summed, individual numbers in the arrays of each key will be summed: {"Ga": [1,0], "Sn": [0,2]}
-             ==3: does not exist at the moment
              ==4: following dicts can be extended with another dict: {"Ga":["O:6","O:6"], "Sn":["T:4","T:4"]}
         :return: None, start_dict will have the new values
         """
@@ -219,8 +232,6 @@ class OverAllAnalysis:
                     start_dict[key] = dict_to_add[key]
                 elif number_of_elements_to_add == 2:
                     start_dict[key] = dict_to_add[key].copy()
-                # elif number_of_elements_to_add == 3:
-                #     start_dict[key] = dict_to_add[key].copy()
                 elif number_of_elements_to_add == 4:
                     start_dict[key] = dict_to_add[key].copy()
             else:
@@ -229,30 +240,24 @@ class OverAllAnalysis:
                 elif number_of_elements_to_add == 2:
                     start_dict[key][0] += dict_to_add[key][0]
                     start_dict[key][1] += dict_to_add[key][1]
-                # elif number_of_elements_to_add == 3:
-                #     for env, number in dict_to_add[key].items():
-                #         if env not in start_dict[key]:
-                #             start_dict[key][env] = dict_to_add[key][env]
-                #         else:
-                #             start_dict[key][env] += dict_to_add[key][env]
                 elif number_of_elements_to_add == 4:
                     start_dict[key].extend(dict_to_add[key])
 
-    def _get_similar_structures(self, list_mat_id, source='MP', save_to_file=True,
+    def _get_similar_structures(self, list_mat_id: list, source='MP', save_to_file=True,
                                 path_to_save='Similar_Structures.json', fetch_results_only=False,
                                 start_from_Matching=False,
                                 path_to_precomputed_matching="Should_not_be_changed/Matching_All_Structures.json",
-                                restart_from_matching=False):
+                                restart_from_matching=False) -> dict:
         """
-
-        :param list_mat_id:
-        :param source:
+        will match materials ids according to structures
+        :param list_mat_id: list of materials ids
+        :param source: 'MP' (Materials Project), 'MP_very_symmetric' (only structures with very symmetric coordiation environments), or 'experimental' (structures from COD) can be used
         :param save_to_file:
         :param path_to_save:
         :param fetch_results_only:
         :param start_from_Matching: matches with the help of existing matching
         :param restart_from_matching: continues a matching from a file, e.g. to continue it later when interrupted
-        :return:
+        :return: dict including the matching
         """
 
         if not start_from_Matching and not fetch_results_only:
@@ -374,35 +379,18 @@ class OverAllAnalysis:
                 raise ValueError
         return outputdict
 
-    # def _print_to_screen_similar_structures(self, dict_to_print, add_properties_from_lse=False, source='MP'):
-    #     for key, items in OrderedDict(
-    #             sorted(dict_to_print['structure_matching'].items(), key=lambda t: len(t[1]), reverse=True)).items():
-    #
-    #         if len(items) == 1:
-    #             print(key + ' (' + str(dict_to_print['additional_info'][key]) + ', ' + str(
-    #                 len(items)) + ' representative): ', end='')
-    #         else:
-    #             print(key + ' (' + str(dict_to_print['additional_info'][key]) + ', ' + str(
-    #                 len(items)) + ' representatives): ', end='')
-    #         for item in items:
-    #             if add_properties_from_lse:
-    #                 lse = self._get_lse_from_folder(mat=item, source=source)
-    #                 valence = [i for i in lse.valences if i > 0]
-    #                 # get CN:
-    #                 CN = []
-    #                 for isite, site_envs in enumerate(lse.coordination_environments):
-    #
-    #                     if site_envs != None:
-    #                         if len(site_envs) > 0:
-    #                             CN.append(site_envs[0]['ce_symbol'].split(':')[1])
-    #                 print(item + ' (' + str(dict_to_print['additional_info'][item]) + ', CNs:' + str(
-    #                     CN) + ', valences: ' + str(valence) + '), ', end='')
-    #             print(item + ' (' + str(dict_to_print['additional_info'][item]) + '), ', end='')
-    #
-    #         print()
-
-    def _print_to_file_similar_structures(self, dict_to_print, source='MP', filename='Test.yaml', fmt='yml',
+    def _print_to_file_similar_structures(self, dict_to_print: dict, source='MP', filename='Test.yaml', fmt='yml',
                                           add_info=None, name_add_info=""):
+        """
+        will print the matched structures in a file
+        :param dict_to_print: dict to print
+        :param source: 'MP' (Materials Project), 'MP_very_symmetric' (only structures with very symmetric coordiation environments), or 'experimental' (structures from COD) can be used
+        :param filename: filename
+        :param fmt: 'yml' or 'csv'
+        :param add_info: additional external output for files
+        :param name_add_info: how is the external output called
+
+        """
         if fmt == 'yml':
             new_dict_to_print = OrderedDict()
             for key, items in OrderedDict(
@@ -482,8 +470,15 @@ class OverAllAnalysis:
                             [str(line["mpid"]), str(line["formula"]), str(line["structure_type"]), str(line["cations"]),
                              str(line["valences"]), str(line["CN"]), str(line[name_add_info])])
 
-    def _pieplot_connections(self, corner, edge, face, title="All"):
-
+    def _pieplot_connections(self, corner: int, edge: int, face: int, title="All") -> plt:
+        """
+        will plot a pie chart based on integers describing the connections
+        :param corner: number of corner connections
+        :param edge: number of edge connections
+        :param face: number of face connections
+        :param title: title of the plot
+        :return: plot
+        """
         labels = 'via corners', 'via edges', 'via faces'
         sizes = [corner, edge, face]
         colors = ['#5da5daff', '#faa43aff', '#f15854ff']
@@ -495,7 +490,13 @@ class OverAllAnalysis:
         return plt
 
     def visualize_structure_by_id(self, mat, supercell=[1, 1, 0]):
-        # TODO: implement supercell
+        """
+
+        :param mat: materials id
+        :param supercell: list of additional cells that are considered in each direction
+        :return:
+        """
+        # TODO: rethink supercell implementation
         # get information on the supercell to neigbors
 
         lse = self._get_lse_from_folder(mat, source=self.source)
@@ -541,29 +542,14 @@ class OverAllAnalysis:
         vis.show()
 
 
-# Not sure this should be tested - let's see
-# class MatchAllStructures(OverAllAnalysis):
-#     def __init__(self, source='MP', startmaterial=None, stopmaterial=None, restart_from_matching=False):
-#         self.source = source
-#         materials_list = self._get_list_materials(source=self.source, start_material=startmaterial,
-#                                                   stop_material=stopmaterial)
-#         self._get_similar_structures(materials_list, source=source, save_to_file=True,
-#                                      path_to_save="Results/Matching_All_Structures.json",
-#                                      restart_from_matching=restart_from_matching)
-#
-#
-# # most frequent environment: this is also something that needs to be computed
-# might need to be included in PaulingRules
-
-
 class Pauling1Frequency(OverAllAnalysis):
-    """Analyses the 1-percentropy of certain cation"""
+    """Class to analyse the largest frequency of a coordination environment for each cation"""
 
     def __init__(self, source='MP', onlybinaries=False, plot_element_dependend_analysis=True,
                  lowest_number_environments_for_plot=50, lower_limit_plot=0.0, upper_limit_plot=1.0,
                  list_of_materials_to_investigate=None, start_material=None, stop_material=None):
         """
-            :param source:
+            :param source: 'MP' (Materials Project), 'MP_very_symmetric' (only structures with very symmetric coordiation environments), or 'experimental' (structures from COD) can be used
             :param onlybinaries: only binary structures will be analysed
             :param analyse_structures: fulfiling and exceptional structures will be analysed
             :param lowest_number_environments_for_plot: elements that have a lower number of environments in the evaluation will not be plotted
@@ -582,7 +568,13 @@ class Pauling1Frequency(OverAllAnalysis):
         self.list_of_materials_to_investigate = list_of_materials_to_investigate
 
     def run(self, start_from_results=False, save_result_data=True, path_to_save='Results/Results_First_Limits.json'):
-
+        """
+        runs the analysis
+        :param start_from_results: if True, restart from Result file
+        :param save_result_data: if True, saves results in json file
+        :param path_to_save: path to save the files
+        :return:
+        """
         if not start_from_results:
             self._new_setup()
             self.Plot_PSE_most_frequent = get_most_frequent_environment(self.All_Details)
@@ -607,6 +599,10 @@ class Pauling1Frequency(OverAllAnalysis):
             self._save_results_to_file(outputdict, path_to_save)
 
     def _new_setup(self):
+        """
+        will be done if results are not read from file
+        :return:
+        """
         list_mat = self._get_list_materials(source=self.source, onlybinaries=self.onlybinaries,
                                             start_material=self.start_material, stop_material=self.stop_material)
         self.All_Details = {}
@@ -624,18 +620,22 @@ class Pauling1Frequency(OverAllAnalysis):
 
 
 class Pauling1Entropy(Pauling1Frequency):
-    """Analyses the 1-percentropy of certain cation"""
+    """Class to analyse the Shannon entropy for each element"""
 
     def __init__(self, source='MP', onlybinaries=False, plot_element_dependend_analysis=True,
                  lowest_number_environments_for_plot=50, lower_limit_plot=0.0, upper_limit_plot=1.0,
                  list_of_materials_to_investigate=None, start_material=None, stop_material=None):
         """
-            :param source:
-            :param onlybinaries: only binary structures will be analysed
-            :param analyse_structures: fulfiling and exceptional structures will be analysed
-            :param lowest_number_environments_for_plot: elements that have a lower number of environments in the evaluation will not be plotted
-            :param save_result_data: all results will be saved so that results can easily be recreated
-            :return:
+
+        :param source: 'MP' (Materials Project), 'MP_very_symmetric' (only structures with very symmetric coordiation environments), or 'experimental' (structures from COD) can be used
+        :param onlybinaries: only binary structures will be analysed
+        :param plot_element_dependend_analysis: will plot element dependent anlysis
+        :param lowest_number_environments_for_plot: decides which elements will be considered in element dependent plot with the help of the lowest number of environments
+        :param lower_limit_plot: decides the lower limit for plotting this
+        :param upper_limit_plot: decides the upper limit for plotting this
+        :param list_of_materials_to_investigate: you can also a reference to a list of materials that should be investigated, e.g. "test.json"
+        :param start_material: number at which the investigation is started
+        :param stop_material: number before which the investigation is started
         """
 
         super(Pauling1Entropy, self).__init__(source=source, onlybinaries=onlybinaries,
@@ -645,9 +645,14 @@ class Pauling1Entropy(Pauling1Frequency):
                                               list_of_materials_to_investigate=list_of_materials_to_investigate,
                                               start_material=start_material, stop_material=stop_material)
 
-    def run(self, start_from_results=False, save_result_data=True, path_to_save='Results/Results_First_Limits.json',
-            start_material=None, stop_material=None):
+    def run(self, start_from_results=False, save_result_data=True, path_to_save='Results/Results_First_Limits.json'):
+        """
 
+        :param start_from_results: if True, restart from Result file
+        :param save_result_data: if True, saves results in json file
+        :param path_to_save: path to save the files
+        :return:
+        """
         if not start_from_results:
             super(Pauling1Entropy, self)._new_setup()
             self.Plot_PSE_entropy = get_entropy_from_frequencies(self.All_Details)
@@ -672,19 +677,25 @@ class Pauling1Entropy(Pauling1Frequency):
 
 
 class Pauling1MeanCoordinationNumber(Pauling1Entropy):
+    """
+    Class to analyse the mean CN for each element
+    """
 
     def __init__(self, source='MP', onlybinaries=False, plot_element_dependend_analysis=True,
                  lowest_number_environments_for_plot=50, lower_limit_plot=2.0, upper_limit_plot=12,
                  list_of_materials_to_investigate=None, start_material=None, stop_material=None):
         """
-            :param source:
-            :param onlybinaries: only binary structures will be analysed
-            :param analyse_structures: fulfiling and exceptional structures will be analysed
-            :param lowest_number_environments_for_plot: elements that have a lower number of environments in the evaluation will not be plotted
-            :param save_result_data: all results will be saved so that results can easily be recreated
-            :return:
-        """
 
+        :param source: 'MP' (Materials Project), 'MP_very_symmetric' (only structures with very symmetric coordiation environments), or 'experimental' (structures from COD) can be used
+        :param onlybinaries: only binary structures will be analysed
+        :param plot_element_dependend_analysis: will plot element dependent anlysis
+        :param lowest_number_environments_for_plot: decides which elements will be considered in element dependent plot with the help of the lowest number of environments
+        :param lower_limit_plot: decides the lower limit for plotting this
+        :param upper_limit_plot: decides the upper limit for plotting this
+        :param list_of_materials_to_investigate: you can also a reference to a list of materials that should be investigated, e.g. "test.json"
+        :param start_material: number at which the investigation is started
+        :param stop_material: number before which the investigation is started
+        """
         super(Pauling1Entropy, self).__init__(source=source, onlybinaries=onlybinaries,
                                               plot_element_dependend_analysis=plot_element_dependend_analysis,
                                               lowest_number_environments_for_plot=lowest_number_environments_for_plot,
@@ -692,8 +703,14 @@ class Pauling1MeanCoordinationNumber(Pauling1Entropy):
                                               list_of_materials_to_investigate=list_of_materials_to_investigate,
                                               start_material=start_material, stop_material=stop_material)
 
-    def run(self, start_from_results=False, save_result_data=True, path_to_save='Results/Results_First_Limits.json',
-            start_material=None, stop_material=None):
+    def run(self, start_from_results=False, save_result_data=True, path_to_save='Results/Results_First_Limits.json'):
+        """
+        will run the analysis
+        :param start_from_results: if True, restart from Result file
+        :param save_result_data: if True, saves results in json file
+        :param path_to_save: path to save the files
+        :return:
+        """
 
         if not start_from_results:
             super(Pauling1Entropy, self)._new_setup()
@@ -718,11 +735,24 @@ class Pauling1MeanCoordinationNumber(Pauling1Entropy):
 
 
 class Pauling1OverAllAnalysis(OverAllAnalysis):
+    """
+    Class to analyse the first rule based on univalent radii
+    """
 
     def run(self, start_from_results=False, save_result_data=True, save_structure_analysis=True,
-            restart_from_saved_structure_analyisis=False,
+            restart_from_saved_structure_analysis=False,
             path_to_save='Results/Results_First_Rule.json', start_material=None, stop_material=None):
+        """
 
+        :param start_from_results: will start from file if true
+        :param save_result_data: will save a file
+        :param save_structure_analysis: will save the structure analysis as well (path will be set automatically)
+        :param restart_from_saved_structure_analysis: will start from a save structure analysis (to continue if stops)
+        :param path_to_save: path at which the normal results are saved
+        :param start_material: value cuts the list of all materials
+        :param stop_material: value cuts the list of all materials
+        :return:
+        """
         if not start_from_results:
             self.start_material = start_material
             self.stop_material = stop_material
@@ -763,7 +793,7 @@ class Pauling1OverAllAnalysis(OverAllAnalysis):
                                                                              path_to_save=path_to_save.split(
                                                                                  '.')[
                                                                                               0] + "_structural_exceptions.json",
-                                                                             fetch_results_only=restart_from_saved_structure_analyisis,
+                                                                             fetch_results_only=restart_from_saved_structure_analysis,
                                                                              start_from_Matching=self.use_prematching)
             dict_similarstructures_fulfilling = self._get_similar_structures(self.structures_fulfillingrule,
                                                                              source=self.source,
@@ -771,7 +801,7 @@ class Pauling1OverAllAnalysis(OverAllAnalysis):
                                                                              path_to_save=path_to_save.split(
                                                                                  '.')[
                                                                                               0] + "_structures_fulfilling.json",
-                                                                             fetch_results_only=restart_from_saved_structure_analyisis,
+                                                                             fetch_results_only=restart_from_saved_structure_analysis,
                                                                              start_from_Matching=self.use_prematching)
 
             self.dict_similarstructures_exceptions = dict_similarstructures_exceptions
@@ -795,6 +825,10 @@ class Pauling1OverAllAnalysis(OverAllAnalysis):
                                                                     0] + "_structures_fulfilling_readable.csv")
 
     def _new_setup(self):
+        """
+        will do the analysis from scratch
+        :return:
+        """
         # could include: newsetup or from file here!
         list_mat = self._get_list_materials(source=self.source, onlybinaries=self.onlybinaries,
                                             start_material=self.start_material, stop_material=self.stop_material)
@@ -826,11 +860,25 @@ class Pauling1OverAllAnalysis(OverAllAnalysis):
 
 
 class Pauling2OverAllAnalysis(OverAllAnalysis):
+    """
+    Class to analyse second rule
+    """
 
     def run(self, show_plot=True, start_from_results=False, save_result_data=True,
-            restart_from_saved_structure_analyisis=False,
+            restart_from_saved_structure_analysis=False,
             save_structure_analysis=True,
             path_to_save='Results/Results_Second_Rule.json', start_material=None, stop_material=None):
+        """
+        :param show_plot: will show the main analysis plot from the second rule
+        :param start_from_results: if True,   restart from saved results
+        :param save_result_data: if True, save results in file
+        :param restart_from_saved_structure_analysis: if True, restarts a started structure analysis
+        :param save_structure_analysis:  If True: saves structure analysis
+        :param path_to_save: path to save normal results, structure analysis will saved in an adapted path
+        :param start_material: number of material at which the analysis starts
+        :param stop_material: number of material before which the analysis stops
+        :return:
+        """
 
         if not start_from_results:
             self.start_material = start_material
@@ -883,7 +931,7 @@ class Pauling2OverAllAnalysis(OverAllAnalysis):
                                                                              path_to_save=path_to_save.split('.')[
                                                                                               0] + "_structural_exceptions.json",
                                                                              start_from_Matching=self.use_prematching,
-                                                                             fetch_results_only=restart_from_saved_structure_analyisis)
+                                                                             fetch_results_only=restart_from_saved_structure_analysis)
 
             dict_similarstructures_fulfilling = self._get_similar_structures(self.structures_fulfillingrule,
                                                                              source=self.source,
@@ -891,7 +939,7 @@ class Pauling2OverAllAnalysis(OverAllAnalysis):
                                                                              path_to_save=path_to_save.split('.')[
                                                                                               0] + "_structures_fulfilling.json",
                                                                              start_from_Matching=self.use_prematching,
-                                                                             fetch_results_only=restart_from_saved_structure_analyisis)
+                                                                             fetch_results_only=restart_from_saved_structure_analysis)
 
             self.dict_similarstructures_exceptions = dict_similarstructures_exceptions
             self.dict_similarstructures_fulfilling = dict_similarstructures_fulfilling
@@ -917,8 +965,15 @@ class Pauling2OverAllAnalysis(OverAllAnalysis):
                                                                     0] + "_structures_fulfilling_readable.csv",
                                                        add_info=self.additional_info, name_add_info="Bond valence sum")
 
-    def _stddev(self, lst, mean):
-        """percental standard deviation of a sample in a list format"""
+    def _stddev(self, lst: list, mean: float) -> list:
+        """
+        calculates standard deviation in percent of a sample in a list format
+
+        :param lst: lst for which the standard deviation is calculated
+        :param mean: float describing the mean of the lst
+        :return: list of element including the standard deviation
+        """
+
         # TODO: get rid of the list format
         sum = 0.0
         mn = mean
@@ -926,19 +981,22 @@ class Pauling2OverAllAnalysis(OverAllAnalysis):
             sum += pow((lst[i] - mn), 2)
         return np.sqrt([sum / (len(lst) - 1)]) / mn
 
-    # def _stddev_normal(self, lst, mean):
-    #     """?"""
-    #     """standard deviation of a sample"""
-    #     sum = 0.0
-    #     mn = mean
-    #     for i in range(len(lst)):
-    #         sum += pow((lst[i] - mn), 2)
-    #     return np.sqrt([sum / (len(lst) - 1)])
-
-    def _get_deviation_from_ideal_value(self, inputarray, ideal):
+    def _get_deviation_from_ideal_value(self, inputarray: list, ideal: float) -> list:
+        """
+        calculates the deviation from an ideal value for a whole list
+        :param inputarray:
+        :param ideal:
+        :return:
+        """
         return [abs(float(x) - float(ideal)) for x in inputarray]
 
-    def _get_frequency_of_values(self, arraydeviations, stepsize):
+    def _get_frequency_of_values(self, arraydeviations: list, stepsize: float) -> tuple:
+        """
+        will get the frequencies of values lower a certain step size
+        :param arraydeviations: array of the deviations from ideal value
+        :param stepsize: stepsize as a float
+        :return:
+        """
         frequency = []
         dev_array = np.arange(0, max(arraydeviations) + stepsize, stepsize)
 
@@ -950,11 +1008,28 @@ class Pauling2OverAllAnalysis(OverAllAnalysis):
 
         return dev_array, frequency
 
-    def _list_to_np_array_and_divide_by_value(self, inputarray, valuetodivide):
+    def _list_to_np_array_and_divide_by_value(self, inputarray: list, valuetodivide: float) -> np.array:
+        """
+        will divide each element of a whole array by a value
+        :param inputarray: array
+        :param valuetodivide: float
+        :return: numpy.array
+        """
         return (np.array(inputarray) / float(valuetodivide))
 
-    def _secondrule_plot(self, arraydev, relativefreqarray, tot_stddev, maxpercentage=70, save_plot=False,
-                         filename='second_rule.svg'):
+    def _secondrule_plot(self, arraydev: np.array, relativefreqarray: np.array, tot_stddev: float, maxpercentage=70,
+                         save_plot=False,
+                         filename='second_rule.svg') -> plt:
+        """
+
+        :param arraydev: will be plotted in x direction
+        :param relativefreqarray: will be plotted in y direction
+        :param tot_stddev: total standard deviation in percent
+        :param maxpercentage: up to which percentage should the plot be shown
+        :param save_plot: should the plot be saved
+        :param filename: filename for saving this plot
+        :return:
+        """
         matplotlib.rcParams['pdf.fonttype'] = 42
         matplotlib.rcParams['ps.fonttype'] = 42
         font = {'size': 22}
@@ -973,6 +1048,10 @@ class Pauling2OverAllAnalysis(OverAllAnalysis):
         return plt
 
     def _new_setup(self):
+        """
+        does the analysis from scratch
+        :return:
+        """
         list_mat = self._get_list_materials(source=self.source, onlybinaries=self.onlybinaries,
                                             start_material=self.start_material, stop_material=self.stop_material)
 
@@ -1012,10 +1091,6 @@ class Pauling2OverAllAnalysis(OverAllAnalysis):
             # TODO: has to be tested
             self.additional_info[mat] = bvs
 
-            # print(self.array_bvs)
-            # except IndexError:
-            #     print("IndexError: "+mat)
-            #     to_remove.append(mat)
         self.array_bvs = array_bvs
         self.bs_sum_mean = np.mean(array_bvs)
 
@@ -1027,16 +1102,33 @@ class Pauling2OverAllAnalysis(OverAllAnalysis):
 
         self.arraydev_share = self._list_to_np_array_and_divide_by_value(np.array(dev_array), ideal_bs)
         self.relativefrequency = self._list_to_np_array_and_divide_by_value(np.array(self.frequency),
-                                                                            float(len(array_bvs)))
-        # self.to_remove=to_remove
 
 
 class Pauling3OverAllAnalysis(OverAllAnalysis):
+    """
+    Class to analyse the third Pauling rule
+    """
 
     def run(self, show_plot=True, start_from_connections=False, save_connections=True,
             connections_folder='AnalysisConnections', start_from_results=False, save_result_data=True,
-            restart_from_saved_structure_analyisis=False, save_structure_analysis=True,
+            restart_from_saved_structure_analysis=False, save_structure_analysis=True,
             path_to_save='Results/Results_Second_Rule.json', start_material=None, stop_material=None, maxCN=None):
+        """
+
+        :param show_plot: if True, the pie plot, and the dependencies of the rule fulfillment on atomic radii and mean CN are shown
+        :param start_from_connections: starts from saved connection files (recommended if they exist)
+        :param save_connections: if true, will save the connections if not already present
+        :param connections_folder: the folder, in which the connection files are saved
+        :param start_from_results: if true, will only read and plot the results
+        :param save_result_data: if true, will save complete result data
+        :param restart_from_saved_structure_analysis: if true, will restart the structure analysis from before
+        :param save_structure_analysis: if true, will save the structure analysis
+        :param path_to_save: where shall the results be saved (structure analysis will be saved in an adapted path in the same directory)
+        :param start_material: number of the material at which the analysis shall be started
+        :param stop_material: number of the material before which the analysis shall be stopped
+        :param maxCN: only polyhedra with this coordination number or lower will be considered in the analysis
+        :return:
+        """
 
         self.start_material = start_material
         self.stop_material = stop_material
@@ -1063,8 +1155,10 @@ class Pauling3OverAllAnalysis(OverAllAnalysis):
         if show_plot:
             # do the other plot here
             # print(self.Plot_PSE_numbers)
-            self._plot_influence_mean_CN(self.Plot_PSE_DICT, self.Plot_PSE_numbers)
-            self._plot_influence_atomic_radii(self.Plot_PSE_DICT)
+            plot1=self._plot_influence_mean_CN(self.Plot_PSE_DICT, self.Plot_PSE_numbers)
+            plot1.show()
+            plot2=self._plot_influence_atomic_radii(self.Plot_PSE_DICT)
+            plot2.show()
 
             plot = self._pieplot_connections(self.connections['corner'], self.connections['edge'],
                                              self.connections['face'], 'Connected Pairs of Polyhedra')
@@ -1096,7 +1190,7 @@ class Pauling3OverAllAnalysis(OverAllAnalysis):
                                                                              save_to_file=save_structure_analysis,
                                                                              path_to_save=path_to_save.split('.')[
                                                                                               0] + "_structural_exceptions.json",
-                                                                             fetch_results_only=restart_from_saved_structure_analyisis,
+                                                                             fetch_results_only=restart_from_saved_structure_analysis,
                                                                              start_from_Matching=self.use_prematching)
 
             dict_similarstructures_fulfilling = self._get_similar_structures(self.structures_fulfillingrule,
@@ -1104,7 +1198,7 @@ class Pauling3OverAllAnalysis(OverAllAnalysis):
                                                                              save_to_file=save_structure_analysis,
                                                                              path_to_save=path_to_save.split('.')[
                                                                                               0] + "_structures_fulfilling.json",
-                                                                             fetch_results_only=restart_from_saved_structure_analyisis,
+                                                                             fetch_results_only=restart_from_saved_structure_analysis,
                                                                              start_from_Matching=self.use_prematching)
 
             self.dict_similarstructures_exceptions = dict_similarstructures_exceptions
@@ -1136,7 +1230,12 @@ class Pauling3OverAllAnalysis(OverAllAnalysis):
                                                        add_info=self.additional_info,
                                                        name_add_info='Connections of Cations with Valences')
 
-    def _plot_influence_atomic_radii(self, Plot_PSE_Dict):
+    def _plot_influence_atomic_radii(self, Plot_PSE_Dict: dict)->plt:
+        """
+        will plot number of connected polyhedra vs. atomic radii
+        :param Plot_PSE_Dict: a dict with information on the rule fulfillment for each cation
+        :return:
+        """
         # oder histogramm
         corneredge_histo = []
         face_histo = []
@@ -1177,9 +1276,15 @@ class Pauling3OverAllAnalysis(OverAllAnalysis):
         plt.ylabel("Connections via faces")
         plt.xlabel("Atomic radius in Angstrom")
         # plt.plot([0,1000],[np.mean(face_histo),np.mean(face_histo)],'b-')
-        plt.show()
+        return plt
 
-    def _plot_influence_mean_CN(self, Plot_PSE_Dict, Plot_PSE_CN_Info):
+    def _plot_influence_mean_CN(self, Plot_PSE_Dict:dict, Plot_PSE_CN_Info:dict)->plt:
+        """
+        will plot number of conncted polyhedra vs. mean CN
+        :param Plot_PSE_Dict: dict with info on the rule fulfillment for each cation
+        :param Plot_PSE_CN_Info: dict with info for each cation on the mean CN
+        :return: plot
+        """
         # oder histogramm
         corneredge_histo = []
         face_histo = []
@@ -1220,9 +1325,13 @@ class Pauling3OverAllAnalysis(OverAllAnalysis):
         plt.ylabel("Connections via faces")
         plt.xlabel("Mean of the CN")
         # plt.plot([0,1000],[np.mean(face_histo),np.mean(face_histo)],'b-')
-        plt.show()
+        return plt
 
     def _new_setup(self):
+        """
+        will setup calculations from scratch
+        :return:
+        """
         list_mat = self._get_list_materials(source=self.source, onlybinaries=self.onlybinaries,
                                             start_material=self.start_material, stop_material=self.stop_material)
 
@@ -1235,8 +1344,7 @@ class Pauling3OverAllAnalysis(OverAllAnalysis):
         self.connections = {"corner": 0, "edge": 0, "face": 0}
         self.present_env = {}
         self.All_Details = {}
-        # valence dependency can be introduced later
-        # TODO: should search for an exception to third rule
+
         for mat in list_mat:
             print(mat)
             lse = self._get_lse_from_folder(mat, source=self.source)
@@ -1258,9 +1366,6 @@ class Pauling3OverAllAnalysis(OverAllAnalysis):
             except RuleCannotBeAnalyzedError:
                 self.structures_cannot_be_evaluated.append(mat)
 
-            # get details and add them
-
-            # weiteres dict anlegen, um verknuepfungsplot zu machen
 
             Details = pauling3.get_details(maximumCN=self.maxCN)
             self.additional_info[mat] = Details["species"]
@@ -1277,24 +1382,13 @@ class Pauling3OverAllAnalysis(OverAllAnalysis):
             self._add_dict_cat_dependency(start_dict=self.All_Details, dict_to_add=Details2,
                                           number_of_elements_to_add=4)
 
-            # function that brings Details in correct form:
-            # for all keys, sum over all valences, add 'corner'+'edge' and all 'face together,
-            # give an output dict that can be used for PlotPSE
 
-            # bvs = Details['bvs_for_each_anion']
-
-        # print(self.Plot_PSE_DICT)
-        # print(self.connections)
-        # print(self.present_env)
-        # add cations to each other, to count total number of cations
-        # self._add_dict_cat_dependency(self.present_env, Details['cations_in_structure'],
-        #                              number_of_elements_to_add=1)
-
-        # array_bvs.extend(bvs)
-
-        # print(self.array_bvs)
-
-    def _reformat_details(self, Details):
+    def _reformat_details(self, Details:dict)->dict:
+        """
+        reformats dicts
+        :param Details:
+        :return:
+        """
         New_Details = {}
         for key, item in Details.items():
             if not key in New_Details:
@@ -1305,21 +1399,43 @@ class Pauling3OverAllAnalysis(OverAllAnalysis):
                 New_Details[key][1] += item2['face']
         return New_Details
 
-    def _sum_connections(self, start_dict, Details):
+    def _sum_connections(self, start_dict:dict, Details:dict):
+        """
+        sums dicts
+        :param start_dict: here, the other values will be added
+        :param Details: the dict that will be added
+        :return:
+        """
         start_dict["corner"] += Details["corner"]
         start_dict["edge"] += Details["edge"]
         start_dict["face"] += Details["face"]
 
-        pass
 
 
 class Pauling4OverAllAnalysis(OverAllAnalysis):
-    # TODO: think about another elementwise analysis instead -> could also just count for fulfilling or unfulfilling for cations that have lowest CN and highest valence
+    """
+    Class to analyse the fourth rule
+    """
 
     def run(self, show_plot=True, start_from_connections=False, save_connections=True,
             connections_folder='AnalysisConnections', start_from_results=False, save_result_data=True,
-            restart_from_saved_structure_analyisis=False, save_structure_analysis=True,
+            restart_from_saved_structure_analysis=False, save_structure_analysis=True,
             path_to_save='Results/Results_Second_Rule.json', start_material=None, stop_material=None):
+        """
+
+        :param show_plot: if True, main plots for fourth rule will be shown
+        :param start_from_connections: if true, will start from the calculated connections
+        :param save_connections: if true, will save the connections
+        :param connections_folder: folder, where the connection files are saved
+        :param start_from_results: if true, will start from result file
+        :param save_result_data: if true, will save result data
+        :param restart_from_saved_structure_analysis: if true, will restart from a previous structure analysis
+        :param save_structure_analysis: if true, will save the structure analysis in the same folder as the other results
+        :param path_to_save: path where the files shall be saved
+        :param start_material: number of the material at which the analysis will be started
+        :param stop_material: number of the material before which the analysis will be stopped
+        :return:
+        """
 
         self.connections_folder = connections_folder
         self.start_from_connections = start_from_connections
@@ -1373,7 +1489,7 @@ class Pauling4OverAllAnalysis(OverAllAnalysis):
                                                                              save_to_file=save_structure_analysis,
                                                                              path_to_save=path_to_save.split('.')[
                                                                                               0] + "_structural_exceptions.json",
-                                                                             fetch_results_only=restart_from_saved_structure_analyisis,
+                                                                             fetch_results_only=restart_from_saved_structure_analysis,
                                                                              start_from_Matching=self.use_prematching)
 
             dict_similarstructures_fulfilling = self._get_similar_structures(self.structures_fulfillingrule,
@@ -1381,7 +1497,7 @@ class Pauling4OverAllAnalysis(OverAllAnalysis):
                                                                              save_to_file=save_structure_analysis,
                                                                              path_to_save=path_to_save.split('.')[
                                                                                               0] + "_structures_fulfilling.json",
-                                                                             fetch_results_only=restart_from_saved_structure_analyisis,
+                                                                             fetch_results_only=restart_from_saved_structure_analysis,
                                                                              start_from_Matching=self.use_prematching)
 
             self.dict_similarstructures_exceptions = dict_similarstructures_exceptions
@@ -1413,6 +1529,10 @@ class Pauling4OverAllAnalysis(OverAllAnalysis):
                                                        name_add_info='Connections depending on element, CN, and valence')
 
     def _new_setup(self):
+        """
+        will start analysis from scratch
+        :return:
+        """
         list_mat = self._get_list_materials(source=self.source, onlybinaries=self.onlybinaries,
                                             start_material=self.start_material, stop_material=self.stop_material)
 
@@ -1478,7 +1598,12 @@ class Pauling4OverAllAnalysis(OverAllAnalysis):
             except RuleCannotBeAnalyzedError:
                 pass
 
-    def _reformat_details_elementwise(self, Details):
+    def _reformat_details_elementwise(self, Details:dict)->dict:
+        """
+        will reformat a dict
+        :param Details: dict
+        :return: dict
+        """
         maxval1 = 'val1:' + str(Details['maxval'])
         maxval2 = 'val2:' + str(Details['maxval'])
         minCN1 = 'CN1:' + str(Details['minCN'])
@@ -1506,7 +1631,13 @@ class Pauling4OverAllAnalysis(OverAllAnalysis):
 
         return outputdict
 
-    def _add_dict_CN_val(self, start_dict, to_add_dict):
+    def _add_dict_CN_val(self, start_dict:dict, to_add_dict:dict):
+        """
+        will sum two dicts
+        :param start_dict: dict to which the new dict will be added
+        :param to_add_dict: dict to add
+        :return:
+        """
         for key, item in to_add_dict.items():
             if key not in start_dict:
                 start_dict[key] = {}
@@ -1516,7 +1647,12 @@ class Pauling4OverAllAnalysis(OverAllAnalysis):
                 start_dict[key][key2][0] += to_add_dict[key][key2][0]
                 start_dict[key][key2][1] += to_add_dict[key][key2][1]
 
-    def _reformat_details_val(self, Details):
+    def _reformat_details_val(self, Details:dict)->dict:
+        """
+        reformats dict
+        :param Details:  dict
+        :return: dict
+        """
         New_Details = {}
 
         for key1, item1 in Details.items():
@@ -1547,24 +1683,18 @@ class Pauling4OverAllAnalysis(OverAllAnalysis):
 
         return New_Details
 
-    # def _check_details_symmetric(self, inputdict):
-    #     # teste, ob ausgabe symmetrisch
-    #     for key1, item in inputdict.items():
-    #         for key2, item2 in item.items():
-    #             if key1 <= key2:
-    #                 if not item2 == inputdict[key2][key1]:
-    #                     return False
-    #     return True
-
-    def _reformat_details_CN(self, Details):
+    def _reformat_details_CN(self, Details:dict)->dict:
+        """
+        will reformat the dict
+        :param Details: dict
+        :return:  dict
+        """
         New_Details = {}
 
         for key1, item1 in Details.items():
 
             if "val1" in key1:
-                # val1 = key1.split(":")[1]
                 for key2, item2 in item1.items():
-                    # val2 = key2.split(":")[1]
                     for key3, item3 in item2.items():
                         CN1 = key3.split(":")[1]
                         if CN1 not in New_Details:
@@ -1590,13 +1720,30 @@ class Pauling4OverAllAnalysis(OverAllAnalysis):
 
         return New_Details
 
-    def _plot_get_max(self, inputdict):
+    def _plot_get_max(self, inputdict:dict)->float:
+        """
+        get max  value of keys of dict
+        :param inputdict:
+        :return: float
+        """
         return max([int(x) for x in inputdict.keys()])
 
-    def _plot_init_np(self, maxvalue):
+    def _plot_init_np(self, maxvalue:int)->np.full:
+        """
+        initalizes np.full
+        :param maxvalue: int that determines how large np.full will be
+        :return:
+        """
         return np.full((maxvalue, maxvalue), np.nan)
 
     def _plot_fill_np(self, PlotEndDict, inputdict, lowervalue):
+        """
+
+        :param PlotEndDict:
+        :param inputdict:
+        :param lowervalue:
+        :return:
+        """
         for key, item in inputdict.items():
             for key2, item2 in item.items():
                 if item2[0] + item2[1] > lowervalue:

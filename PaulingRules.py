@@ -1,23 +1,41 @@
 import json
 import numpy as np
 from pymatgen.core import PeriodicSite
+from pymatgen.core.structure import Structure
 import os
 from collections import Counter
 from collections import OrderedDict
 import math
-from pymatgen.analysis.chemenv.coordination_environments.coordination_geometries import CoordinationGeometry
+from pymatgen.analysis.chemenv.coordination_environments.structure_environments import LightStructureEnvironments
 
 
 class RuleCannotBeAnalyzedError(Exception):
+    """
+    An Exception that will be raised if one Rule cannot be analyzed
+    """
+
     def __init__(self, value='The Rule cannot be analyzed'):
+        """
+
+        :param value: string that is used in the string representation of the error
+        """
         self.value = value
 
     def __str__(self):
+        """
+
+        :return: string representation of the error
+        """
         return repr(self.value)
 
 
-def is_an_oxide_and_no_env_for_O(lse):
-    #TODO: should also check if there are neighbors for every cation!
+def is_an_oxide_and_no_env_for_O(lse: LightStructureEnvironments) -> bool:
+    """
+
+    :param lse: object of the type LightStructureEnvironments
+    :return: Boolean if the compound is an oxide and no environments were computed for oxygen
+    """
+    # TODO: should also check if there are neighbors for every cation!
     for isite, site in enumerate(lse.structure):
         if lse.valences[isite] < 0 and site.species_string != 'O':
             raise ValueError("This is not an oxide. The assessment will be stopped.")
@@ -29,7 +47,13 @@ def is_an_oxide_and_no_env_for_O(lse):
     return True
 
 
-def get_entropy_from_frequencies(dict_all_environments,max_env=66):
+def get_entropy_from_frequencies(dict_all_environments: dict, max_env=66) -> dict:
+    """
+    will calulate a relative Shannon entropy from the frequencies of the chemical environments
+    :param dict_all_environments: e.g., {'Ga': ['O:6', 'O:6', 'T:4', 'T:4']}
+    :param max_env: maximum number of chemical environments, 66
+    :return:  a dict for each element that includes the entropy relative to the maximal shannon entropy, e.g. {'Ga':0.5}
+    """
     MAX_ENV = max_env
     all = {}
     frequencies = {}
@@ -46,8 +70,8 @@ def get_entropy_from_frequencies(dict_all_environments,max_env=66):
             entropy[key] += -math.log(value, 2) * value
 
     # print(Coordination)
-    #something wrong here!
-    maxentropy =  (-math.log(1.0 / float(MAX_ENV), 2) * 1.0 / float(MAX_ENV))*MAX_ENV
+    # something wrong here!
+    maxentropy = (-math.log(1.0 / float(MAX_ENV), 2) * 1.0 / float(MAX_ENV)) * MAX_ENV
 
     perc_entropy = {}
     for key, value in entropy.items():
@@ -55,7 +79,13 @@ def get_entropy_from_frequencies(dict_all_environments,max_env=66):
 
     return perc_entropy
 
-def get_most_frequent_environment(dict_all_environments):
+
+def get_most_frequent_environment(dict_all_environments: dict) -> dict:
+    """
+    will calculate the frequency of the most frequent environment
+    :param dict_all_environments: e.g., {'Ga': ['O:6', 'O:6', 'T:4', 'T:4']}
+    :return: dict that looks the following: {'Ga': 0.5}
+    """
     all = {}
     frequencies = {}
     perc_most_frequent = {}
@@ -75,23 +105,36 @@ def get_most_frequent_environment(dict_all_environments):
             break;
     return perc_ready
 
-def get_mean_CN_from_frequencies(dict_all_environments):
+
+def get_mean_CN_from_frequencies(dict_all_environments: dict) -> dict:
+    """
+    will calculate the mean coordination number based on the dict
+    :param dict_all_environments: e.g., {'Ga': ['O:6', 'O:6', 'T:4', 'T:4']}
+    :return: dict that looks the following: {'Ga':5}, where 4 is the mean CN of Ga for the given dict
+    """
     numbers_ready = {}
-    dict_all_CN={}
+    dict_all_CN = {}
     for key, value in dict_all_environments.items():
         if not key in dict_all_CN:
-            dict_all_CN[key]=[]
+            dict_all_CN[key] = []
         for value2 in value:
-            dict_all_CN[key].append(int(value2.split(":")[1]))#)
+            dict_all_CN[key].append(int(value2.split(":")[1]))  # )
 
     for key, value in dict_all_CN.items():
-        numbers_ready[key]=np.mean(value)
+        numbers_ready[key] = np.mean(value)
     return numbers_ready
 
 
 class FrequencyEnvironmentPauling1:
-    # TODO: test classes
-    def __init__(self, lse):
+    """
+    Class to get dicts of the following type: {'Ga': ['O:6', 'O:6', 'T:4', 'T:4']} for each LightStructureEnvironment
+    """
+
+    def __init__(self, lse: LightStructureEnvironments):
+        """
+
+        :param lse: Objet of the type LightStructureEnvironments
+        """
         is_an_oxide_and_no_env_for_O(lse)
 
         self.output_dict = {}
@@ -104,17 +147,31 @@ class FrequencyEnvironmentPauling1:
                     self.output_dict[lse.structure[isite].species_string].append(site_envs[0]['ce_symbol'])
 
     def get_details(self):
+        """
+        will give you the results of the computations
+        :return: dict similar to {'Ga': ['O:6', 'O:6', 'T:4', 'T:4']}
+        """
         return self.output_dict
 
 
-
-
 class Pauling0:
-    def __init__(self, lse):
+    """
+    Class to count the number of cations in a structure
+    """
+
+    def __init__(self, lse: LightStructureEnvironments):
+        """
+
+        :param lse: LightStructureEnvironments object where oxygen does not have a calculated environment
+        """
         is_an_oxide_and_no_env_for_O(lse)
         self.lse = lse
 
-    def get_cations_in_structure(self):
+    def get_cations_in_structure(self) -> dict:
+        """
+        will return a dict with the counted cations
+        :return: dict of this type: {'As': 8}
+        """
         elements = []
         for isite, site in enumerate(self.lse.structure):
             if self.lse.valences[isite] >= 0:
@@ -123,10 +180,13 @@ class Pauling0:
 
 
 class Pauling1:
-    def __init__(self, lse, filenameradii="univalent_cat_radii.json", onlylowerlimit=False):
+    """
+    Class to test Pauling's first rule
+    """
+
+    def __init__(self, lse: LightStructureEnvironments, filenameradii="univalent_cat_radii.json", onlylowerlimit=False):
         """
-        class to test Pauling's first rule
-        :param lse: LightStructureEnvironment
+        :param lse: LightStructureEnvironments, only environments for cations should have been calculated
         :param filenameradii: name of the file containing radius ratios
         :param onlylowerlimit: If False, ratio windows are considered
         """
@@ -194,13 +254,17 @@ class Pauling1:
                         else:
                             self.no_cat += 1
 
-    def get_details(self):
+    def get_details(self) -> dict:
         """
 
-        :return: returns a dict with many details on the Pauling rules
+        :return: returns a dict with many details on the Pauling rules, looks like this:
+        {'cat_dependency': {'As': [4, 4]}, 'cat_val_dependency': {'As': {5: [4, 4]}},
+        'Env_fulfilled': 4, 'Env_notfulfilled': 4, 'Env_out_of_list': 0, 'Cat_out_of_list': 0}
         """
         Outputdict = {}
+        # first entry in list gives you the environments fulfilling the rule, the second that don't
         Outputdict["cat_dependency"] = self.cat_list
+        # first entry in list gives you the environments fulfilling the rule, the second that don't
         Outputdict["cat_val_dependency"] = self.cat_valence_list
         Outputdict["Env_fulfilled"] = self.mat_pauling_fulfilled
         Outputdict["Env_notfulfilled"] = self.env_not
@@ -209,11 +273,11 @@ class Pauling1:
 
         return Outputdict
 
-    def is_fulfilled(self):
+    def is_fulfilled(self) -> bool:
         """
         tells you if the rule is fulfilled.
         :return: Boolean
-        raises TypeError if not all environments and cations can be considered
+        raises TypeError if not all environments are in Pauling's book and if one univalent radii is not present
         """
         if self.no_env != 0 or self.no_cat != 0:
             raise RuleCannotBeAnalyzedError("The first rule cannot be evaluated.")
@@ -224,7 +288,12 @@ class Pauling1:
             return False
 
     # directly from Pauling's book
-    def _predict_env_pauling_window(self, ratio):
+    def _predict_env_pauling_window(self, ratio: float) -> list:
+        """
+        will return a list with the determined environments
+        :param ratio: radius ratio
+        :return: list with determined environments
+        """
         if ratio < 0.225:
             return ['does not exist']
         elif ratio >= 0.225 and ratio < 0.414:
@@ -240,7 +309,12 @@ class Pauling1:
         elif ratio >= 1.0:
             return ['C:12']  # Cuboctahedron
 
-    def _predict_env_pauling_lowerlimit(self, ratio):
+    def _predict_env_pauling_lowerlimit(self, ratio: float) -> list:
+        """
+        will return a list with the determined environments, this time the radius ratio is treated as a lower limit
+        :param ratio: radius ratio
+        :return: list with determined environments
+        """
         ListToReturn = []
         if ratio >= 0.225:
             ListToReturn.append('T:4')  # tetrahedron
@@ -257,8 +331,14 @@ class Pauling1:
             ListToReturn.append('C:12')  # Cuboctahedron
         return ListToReturn
 
-    def _first_rule(self, iratio, site_env, onlylowerlimit):
-
+    def _first_rule(self, iratio: float, site_env: dict, onlylowerlimit: bool) -> bool:
+        """
+        will evalute the first Pauling rule
+        :param iratio: radius ratio
+        :param site_env: dict including the 'ce_symbol' key
+        :param onlylowerlimit: will see the radius ratio only as a lower limit
+        :return:
+        """
         environments = ['T:4', 'O:6', 'FO:7',
                         'SA:8', 'TT_1:9', 'C:8', 'C:12']
 
@@ -280,55 +360,14 @@ class Pauling1:
             raise ValueError("env not in Pauling book")
 
 
-# class Pauling1_general_limit_rule:
-#     def __init__(self, lse):
-#         # TODO: implement something based on information theory to assess the number of environments!
-#
-#         # with valences
-#         outputdict = {}
-#         for isite, site_envs in enumerate(lse.coordination_environments):
-#             # identifies cationic sites - only cations have site_envs
-#             if site_envs != None:
-#                 if len(site_envs) > 0:
-#                     if not lse.structure[isite].species_string in outputdict:
-#                         outputdict[lse.structure[isite].species_string] = {}
-#                     if not lse.valences[isite] in outputdict[lse.structure[isite].species_string]:
-#                         outputdict[lse.structure[isite].species_string][lse.valences[isite]] = {}
-#                     if not site_envs[0]['ce_symbol'] in outputdict[lse.structure[isite].species_string][
-#                         lse.valences[isite]]:
-#                         outputdict[lse.structure[isite].species_string][lse.valences[isite]][
-#                             site_envs[0]['ce_symbol']] = 1
-#                     else:
-#                         outputdict[lse.structure[isite].species_string][lse.valences[isite]][
-#                             site_envs[0]['ce_symbol']] += 1
-#
-#         self.outputdict = outputdict
-#
-#         # without valences
-#         outputdict_without_val = {}
-#         for isite, site_envs in enumerate(lse.coordination_environments):
-#             # identifies cationic sites - only cations have site_envs
-#             if site_envs != None:
-#                 if len(site_envs) > 0:
-#                     if not lse.structure[isite].species_string in outputdict_without_val:
-#                         outputdict_without_val[lse.structure[isite].species_string] = {}
-#                     if not site_envs[0]['ce_symbol'] in outputdict_without_val[lse.structure[isite].species_string]:
-#                         outputdict_without_val[lse.structure[isite].species_string][site_envs[0]['ce_symbol']] = 1
-#                     else:
-#                         outputdict_without_val[lse.structure[isite].species_string][site_envs[0]['ce_symbol']] += 1
-#
-#         self.outputdict_without_val = outputdict_without_val
-#
-#     def get_details(self):
-#
-#         return {"only_elements": self.outputdict_without_val, "with_val": self.outputdict}
-
-
 class Pauling2(Pauling0):
-    def __init__(self, lse):
-        """
+    """
         Class to test the electrostatic valence rule
-        :param lse: LightStructureEnvironment
+    """
+
+    def __init__(self, lse: LightStructureEnvironments):
+        """
+        :param lse: LightStructureEnvironment, only cations should have an coordination environment
         """
         is_an_oxide_and_no_env_for_O(lse)
 
@@ -348,7 +387,6 @@ class Pauling2(Pauling0):
                                                                         'bond_strength': float(
                                                                             lse.valences[isite]) / cn})
         self.anions_bond_strengths = []
-        # self.satisfied = True
         self.lse = lse
         for isite, site in enumerate(lse.structure):
             if lse.valences[isite] < 0:
@@ -361,22 +399,18 @@ class Pauling2(Pauling0):
                     bond_strengths = []
                     cations_isites = []
                 bond_strengths_sum = sum(bond_strengths)
-                # site_is_satisfied = bool(np.isclose(
-                #    bond_strengths_sum, -lse.valences[isite]))
                 self.anions_bond_strengths.append({'anion_isite': isite,
                                                    'bond_strengths': bond_strengths,
                                                    'cations_isites': cations_isites,
                                                    'nominal_oxidation_state': lse.valences[isite],
                                                    'bond_strengths_sum': bond_strengths_sum}
                                                   )
-                # if not site_is_satisfied:
-                #    self.satisfied = False
 
-    def is_fulfilled(self, tolerance=1e-2):
+    def is_fulfilled(self, tolerance=1e-2) -> bool:
         """
         Tells you if rule is fulfilled for the whole structure
         :param: tolerance for deviation from 2.
-        :return: Boolean
+        :return: Boolean, True if the rule is fulfilled
         """
         self.satisfied = True
         ianionsite = 0
@@ -389,7 +423,7 @@ class Pauling2(Pauling0):
 
         return self.satisfied
 
-    def get_details(self, tolerance=10e-2):
+    def get_details(self, tolerance=10e-2) -> dict:
         """
         Gives you an output dict with information on each anion
         :param tolerance: tolerance for evaluation of fulfillment for each oxygen
@@ -402,7 +436,7 @@ class Pauling2(Pauling0):
         OutputDict["cations_in_structure"] = self.get_cations_in_structure()
         return OutputDict
 
-    def _get_anions_bvs(self):
+    def _get_anions_bvs(self) -> list:
         """
         get bond valences sums for each anion
         :return: list of bvs
@@ -416,10 +450,9 @@ class Pauling2(Pauling0):
                 ianionsite = ianionsite + 1
         return bvs
 
-    def _get_cations_around_anion(self):
+    def _get_cations_around_anion(self) -> list:
         """
-        returns list of list with elements around anion
-        :return:
+        :return: list of list with elements around anion
         """
         ianionsite = 0
         elements = []
@@ -431,7 +464,15 @@ class Pauling2(Pauling0):
                 ianionsite = ianionsite + 1
         return elements
 
-    def _get_elementwise_fulfillment(self, tolerance=10e-2):
+    def _get_elementwise_fulfillment(self, tolerance=10e-2) -> dict:
+        """
+        will calculate an elementwise fulfillment
+        will count cations as fulfilling if they are around an anion that fulfills the rule
+        will count cations as not fulfilling if they are around an anion that does not fulfill the rule
+        there will be double counting of cations due to that
+        :param tolerance:
+        :return: dict including information for each cation
+        """
         # TODO: think about the tolerance!
         cations_around_anion = self._get_cations_around_anion()
         Elementwise_fulfillment = {}
@@ -450,31 +491,37 @@ class Pauling2(Pauling0):
 
 
 class PaulingConnection:
-    """Class that can analyze connections of polyhedra"""
+    """Class that can analyze connections of polyhedra, will be used for rules 3 to 5"""
 
-    def __init__(self, DISTANCE):
-        self.DISTANCE = DISTANCE
-
-    def _is_cationic_site(self, isite, valences):
+    def __init__(self, DISTANCE: float):
         """
 
+        :param DISTANCE: maximum distance between the cations that is considered
+        """
+        self.DISTANCE = DISTANCE
+
+    def _is_cationic_site(self, isite: int, valences: list) -> bool:
+        """
+        tells you if element on site is a cation
         :param isite: number of the site that is relevant
         :param valences: list of valences in order of sites
-        :return:
+        :return: Boolean if the element on the site is a cation
         """
         if valences[isite] >= 0:
             return True
         else:
             return False
 
-    def _get_oxygen_neighbors(self, lse, site, r, CN, ceindex):
+    def _get_oxygen_neighbors(self, lse: LightStructureEnvironments, site: PeriodicSite, r: float, CN: int,
+                              ceindex: int):
         """
+        will return a list of oxygen neighbor sites
         :param lse: LightStructureEnvironment
         :param site: relevant site
         :param r: radius that should be considered for the analysis of the neighbors
         :param CN: coordination number of this cationic site
         :param ceindex: index of the coordination number at hand (for the most important one, usually 0)
-        :return: list of oxygen neighbors
+        :return: list of oxygen neighbor sites
         """
         struct = lse.structure
         all_neighbors = struct.get_neighbors(site=site, r=r)
@@ -493,8 +540,9 @@ class PaulingConnection:
                 break
         return oxygen_neighbors
 
-    def _get_cation_neighbors(self, struct, site, r, valences=[]):
+    def _get_cation_neighbors(self, struct: Structure, site: PeriodicSite, r: float, valences: list) -> list:
         """
+        will return a list of neighboring cationic neighbor sites
         get cationic neighbors of a cation
         :param struct: Structure Object
         :param site: relevant cationic site
@@ -510,7 +558,13 @@ class PaulingConnection:
                 cation_neighbors.append(i[0])
         return cation_neighbors
 
-    def _get_site_index(self, insite, struct):
+    def _get_site_index(self, insite: PeriodicSite, struct: Structure) -> int:
+        """
+        will return index of a site
+        :param insite: PeriodicSite
+        :param struct: Structure
+        :return: integer indicating the site index
+        """
         sites = struct.sites
         for isite, site in enumerate(sites):
             if insite.is_periodic_image(site):
@@ -518,15 +572,24 @@ class PaulingConnection:
 
 
 class Pauling3and4(PaulingConnection):
+    """
+    Class to analyse third and fourth rule
+    """
+
     def __init__(self):
+        """
+        will overwrite the PaulingConnection init
+        """
         pass
 
-    def newsetup(self, lse, filename=None, save_to_file=True, foldername='ThirdRuleAnalysisConnections', distance=8.0):
+    def newsetup(self, lse: LightStructureEnvironments, filename=None, save_to_file=True,
+                 foldername='ThirdRuleAnalysisConnections', distance=8.0):
         """
+            will setup everything from scratch, should only be used in the beginning of an analysis ->slow
             :param lse: LightStructureEnvironment
             :param save_to_file: Boolean
-            :param filename: for example "file1.json"
-            :param foldername: name of the folder
+            :param filename: usually string, for example "file1.json"
+            :param foldername: name of the folder you would like to save the file in
             :param distance: float giving the distances of cations that is considered
         """
         self.lse = lse
@@ -548,14 +611,20 @@ class Pauling3and4(PaulingConnection):
             with open(os.path.join(foldername, filename), 'w') as file:
                 json.dump(self.PolyhedronDict, file)
 
-    def from_file(self, filename, foldername='ThirdRuleAnalysisConnections'):
+    def from_file(self, filename: str, foldername='ThirdRuleAnalysisConnections'):
+        """
+        will setup everything from a json file
+        :param filename: "example.json"
+        :param foldername: folder, in which the file is located
+        :return:
+        """
         with open(os.path.join(foldername, filename)) as file:
             self.PolyhedronDict = json.load(file)
 
-    def _test_fulfillment(self, maxCN=None):
+    def _get_connections_Pauling3_and_4(self, maxCN=None) -> dict:
         """
-        internal class to test fulfillment of rule
-        :param maxCN:
+        internal method to get the numbers of connections
+        :param maxCN: maximum Coordination number that is considered
         :return: returns connections as a dict
         """
         inputdict = self.PolyhedronDict
@@ -592,12 +661,13 @@ class Pauling3and4(PaulingConnection):
 
         return {"no": not_connected, "corner": corner, "edge": edge, "face": face}
 
-    def _get_number_connected_oxygens_and_CN(self, index, index2, sitetupel, lse):
+    def _get_number_connected_oxygens_and_CN(self, index: int, index2: int, sitetupel: tuple,
+                                             lse: LightStructureEnvironments) -> tuple:
         """
-
+        tells you how many oxygen atoms are shared by two polyhedra
         :param index: site index of first cation site
-        :param index2: ite index of second cation site
-        :param sitetupel: tupel of sites that is investigated
+        :param index2: site index of second cation site
+        :param sitetupel: tuple of sites that is investigated
         :param lse: LightStructureEnvironment
         :return: returns number of connected oxygens, coordination number of first cation and second cation
         """
@@ -619,7 +689,7 @@ class Pauling3and4(PaulingConnection):
         numberconnect = len(intersectOx)
         return numberconnect, CN, CN2
 
-    def _get_cationvalences(self, valences):
+    def _get_cationvalences(self, valences: list) -> list:
         """
         get valences of cation
         :param valences: valences of all sites
@@ -631,7 +701,7 @@ class Pauling3and4(PaulingConnection):
                 cationvalences.append(val)
         return cationvalences
 
-    def _get_cationCN(self, lse):
+    def _get_cationCN(self, lse: LightStructureEnvironments):
         """
         :param lse: LightStructureEnvironment
         :return: returns coordination numbers of cations as a list
@@ -646,12 +716,12 @@ class Pauling3and4(PaulingConnection):
                 CNlist.append(CN)
         return CNlist
 
-    def _get_connections(self, pairedsites, lse, DISTANCE):
+    def _get_connections(self, pairedsites: list, lse: LightStructureEnvironments, DISTANCE: float) -> dict:
         """
-
+        will give an output dict with information on the connection of polyhedra
         :param pairedsites: paired sites
         :param lse: LightStructureEnvironments
-        :param DISTANCE: distance for the connetions
+        :param DISTANCE: distance for the connections
         :return: Outputdict with many information
         """
         struct = lse.structure
@@ -714,12 +784,12 @@ class Pauling3and4(PaulingConnection):
 
         return outputdict
 
-    def _get_pairedsites(self, allsites, DISTANCE):
+    def _get_pairedsites(self, allsites: list, DISTANCE: float) -> list:
         """
-
+        will pair sites that have a certain distance
         :param allsites: all sites that will be considered
-        :param DISTANCE: distance that is considered
-        :return: paired sites with a certain distance
+        :param DISTANCE: only sites having a distance smaller or equal to this distance will be considered
+        :return: list of paired sites in list
         """
         startendpoints = []
         pairedsites = []
@@ -766,12 +836,12 @@ class Pauling3and4(PaulingConnection):
                         pairedsites.append([allsites[i], allsites[j]])
         return pairedsites
 
-    def _get_allsites(self, lse, DISTANCE):
+    def _get_allsites(self, lse: LightStructureEnvironments, DISTANCE: float) -> list:
         """
-
+        will help investigate the connections
         :param lse: LightStructureEnvironment
         :param DISTANCE: distance between cations
-        :return: returns relevant sites as a list
+        :return: returns relevant sites to investigate the connections as a list
         """
 
         sites = lse.structure.sites
@@ -805,30 +875,34 @@ class Pauling3and4(PaulingConnection):
 
         return allsites
 
-    def get_connections(self, maximumCN=None):
+    def get_connections(self, maximumCN=None) -> dict:
         """
         Gives connections
         :return: Outputdict with number of connections
         """
-        OutputDict = self._test_fulfillment(maxCN=maximumCN)
+        OutputDict = self._get_connections_Pauling3_and_4(maxCN=maximumCN)
         return OutputDict
 
 
 class Pauling3(Pauling3and4):
-    def is_fulfilled(self, maximumCN=None):
+    """
+    Class to evaluate the third rule
+    """
+
+    def is_fulfilled(self, maximumCN=None) -> bool:
         """
         tells you if third rule is fulfilled (i.e. no connections via faces!)
         :param maximumCN: gives the maximal CN of cations that are considered
-        :return:
+        :return: True if the rule is fulfilled (i.e. no connections via faces)
         """
-        connections = self._test_fulfillment(maxCN=maximumCN)
+        connections = self._get_connections_Pauling3_and_4(maxCN=maximumCN)
 
         if connections["face"] == 0:
             return True
         else:
             return False
 
-    def get_details(self, maximumCN=None):
+    def get_details(self, maximumCN=None) -> dict:
         """
         returns a dict that looks the following {"Element string": "Valence as an int": {"no": number1, "corner": number2, "edge": number3, "face" number4} indicating the connections.}
         :param maximumCN: maximum CN that is considered
@@ -836,12 +910,12 @@ class Pauling3(Pauling3and4):
 
         """
         Outputdict = self._postevaluation3rdrule_evaluate_elementdependency(maxCN=maximumCN)
-        seconddict = self._test_fulfillment(maxCN=maximumCN)
+        seconddict = self._get_connections_Pauling3_and_4(maxCN=maximumCN)
         seconddict["species"] = Outputdict
 
         return seconddict
 
-    def _postevaluation3rdrule_evaluate_elementdependency(self, maxCN=None):
+    def _postevaluation3rdrule_evaluate_elementdependency(self, maxCN=None) -> dict:
         """
         evaluates element and valence dependency of connected pairs of polyhedra
         :param maxCN:
@@ -927,7 +1001,11 @@ class Pauling3(Pauling3and4):
 
 
 class Pauling4(Pauling3and4):
-    def is_fulfilled(self):
+    """
+    Class to evaluate the Fourth Rule
+    """
+
+    def is_fulfilled(self) -> bool:
         """
         tells you if polyhedra of cations with highest valence and smallest CN don't show any connections within the structure
         structure has to have cations with different valences and coordination numbers
@@ -945,7 +1023,7 @@ class Pauling4(Pauling3and4):
         else:
             return True
 
-    def get_details(self):
+    def get_details(self) -> dict:
         """
         gives you number of connections as a function of the coordination numbers and valences of the polyhedra pairs
         :return: Dict of the following form: {"val1:valence1": {"val2:valence2": {"CN1:CN1": {"CN2:CN2": {"no": number1, "corner": number2, "edge": number3, "face" number4}}}}} indicating the connections depending on valences and CN
@@ -954,7 +1032,7 @@ class Pauling4(Pauling3and4):
             raise RuleCannotBeAnalyzedError()
         return self._postevaluation4thrule()
 
-    def _is_candidate_4thrule(self):
+    def _is_candidate_4thrule(self) -> bool:
         inputdict = self.PolyhedronDict
         samevalences = inputdict['samevalences']
         sameCN = inputdict['sameCN']
@@ -964,7 +1042,7 @@ class Pauling4(Pauling3and4):
             return False
 
     # Add additional evaluation of 4th rule that does not depend on valence or CN product but on 2 valences, 2 CN
-    def _postevaluation4thrule(self):
+    def _postevaluation4thrule(self) -> dict:
         """
         :return: more information connected pairs of polyhedra
         """
@@ -1288,7 +1366,7 @@ class Pauling4(Pauling3and4):
 
         return Outputdict
 
-    def _postevaluation4thruleperpolyhedron_only_withoutproduct(self, CN1, CN2, val1, val2):
+    def _postevaluation4thruleperpolyhedron_only_withoutproduct(self, CN1: int, CN2: int, val1: int, val2: int) -> dict:
         """
         That is the one I used for the evaluation
         :param CN1: CN1 of an atom in pair of polyhedra
@@ -1338,20 +1416,26 @@ class Pauling4(Pauling3and4):
 
 
 class Pauling5(PaulingConnection):
+    """
+    Class to evaluate the fifth rule
+    """
 
     def __init__(self):
         pass
 
-    def newsetup(self, lse, filename=None, save_to_file=True, foldername="FifthsRuleAnalysis", distance=8.0):
+    def newsetup(self, lse: LightStructureEnvironments, filename=None, save_to_file=True,
+                 foldername="FifthsRuleAnalysis", distance=8.0):
+        """
+        collects the coordination numbers, coordination environments and the number of connections via corners, edges and faces of each of the polyhedra for each of the cations
 
-        # collects the coordination numbers, coordination environments and the number of connections via corners, edges and faces of each of the polyhedra for each of the cations
+        :param lse: LightStructureEnvironment
+        :param filename: "test.json", name under which the files are saved
+        :param save_to_file: if this is True, the files will be saved
+        :param foldername: name of the folder that the files will be saved in
+        :param distance: maximum distance that is considered in evaluation of connections
+        :return:
         """
-                    :param lse: LightStructureEnvironment
-                    :param save_to_file: Boolean
-                    :param filename: beginning of the file name, without ".json"
-                    :param foldername: name of the folder
-                    :param distance: float giving the distances of cations that is considered
-        """
+
         is_an_oxide_and_no_env_for_O(lse)
         super().__init__(DISTANCE=distance)
 
@@ -1423,42 +1507,50 @@ class Pauling5(PaulingConnection):
 
         self.FifthRuleDict = outputdict
 
-    def from_file(self, filename, foldername):
-        # have to test this part of the code as well
-
+    def from_file(self, filename: str, foldername: str):
+        """
+        setup of the connections from a saved file
+        :param filename: file name under which the file is saved
+        :param foldername: folder, in which the files are
+        :return:
+        """
         with open(os.path.join(foldername, filename)) as file:
             self.FifthRuleDict = json.load(file)
 
-    def is_fulfilled(self, options="CN", leave_out_list=[]):
-        # TODO: include lists of exceptions!
-        # hand it over to is_candidate_5thrule
+    def is_fulfilled(self, options="CN", leave_out_list=[]) -> bool:
         """
         tests if all chemically equivalent cations (same element, same valence) have the same CN, or environment, or environment and number of connections
         if there is only one chemically equivalent cation, the method raises a RuleCannotBeAnalyzedError
         if the wrong option is used, a ValueError is raised
         :param options: can be "CN", "env", or "env+nconnections"
+        :param leave_out_list: list of cations (str) that will be left out from analysis
         :return: Boolean
         """
-        # test _is_candidate_5thrule
+        # test if rule can be evaluated (more than one chemically equivalent cation!)
         if not self._is_candidate_5thrule(leave_out_list=leave_out_list):
             raise RuleCannotBeAnalyzedError("5th Rule cannot be evaluated")
 
-        details=self.get_details(options=options,leave_out_list=leave_out_list)
+        details = self.get_details(options=options, leave_out_list=leave_out_list)
 
         for key, items in details.items():
-            #print(key)
-            if items['not_fulfilled']>0:
+            # print(key)
+            if items['not_fulfilled'] > 0:
                 return False
         return True
 
-    def get_details(self, options='CN', leave_out_list=[]):
+    def get_details(self, options='CN', leave_out_list=[]) -> dict:
+        """
+        will return a dict with information to assess this rule
+        :param options:  can be "CN", "env", or "env+nconnections"
+        :param leave_out_list: list of cations (str) that will be left out from analysis
+        :return: dict with information on the fulfillment of the rule
+        """
         if not self._is_candidate_5thrule(leave_out_list=leave_out_list):
             raise RuleCannotBeAnalyzedError("5th Rule cannot be evaluated")
 
         outputdict = self._postevaluation5thrule_elementdependency()
         output = {}
 
-        # TODO: only allow cat that are not in leave_out_list
         if options == 'CN':
             for cat in outputdict['exceptionsCN']:
                 if not cat[0] in leave_out_list:
@@ -1510,11 +1602,10 @@ class Pauling5(PaulingConnection):
         else:
             raise ValueError("Wrong option")
 
-    def _is_candidate_5thrule(self, leave_out_list=[]):
-        # TODO, deal with exceptions list
+    def _is_candidate_5thrule(self, leave_out_list=[]) -> bool:
         """
         tells you if 5th rule can be evaluated
-        :param leave_out_list:
+        :param leave_out_list: will remove those structures that only include cations from the elements in list
         :return: Boolean
         """
 
@@ -1539,54 +1630,10 @@ class Pauling5(PaulingConnection):
             else:
                 return False
 
-    # def _postevaluation5thrule(self):
-    #     """
-    #     evaluates the 5th rule
-    #     :return: outputdict with relevant information
-    #     """
-    #     connection_corners = self.FifthRuleDict['connection_corners']
-    #     connection_edges = self.FifthRuleDict['connection_edges']
-    #     connection_faces = self.FifthRuleDict['connection_faces']
-    #     catenv = self.FifthRuleDict['catenv']
-    #     catid = self.FifthRuleDict['catid']
-    #     uniquecat = self.FifthRuleDict['uniquecat']
-    #
-    #     hassamechemenvandsameconnectionnumber = True
-    #     hassameenv = True
-    #     hassameCN = True
-    #
-    #     # tells you if all cations that are the same have the same CN, CE, CE with no connections
-    #     # is this the correct test?
-    #     if len(uniquecat) != len(catid):
-    #
-    #         for icat, cat in enumerate(catid):
-    #             for icat2, cat2 in enumerate(catid):
-    #                 if icat2 > icat:
-    #                     if cat == cat2:
-    #                         if not (int(str(catenv[icat].split(":")[1])) == int(
-    #                                 str(catenv[icat2].split(":")[1]))):
-    #                             hassameCN = False
-    #
-    #                         if not (str(catenv[icat]) == str(catenv[icat2])):
-    #                             hassameenv = False
-    #                         if not (connection_corners[icat] == connection_corners[icat2] and connection_edges[
-    #                             icat] ==
-    #                                 connection_edges[icat2] and connection_faces[icat] == connection_faces[
-    #                                     icat2] and str(catenv[icat]) == str(catenv[icat2])):
-    #                             hassamechemenvandsameconnectionnumber = False
-    #                             break
-    #
-    #     Outputdict = {}
-    #     Outputdict['hassameCN'] = hassameCN
-    #     Outputdict['hassameenv'] = hassameenv
-    #     Outputdict['hassameenvadsameconnectionnumber'] = hassamechemenvandsameconnectionnumber
-    #
-    #     return Outputdict
-
-    def _postevaluation5thrule_elementdependency(self):
+    def _postevaluation5thrule_elementdependency(self) -> dict:
         """
         gives you information on the element dependency of the rule
-        :return:
+        :return: dict with information on the elements
         """
 
         connection_corners = self.FifthRuleDict['connection_corners']

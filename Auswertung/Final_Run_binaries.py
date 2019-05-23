@@ -13,7 +13,8 @@ from Classes_for_statistics import OverAllAnalysis
 
 
 newclass=Pauling1OverAllAnalysis(source='MP',onlybinaries=True,plot_element_dependend_analysis=True,analyse_structures=True,use_prematching=True,lowest_number_environments_for_plot=50)
-newclass.run(start_from_results=False,save_result_data=True,save_structure_analysis=True,restart_from_saved_structure_analyisis=False,path_to_save='Results/Results_First_Rule_only_binaries.json')
+newclass.run(start_from_results=False, save_result_data=True, save_structure_analysis=True,
+             restart_from_saved_structure_analysis=False, path_to_save='Results/Results_First_Rule_only_binaries.json')
 
 newclass=Pauling1Frequency(source='MP',onlybinaries=True,plot_element_dependend_analysis=True, lowest_number_environments_for_plot=50,lower_limit_plot=0.0, upper_limit_plot=1.0)
 newclass.run(start_from_results=False,save_result_data=True,path_to_save='Results/Results_First_Rule_Most_Frequent_only_binaries.json')
@@ -24,18 +25,20 @@ newclass.run(start_from_results=False,save_result_data=True,path_to_save='Result
 
 
 newclass = Pauling2OverAllAnalysis(source='MP', onlybinaries=True, plot_element_dependend_analysis=True,lowest_number_environments_for_plot=50, lower_limit_plot=0.1,upper_limit_plot=0.8,analyse_structures=True,use_prematching=True)
-newclass.run(start_from_results=False, save_result_data=True,path_to_save='Results/Results_Second_Rule_only_binaries.json',save_structure_analysis=True,restart_from_saved_structure_analyisis=False)
+newclass.run(start_from_results=False, save_result_data=True, path_to_save='Results/Results_Second_Rule_only_binaries.json', save_structure_analysis=True,
+             restart_from_saved_structure_analysis=False)
 
 
 newclass = Pauling2OverAllAnalysis(source='MP_very_symmetric', onlybinaries=True, plot_element_dependend_analysis=True,lowest_number_environments_for_plot=50, lower_limit_plot=0.5,upper_limit_plot=1.0,analyse_structures=True,use_prematching=True)
-newclass.run(start_from_results=False, save_result_data=True,path_to_save='Results/Results_Second_Rule_very_symmetric_only_binaries.json',save_structure_analysis=True,restart_from_saved_structure_analyisis=False)
+newclass.run(start_from_results=False, save_result_data=True, path_to_save='Results/Results_Second_Rule_very_symmetric_only_binaries.json', save_structure_analysis=True,
+             restart_from_saved_structure_analysis=False)
 
 
 newclass = Pauling3OverAllAnalysis(source='MP', onlybinaries=True, plot_element_dependend_analysis=True,
                                    lowest_number_environments_for_plot=50, lower_limit_plot=0.6, upper_limit_plot=1.0,
                                    analyse_structures=True, use_prematching=True)
 newclass.run(start_from_connections=True, save_connections=True, connections_folder='AnalysisConnections',
-             start_from_results=False, save_result_data=True, restart_from_saved_structure_analyisis=False,
+             start_from_results=False, save_result_data=True, restart_from_saved_structure_analysis=False,
              save_structure_analysis=True, path_to_save='Results/Results_Third_Rule_only_binaries.json')
 
 
@@ -43,8 +46,8 @@ newclass = Pauling3OverAllAnalysis(source='MP', onlybinaries=True, plot_element_
                                    lowest_number_environments_for_plot=50, lower_limit_plot=0.6, upper_limit_plot=1.0,
                                    analyse_structures=True, use_prematching=True)
 newclass.run(start_from_connections=True, save_connections=True, connections_folder='AnalysisConnections',
-             start_from_results=False, save_result_data=True, restart_from_saved_structure_analyisis=False,
-             save_structure_analysis=True, path_to_save='Results/Results_Third_Rule_max_CN_only_binaries.json',maxCN=8)
+             start_from_results=False, save_result_data=True, restart_from_saved_structure_analysis=False,
+             save_structure_analysis=True, path_to_save='Results/Results_Third_Rule_max_CN_only_binaries.json', maxCN=8)
 
 
 newclass = Pauling4OverAllAnalysis(source='MP', onlybinaries=True, plot_element_dependend_analysis=True,
@@ -52,7 +55,7 @@ newclass = Pauling4OverAllAnalysis(source='MP', onlybinaries=True, plot_element_
                                    analyse_structures=True, use_prematching=True)
 newclass.run(show_plot=True, start_from_connections=True, save_connections=True,
              connections_folder='AnalysisConnections',
-             start_from_results=False, save_result_data=True, restart_from_saved_structure_analyisis=False,
+             start_from_results=False, save_result_data=True, restart_from_saved_structure_analysis=False,
              save_structure_analysis=True, path_to_save='Results/Results_Fourth_Rule_only_binaries.json')
 
 
