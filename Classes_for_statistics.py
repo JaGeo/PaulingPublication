@@ -1101,7 +1101,7 @@ class Pauling2OverAllAnalysis(OverAllAnalysis):
         dev_array, self.frequency = self._get_frequency_of_values(arraydeviations=bs_dev, stepsize=0.01)
 
         self.arraydev_share = self._list_to_np_array_and_divide_by_value(np.array(dev_array), ideal_bs)
-        self.relativefrequency = self._list_to_np_array_and_divide_by_value(np.array(self.frequency),
+        self.relativefrequency = self._list_to_np_array_and_divide_by_value(np.array(self.frequency),float(len(array_bvs)))
 
 
 class Pauling3OverAllAnalysis(OverAllAnalysis):
