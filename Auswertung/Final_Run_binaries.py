@@ -66,7 +66,7 @@ newclass = Pauling5OverAllAnalysis(source='MP', onlybinaries=True, plot_element_
 newclass.run(show_plot=True, remove_elements_low_entropy=False, threshold_remove_elements=0.9,
              start_from_connections=True, save_connections=True,
              connections_folder='AnalysisConnections_5thRule',
-             start_from_results=False, save_result_data=True, restart_from_saved_structure_analyisis=False,
+             start_from_results=False, save_result_data=True, restart_from_saved_structure_analysis=False,
              save_structure_analysis=True, path_to_save='Results/Results_Fifth_Rule_only_binaries.json')
 
 #remove elements with low entropy!
@@ -77,7 +77,7 @@ newclass = Pauling5OverAllAnalysis(source='MP', onlybinaries=True, plot_element_
 newclass.run(show_plot=True, remove_elements_low_entropy=True, threshold_remove_elements=0.9,
              start_from_connections=True, save_connections=True,
              connections_folder='AnalysisConnections_5thRule',
-             start_from_results=False, save_result_data=True, restart_from_saved_structure_analyisis=False,
+             start_from_results=False, save_result_data=True, restart_from_saved_structure_analysis=False,
              save_structure_analysis=True, path_to_save='Results/Results_Fifth_Rule_remove_low_entropy_only_binaries.json')
 
 newclass = AllPaulingOverAllAnalysis(source='MP', onlybinaries=True, plot_element_dependend_analysis=True,
@@ -87,7 +87,7 @@ newclass = AllPaulingOverAllAnalysis(source='MP', onlybinaries=True, plot_elemen
 newclass.run(remove_elements_low_entropy=False, start_from_connections=True, save_connections=True,
              connections_folder34='AnalysisConnections', connections_folder5='AnalysisConnections_5thRule',
              start_from_results=False, save_result_data=True,
-             restart_from_saved_structure_analyisis=False, save_structure_analysis=True,
+             restart_from_saved_structure_analysis=False, save_structure_analysis=True,
              path_to_save='Results/Results_AllRules_only_binaries.json', start_material=None, stop_material=None,
              threshold_remove_elements=0.95)
 

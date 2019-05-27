@@ -793,7 +793,7 @@ class TestPauling5OverAllAnalysis(unittest.TestCase):
     def test_run(self):
         self.pauling5normal.run(show_plot=False, start_from_connections=False, save_connections=False,
                                 connections_folder='', start_from_results=False, save_result_data=False,
-                                restart_from_saved_structure_analyisis=False, save_structure_analysis=False,
+                                restart_from_saved_structure_analysis=False, save_structure_analysis=False,
                                 path_to_save='', remove_elements_low_entropy=False)
         self.assertListEqual(self.pauling5normal.structures_exceptions, ['mp-1788', 'mp-886'])
         self.assertListEqual(self.pauling5normal.structures_fulfillingrule, ['mp-7000', 'mp-306'])
@@ -804,23 +804,23 @@ class TestPauling5OverAllAnalysis(unittest.TestCase):
 
         self.pauling5normal.run(show_plot=False, start_from_connections=False, save_connections=True,
                                 connections_folder='tmp_folder1', start_from_results=False, save_result_data=False,
-                                restart_from_saved_structure_analyisis=False, save_structure_analysis=False,
+                                restart_from_saved_structure_analysis=False, save_structure_analysis=False,
                                 path_to_save='', remove_elements_low_entropy=False, start_material=0, stop_material=1)
 
         self.pauling5normal.run(show_plot=False, start_from_connections=True, save_connections=True,
                                 connections_folder='tmp_folder1', start_from_results=False, save_result_data=False,
-                                restart_from_saved_structure_analyisis=False, save_structure_analysis=False,
+                                restart_from_saved_structure_analysis=False, save_structure_analysis=False,
                                 path_to_save='', remove_elements_low_entropy=False, start_material=0, stop_material=1)
 
         self.pauling5normal.run(show_plot=False, start_from_connections=True, save_connections=True,
                                 connections_folder='tmp_folder1', start_from_results=False, save_result_data=True,
-                                restart_from_saved_structure_analyisis=False, save_structure_analysis=True,
+                                restart_from_saved_structure_analysis=False, save_structure_analysis=True,
                                 path_to_save='Results.json', remove_elements_low_entropy=False, start_material=0,
                                 stop_material=1)
 
         self.pauling5normal.run(show_plot=False, start_from_connections=True, save_connections=True,
                                 connections_folder='tmp_folder1', start_from_results=True, save_result_data=True,
-                                restart_from_saved_structure_analyisis=False, save_structure_analysis=True,
+                                restart_from_saved_structure_analysis=False, save_structure_analysis=True,
                                 path_to_save='Results.json', remove_elements_low_entropy=False, start_material=0,
                                 stop_material=1)
 
@@ -832,7 +832,7 @@ class TestPauling5OverAllAnalysis(unittest.TestCase):
 
         self.pauling5entropy.run(show_plot=False, start_from_connections=False, save_connections=False,
                                  connections_folder='', start_from_results=False, save_result_data=False,
-                                 restart_from_saved_structure_analyisis=False, save_structure_analysis=False,
+                                 restart_from_saved_structure_analysis=False, save_structure_analysis=False,
                                  path_to_save='', remove_elements_low_entropy=True, threshold_remove_elements=0.84)
 
         self.assertListEqual(self.pauling5entropy.structures_fulfillingrule, [])
@@ -846,7 +846,7 @@ class TestPauling5OverAllAnalysis(unittest.TestCase):
 
         self.pauling5entropy.run(show_plot=False, start_from_connections=False, save_connections=False,
                                  connections_folder='', start_from_results=False, save_result_data=False,
-                                 restart_from_saved_structure_analyisis=False, save_structure_analysis=False,
+                                 restart_from_saved_structure_analysis=False, save_structure_analysis=False,
                                  path_to_save='', remove_elements_low_entropy=True, threshold_remove_elements=0.82)
 
         self.assertListEqual(self.pauling5entropy.structures_fulfillingrule, [])
@@ -910,7 +910,7 @@ class TestAllPaulingOverAllAnalysis(unittest.TestCase):
                              save_connections=False, connections_folder34='AnalysisConnections',
                              connections_folder5='AnalysisConnections_5thRule',
                              start_from_results=False, save_result_data=False,
-                             restart_from_saved_structure_analyisis=False, save_structure_analysis=False,
+                             restart_from_saved_structure_analysis=False, save_structure_analysis=False,
                              path_to_save='', start_material=None, stop_material=None,
                              threshold_remove_elements=0.95)
 
@@ -923,7 +923,7 @@ class TestAllPaulingOverAllAnalysis(unittest.TestCase):
                             save_connections=False, connections_folder34='AnalysisConnections',
                             connections_folder5='AnalysisConnections_5thRule',
                             start_from_results=False, save_result_data=False,
-                            restart_from_saved_structure_analyisis=False, save_structure_analysis=False,
+                            restart_from_saved_structure_analysis=False, save_structure_analysis=False,
                             path_to_save='', start_material=None, stop_material=None,
                             threshold_remove_elements=0.95)
 
@@ -936,7 +936,7 @@ class TestAllPaulingOverAllAnalysis(unittest.TestCase):
                             save_connections=False, connections_folder34='AnalysisConnections',
                             connections_folder5='AnalysisConnections_5thRule',
                             start_from_results=False, save_result_data=False,
-                            restart_from_saved_structure_analyisis=False, save_structure_analysis=False,
+                            restart_from_saved_structure_analysis=False, save_structure_analysis=False,
                             path_to_save='', start_material=0, stop_material=1,
                             threshold_remove_elements=0.5)
 
@@ -948,7 +948,7 @@ class TestAllPaulingOverAllAnalysis(unittest.TestCase):
                             save_connections=False, connections_folder34='AnalysisConnections',
                             connections_folder5='AnalysisConnections_5thRule',
                             start_from_results=False, save_result_data=False,
-                            restart_from_saved_structure_analyisis=False, save_structure_analysis=False,
+                            restart_from_saved_structure_analysis=False, save_structure_analysis=False,
                             path_to_save='', start_material=0, stop_material=1,
                             threshold_remove_elements=0.45)
 
@@ -988,7 +988,7 @@ class TestAllPaulingOverAllAnalysis(unittest.TestCase):
                             save_connections=False, connections_folder34='AnalysisConnections',
                             connections_folder5='AnalysisConnections_5thRule',
                             start_from_results=False, save_result_data=False,
-                            restart_from_saved_structure_analyisis=False, save_structure_analysis=False,
+                            restart_from_saved_structure_analysis=False, save_structure_analysis=False,
                             path_to_save='', start_material=None, stop_material=None,
                             threshold_remove_elements=0.95, adapt_first_fourth_and_fifth_rules=False,
                             ignore_first_rule=True, ignore_second_rule=False, ignore_third_rule=False,
@@ -1004,7 +1004,7 @@ class TestAllPaulingOverAllAnalysis(unittest.TestCase):
                             save_connections=False, connections_folder34='AnalysisConnections',
                             connections_folder5='AnalysisConnections_5thRule',
                             start_from_results=False, save_result_data=False,
-                            restart_from_saved_structure_analyisis=False, save_structure_analysis=False,
+                            restart_from_saved_structure_analysis=False, save_structure_analysis=False,
                             path_to_save='', start_material=None, stop_material=None,
                             threshold_remove_elements=0.95, adapt_first_fourth_and_fifth_rules=False,
                             ignore_first_rule=True, ignore_second_rule=True, ignore_third_rule=True,
@@ -1020,7 +1020,7 @@ class TestAllPaulingOverAllAnalysis(unittest.TestCase):
                             save_connections=False, connections_folder34='AnalysisConnections',
                             connections_folder5='AnalysisConnections_5thRule',
                             start_from_results=False, save_result_data=False,
-                            restart_from_saved_structure_analyisis=False, save_structure_analysis=False,
+                            restart_from_saved_structure_analysis=False, save_structure_analysis=False,
                             path_to_save='', start_material=None, stop_material=None,
                             threshold_remove_elements=0.95,
                             adapt_first_fourth_and_fifth_rules=True,
@@ -1038,7 +1038,7 @@ class TestAllPaulingOverAllAnalysis(unittest.TestCase):
                             save_connections=False, connections_folder34='AnalysisConnections',
                             connections_folder5='AnalysisConnections_5thRule',
                             start_from_results=False, save_result_data=False,
-                            restart_from_saved_structure_analyisis=False, save_structure_analysis=False,
+                            restart_from_saved_structure_analysis=False, save_structure_analysis=False,
                             path_to_save='', start_material=None, stop_material=None,
                             threshold_remove_elements=0.95,
                             adapt_first_fourth_and_fifth_rules=True,
@@ -1055,7 +1055,7 @@ class TestAllPaulingOverAllAnalysis(unittest.TestCase):
                             save_connections=False, connections_folder34='AnalysisConnections',
                             connections_folder5='AnalysisConnections_5thRule',
                             start_from_results=False, save_result_data=False,
-                            restart_from_saved_structure_analyisis=False, save_structure_analysis=False,
+                            restart_from_saved_structure_analysis=False, save_structure_analysis=False,
                             path_to_save='', start_material=None, stop_material=None,
                             threshold_remove_elements=0.95,
                             adapt_first_fourth_and_fifth_rules=True,
@@ -1071,7 +1071,7 @@ class TestAllPaulingOverAllAnalysis(unittest.TestCase):
                              save_connections=False, connections_folder34='AnalysisConnections',
                              connections_folder5='AnalysisConnections_5thRule',
                              start_from_results=False, save_result_data=False,
-                             restart_from_saved_structure_analyisis=False, save_structure_analysis=False,
+                             restart_from_saved_structure_analysis=False, save_structure_analysis=False,
                              path_to_save='', start_material=None, stop_material=None,
                              threshold_remove_elements=0.95,
                              adapt_first_fourth_and_fifth_rules=True,
@@ -1087,7 +1087,7 @@ class TestAllPaulingOverAllAnalysis(unittest.TestCase):
                              save_connections=False, connections_folder34='AnalysisConnections',
                              connections_folder5='AnalysisConnections_5thRule',
                              start_from_results=False, save_result_data=False,
-                             restart_from_saved_structure_analyisis=False, save_structure_analysis=False,
+                             restart_from_saved_structure_analysis=False, save_structure_analysis=False,
                              path_to_save='', start_material=None, stop_material=None,
                              threshold_remove_elements=0.95,
                              adapt_first_fourth_and_fifth_rules=True,
@@ -1103,7 +1103,7 @@ class TestAllPaulingOverAllAnalysis(unittest.TestCase):
                              save_connections=False, connections_folder34='AnalysisConnections',
                              connections_folder5='AnalysisConnections_5thRule',
                              start_from_results=False, save_result_data=False,
-                             restart_from_saved_structure_analyisis=False, save_structure_analysis=False,
+                             restart_from_saved_structure_analysis=False, save_structure_analysis=False,
                              path_to_save='', start_material=None, stop_material=None,
                              threshold_remove_elements=0.95,
                              adapt_first_fourth_and_fifth_rules=True,
@@ -1120,7 +1120,7 @@ class TestAllPaulingOverAllAnalysis(unittest.TestCase):
                             save_connections=False, connections_folder34='AnalysisConnections',
                             connections_folder5='AnalysisConnections_5thRule',
                             start_from_results=False, save_result_data=False,
-                            restart_from_saved_structure_analyisis=False, save_structure_analysis=False,
+                            restart_from_saved_structure_analysis=False, save_structure_analysis=False,
                             path_to_save='', start_material=None, stop_material=None,
                             threshold_remove_elements=0.95, adapt_first_fourth_and_fifth_rules=False,
                             ignore_first_rule=True, ignore_second_rule=False, ignore_third_rule=False,
@@ -1137,7 +1137,7 @@ class TestAllPaulingOverAllAnalysis(unittest.TestCase):
                             save_connections=False, connections_folder34='AnalysisConnections',
                             connections_folder5='AnalysisConnections_5thRule',
                             start_from_results=False, save_result_data=False,
-                            restart_from_saved_structure_analyisis=False, save_structure_analysis=False,
+                            restart_from_saved_structure_analysis=False, save_structure_analysis=False,
                             path_to_save='', start_material=None, stop_material=None,
                             threshold_remove_elements=0.95, adapt_first_fourth_and_fifth_rules=False,
                             ignore_first_rule=False, ignore_second_rule=False, ignore_third_rule=False,
@@ -1150,16 +1150,16 @@ class TestAllPaulingOverAllAnalysis(unittest.TestCase):
 
 
         self.paulingall.run(remove_elements_low_entropy=False, start_from_connections=False,
-                             save_connections=False, connections_folder34='AnalysisConnections',
-                             connections_folder5='AnalysisConnections_5thRule',
-                             start_from_results=False, save_result_data=False,
-                             restart_from_saved_structure_analyisis=False, save_structure_analysis=False,
-                             path_to_save='', start_material=None, stop_material=None,
-                             threshold_remove_elements=0.95,
-                             adapt_first_fourth_and_fifth_rules=True,
-                             ignore_first_rule=True, ignore_second_rule=True, ignore_third_rule=True,
-                             ignore_fourth_rule=True,
-                             ignore_fifth_rule=True, remove_structures_with_CN_larger_8=True)
+                            save_connections=False, connections_folder34='AnalysisConnections',
+                            connections_folder5='AnalysisConnections_5thRule',
+                            start_from_results=False, save_result_data=False,
+                            restart_from_saved_structure_analysis=False, save_structure_analysis=False,
+                            path_to_save='', start_material=None, stop_material=None,
+                            threshold_remove_elements=0.95,
+                            adapt_first_fourth_and_fifth_rules=True,
+                            ignore_first_rule=True, ignore_second_rule=True, ignore_third_rule=True,
+                            ignore_fourth_rule=True,
+                            ignore_fifth_rule=True, remove_structures_with_CN_larger_8=True)
 
         self.assertListEqual(self.paulingall.structures_fulfillingrule,['mp-1788', 'mp-7000', 'mp-19359', 'mp-306', 'mp-886', 'mp-2605'])
         self.assertListEqual(self.paulingall.structures_exceptions,[])
@@ -1169,7 +1169,7 @@ class TestAllPaulingOverAllAnalysis(unittest.TestCase):
                              save_connections=False, connections_folder34='AnalysisConnections',
                              connections_folder5='AnalysisConnections_5thRule',
                              start_from_results=False, save_result_data=False,
-                             restart_from_saved_structure_analyisis=False, save_structure_analysis=False,
+                             restart_from_saved_structure_analysis=False, save_structure_analysis=False,
                              path_to_save='', start_material=None, stop_material=None,
                              threshold_remove_elements=0.95,
                              adapt_first_fourth_and_fifth_rules=True,

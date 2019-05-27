@@ -1064,8 +1064,8 @@ class Pauling2OverAllAnalysis(OverAllAnalysis):
         self.present_env = {}
         self.additional_info = {}
         # valence dependency can be introduced later
-
         for mat in list_mat:
+            print(mat)
 
             lse = self._get_lse_from_folder(mat, source=self.source)
             pauling2 = Pauling2(lse=lse)
@@ -1101,7 +1101,8 @@ class Pauling2OverAllAnalysis(OverAllAnalysis):
         dev_array, self.frequency = self._get_frequency_of_values(arraydeviations=bs_dev, stepsize=0.01)
 
         self.arraydev_share = self._list_to_np_array_and_divide_by_value(np.array(dev_array), ideal_bs)
-        self.relativefrequency = self._list_to_np_array_and_divide_by_value(np.array(self.frequency),float(len(array_bvs)))
+        self.relativefrequency = self._list_to_np_array_and_divide_by_value(np.array(self.frequency),
+                                                                            float(len(array_bvs)))
 
 
 class Pauling3OverAllAnalysis(OverAllAnalysis):
@@ -1155,9 +1156,9 @@ class Pauling3OverAllAnalysis(OverAllAnalysis):
         if show_plot:
             # do the other plot here
             # print(self.Plot_PSE_numbers)
-            plot1=self._plot_influence_mean_CN(self.Plot_PSE_DICT, self.Plot_PSE_numbers)
+            plot1 = self._plot_influence_mean_CN(self.Plot_PSE_DICT, self.Plot_PSE_numbers)
             plot1.show()
-            plot2=self._plot_influence_atomic_radii(self.Plot_PSE_DICT)
+            plot2 = self._plot_influence_atomic_radii(self.Plot_PSE_DICT)
             plot2.show()
 
             plot = self._pieplot_connections(self.connections['corner'], self.connections['edge'],
@@ -1230,7 +1231,7 @@ class Pauling3OverAllAnalysis(OverAllAnalysis):
                                                        add_info=self.additional_info,
                                                        name_add_info='Connections of Cations with Valences')
 
-    def _plot_influence_atomic_radii(self, Plot_PSE_Dict: dict)->plt:
+    def _plot_influence_atomic_radii(self, Plot_PSE_Dict: dict) -> plt:
         """
         will plot number of connected polyhedra vs. atomic radii
         :param Plot_PSE_Dict: a dict with information on the rule fulfillment for each cation
@@ -1247,9 +1248,13 @@ class Pauling3OverAllAnalysis(OverAllAnalysis):
 
         # TODO: make a statistical test and test for the different distributions
         # TODO: utilize a smilar plot for 4th rule
+        print("Mean CN for Corners and Edge Connected Polyhedra")
         print(np.mean(corneredge_histo))
+        print("Standard Deviation CN for Corners and Edge Connected Polyhedra")
         print(np.std(corneredge_histo, ddof=1))
+        print("Mean CN for Face Connected Polyhedra")
         print(np.mean(face_histo))
+        print("Standard Deviation CN for Face Connected Polyhedra")
         print(np.std(face_histo, ddof=1))
 
         # range noch korrekt anpassen
@@ -1278,7 +1283,7 @@ class Pauling3OverAllAnalysis(OverAllAnalysis):
         # plt.plot([0,1000],[np.mean(face_histo),np.mean(face_histo)],'b-')
         return plt
 
-    def _plot_influence_mean_CN(self, Plot_PSE_Dict:dict, Plot_PSE_CN_Info:dict)->plt:
+    def _plot_influence_mean_CN(self, Plot_PSE_Dict: dict, Plot_PSE_CN_Info: dict) -> plt:
         """
         will plot number of conncted polyhedra vs. mean CN
         :param Plot_PSE_Dict: dict with info on the rule fulfillment for each cation
@@ -1366,7 +1371,6 @@ class Pauling3OverAllAnalysis(OverAllAnalysis):
             except RuleCannotBeAnalyzedError:
                 self.structures_cannot_be_evaluated.append(mat)
 
-
             Details = pauling3.get_details(maximumCN=self.maxCN)
             self.additional_info[mat] = Details["species"]
             New_Details = self._reformat_details(Details['species'])
@@ -1382,8 +1386,7 @@ class Pauling3OverAllAnalysis(OverAllAnalysis):
             self._add_dict_cat_dependency(start_dict=self.All_Details, dict_to_add=Details2,
                                           number_of_elements_to_add=4)
 
-
-    def _reformat_details(self, Details:dict)->dict:
+    def _reformat_details(self, Details: dict) -> dict:
         """
         reformats dicts
         :param Details:
@@ -1399,7 +1402,7 @@ class Pauling3OverAllAnalysis(OverAllAnalysis):
                 New_Details[key][1] += item2['face']
         return New_Details
 
-    def _sum_connections(self, start_dict:dict, Details:dict):
+    def _sum_connections(self, start_dict: dict, Details: dict):
         """
         sums dicts
         :param start_dict: here, the other values will be added
@@ -1409,7 +1412,6 @@ class Pauling3OverAllAnalysis(OverAllAnalysis):
         start_dict["corner"] += Details["corner"]
         start_dict["edge"] += Details["edge"]
         start_dict["face"] += Details["face"]
-
 
 
 class Pauling4OverAllAnalysis(OverAllAnalysis):
@@ -1598,7 +1600,7 @@ class Pauling4OverAllAnalysis(OverAllAnalysis):
             except RuleCannotBeAnalyzedError:
                 pass
 
-    def _reformat_details_elementwise(self, Details:dict)->dict:
+    def _reformat_details_elementwise(self, Details: dict) -> dict:
         """
         will reformat a dict
         :param Details: dict
@@ -1631,7 +1633,7 @@ class Pauling4OverAllAnalysis(OverAllAnalysis):
 
         return outputdict
 
-    def _add_dict_CN_val(self, start_dict:dict, to_add_dict:dict):
+    def _add_dict_CN_val(self, start_dict: dict, to_add_dict: dict):
         """
         will sum two dicts
         :param start_dict: dict to which the new dict will be added
@@ -1647,7 +1649,7 @@ class Pauling4OverAllAnalysis(OverAllAnalysis):
                 start_dict[key][key2][0] += to_add_dict[key][key2][0]
                 start_dict[key][key2][1] += to_add_dict[key][key2][1]
 
-    def _reformat_details_val(self, Details:dict)->dict:
+    def _reformat_details_val(self, Details: dict) -> dict:
         """
         reformats dict
         :param Details:  dict
@@ -1683,7 +1685,7 @@ class Pauling4OverAllAnalysis(OverAllAnalysis):
 
         return New_Details
 
-    def _reformat_details_CN(self, Details:dict)->dict:
+    def _reformat_details_CN(self, Details: dict) -> dict:
         """
         will reformat the dict
         :param Details: dict
@@ -1720,28 +1722,28 @@ class Pauling4OverAllAnalysis(OverAllAnalysis):
 
         return New_Details
 
-    def _plot_get_max(self, inputdict:dict)->float:
+    def _plot_get_max(self, inputdict: dict) -> float:
         """
         get max  value of keys of dict
-        :param inputdict:
+        :param inputdict
         :return: float
         """
         return max([int(x) for x in inputdict.keys()])
 
-    def _plot_init_np(self, maxvalue:int)->np.full:
+    def _plot_init_np(self, maxvalue: int) -> np.full:
         """
-        initalizes np.full
+        initalizes numpy.full
         :param maxvalue: int that determines how large np.full will be
-        :return:
+        :return: numpy.full
         """
         return np.full((maxvalue, maxvalue), np.nan)
 
     def _plot_fill_np(self, PlotEndDict, inputdict, lowervalue):
         """
-
-        :param PlotEndDict:
-        :param inputdict:
-        :param lowervalue:
+        will fill in the entries of the plot dict that will then be plotted
+        :param PlotEndDict: dict that will later be plotted
+        :param inputdict: input dictionary
+        :param lowervalue: only if there are more than lowervalue entries, there will be an entry in the ouptut dict
         :return:
         """
         for key, item in inputdict.items():
@@ -1752,8 +1754,12 @@ class Pauling4OverAllAnalysis(OverAllAnalysis):
     def _fourthrule_plot(self, inputdict, option='CN', vmin=0.0, vmax=1.0, lowervalue=50, leaveoutCN13=True):
         """
         #leaves out CN 13 for option "CN" -> too few entries
-        :param inputdict:
+        :param inputdict: dict that will be plotted
         :param option: 'CN' or 'val' -> changes labels of axis dynamically
+        :param vmin: lower limit of plotted z values
+        :param vmax: upper limit of plotted z values
+        :param: lowervalue: only if more than lowervalue polyhedra were considered, it will be plotted
+        :param: leaveoutCN13: if  true, CN=13 will be left out from plot
         :return:
         """
         # get valmax
@@ -1825,12 +1831,32 @@ class Pauling4OverAllAnalysis(OverAllAnalysis):
 
 
 class Pauling5OverAllAnalysis(OverAllAnalysis):
+    """
+    Class to analyse the 5th rule
+    """
 
     def run(self, remove_elements_low_entropy=True, show_plot=True, start_from_connections=False, save_connections=True,
             connections_folder='AnalysisConnections_5thRule', start_from_results=False, save_result_data=True,
-            restart_from_saved_structure_analyisis=False, save_structure_analysis=True,
+            restart_from_saved_structure_analysis=False, save_structure_analysis=True,
             path_to_save='Results/Results_Second_Rule.json',
             threshold_remove_elements=0.95, start_material=None, stop_material=None):
+        """
+        will run the overall analysis
+        :param remove_elements_low_entropy: removes elements that have a low shannon entropy
+        :param show_plot: if true, will display all relevant plots
+        :param start_from_connections: if true, will start from connection files
+        :param save_connections: if true, will save connections in files
+        :param connections_folder: folder, in which the connections are saved
+        :param start_from_results: if true, will start from saved results
+        :param save_result_data: if true, will save results
+        :param restart_from_saved_structure_analysis: will restart from a structure analysis that was begun
+        :param save_structure_analysis: will save structure analysis, if true
+        :param path_to_save: where will the results be saved
+        :param threshold_remove_elements: will determine which elements will be removed according to shannon entropy
+        :param start_material: number, from which the analysis will be started
+        :param stop_material: number, before whch the analysis will be stopped
+        :return:
+        """
         # threshold_remove_elements: 1-entropy that removes elements with only very few environments
 
         self.remove_elements_low_entropy = remove_elements_low_entropy
@@ -1896,7 +1922,7 @@ class Pauling5OverAllAnalysis(OverAllAnalysis):
                                                                              save_to_file=save_structure_analysis,
                                                                              path_to_save=path_to_save.split('.')[
                                                                                               0] + "_structural_exceptions.json",
-                                                                             fetch_results_only=restart_from_saved_structure_analyisis,
+                                                                             fetch_results_only=restart_from_saved_structure_analysis,
                                                                              start_from_Matching=self.use_prematching)
 
             dict_similarstructures_fulfilling = self._get_similar_structures(self.structures_fulfillingrule,
@@ -1904,7 +1930,7 @@ class Pauling5OverAllAnalysis(OverAllAnalysis):
                                                                              save_to_file=save_structure_analysis,
                                                                              path_to_save=path_to_save.split('.')[
                                                                                               0] + "_structures_fulfilling.json",
-                                                                             fetch_results_only=restart_from_saved_structure_analyisis,
+                                                                             fetch_results_only=restart_from_saved_structure_analysis,
                                                                              start_from_Matching=self.use_prematching)
 
             self.dict_similarstructures_exceptions = dict_similarstructures_exceptions
@@ -1928,6 +1954,10 @@ class Pauling5OverAllAnalysis(OverAllAnalysis):
                                                                     0] + "_structures_fulfilling_readable.csv")
 
     def _new_setup(self):
+        """
+        will start the analysis from scratch
+        :return:
+        """
         list_mat = self._get_list_materials(source=self.source, onlybinaries=self.onlybinaries,
                                             start_material=self.start_material, stop_material=self.stop_material)
 
@@ -1940,7 +1970,7 @@ class Pauling5OverAllAnalysis(OverAllAnalysis):
         # valence dependency can be introduced later
         # counter_not_primitive=0
         for mat in list_mat:
-            # print(mat)
+            print(mat)
             lse = self._get_lse_from_folder(mat, source=self.source)
             # prim_struct=lse.structure.get_primitive_structure()
             # print(prim_struct.composition)
@@ -1981,7 +2011,14 @@ class Pauling5OverAllAnalysis(OverAllAnalysis):
             #     counter_not_primitive+=1
             #     print(counter_not_primitive)
 
-    def _fifth_rule_plot(self, okay, notokay, title="Tested Structures"):
+    def _fifth_rule_plot(self, okay: int, notokay: int, title="Tested Structures") -> plt:
+        """
+        will plot a pie plot
+        :param okay: number of structures fulfilling the rule
+        :param notokay: number of structures that do not fulfill the rule
+        :param title: title of the plot
+        :return: will return a plot
+        """
         import matplotlib.pyplot as plt
 
         labels = 'Fulfills rule', 'Does not fulfill rule'
@@ -1996,7 +2033,12 @@ class Pauling5OverAllAnalysis(OverAllAnalysis):
         plt.axis('equal')
         return plt
 
-    def _reformat_details_elementdependency(self, details):
+    def _reformat_details_elementdependency(self, details: dict) -> dict:
+        """
+        will reformat a dict to make the analysis easier
+        :param details: dict
+        :return: dict
+        """
         new_dict = {}
         for key in details:
             if not key in new_dict:
@@ -2005,15 +2047,44 @@ class Pauling5OverAllAnalysis(OverAllAnalysis):
 
 
 class AllPaulingOverAllAnalysis(OverAllAnalysis):
+    """
+    Class to analyse all 5 Pauling rules
+    """
+
     def run(self, remove_elements_low_entropy=False, start_from_connections=False,
             save_connections=True, connections_folder34='AnalysisConnections',
             connections_folder5='AnalysisConnections_5thRule',
             start_from_results=False, save_result_data=True,
-            restart_from_saved_structure_analyisis=False, save_structure_analysis=True,
+            restart_from_saved_structure_analysis=False, save_structure_analysis=True,
             path_to_save='Results/Results_AllRules.json', threshold_remove_elements=0.95, start_material=None,
             stop_material=None, adapt_first_fourth_and_fifth_rules=False, ignore_first_rule=True,
             ignore_second_rule=False, ignore_third_rule=False, ignore_fourth_rule=False, ignore_fifth_rule=False,
             remove_structures_with_CN_larger_8=False):
+        """
+        will run the overall analysis
+        :param remove_elements_low_entropy: will remove the elements with low shannon entropy
+        :param start_from_connections: if true, will start from connections files
+        :param save_connections: if true, will save the connections files
+        :param connections_folder34: folder for 3rd and 4th rule files
+        :param connections_folder5: folder for 5th rule files
+        :param start_from_results: if true, will start from results
+        :param save_result_data: if true, will save results
+        :param restart_from_saved_structure_analysis: if true, will restart from a started structure analysis
+        :param save_structure_analysis: if true, will save the structure analysis
+        :param path_to_save: path, where results will be saved
+        :param threshold_remove_elements: will decide, which elements will be removed according to shannon entropy
+        :param start_material: material number, at which the analysis will be started
+        :param stop_material: material number, before which the analysis will be stated
+        :param adapt_first_fourth_and_fifth_rules: will adapt the first, fourth, fifth rule (different from before)
+        :param ignore_first_rule: if true, will skip analysis of first rule
+        :param ignore_second_rule: if true, will skip analysis of second rule
+        :param ignore_third_rule: if true, will skip analysis of third rule
+        :param ignore_fourth_rule: if true, will skip analysis of fourth rule
+        :param ignore_fifth_rule: if true, will skip analysis of fifth rule
+        :param remove_structures_with_CN_larger_8: if true, will remove all structures with CN>8
+        :return:
+        """
+
         self.start_material = start_material
         self.stop_material = stop_material
         self.ignore_first_rule_and_test_criteria_for_rule_four_and_five = adapt_first_fourth_and_fifth_rules
@@ -2109,7 +2180,7 @@ class AllPaulingOverAllAnalysis(OverAllAnalysis):
                                                                              save_to_file=save_structure_analysis,
                                                                              path_to_save=path_to_save.split('.')[
                                                                                               0] + "_structural_exceptions.json",
-                                                                             fetch_results_only=restart_from_saved_structure_analyisis,
+                                                                             fetch_results_only=restart_from_saved_structure_analysis,
                                                                              start_from_Matching=self.use_prematching)
 
             dict_similarstructures_fulfilling = self._get_similar_structures(self.structures_fulfillingrule,
@@ -2117,7 +2188,7 @@ class AllPaulingOverAllAnalysis(OverAllAnalysis):
                                                                              save_to_file=save_structure_analysis,
                                                                              path_to_save=path_to_save.split('.')[
                                                                                               0] + "_structures_fulfilling.json",
-                                                                             fetch_results_only=restart_from_saved_structure_analyisis,
+                                                                             fetch_results_only=restart_from_saved_structure_analysis,
                                                                              start_from_Matching=self.use_prematching)
 
         if save_structure_analysis and self.analyse_structures:
@@ -2136,6 +2207,10 @@ class AllPaulingOverAllAnalysis(OverAllAnalysis):
                                                                 0] + "_structures_fulfilling_readable.csv")
 
     def _new_setup(self):
+        """
+        will start overall analysis from scratch
+        :return:
+        """
         list_mat = self._get_list_materials(source=self.source, onlybinaries=self.onlybinaries,
                                             start_material=self.start_material, stop_material=self.stop_material)
 
@@ -2295,6 +2370,10 @@ class AllPaulingOverAllAnalysis(OverAllAnalysis):
 
 
 class AllPaulingOverAllAnalysis_Final_Summary(OverAllAnalysis):
+    """
+    Class to analyse 4 rules and the dependency of each rule on the rule fulfillment
+    """
+
     def run(self, remove_elements_low_entropy=False, start_from_connections=False,
             save_connections=True, connections_folder34='AnalysisConnections',
             connections_folder5='AnalysisConnections_5thRule',
@@ -2302,7 +2381,22 @@ class AllPaulingOverAllAnalysis_Final_Summary(OverAllAnalysis):
             path_to_save='Results/Results_AllRules_Final_plot.json', threshold_remove_elements=0.95,
             start_material=None,
             stop_material=None, plot_result=True):
+        """
 
+        :param remove_elements_low_entropy: elements with low shannon entropy will be removed
+        :param start_from_connections: if true, will start from connections files
+        :param save_connections: if true, save connection files
+        :param connections_folder34: folder for 3rd and 4th rule files
+        :param connections_folder5: folder for 5th rule files
+        :param start_from_results: if true, start from results
+        :param save_result_data: if true, saves results
+        :param path_to_save: path to save the files
+        :param threshold_remove_elements: decides which elements will be removed
+        :param start_material: material number, at which the analysis is started
+        :param stop_material: material number, beore the analysis will be stopped
+        :param plot_result: if true, will plot results
+        :return:
+        """
         # general parameters, could be used in run instead
         adapt_first_fourth_and_fifth_rules = True
         ignore_first_rule = True
@@ -2325,7 +2419,7 @@ class AllPaulingOverAllAnalysis_Final_Summary(OverAllAnalysis):
                          start_from_connections=start_from_connections, save_connections=save_connections,
                          connections_folder34=connections_folder34, connections_folder5=connections_folder5,
                          start_from_results=False, save_result_data=False,
-                         restart_from_saved_structure_analyisis=False, save_structure_analysis=False,
+                         restart_from_saved_structure_analysis=False, save_structure_analysis=False,
                          path_to_save='', start_material=start_material,
                          stop_material=stop_material,
                          threshold_remove_elements=threshold_remove_elements,
@@ -2341,7 +2435,7 @@ class AllPaulingOverAllAnalysis_Final_Summary(OverAllAnalysis):
                          start_from_connections=start_from_connections, save_connections=save_connections,
                          connections_folder34=connections_folder34, connections_folder5=connections_folder5,
                          start_from_results=False, save_result_data=False,
-                         restart_from_saved_structure_analyisis=False, save_structure_analysis=False,
+                         restart_from_saved_structure_analysis=False, save_structure_analysis=False,
                          path_to_save='', start_material=start_material,
                          stop_material=stop_material,
                          threshold_remove_elements=threshold_remove_elements,
@@ -2357,7 +2451,7 @@ class AllPaulingOverAllAnalysis_Final_Summary(OverAllAnalysis):
                          start_from_connections=start_from_connections, save_connections=save_connections,
                          connections_folder34=connections_folder34, connections_folder5=connections_folder5,
                          start_from_results=False, save_result_data=False,
-                         restart_from_saved_structure_analyisis=False, save_structure_analysis=False,
+                         restart_from_saved_structure_analysis=False, save_structure_analysis=False,
                          path_to_save='', start_material=start_material,
                          stop_material=stop_material,
                          threshold_remove_elements=threshold_remove_elements,
@@ -2373,7 +2467,7 @@ class AllPaulingOverAllAnalysis_Final_Summary(OverAllAnalysis):
                          start_from_connections=start_from_connections, save_connections=save_connections,
                          connections_folder34=connections_folder34, connections_folder5=connections_folder5,
                          start_from_results=False, save_result_data=False,
-                         restart_from_saved_structure_analyisis=False, save_structure_analysis=False,
+                         restart_from_saved_structure_analysis=False, save_structure_analysis=False,
                          path_to_save='', start_material=start_material,
                          stop_material=stop_material,
                          threshold_remove_elements=threshold_remove_elements,
@@ -2389,7 +2483,7 @@ class AllPaulingOverAllAnalysis_Final_Summary(OverAllAnalysis):
                          start_from_connections=start_from_connections, save_connections=save_connections,
                          connections_folder34=connections_folder34, connections_folder5=connections_folder5,
                          start_from_results=False, save_result_data=False,
-                         restart_from_saved_structure_analyisis=False, save_structure_analysis=False,
+                         restart_from_saved_structure_analysis=False, save_structure_analysis=False,
                          path_to_save='', start_material=start_material,
                          stop_material=stop_material,
                          threshold_remove_elements=threshold_remove_elements,
@@ -2406,7 +2500,7 @@ class AllPaulingOverAllAnalysis_Final_Summary(OverAllAnalysis):
                          start_from_connections=start_from_connections, save_connections=save_connections,
                          connections_folder34=connections_folder34, connections_folder5=connections_folder5,
                          start_from_results=False, save_result_data=False,
-                         restart_from_saved_structure_analyisis=False, save_structure_analysis=False,
+                         restart_from_saved_structure_analysis=False, save_structure_analysis=False,
                          path_to_save='', start_material=start_material,
                          stop_material=stop_material,
                          threshold_remove_elements=threshold_remove_elements,
@@ -2422,7 +2516,7 @@ class AllPaulingOverAllAnalysis_Final_Summary(OverAllAnalysis):
                          start_from_connections=start_from_connections, save_connections=save_connections,
                          connections_folder34=connections_folder34, connections_folder5=connections_folder5,
                          start_from_results=False, save_result_data=False,
-                         restart_from_saved_structure_analyisis=False, save_structure_analysis=False,
+                         restart_from_saved_structure_analysis=False, save_structure_analysis=False,
                          path_to_save='', start_material=start_material,
                          stop_material=stop_material,
                          threshold_remove_elements=threshold_remove_elements,
@@ -2438,7 +2532,7 @@ class AllPaulingOverAllAnalysis_Final_Summary(OverAllAnalysis):
                          start_from_connections=start_from_connections, save_connections=save_connections,
                          connections_folder34=connections_folder34, connections_folder5=connections_folder5,
                          start_from_results=False, save_result_data=False,
-                         restart_from_saved_structure_analyisis=False, save_structure_analysis=False,
+                         restart_from_saved_structure_analysis=False, save_structure_analysis=False,
                          path_to_save='', start_material=start_material,
                          stop_material=stop_material,
                          threshold_remove_elements=threshold_remove_elements,
@@ -2454,7 +2548,7 @@ class AllPaulingOverAllAnalysis_Final_Summary(OverAllAnalysis):
                          start_from_connections=start_from_connections, save_connections=save_connections,
                          connections_folder34=connections_folder34, connections_folder5=connections_folder5,
                          start_from_results=False, save_result_data=False,
-                         restart_from_saved_structure_analyisis=False, save_structure_analysis=False,
+                         restart_from_saved_structure_analysis=False, save_structure_analysis=False,
                          path_to_save='', start_material=start_material,
                          stop_material=stop_material,
                          threshold_remove_elements=threshold_remove_elements,
@@ -2470,7 +2564,7 @@ class AllPaulingOverAllAnalysis_Final_Summary(OverAllAnalysis):
                          start_from_connections=start_from_connections, save_connections=save_connections,
                          connections_folder34=connections_folder34, connections_folder5=connections_folder5,
                          start_from_results=False, save_result_data=False,
-                         restart_from_saved_structure_analyisis=False, save_structure_analysis=False,
+                         restart_from_saved_structure_analysis=False, save_structure_analysis=False,
                          path_to_save='', start_material=start_material,
                          stop_material=stop_material,
                          threshold_remove_elements=threshold_remove_elements,
@@ -2492,11 +2586,15 @@ class AllPaulingOverAllAnalysis_Final_Summary(OverAllAnalysis):
             self._save_results_to_file(outputdict, path_to_save)
 
         if plot_result:
-            self.final_plot()
-
+            plt = self.final_plot()
+            plt.show()
         # todo: speicher den kram in file
 
-    def final_plot(self):
+    def final_plot(self) -> plt:
+        """
+
+        :return:
+        """
         import numpy as np
         import matplotlib.pyplot as plt
 
@@ -2528,4 +2626,4 @@ class AllPaulingOverAllAnalysis_Final_Summary(OverAllAnalysis):
         plt.legend()
 
         plt.tight_layout()
-        plt.show()
+        return plt

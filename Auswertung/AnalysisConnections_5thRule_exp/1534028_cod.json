@@ -1,0 +1,1 @@
+{"connection_corners": [12, 12, 8, 4, 4, 8], "connection_edges": [4, 4, 12, 8, 8, 0], "connection_faces": [5, 5, 2, 0, 0, 0], "catenv": ["SBT:8", "SBT:8", "C:8", "S:4", "S:4", "L:2"], "catid": [["Ba", 2], ["Ba", 2], ["Lu", 3], ["Cu", 2], ["Cu", 2], ["Cu", 1]], "uniquecat": [["Ba", 2], ["Lu", 3], ["Cu", 2], ["Cu", 1]]}

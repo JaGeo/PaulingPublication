@@ -1,0 +1,1 @@
+{"connection_corners": [11, 11, 11, 11, 11, 11, 11, 11], "connection_edges": [1, 1, 1, 1, 3, 3, 1, 1], "connection_faces": [0, 0, 0, 0, 0, 0, 0, 0], "catenv": ["T:4", "T:4", "T:4", "T:4", "T:5", "T:5", "T:4", "T:4"], "catid": [["Li", 1], ["Li", 1], ["Li", 1], ["Li", 1], ["Cd", 2], ["Cd", 2], ["Ge", 4], ["Ge", 4]], "uniquecat": [["Li", 1], ["Cd", 2], ["Ge", 4]]}
