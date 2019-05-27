@@ -164,10 +164,10 @@ class OverAllAnalysis:
         :return: LightStructureEnvironments
         """
         if source == 'MP' or source == 'MP_very_symmetric' or source == 'my_own_list':
-            with open(os.path.join("../lse_MP", mat + ".json"), 'r') as f:
+            with open(os.path.join("../Assessment/lse_MP", mat + ".json"), 'r') as f:
                 data = json.load(f)
         elif source == 'experimental':
-            with open(os.path.join("../lse_exp", mat + ".json"), 'r') as f:
+            with open(os.path.join("../Assessment/lse_exp", mat + ".json"), 'r') as f:
                 data = json.load(f)
 
         lse = LightStructureEnvironments.from_dict(data)
