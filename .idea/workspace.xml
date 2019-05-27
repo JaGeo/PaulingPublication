@@ -1,0 +1,838 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="704e16ae-e910-437a-80dc-39bb348546dc" name="Default" comment="">
+      <change beforePath="$PROJECT_DIR$/Classes_for_statistics.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PaulingRules.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PlotClasses.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/univalent_cat_radii.json" beforeDir="false" />
+    </list>
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="TRACKING_ENABLED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileEditorManager">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file leaf-file-name="test_PaulingRules.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/tests/test_PaulingRules.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="102">
+              <caret line="276" column="37" selection-start-line="276" selection-start-column="37" selection-end-line="276" selection-end-column="37" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Final_Run.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Assessment/Final_Run.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="34">
+              <caret line="2" column="4" selection-start-line="2" selection-start-column="4" selection-end-line="2" selection-end-column="43" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Final_Run_exp.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Assessment/Final_Run_exp.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="222">
+              <caret line="62" column="52" selection-end-line="101" selection-end-column="44" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Final_Run_binaries.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Assessment/Final_Run_binaries.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="120">
+              <caret line="100" column="76" selection-start-line="100" selection-start-column="64" selection-end-line="100" selection-end-column="76" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="PlotClasses.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/PaulingLibrary/PlotClasses.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="85">
+              <caret line="9" lean-forward="true" selection-start-line="9" selection-end-line="9" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Classes_for_statistics.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/PaulingLibrary/Classes_for_statistics.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="120">
+              <caret line="839" column="92" selection-start-line="839" selection-start-column="92" selection-end-line="839" selection-end-column="92" />
+              <folding>
+                <element signature="e#0#11#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="PaulingRules.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/PaulingLibrary/PaulingRules.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="120">
+              <caret line="186" column="80" selection-start-line="186" selection-start-column="71" selection-end-line="186" selection-end-column="80" />
+              <folding>
+                <element signature="e#0#11#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="test_Classes_for_statistics.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/tests/test_Classes_for_statistics.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="17">
+              <caret line="2" column="61" selection-start-line="2" selection-start-column="61" selection-end-line="2" selection-end-column="61" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="test_list4.json" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/tests/test_list4.json">
+          <provider selected="true" editor-type-id="text-editor">
+            <state>
+              <caret column="2" selection-start-column="2" selection-end-column="9" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>_get_deviation</find>
+      <find>_second_rule</find>
+      <find>_second</find>
+      <find>_plot_influence</find>
+      <find>1521322</find>
+      <find>1528963_cod</find>
+      <find>4001741_cod</find>
+      <find>1001441_cod</find>
+      <find>1001450_cod</find>
+      <find>second</find>
+      <find>Pauling1</find>
+      <find>str</find>
+      <find>restart_from_saved_structure_analyisis</find>
+      <find>Auswertung</find>
+      <find />
+      <find>experimental</find>
+      <find>MP</find>
+      <find>lse</find>
+      <find>ICSD</find>
+      <find>print(mat</find>
+      <find>plot</find>
+      <find>_fourth</find>
+      <find>maxCN</find>
+      <find>binar</find>
+      <find>Pauling5</find>
+      <find>thres</find>
+      <find>int,</find>
+      <find>Pauling4</find>
+      <find>onlybinaries</find>
+      <find>univalent</find>
+    </findStrings>
+    <replaceStrings>
+      <replace>lowerlimit</replace>
+      <replace>&quot;face&quot;</replace>
+      <replace>valCNmax</replace>
+      <replace>'O:6'</replace>
+      <replace>'T:4'</replace>
+      <replace>'A:2'</replace>
+      <replace>MP_very_symmetric</replace>
+      <replace>'L:2'</replace>
+      <replace>list_of_materials_to_investigate</replace>
+      <replace>MP</replace>
+      <replace>experimental</replace>
+      <replace>restart_from_saved_structure_analysis</replace>
+      <replace>exp</replace>
+    </replaceStrings>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/Sample_File.py" />
+        <option value="$PROJECT_DIR$/test_PaulingRules.py" />
+        <option value="$PROJECT_DIR$/Graph_Test.py" />
+        <option value="$PROJECT_DIR$/Auswertung/Function_to_get_statistics.py" />
+        <option value="$PROJECT_DIR$/Auswertung/Classes_for_statistics.py" />
+        <option value="$PROJECT_DIR$/test_run.py" />
+        <option value="$PROJECT_DIR$/PlotClasses.py" />
+        <option value="$PROJECT_DIR$/tests/test_list.json" />
+        <option value="$PROJECT_DIR$/tests/test_list2.json" />
+        <option value="$PROJECT_DIR$/tests/test_list3.json" />
+        <option value="$PROJECT_DIR$/Example/Sample_File.py" />
+        <option value="$PROJECT_DIR$/../SearchGuidoDatabase_Final/check_primitive.py" />
+        <option value="$PROJECT_DIR$/tests/test_PaulingRules.py" />
+        <option value="$PROJECT_DIR$/tests/test_Classes_for_statistics.py" />
+        <option value="$PROJECT_DIR$/PaulingRules.py" />
+        <option value="$PROJECT_DIR$/Auswertung/Should_not_be_changed/List_experimental_oxides.json" />
+        <option value="$PROJECT_DIR$/Auswertung/Final_Run_exp.py" />
+        <option value="$PROJECT_DIR$/Auswertung/Final_Run.py" />
+        <option value="$PROJECT_DIR$/Auswertung/Final_Run_binaries.py" />
+        <option value="$PROJECT_DIR$/Auswertung/Copy_lse.py" />
+        <option value="$PROJECT_DIR$/Assessment/Copy_lse.py" />
+        <option value="$PROJECT_DIR$/tests/test_plot_4thrule.py" />
+        <option value="$PROJECT_DIR$/Classes_for_statistics.py" />
+        <option value="$PROJECT_DIR$/Assessment/Final_Run_exp.py" />
+        <option value="$PROJECT_DIR$/Assessment/Final_Run.py" />
+        <option value="$PROJECT_DIR$/Assessment/Final_Run_binaries.py" />
+        <option value="$PROJECT_DIR$/PaulingLibrary/Classes_for_statistics.py" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="77" />
+    <option name="y" value="507" />
+    <option name="width" value="1295" />
+    <option name="height" value="1040" />
+  </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectView">
+    <navigator proportions="" version="1">
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="Scope" />
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="PaulingLibrary" type="b2602c69:ProjectViewProjectNode" />
+              <item name="PaulingLibrary" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../Computed_Oxides_ICSD" />
+    <property name="settings.editor.selected.configurable" value="vcs.Git" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\jageorge\Projects\AuslagerungAndererPC\PaulingLibrary\Auswertung" />
+      <recent name="C:\Users\jageorge\Projects\AuslagerungAndererPC\PaulingLibrary\tests" />
+    </key>
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="RunManager" selected="Python.Final_Run_binaries">
+    <configuration name="Copy_lse" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="PaulingLibrary" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Assessment" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Assessment/Copy_lse.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+    </configuration>
+    <configuration name="Final_Run (1)" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="PaulingLibrary" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Assessment" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Assessment/Final_Run.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+    </configuration>
+    <configuration name="Final_Run" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="PaulingLibrary" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Auswertung" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Auswertung/Final_Run.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+    </configuration>
+    <configuration name="Final_Run_binaries" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="PaulingLibrary" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Assessment" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Assessment/Final_Run_binaries.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+    </configuration>
+    <configuration name="Final_Run_exp (1)" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="PaulingLibrary" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Assessment" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Assessment/Final_Run_exp.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+    </configuration>
+    <configuration name="test_Classes_for_statistics" type="PythonConfigurationType" factoryName="Python">
+      <module name="PaulingLibrary" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="C:\ProgramData\Anaconda3\envs\new\Scripts\python.exe" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/tests/test_Classes_for_statistics.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+    </configuration>
+    <list>
+      <item itemvalue="Python.test_Classes_for_statistics" />
+      <item itemvalue="Python.Final_Run" />
+      <item itemvalue="Python.Copy_lse" />
+      <item itemvalue="Python.Final_Run (1)" />
+      <item itemvalue="Python.Final_Run_exp (1)" />
+      <item itemvalue="Python.Final_Run_binaries" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python.Final_Run_binaries" />
+        <item itemvalue="Python.Final_Run_exp (1)" />
+        <item itemvalue="Python.Final_Run (1)" />
+        <item itemvalue="Python.Copy_lse" />
+        <item itemvalue="Python.Final_Run" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="704e16ae-e910-437a-80dc-39bb348546dc" name="Default" comment="" />
+      <created>1551272492399</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1551272492399</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="TestHistory">
+    <history-entry file="Unittests_in_test_Classes_for_statistics_py - 2019.04.02 at 21h 43m 33s.xml">
+      <configuration name="Unittests in test_Classes_for_statistics.py" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Unittests_in_test_Classes_for_statistics_py - 2019.04.02 at 21h 48m 07s.xml">
+      <configuration name="Unittests in test_Classes_for_statistics.py" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Unittests_in_test_Classes_for_statistics_py - 2019.04.02 at 21h 50m 12s.xml">
+      <configuration name="Unittests in test_Classes_for_statistics.py" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Unittests_in_test_Classes_for_statistics_py - 2019.04.02 at 21h 50m 13s.xml">
+      <configuration name="Unittests in test_Classes_for_statistics.py" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Unittests_in_test_Classes_for_statistics_py - 2019.04.04 at 14h 29m 58s.xml">
+      <configuration name="Unittests in test_Classes_for_statistics.py" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Unittests_in_test_Classes_for_statistics_py - 2019.05.14 at 11h 59m 40s.xml">
+      <configuration name="Unittests in test_Classes_for_statistics.py" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Unittests_in_test_Classes_for_statistics_py - 2019.05.20 at 11h 38m 11s.xml">
+      <configuration name="Unittests in test_Classes_for_statistics.py" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Unittests_in_test_PaulingRules_py - 2019.05.23 at 14h 32m 52s.xml">
+      <configuration name="Unittests in test_PaulingRules.py" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Unittests_in_test_PaulingRules_py - 2019.05.23 at 15h 31m 29s.xml">
+      <configuration name="Unittests in test_PaulingRules.py" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Unittests_in_test_PaulingRules_py - 2019.05.23 at 17h 44m 00s.xml">
+      <configuration name="Unittests in test_PaulingRules.py" configurationId="tests" />
+    </history-entry>
+  </component>
+  <component name="TodoView" selected-index="1">
+    <todo-panel id="selected-file">
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+    <todo-panel id="all">
+      <are-packages-shown value="true" />
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="-6" y="-6" width="1293" height="733" extended-state="6" />
+    <editor active="true" />
+    <layout>
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.35135135" weight="0.23688394" />
+      <window_info anchor="bottom" id="TODO" order="6" weight="0.49334812" />
+      <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.113672495" side_tool="true" weight="0.27045074" />
+      <window_info anchor="bottom" id="Find" order="1" sideWeight="0.49841017" weight="0.32387313" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.8863275" visible="true" weight="0.27045074" />
+      <window_info anchor="bottom" id="Version Control" order="9" weight="0.32888147" />
+      <window_info anchor="bottom" id="Python Console" order="7" weight="0.32815966" />
+      <window_info id="Structure" order="1" sideWeight="0.6486486" side_tool="true" weight="0.23688394" />
+      <window_info anchor="bottom" id="Terminal" order="8" sideWeight="0.49920508" weight="0.32815966" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
+      <window_info id="Favorites" order="2" side_tool="true" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+    </layout>
+    <layout-to-restore>
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.8863275" visible="true" weight="0.17960088" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.35135135" weight="0.23688394" />
+      <window_info id="Structure" order="1" sideWeight="0.6486486" side_tool="true" weight="0.23688394" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="bottom" id="TODO" order="6" weight="0.49334812" />
+      <window_info anchor="bottom" id="Python Console" order="7" weight="0.32815966" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
+      <window_info anchor="bottom" id="Terminal" order="8" sideWeight="0.49920508" weight="0.32815966" />
+      <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.113672495" side_tool="true" weight="0.27045074" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="Version Control" order="9" weight="0.32888147" />
+      <window_info anchor="bottom" id="Find" order="1" sideWeight="0.49841017" weight="0.32387313" />
+      <window_info id="Favorites" order="2" side_tool="true" />
+    </layout-to-restore>
+  </component>
+  <component name="VcsContentAnnotationSettings">
+    <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <option name="time" value="2" />
+    </breakpoint-manager>
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/PaulingRules.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="19771">
+          <caret line="1163" selection-start-line="1163" selection-end-line="1163" />
+          <folding>
+            <element signature="e#0#11#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Graph_Test.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1343">
+          <caret line="79" selection-start-line="79" selection-end-line="79" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Auswertung/Final_Run.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="39" selection-start-column="39" selection-end-column="39" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tests/test_PaulingRules.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="4" selection-start-line="4" selection-end-line="4" selection-end-column="113" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test_run.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="12" column="27" selection-start-line="12" selection-start-column="27" selection-end-line="12" selection-end-column="27" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PaulingRules.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="19771">
+          <caret line="1163" lean-forward="true" selection-start-line="1163" selection-end-line="1163" />
+          <folding>
+            <element signature="e#0#11#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Graph_Test.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1343">
+          <caret line="79" lean-forward="true" selection-start-line="79" selection-end-line="79" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Auswertung/Final_Run.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="39" selection-start-column="39" selection-end-column="39" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tests/test_PaulingRules.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="4" lean-forward="true" selection-start-line="4" selection-end-line="4" selection-end-column="113" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test_run.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="12" column="27" lean-forward="true" selection-start-line="12" selection-start-column="27" selection-end-line="12" selection-end-column="27" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PaulingRules.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="21131">
+          <caret line="1243" column="9" selection-start-line="1243" selection-start-column="9" selection-end-line="1243" selection-end-column="9" />
+          <folding>
+            <element signature="e#0#11#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test_PaulingRules.py" />
+    <entry file="file://$PROJECT_DIR$/test_run.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="85">
+          <caret line="5" column="18" selection-start-line="5" selection-start-column="18" selection-end-line="5" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PaulingRules.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="765">
+          <caret line="45" column="98" lean-forward="true" selection-start-line="45" selection-start-column="98" selection-end-line="45" selection-end-column="98" />
+          <folding>
+            <element signature="e#0#11#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test_PaulingRules.py" />
+    <entry file="file://C:/ProgramData/Anaconda3/Lib/unittest/case.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="623">
+          <caret line="767" column="38" lean-forward="true" selection-start-line="767" selection-start-column="38" selection-end-line="767" selection-end-column="38" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Sample_File.py" />
+    <entry file="file://$PROJECT_DIR$/test_PaulingRules.py" />
+    <entry file="file://$PROJECT_DIR$/Auswertung/Classes_for_statistics.py" />
+    <entry file="file://$PROJECT_DIR$/test_run.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="153">
+          <caret line="9" column="53" selection-start-line="9" selection-start-column="53" selection-end-line="9" selection-end-column="82" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PlotClasses.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1071">
+          <caret line="67" column="21" selection-start-line="67" selection-start-column="21" selection-end-line="67" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://C:/ProgramData/Anaconda3/Lib/site-packages/matplotlib/font_manager.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="186">
+          <caret line="1239" column="18" selection-start-line="1239" selection-start-column="18" selection-end-line="1239" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Graph_Test.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="170">
+          <caret line="10" column="11" selection-start-line="10" selection-start-column="11" selection-end-line="10" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tests/test_list.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="17" selection-start-column="17" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tests/test_list2.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="12" selection-start-column="12" selection-end-column="12" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Auswertung/Should_not_be_changed/allmaterials.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="129">
+          <caret column="52971" selection-start-column="52964" selection-end-column="52971" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Auswertung/Results/Results_First_Rule_structures_fulfilling_readable.yaml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="4" column="33" lean-forward="true" selection-start-line="4" selection-start-column="33" selection-end-line="4" selection-end-column="33" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Auswertung/Results/Results_First_Rule_structural_exceptions_readable.yaml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret lean-forward="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tests/test_list3.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="11" lean-forward="true" selection-start-column="11" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../SearchGuidoDatabase_Final/check_primitive.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="238">
+          <caret line="19" column="55" lean-forward="true" selection-start-line="19" selection-start-column="55" selection-end-line="19" selection-end-column="55" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tests/test_PaulingRules.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="102">
+          <caret line="276" column="37" selection-start-line="276" selection-start-column="37" selection-end-line="276" selection-end-column="37" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Auswertung/Should_not_be_changed/List_ICSD_oxides - Kopie.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="111">
+          <caret column="12249" selection-start-column="12242" selection-end-column="12249" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Auswertung/Should_not_be_changed/List_experimental_oxides.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="233">
+          <caret column="74460" selection-end-column="74460" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Example/Sample_File.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret line="7" lean-forward="true" selection-start-line="7" selection-end-line="7" />
+          <folding>
+            <element signature="e#0#136#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/.PyCharmCE2018.1/system/python_stubs/-168686529/builtins.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="118">
+          <caret line="488" selection-start-line="488" selection-end-line="489" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Auswertung/Final_Run_exp.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="21" selection-start-line="20" selection-end-line="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Auswertung/Final_Run.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="102">
+          <caret line="6" selection-start-line="4" selection-end-line="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Auswertung/Final_Run_binaries.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="601">
+          <caret line="43" selection-start-line="43" selection-end-line="43" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Auswertung/Copy_lse.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="170">
+          <caret line="10" column="47" lean-forward="true" selection-start-line="10" selection-start-column="47" selection-end-line="10" selection-end-column="47" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Assessment/Copy_lse.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="148">
+          <caret line="9" column="25" selection-start-line="9" selection-start-column="16" selection-end-line="9" selection-end-column="25" />
+          <folding>
+            <element signature="e#0#11#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PaulingRules.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="308">
+          <caret line="1365" selection-start-line="1365" selection-end-line="1365" />
+          <folding>
+            <element signature="e#0#11#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tests/test_list4.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="2" selection-start-column="2" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Classes_for_statistics.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="328">
+          <caret line="1893" selection-start-line="1893" selection-end-line="1893" />
+          <folding>
+            <element signature="e#0#11#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Assessment/Final_Run_exp.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="222">
+          <caret line="62" column="52" selection-end-line="101" selection-end-column="44" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Assessment/Final_Run.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="34">
+          <caret line="2" column="4" selection-start-line="2" selection-start-column="4" selection-end-line="2" selection-end-column="43" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tests/test_plot_4thrule.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="221">
+          <caret line="13" selection-start-line="13" selection-end-line="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Assessment/Final_Run_binaries.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="120">
+          <caret line="100" column="76" selection-start-line="100" selection-start-column="64" selection-end-line="100" selection-end-column="76" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PaulingLibrary/PaulingRules.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="120">
+          <caret line="186" column="80" selection-start-line="186" selection-start-column="71" selection-end-line="186" selection-end-column="80" />
+          <folding>
+            <element signature="e#0#11#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tests/test_Classes_for_statistics.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="2" column="61" selection-start-line="2" selection-start-column="61" selection-end-line="2" selection-end-column="61" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PaulingLibrary/PlotClasses.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="85">
+          <caret line="9" lean-forward="true" selection-start-line="9" selection-end-line="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PaulingLibrary/Classes_for_statistics.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="120">
+          <caret line="839" column="92" selection-start-line="839" selection-start-column="92" selection-end-line="839" selection-end-column="92" />
+          <folding>
+            <element signature="e#0#11#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+  </component>
+</project>
