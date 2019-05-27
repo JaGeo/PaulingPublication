@@ -1,0 +1,1 @@
+{"connection_corners": [10, 10, 6, 6, 6, 6, 12], "connection_edges": [4, 4, 2, 2, 2, 2, 0], "connection_faces": [3, 3, 0, 0, 0, 0, 4], "catenv": ["PA:10", "PA:10", "T:4", "T:4", "T:4", "T:4", "DDPN:8"], "catid": [["K", 1], ["K", 1], ["P", 5], ["P", 5], ["P", 5], ["P", 5], ["Sr", 2]], "uniquecat": [["K", 1], ["P", 5], ["Sr", 2]]}

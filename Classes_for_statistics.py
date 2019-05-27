@@ -1,41 +1,34 @@
-from PaulingRules import Pauling0, Pauling1, Pauling2, Pauling3, Pauling4, Pauling5, RuleCannotBeAnalyzedError, \
-    FrequencyEnvironmentPauling1, get_entropy_from_frequencies, get_most_frequent_environment, \
-    get_mean_CN_from_frequencies
-from pymatgen.analysis.chemenv.coordination_environments.structure_environments import LightStructureEnvironments
-from PlotClasses import PlotterPSE
-from pymatgen.analysis.structure_matcher import StructureMatcher, FrameworkComparator
 import json
-import scipy as sp
 import numpy as np
-from collections import OrderedDict
-from collections import Counter
+from collections import OrderedDict, Counter
 import matplotlib
 import matplotlib.pyplot as plt
 import os
-from pymatgen.analysis.chemenv.utils.chemenv_errors import NeighborsNotComputedChemenvError
-from pymatgen.analysis.chemenv.utils.scripts_utils import draw_cg
-from pymatgen.analysis.chemenv.coordination_environments.coordination_geometries import AllCoordinationGeometries
-from pymatgen.core.sites import PeriodicSite
-from pymatgen.vis.structure_vtk import StructureVis
-from yaml import load, dump
-from pymatgen.core.periodic_table import Element
+from yaml import dump
+import csv
 
 try:
     from yaml import CLoader as Loader, CDumper as Dumper
 except ImportError:
     from yaml import Loader, Dumper
 
-import csv
+from pymatgen.analysis.chemenv.coordination_environments.structure_environments import LightStructureEnvironments
+from pymatgen.analysis.chemenv.utils.chemenv_errors import NeighborsNotComputedChemenvError
+from pymatgen.analysis.chemenv.utils.scripts_utils import draw_cg
+from pymatgen.analysis.chemenv.coordination_environments.coordination_geometries import AllCoordinationGeometries
+from pymatgen.core.sites import PeriodicSite
+from pymatgen.vis.structure_vtk import StructureVis
+from pymatgen.analysis.structure_matcher import StructureMatcher, FrameworkComparator
+from pymatgen.core.periodic_table import Element
+
+from PaulingRules import Pauling0, Pauling1, Pauling2, Pauling3, Pauling4, Pauling5, RuleCannotBeAnalyzedError, \
+    FrequencyEnvironmentPauling1, get_entropy_from_frequencies, get_most_frequent_environment, \
+    get_mean_CN_from_frequencies
+from PlotClasses import PlotterPSE
 
 
-# TODO: cover  24-25, 125-139, 170-172, 182-189, 303-304, 339, 343-346, 371, 461-469, 475-516, 572-576, 636-640, 664, 675-695, 727-729, 832-835, 838-842, 932-947, 1034-1039, 1045-1049, 1101-1134, 1138-1171, 1207-1208, 1295-1298, 1302-1306, 1552-1616, 1658-1660, 1672-1676, 1781-1793, 1856-1866, 1882, 1970
-# TODO: discard non primitive structures, discard theoretical structures, update energy above hull for structures and discard structures not below or equal to 0.025 eV
 
-# TODO: Get structures that are very symmetric
 
-# TODO: include an option to do the calculations for experimental structures based on the ICSD and so on. -> Search database of Guido.
-
-# TODO: cohp NaFeO2 -> have a look at metal-metal interactions, make sure the structural description is okay
 
 class OverAllAnalysis:
 
@@ -78,7 +71,7 @@ class OverAllAnalysis:
         """
         # TODO: test this part
         if source == 'MP':
-            with open("../Auswertung/Should_not_be_changed/allmaterials.json", "r") as f:
+            with open("../Assessment/Should_not_be_changed/allmaterials.json", "r") as f:
                 list_compound_dict = json.load(f)
                 list_compound_dict["is_clear_compounds"] = list(set(list_compound_dict["is_clear_compounds"]))
                 if not onlybinaries:
@@ -95,7 +88,7 @@ class OverAllAnalysis:
 
         elif source == 'MP_very_symmetric':
             with open(
-                    "../Auswertung/Should_not_be_changed/ce_fraction_0.95plus_csm_0.1plus_eabovehull0.025plus_discardS1.json",
+                    "../Assessment/Should_not_be_changed/ce_fraction_0.95plus_csm_0.1plus_eabovehull0.025plus_discardS1.json",
                     "r") as f:
                 list_compound_dict = json.load(f)
                 if not onlybinaries:
@@ -127,7 +120,7 @@ class OverAllAnalysis:
         elif source == 'experimental':
             # TODO: update
             list_compound = self._get_precomputed_results(
-                "../Auswertung/Should_not_be_changed/List_experimental_oxides.json")
+                "../Assessment/Should_not_be_changed/List_experimental_oxides.json")
             if not onlybinaries:
                 if start_material is None and stop_material is None:
                     list_compound = list_compound
@@ -171,10 +164,10 @@ class OverAllAnalysis:
         :return: LightStructureEnvironments
         """
         if source == 'MP' or source == 'MP_very_symmetric' or source == 'my_own_list':
-            with open(os.path.join("../../DB_chem_env/1st_rule", mat + ".json"), 'r') as f:
+            with open(os.path.join("../lse_MP", mat + ".json"), 'r') as f:
                 data = json.load(f)
         elif source == 'experimental':
-            with open(os.path.join("../../SearchGuidoDatabase_Final/lse_primitive_cell", mat + ".json"), 'r') as f:
+            with open(os.path.join("../lse_exp", mat + ".json"), 'r') as f:
                 data = json.load(f)
 
         lse = LightStructureEnvironments.from_dict(data)
@@ -1065,7 +1058,7 @@ class Pauling2OverAllAnalysis(OverAllAnalysis):
         self.additional_info = {}
         # valence dependency can be introduced later
         for mat in list_mat:
-            print(mat)
+            #print(mat)
 
             lse = self._get_lse_from_folder(mat, source=self.source)
             pauling2 = Pauling2(lse=lse)
@@ -1351,7 +1344,7 @@ class Pauling3OverAllAnalysis(OverAllAnalysis):
         self.All_Details = {}
 
         for mat in list_mat:
-            print(mat)
+            #print(mat)
             lse = self._get_lse_from_folder(mat, source=self.source)
             pauling0 = Pauling0(lse)
             pauling1_limit = FrequencyEnvironmentPauling1(lse=lse)
@@ -1970,7 +1963,7 @@ class Pauling5OverAllAnalysis(OverAllAnalysis):
         # valence dependency can be introduced later
         # counter_not_primitive=0
         for mat in list_mat:
-            print(mat)
+            #print(mat)
             lse = self._get_lse_from_folder(mat, source=self.source)
             # prim_struct=lse.structure.get_primitive_structure()
             # print(prim_struct.composition)

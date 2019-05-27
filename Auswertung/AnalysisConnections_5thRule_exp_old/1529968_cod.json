@@ -1,1 +1,0 @@
-{"connection_corners": [12, 12, 12, 12, 20, 20, 4, 4], "connection_edges": [8, 8, 8, 8, 2, 2, 10, 10], "connection_faces": [6, 6, 6, 6, 8, 8, 0, 0], "catenv": ["DD:8", "DD:8", "DD:8", "DD:8", "DD:8", "DD:8", "T:4", "T:4"], "catid": [["Li", 1], ["Li", 1], ["Li", 1], ["Li", 1], ["Ca", 2], ["Ca", 2], ["Si", 4], ["Si", 4]], "uniquecat": [["Li", 1], ["Ca", 2], ["Si", 4]]}

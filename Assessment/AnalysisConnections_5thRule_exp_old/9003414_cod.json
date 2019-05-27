@@ -1,0 +1,1 @@
+{"connection_corners": [4, 4, 8, 8, 6, 6, 6, 6], "connection_edges": [13, 13, 5, 5, 3, 3, 3, 3], "connection_faces": [0, 0, 0, 0, 0, 0, 0, 0], "catenv": ["SBSA:10", "SBSA:10", "O:6", "O:6", "T:4", "T:4", "T:4", "T:4"], "catid": [["Ca", 2], ["Ca", 2], ["Ni", 2], ["Ni", 2], ["Si", 4], ["Si", 4], ["Si", 4], ["Si", 4]], "uniquecat": [["Ca", 2], ["Ni", 2], ["Si", 4]]}
