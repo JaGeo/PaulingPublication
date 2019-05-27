@@ -1,4 +1,4 @@
-# PaulingLibrary
+# Github Repositorium to Reproduce the Assessment of the Pauling rules
 
 This is the github repositorium for our publication "" which assesses the Pauling rules on around 5000 experimental oxides from the [Materials Project](http://materialsproject.org/) and around 5000 experimental oxides from the [Crystal Open Database](http://www.crystallography.net/cod/). 
 
