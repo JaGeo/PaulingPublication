@@ -1,1 +1,0 @@
-{"connection_corners": [6, 6, 5, 5, 4, 4, 8, 8], "connection_edges": [6, 6, 7, 7, 3, 3, 2, 2], "connection_faces": [0, 0, 0, 0, 4, 4, 7, 7], "catenv": ["O:6", "O:6", "O:6", "O:6", "O:6", "O:6", "BS_2:10", "BS_2:10"], "catid": [["Ti", 4], ["Ti", 4], ["Ti", 3], ["Ti", 3], ["Ti", 4], ["Ti", 4], ["Ba", 2], ["Ba", 2]], "uniquecat": [["Ti", 4], ["Ti", 3], ["Ba", 2]]}
