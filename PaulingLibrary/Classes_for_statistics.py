@@ -2220,7 +2220,7 @@ class AllPaulingOverAllAnalysis(OverAllAnalysis):
         # print(self.list_to_remove)
         for mat in list_mat:
             lse = self._get_lse_from_folder(mat, source=self.source)
-            pauling1 = Pauling1(lse, filenameradii='../univalent_cat_radii.json', onlylowerlimit=False)
+            pauling1 = Pauling1(lse, filenameradii='../Assessment/Should_not_be_changed/univalent_cat_radii.json', onlylowerlimit=False)
             pauling2 = Pauling2(lse)
             pauling3 = Pauling3()
             pauling4 = Pauling4()

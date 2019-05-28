@@ -43,37 +43,37 @@ class TestOverallAnalysis(unittest.TestCase):
         self.assertDictEqual(dict1, {'Ga': ["O:6", "O:6", "O:6", "O:6"], 'Sn': ["T:4", "T:4"], 'Fe': ["T:4"]})
 
     def test_get_similar_structures(self):
-        self.assertDictEqual(dict((self.overallanalysis._get_similar_structures(["mp-7000", "mp-1788", "mp-553432"],
+        self.assertDictEqual(dict((self.overallanalysis._get_similar_structures(["mp-7000", "mp-1788", "mp-553432_only_for_testing"],
                                                                                 start_from_Matching=True,
                                                                                 save_to_file=False)))[
-                                 "structure_matching"], {'mp-7000': ['mp-7000', 'mp-553432'], 'mp-1788': ['mp-1788']})
+                                 "structure_matching"], {'mp-7000': ['mp-7000', 'mp-553432_only_for_testing'], 'mp-1788': ['mp-1788']})
 
         self.assertDictEqual(dict(
-            self.overallanalysis._get_similar_structures(["mp-7000", "mp-1788", "mp-553432"], save_to_file=False)[
-                "structure_matching"]), {'mp-7000': ['mp-7000', 'mp-553432'], 'mp-1788': ['mp-1788']})
+            self.overallanalysis._get_similar_structures(["mp-7000", "mp-1788", "mp-553432_only_for_testing"], save_to_file=False)[
+                "structure_matching"]), {'mp-7000': ['mp-7000', 'mp-553432_only_for_testing'], 'mp-1788': ['mp-1788']})
         self.assertDictEqual(dict(
-            self.overallanalysis._get_similar_structures(["mp-1788", "mp-553432"], save_to_file=False)[
-                "structure_matching"]), {'mp-553432': ['mp-553432'], 'mp-1788': ['mp-1788']})
+            self.overallanalysis._get_similar_structures(["mp-1788", "mp-553432_only_for_testing"], save_to_file=False)[
+                "structure_matching"]), {'mp-553432_only_for_testing': ['mp-553432_only_for_testing'], 'mp-1788': ['mp-1788']})
 
         self.assertDictEqual(dict(
-            self.overallanalysis._get_similar_structures(["mp-7000", "mp-1788", "mp-7000", "mp-553432"],
+            self.overallanalysis._get_similar_structures(["mp-7000", "mp-1788", "mp-7000", "mp-553432_only_for_testing"],
                                                          save_to_file=False)["structure_matching"]),
-            {'mp-7000': ['mp-7000', 'mp-553432'], 'mp-1788': ['mp-1788']})
+            {'mp-7000': ['mp-7000', 'mp-553432_only_for_testing'], 'mp-1788': ['mp-1788']})
         outfile_path = tempfile.mkstemp(suffix='.json')[1]
         self.overallanalysis._get_similar_structures(["mp-7000", "mp-1788", "mp-7000"], save_to_file=True,
                                                      path_to_save=outfile_path)
         self.assertDictEqual(
-            self.overallanalysis._get_similar_structures(["mp-553432"], save_to_file=True, path_to_save=outfile_path,
+            self.overallanalysis._get_similar_structures(["mp-553432_only_for_testing"], save_to_file=True, path_to_save=outfile_path,
                                                          restart_from_matching=True),
-            {'list_mat_id': ['mp-7000', 'mp-553432', 'mp-1788'],
-             'structure_matching': OrderedDict([('mp-7000', ['mp-7000', 'mp-553432']), ('mp-1788', ['mp-1788'])]),
-             'additional_info': {'mp-7000': 'SiO2', 'mp-1788': 'As2O5', 'mp-553432': 'TiO2'}})
+            {'list_mat_id': ['mp-7000', 'mp-553432_only_for_testing', 'mp-1788'],
+             'structure_matching': OrderedDict([('mp-7000', ['mp-7000', 'mp-553432_only_for_testing']), ('mp-1788', ['mp-1788'])]),
+             'additional_info': {'mp-7000': 'SiO2', 'mp-1788': 'As2O5', 'mp-553432_only_for_testing': 'TiO2'}})
         self.assertDictEqual(
-            self.overallanalysis._get_similar_structures(["mp-7000", "mp-1788", "mp-7000", "mp-553432"],
+            self.overallanalysis._get_similar_structures(["mp-7000", "mp-1788", "mp-7000", "mp-553432_only_for_testing"],
                                                          fetch_results_only=True, path_to_save=outfile_path),
-            {'list_mat_id': ['mp-7000', 'mp-553432', 'mp-1788'],
-             'structure_matching': OrderedDict([('mp-7000', ['mp-7000', 'mp-553432']), ('mp-1788', ['mp-1788'])]),
-             'additional_info': {'mp-7000': 'SiO2', 'mp-1788': 'As2O5', 'mp-553432': 'TiO2'}})
+            {'list_mat_id': ['mp-7000', 'mp-553432_only_for_testing', 'mp-1788'],
+             'structure_matching': OrderedDict([('mp-7000', ['mp-7000', 'mp-553432_only_for_testing']), ('mp-1788', ['mp-1788'])]),
+             'additional_info': {'mp-7000': 'SiO2', 'mp-1788': 'As2O5', 'mp-553432_only_for_testing': 'TiO2'}})
         # auch das restarten sollte getestet werden
 
     def test_get_list_materials(self):
