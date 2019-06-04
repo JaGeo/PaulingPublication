@@ -912,25 +912,27 @@ class TestAllPaulingOverAllAnalysis(unittest.TestCase):
                              start_from_results=False, save_result_data=False,
                              restart_from_saved_structure_analysis=False, save_structure_analysis=False,
                              path_to_save='', start_material=None, stop_material=None,
-                             threshold_remove_elements=0.95)
+                             threshold_remove_elements=0.95,compute_elementwise=True)
 
         self.assertListEqual(self.paulingall2.structures_cannot_be_evaluated,
                              [])
         self.assertListEqual(self.paulingall2.structures_fulfillingrule, ['mp-21947'])
         self.assertListEqual(self.paulingall2.structures_exceptions, [])
-
+        self.assertDictEqual(self.paulingall2.Plot_PSE,{'S': [1, 0], 'Ce': [1, 0]})
         self.paulingall.run(remove_elements_low_entropy=False, start_from_connections=False,
                             save_connections=False, connections_folder34='AnalysisConnections',
                             connections_folder5='AnalysisConnections_5thRule',
                             start_from_results=False, save_result_data=False,
                             restart_from_saved_structure_analysis=False, save_structure_analysis=False,
                             path_to_save='', start_material=None, stop_material=None,
-                            threshold_remove_elements=0.95)
+                            threshold_remove_elements=0.95,compute_elementwise=True)
 
         self.assertListEqual(self.paulingall.structures_cannot_be_evaluated,
                              ['mp-7000', 'mp-19359', 'mp-306', 'mp-2605'])
         self.assertListEqual(self.paulingall.structures_fulfillingrule, [])
         self.assertListEqual(self.paulingall.structures_exceptions, ['mp-1788', 'mp-886'])
+
+        self.assertDictEqual(self.paulingall.Plot_PSE,{'As': [0, 1], 'Ga': [0, 1]})
 
         self.paulingall.run(remove_elements_low_entropy=True, start_from_connections=False,
                             save_connections=False, connections_folder34='AnalysisConnections',
@@ -1203,8 +1205,8 @@ class TestAllPaulingOverAllAnalysis(unittest.TestCase):
         if os.path.isdir("tmp_folder2"):
             os.rmdir("tmp_folder2")
 
-# #AllPaulingOverAllAnalysis_Final_SummaryTest
-#
+#AllPaulingOverAllAnalysis_Final_SummaryTest
+
 
 class AllPaulingOverAllAnalysis_Final_SummaryTest(unittest.TestCase):
     def setUp(self):

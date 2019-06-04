@@ -1047,7 +1047,8 @@ class Pauling2OverAllAnalysis(OverAllAnalysis):
         """
         list_mat = self._get_list_materials(source=self.source, onlybinaries=self.onlybinaries,
                                             start_material=self.start_material, stop_material=self.stop_material)
-
+        #print("Number of Materials")
+        #print(len(list_mat))
         self.structures_fulfillingrule = []
         self.structures_exceptions = []
         self.structures_cannot_be_evaluated = []
@@ -2052,7 +2053,7 @@ class AllPaulingOverAllAnalysis(OverAllAnalysis):
             path_to_save='Results/Results_AllRules.json', threshold_remove_elements=0.95, start_material=None,
             stop_material=None, adapt_first_fourth_and_fifth_rules=False, ignore_first_rule=True,
             ignore_second_rule=False, ignore_third_rule=False, ignore_fourth_rule=False, ignore_fifth_rule=False,
-            remove_structures_with_CN_larger_8=False):
+            remove_structures_with_CN_larger_8=False,compute_elementwise=False):
         """
         will run the overall analysis
         :param remove_elements_low_entropy: will remove the elements with low shannon entropy
@@ -2075,6 +2076,7 @@ class AllPaulingOverAllAnalysis(OverAllAnalysis):
         :param ignore_fourth_rule: if true, will skip analysis of fourth rule
         :param ignore_fifth_rule: if true, will skip analysis of fifth rule
         :param remove_structures_with_CN_larger_8: if true, will remove all structures with CN>8
+        :param will compute elementwise fulfillment of the rule even if plotting is switched off
         :return:
         """
 
@@ -2166,6 +2168,32 @@ class AllPaulingOverAllAnalysis(OverAllAnalysis):
             print(len(self.structures_exceptions))
             print("Fulfilling")
             print(len(self.structures_fulfillingrule))
+
+        self.Plot_PSE={}
+        #Analyze the compositions and compute the fulfillment per element here
+        #TODO: test this part in test code
+        if self.plot_element_dependend_analysis or compute_elementwise:
+            for mat in self.structures_fulfillingrule:
+                lse=self._get_lse_from_folder(mat,source=self.source)
+                elements=lse.structure.composition.elements
+                #print(elements)
+                for element in elements:
+                    if str(element)!='O':
+                        if not str(element) in self.Plot_PSE:
+                            self.Plot_PSE[str(element)]=[0,0]
+                        self.Plot_PSE[str(element)][0]+=1
+            for mat in self.structures_exceptions:
+                lse = self._get_lse_from_folder(mat, source=self.source)
+                elements = lse.structure.composition.elements
+                #print(elements)
+                for element in elements:
+                    if str(element) != 'O':
+                        if not str(element) in self.Plot_PSE:
+                            self.Plot_PSE[str(element)] = [0, 0]
+                        self.Plot_PSE[str(element)][1] += 1
+        if self.plot_element_dependend_analysis:
+            plot=self._plot_PSE(self.Plot_PSE,lowest_number_of_environments_considered=25,lowerlimit=0.0,upperlimit=0.3)
+            plot.show()
 
         if self.analyse_structures:
             dict_similarstructures_exceptions = self._get_similar_structures(self.structures_exceptions,
@@ -2264,16 +2292,6 @@ class AllPaulingOverAllAnalysis(OverAllAnalysis):
                     else:
                         result5 = True
 
-                    # print("Result 1")
-                    # print(result1)
-                    # print("Result 2")
-                    # print(result2)
-                    # print("Result 3")
-                    # print(result3)
-                    # print("Result 4")
-                    # print(result4)
-                    # print("Result 5")
-                    # print(result5)
 
                     if result1 and result2 and result3 and result4 and result5:
                         self.structures_fulfillingrule.append(mat)
@@ -2324,17 +2342,6 @@ class AllPaulingOverAllAnalysis(OverAllAnalysis):
                     else:
                         result5 = True
 
-                    # print(mat)
-                    # print("Result 1")
-                    # print(result1)
-                    # print("Result 2")
-                    # print(result2)
-                    # print("Result 3")
-                    # print(result3)
-                    # print("Result 4")
-                    # print(result4)
-                    # print("Result 5")
-                    # print(result5)
 
                     if result1 and result2 and result3 and result4 and result5:
                         self.structures_fulfillingrule.append(mat)
@@ -2344,22 +2351,6 @@ class AllPaulingOverAllAnalysis(OverAllAnalysis):
                 except RuleCannotBeAnalyzedError:
                     self.structures_cannot_be_evaluated.append(mat)
 
-            # How to analyse elements in more detail?s
-
-            #
-            # try:
-            #     Details = pauling5.get_details(leave_out_list=self.list_to_remove)
-            #     New_Details = self._reformat_details_elementdependency(Details)
-            #     # print(New_Details)
-            #
-            #     self._add_dict_cat_dependency(self.Plot_PSE_DICT, New_Details)
-            #     # !!!!! not working correcntly
-            #     print("Problem")
-            #     self._add_dict_cat_dependency(self.present_env, pauling0._get_cations_in_structure(),
-            #                                   number_of_elements_to_add=1)
-            # #
-            # except RuleCannotBeAnalyzedError:
-            #     print("Exception")
 
 
 class AllPaulingOverAllAnalysis_Final_Summary(OverAllAnalysis):
@@ -2404,7 +2395,7 @@ class AllPaulingOverAllAnalysis_Final_Summary(OverAllAnalysis):
             self.means_CN_all = []
             self.means_CN_smaller9 = []
             newclass = AllPaulingOverAllAnalysis(source=self.source, onlybinaries=self.onlybinaries,
-                                                 analyse_structures=False, use_prematching=True,
+                                                 analyse_structures=False, use_prematching=True,plot_element_dependend_analysis=self.plot_element_dependend_analysis,
                                                  list_of_materials_to_investigate=self.list_of_materials_to_investigate)
 
             # all rules
