@@ -2045,6 +2045,8 @@ class AllPaulingOverAllAnalysis(OverAllAnalysis):
     Class to analyse all 5 Pauling rules
     """
 
+    #TODO: overwrite init to avoid confusions
+
     def run(self, remove_elements_low_entropy=False, start_from_connections=False,
             save_connections=True, connections_folder34='AnalysisConnections',
             connections_folder5='AnalysisConnections_5thRule',
@@ -2192,7 +2194,7 @@ class AllPaulingOverAllAnalysis(OverAllAnalysis):
                             self.Plot_PSE[str(element)] = [0, 0]
                         self.Plot_PSE[str(element)][1] += 1
         if self.plot_element_dependend_analysis:
-            plot=self._plot_PSE(self.Plot_PSE,lowest_number_of_environments_considered=25,lowerlimit=0.0,upperlimit=0.3)
+            plot=self._plot_PSE(self.Plot_PSE,lowest_number_of_environments_considered=self.lowest_number_environments_for_plot,lowerlimit=self.lower_limit_plot,upperlimit=self.upper_limit_plot)
             plot.show()
 
         if self.analyse_structures:
@@ -2357,6 +2359,8 @@ class AllPaulingOverAllAnalysis_Final_Summary(OverAllAnalysis):
     """
     Class to analyse 4 rules and the dependency of each rule on the rule fulfillment
     """
+
+    # TODO: overwrite init to avoid confusions
 
     def run(self, remove_elements_low_entropy=False, start_from_connections=False,
             save_connections=True, connections_folder34='AnalysisConnections',

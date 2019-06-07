@@ -42,7 +42,7 @@ newclass.run(start_from_connections=True, save_connections=True, connections_fol
 
 print("Analysis of fourth rule")
 newclass = Pauling4OverAllAnalysis(source='experimental', onlybinaries=False, plot_element_dependend_analysis=True,
-                                   lowest_number_environments_for_plot=50, lower_limit_plot=0.8, upper_limit_plot=1.0,
+                                   lowest_number_environments_for_plot=50, lower_limit_plot=0.7, upper_limit_plot=1.0,
                                    analyse_structures=False, use_prematching=True)
 newclass.run(show_plot=True, start_from_connections=True, save_connections=True,
              connections_folder='AnalysisConnections_exp',
@@ -74,7 +74,7 @@ newclass.run(show_plot=True, remove_elements_low_entropy=True, threshold_remove_
 
 print("Analyse Pauling rules 2-5 and print percentage of structures fulfilling the rules")
 newclass = AllPaulingOverAllAnalysis(source='experimental', onlybinaries=False, plot_element_dependend_analysis=True,
-                                     lowest_number_environments_for_plot=50, lower_limit_plot=0.6, upper_limit_plot=1.0,
+                                     lowest_number_environments_for_plot=50, lower_limit_plot=0.0, upper_limit_plot=0.3,
                                      analyse_structures=False, use_prematching=True)
 newclass.run(remove_elements_low_entropy=False, start_from_connections=True,
              save_connections=True, connections_folder34='AnalysisConnections_exp',
@@ -90,7 +90,7 @@ print(
     "Analyse Pauling rules 2-5 and test the influence of each of the rules. Adapt the criteria for structures to assess the fourth and fifth rule.")
 
 newclass = AllPaulingOverAllAnalysis_Final_Summary(source='experimental', onlybinaries=False,
-                                                   plot_element_dependend_analysis=True,
+                                                   plot_element_dependend_analysis=False,
                                                    lowest_number_environments_for_plot=50, lower_limit_plot=0.6,
                                                    upper_limit_plot=1.0,
                                                    analyse_structures=False, use_prematching=True)
@@ -100,3 +100,4 @@ newclass.run(remove_elements_low_entropy=False, start_from_connections=True, sav
              start_from_results=False, save_result_data=True,
              path_to_save='Results/Results_AllRules_final_plot_exp.json', start_material=None, stop_material=None,
              threshold_remove_elements=0.90)
+
