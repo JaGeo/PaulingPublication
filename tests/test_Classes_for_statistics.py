@@ -1,6 +1,6 @@
 from Classes_for_statistics import OverAllAnalysis, Pauling1Frequency, Pauling1Entropy, Pauling1OverAllAnalysis, \
     Pauling2OverAllAnalysis, Pauling3OverAllAnalysis, Pauling4OverAllAnalysis, Pauling5OverAllAnalysis, \
-    AllPaulingOverAllAnalysis, Pauling1MeanCoordinationNumber, AllPaulingOverAllAnalysis_Final_Summary
+    AllPaulingOverAllAnalysis, Pauling1MeanCoordinationNumber, AllPaulingOverAllAnalysis_Final_Summary, HowMany
 from collections import OrderedDict
 import unittest
 import os
@@ -43,36 +43,44 @@ class TestOverallAnalysis(unittest.TestCase):
         self.assertDictEqual(dict1, {'Ga': ["O:6", "O:6", "O:6", "O:6"], 'Sn': ["T:4", "T:4"], 'Fe': ["T:4"]})
 
     def test_get_similar_structures(self):
-        self.assertDictEqual(dict((self.overallanalysis._get_similar_structures(["mp-7000", "mp-1788", "mp-553432_only_for_testing"],
-                                                                                start_from_Matching=True,
-                                                                                save_to_file=False)))[
-                                 "structure_matching"], {'mp-7000': ['mp-7000', 'mp-553432_only_for_testing'], 'mp-1788': ['mp-1788']})
+        self.assertDictEqual(
+            dict((self.overallanalysis._get_similar_structures(["mp-7000", "mp-1788", "mp-553432_only_for_testing"],
+                                                               start_from_Matching=True,
+                                                               save_to_file=False)))[
+                "structure_matching"], {'mp-7000': ['mp-7000', 'mp-553432_only_for_testing'], 'mp-1788': ['mp-1788']})
 
         self.assertDictEqual(dict(
-            self.overallanalysis._get_similar_structures(["mp-7000", "mp-1788", "mp-553432_only_for_testing"], save_to_file=False)[
+            self.overallanalysis._get_similar_structures(["mp-7000", "mp-1788", "mp-553432_only_for_testing"],
+                                                         save_to_file=False)[
                 "structure_matching"]), {'mp-7000': ['mp-7000', 'mp-553432_only_for_testing'], 'mp-1788': ['mp-1788']})
         self.assertDictEqual(dict(
             self.overallanalysis._get_similar_structures(["mp-1788", "mp-553432_only_for_testing"], save_to_file=False)[
-                "structure_matching"]), {'mp-553432_only_for_testing': ['mp-553432_only_for_testing'], 'mp-1788': ['mp-1788']})
+                "structure_matching"]),
+            {'mp-553432_only_for_testing': ['mp-553432_only_for_testing'], 'mp-1788': ['mp-1788']})
 
         self.assertDictEqual(dict(
-            self.overallanalysis._get_similar_structures(["mp-7000", "mp-1788", "mp-7000", "mp-553432_only_for_testing"],
-                                                         save_to_file=False)["structure_matching"]),
+            self.overallanalysis._get_similar_structures(
+                ["mp-7000", "mp-1788", "mp-7000", "mp-553432_only_for_testing"],
+                save_to_file=False)["structure_matching"]),
             {'mp-7000': ['mp-7000', 'mp-553432_only_for_testing'], 'mp-1788': ['mp-1788']})
         outfile_path = tempfile.mkstemp(suffix='.json')[1]
         self.overallanalysis._get_similar_structures(["mp-7000", "mp-1788", "mp-7000"], save_to_file=True,
                                                      path_to_save=outfile_path)
         self.assertDictEqual(
-            self.overallanalysis._get_similar_structures(["mp-553432_only_for_testing"], save_to_file=True, path_to_save=outfile_path,
+            self.overallanalysis._get_similar_structures(["mp-553432_only_for_testing"], save_to_file=True,
+                                                         path_to_save=outfile_path,
                                                          restart_from_matching=True),
             {'list_mat_id': ['mp-7000', 'mp-553432_only_for_testing', 'mp-1788'],
-             'structure_matching': OrderedDict([('mp-7000', ['mp-7000', 'mp-553432_only_for_testing']), ('mp-1788', ['mp-1788'])]),
+             'structure_matching': OrderedDict(
+                 [('mp-7000', ['mp-7000', 'mp-553432_only_for_testing']), ('mp-1788', ['mp-1788'])]),
              'additional_info': {'mp-7000': 'SiO2', 'mp-1788': 'As2O5', 'mp-553432_only_for_testing': 'TiO2'}})
         self.assertDictEqual(
-            self.overallanalysis._get_similar_structures(["mp-7000", "mp-1788", "mp-7000", "mp-553432_only_for_testing"],
-                                                         fetch_results_only=True, path_to_save=outfile_path),
+            self.overallanalysis._get_similar_structures(
+                ["mp-7000", "mp-1788", "mp-7000", "mp-553432_only_for_testing"],
+                fetch_results_only=True, path_to_save=outfile_path),
             {'list_mat_id': ['mp-7000', 'mp-553432_only_for_testing', 'mp-1788'],
-             'structure_matching': OrderedDict([('mp-7000', ['mp-7000', 'mp-553432_only_for_testing']), ('mp-1788', ['mp-1788'])]),
+             'structure_matching': OrderedDict(
+                 [('mp-7000', ['mp-7000', 'mp-553432_only_for_testing']), ('mp-1788', ['mp-1788'])]),
              'additional_info': {'mp-7000': 'SiO2', 'mp-1788': 'As2O5', 'mp-553432_only_for_testing': 'TiO2'}})
         # auch das restarten sollte getestet werden
 
@@ -199,6 +207,28 @@ class TestOverallAnalysis(unittest.TestCase):
 
 
 #
+class TestHowMany(unittest.TestCase):
+
+    def setUp(self):
+        self.howmany_normal = HowMany(source='my_own_list', onlybinaries=False,
+                                      plot_element_dependend_analysis=False,
+                                      list_of_materials_to_investigate='test_list.json')
+
+    def test_run(self):
+        self.howmany_normal.run(save_result_data=False, start_from_results=False, path_to_save='')
+        self.assertDictEqual(self.howmany_normal.present_env,
+                             {'As': 8, 'Si': 3, 'Na': 1, 'Fe': 1, 'B': 6, 'Ga': 4, 'Ca': 1})
+
+        self.howmany_normal.run(save_result_data=True, start_from_results=False, path_to_save='Results.json')
+        self.howmany_normal.run(save_result_data=False, start_from_results=True, path_to_save='Results.json')
+        self.assertDictEqual(self.howmany_normal.present_env,
+                             {'As': 8, 'Si': 3, 'Na': 1, 'Fe': 1, 'B': 6, 'Ga': 4, 'Ca': 1})
+
+    def tearDown(self):
+        if os.path.exists("Results.json"):
+            os.remove("Results.json")
+
+
 class TestPauling1Frequency(unittest.TestCase):
 
     def setUp(self):
@@ -369,11 +399,6 @@ class TestPauling1MeanCN(unittest.TestCase):
     def tearDown(self):
         if os.path.exists("Results.json"):
             os.remove("Results.json")
-
-
-#TODO: uncomment
-#this
-#part
 
 
 class TestPauling1OverAllAnalysis(unittest.TestCase):
@@ -621,6 +646,13 @@ class TestPauling3OverAllAnalysis(unittest.TestCase):
 
         # TODO: more tests for reformat etc
 
+    def test_reformatting(self):
+        Details = {"As": {5: {"corner": 2, "edge": 3, "face": 5}, "4": {"corner": 1, "edge": 0, "face": 0}}}
+        New_Details = self.pauling3normalx._reformat_details(Details, EdgesAsAdditionalExceptions=True)
+        self.assertDictEqual(New_Details, {"As": [3, 8]})
+        New_Details = self.pauling3normalx._reformat_details(Details, EdgesAsAdditionalExceptions=False)
+        self.assertDictEqual(New_Details, {"As": [6, 5]})
+
     def tearDown(self):
         if os.path.exists(os.path.join("tmp_folder1", "mp-1788.json")):
             os.remove(os.path.join("tmp_folder1", "mp-1788.json"))
@@ -719,7 +751,7 @@ class TestPauling4OverAllAnalysis(unittest.TestCase):
                       'CN2:4': {'no': 58, 'corner': 14, 'edge': 2, 'face': 2}},
             'CN1:4': {'CN2:6': {'no': 58, 'corner': 14, 'edge': 1, 'face': 1},
                       'CN2:4': {'no': 38, 'corner': 2, 'edge': 1, 'face': 1}}}}}),
-                             {"6": {"6": [38, 9], "4": [116, 34]}, "4": {"6": [116, 34], "4": [38, 4]}})
+            {"6": {"6": [38, 9], "4": [116, 34]}, "4": {"6": [116, 34], "4": [38, 4]}})
         self.assertDictEqual(self.pauling4normal._reformat_details_val({'val1:3': {'val2:3': {
             'CN1:6': {'CN2:6': {'no': 38, 'corner': 2, 'edge': 4, 'face': 3},
                       'CN2:4': {'no': 58, 'corner': 14, 'edge': 2, 'face': 2}},
@@ -730,7 +762,7 @@ class TestPauling4OverAllAnalysis(unittest.TestCase):
             'val2:3': {'CN1:6': {'CN2:6': {'no': 30, 'corner': 6, 'edge': 6, 'face': 0}}}}, 'val1:3': {
             'val2:1': {'CN1:6': {'CN2:6': {'no': 30, 'corner': 6, 'edge': 6, 'face': 0}}},
             'val2:3': {'CN1:6': {'CN2:6': {'no': 18, 'corner': 0, 'edge': 3, 'face': 0}}}}}),
-                             {'1': {'1': [18, 3], '3': [60, 24]}, '3': {'1': [60, 24], '3': [18, 3]}})
+            {'1': {'1': [18, 3], '3': [60, 24]}, '3': {'1': [60, 24], '3': [18, 3]}})
         self.assertDictEqual(self.pauling4normal._reformat_details_elementwise({"maxval": 3, "minCN": 4,
                                                                                 "elementwise": {'Ga': {'val1:3': {
                                                                                     'val2:3': {'CN1:6': {
@@ -740,15 +772,15 @@ class TestPauling4OverAllAnalysis(unittest.TestCase):
                                                                                                   'corner': 28,
                                                                                                   'edge': 0,
                                                                                                   'face': 0}},
-                                                                                               'CN1:4': {
-                                                                                                   'CN2:6': {'no': 116,
-                                                                                                             'corner': 28,
-                                                                                                             'edge': 0,
-                                                                                                             'face': 0},
-                                                                                                   'CN2:4': {'no': 76,
-                                                                                                             'corner': 4,
-                                                                                                             'edge': 1,
-                                                                                                             'face': 1}}}}}}}),
+                                                                                        'CN1:4': {
+                                                                                            'CN2:6': {'no': 116,
+                                                                                                      'corner': 28,
+                                                                                                      'edge': 0,
+                                                                                                      'face': 0},
+                                                                                            'CN2:4': {'no': 76,
+                                                                                                      'corner': 4,
+                                                                                                      'edge': 1,
+                                                                                                      'face': 1}}}}}}}),
                              {'Ga': [76, 6]})
 
     def test_image(self):
@@ -912,27 +944,27 @@ class TestAllPaulingOverAllAnalysis(unittest.TestCase):
                              start_from_results=False, save_result_data=False,
                              restart_from_saved_structure_analysis=False, save_structure_analysis=False,
                              path_to_save='', start_material=None, stop_material=None,
-                             threshold_remove_elements=0.95,compute_elementwise=True)
+                             threshold_remove_elements=0.95, compute_elementwise=True)
 
         self.assertListEqual(self.paulingall2.structures_cannot_be_evaluated,
                              [])
         self.assertListEqual(self.paulingall2.structures_fulfillingrule, ['mp-21947'])
         self.assertListEqual(self.paulingall2.structures_exceptions, [])
-        self.assertDictEqual(self.paulingall2.Plot_PSE,{'S': [1, 0], 'Ce': [1, 0]})
+        self.assertDictEqual(self.paulingall2.Plot_PSE, {'S': [1, 0], 'Ce': [1, 0]})
         self.paulingall.run(remove_elements_low_entropy=False, start_from_connections=False,
                             save_connections=False, connections_folder34='AnalysisConnections',
                             connections_folder5='AnalysisConnections_5thRule',
                             start_from_results=False, save_result_data=False,
                             restart_from_saved_structure_analysis=False, save_structure_analysis=False,
                             path_to_save='', start_material=None, stop_material=None,
-                            threshold_remove_elements=0.95,compute_elementwise=True)
+                            threshold_remove_elements=0.95, compute_elementwise=True)
 
         self.assertListEqual(self.paulingall.structures_cannot_be_evaluated,
                              ['mp-7000', 'mp-19359', 'mp-306', 'mp-2605'])
         self.assertListEqual(self.paulingall.structures_fulfillingrule, [])
         self.assertListEqual(self.paulingall.structures_exceptions, ['mp-1788', 'mp-886'])
 
-        self.assertDictEqual(self.paulingall.Plot_PSE,{'As': [0, 1], 'Ga': [0, 1]})
+        self.assertDictEqual(self.paulingall.Plot_PSE, {'As': [0, 1], 'Ga': [0, 1]})
 
         self.paulingall.run(remove_elements_low_entropy=True, start_from_connections=False,
                             save_connections=False, connections_folder34='AnalysisConnections',
@@ -1117,7 +1149,6 @@ class TestAllPaulingOverAllAnalysis(unittest.TestCase):
         self.assertListEqual(self.paulingall3.structures_fulfillingrule, [])
         self.assertListEqual(self.paulingall3.structures_cannot_be_evaluated, [])
 
-
         self.paulingall.run(remove_elements_low_entropy=False, start_from_connections=False,
                             save_connections=False, connections_folder34='AnalysisConnections',
                             connections_folder5='AnalysisConnections_5thRule',
@@ -1134,7 +1165,6 @@ class TestAllPaulingOverAllAnalysis(unittest.TestCase):
         self.assertListEqual(self.paulingall.structures_cannot_be_evaluated,
                              ['mp-7000', 'mp-19359', 'mp-306', 'mp-2605'])
 
-
         self.paulingall.run(remove_elements_low_entropy=False, start_from_connections=False,
                             save_connections=False, connections_folder34='AnalysisConnections',
                             connections_folder5='AnalysisConnections_5thRule',
@@ -1146,10 +1176,10 @@ class TestAllPaulingOverAllAnalysis(unittest.TestCase):
                             ignore_fourth_rule=False,
                             ignore_fifth_rule=False, remove_structures_with_CN_larger_8=False)
 
-        self.assertListEqual(self.paulingall.structures_exceptions,['mp-1788', 'mp-886'])
-        self.assertListEqual(self.paulingall.structures_fulfillingrule,[])
-        self.assertListEqual(self.paulingall.structures_cannot_be_evaluated,['mp-7000', 'mp-19359', 'mp-306', 'mp-2605'])
-
+        self.assertListEqual(self.paulingall.structures_exceptions, ['mp-1788', 'mp-886'])
+        self.assertListEqual(self.paulingall.structures_fulfillingrule, [])
+        self.assertListEqual(self.paulingall.structures_cannot_be_evaluated,
+                             ['mp-7000', 'mp-19359', 'mp-306', 'mp-2605'])
 
         self.paulingall.run(remove_elements_low_entropy=False, start_from_connections=False,
                             save_connections=False, connections_folder34='AnalysisConnections',
@@ -1163,9 +1193,10 @@ class TestAllPaulingOverAllAnalysis(unittest.TestCase):
                             ignore_fourth_rule=True,
                             ignore_fifth_rule=True, remove_structures_with_CN_larger_8=True)
 
-        self.assertListEqual(self.paulingall.structures_fulfillingrule,['mp-1788', 'mp-7000', 'mp-19359', 'mp-306', 'mp-886', 'mp-2605'])
-        self.assertListEqual(self.paulingall.structures_exceptions,[])
-        self.assertListEqual(self.paulingall.structures_cannot_be_evaluated,[])
+        self.assertListEqual(self.paulingall.structures_fulfillingrule,
+                             ['mp-1788', 'mp-7000', 'mp-19359', 'mp-306', 'mp-886', 'mp-2605'])
+        self.assertListEqual(self.paulingall.structures_exceptions, [])
+        self.assertListEqual(self.paulingall.structures_cannot_be_evaluated, [])
 
         self.paulingall4.run(remove_elements_low_entropy=False, start_from_connections=False,
                              save_connections=False, connections_folder34='AnalysisConnections',
@@ -1179,10 +1210,9 @@ class TestAllPaulingOverAllAnalysis(unittest.TestCase):
                              ignore_fourth_rule=True,
                              ignore_fifth_rule=True, remove_structures_with_CN_larger_8=True)
 
-        self.assertListEqual(self.paulingall4.structures_fulfillingrule,[])
-        self.assertListEqual(self.paulingall4.structures_exceptions,["mp-6564"])
-        self.assertListEqual(self.paulingall4.structures_cannot_be_evaluated,[])
-
+        self.assertListEqual(self.paulingall4.structures_fulfillingrule, [])
+        self.assertListEqual(self.paulingall4.structures_exceptions, ["mp-6564"])
+        self.assertListEqual(self.paulingall4.structures_cannot_be_evaluated, [])
 
         # test reading and writing of all files
         # do that with teardown at the end and clean all files
@@ -1205,27 +1235,67 @@ class TestAllPaulingOverAllAnalysis(unittest.TestCase):
         if os.path.isdir("tmp_folder2"):
             os.rmdir("tmp_folder2")
 
-#AllPaulingOverAllAnalysis_Final_SummaryTest
+
+# AllPaulingOverAllAnalysis_Final_SummaryTest
 
 
 class AllPaulingOverAllAnalysis_Final_SummaryTest(unittest.TestCase):
     def setUp(self):
         self.paulingall = AllPaulingOverAllAnalysis_Final_Summary(source='my_own_list', onlybinaries=False,
-                                                    plot_element_dependend_analysis=False,
-                                                    list_of_materials_to_investigate='test_list.json',
-                                                    analyse_structures=True, use_prematching=True)
+                                                                  plot_element_dependend_analysis=False,
+                                                                  list_of_materials_to_investigate='test_list.json',
+                                                                  analyse_structures=True, use_prematching=True)
+
     def test_run(self):
         self.paulingall.run(remove_elements_low_entropy=False, start_from_connections=False,
-                             save_connections=False, connections_folder34='AnalysisConnections',
-                             connections_folder5='AnalysisConnections_5thRule',
-                             start_from_results=False, save_result_data=False,
-                             path_to_save='', start_material=None, stop_material=None,
-                             threshold_remove_elements=0.95,plot_result=False)
+                            save_connections=True, connections_folder34='tmp_folder1',
+                            connections_folder5='tmp_folder2',
+                            start_from_results=False, save_result_data=False,
+                            path_to_save='', start_material=None, stop_material=None,
+                            threshold_remove_elements=0.95, plot_result=False)
 
-        self.assertListEqual(self.paulingall.means_CN_all,[0.5, 0.5, 0.5, 0.6666666666666666, 0.5])
-        self.assertListEqual(self.paulingall.means_CN_smaller9,[0.5, 0.5, 0.5, 0.6666666666666666, 0.5])
+        self.assertListEqual(self.paulingall.means_CN_all, [0.5, 0.5, 0.5, 0.6666666666666666, 0.5])
+        self.assertListEqual(self.paulingall.means_CN_smaller9, [0.5, 0.5, 0.5, 0.6666666666666666, 0.5])
 
-        #test read and write results
+        # test read and write results
+        self.paulingall.run(remove_elements_low_entropy=False, start_from_connections=True,
+                            save_connections=False, connections_folder34='tmp_folder1',
+                            connections_folder5='tmp_folder2',
+                            start_from_results=False, save_result_data=True,
+                            path_to_save='Results.json', start_material=None, stop_material=None,
+                            threshold_remove_elements=0.95, plot_result=False)
+
+        self.paulingall.run(remove_elements_low_entropy=False, start_from_connections=True,
+                            save_connections=False, connections_folder34='tmp_folder1',
+                            connections_folder5='tmp_folder2',
+                            start_from_results=True, save_result_data=False,
+                            path_to_save='Results.json', start_material=None, stop_material=None,
+                            threshold_remove_elements=0.95, plot_result=False)
+
+        self.assertListEqual(self.paulingall.means_CN_all, [0.5, 0.5, 0.5, 0.6666666666666666, 0.5])
+        self.assertListEqual(self.paulingall.means_CN_smaller9, [0.5, 0.5, 0.5, 0.6666666666666666, 0.5])
+
+    def tearDown(self):
+        os.remove("Results.json")
+        os.remove(os.path.join("tmp_folder1", "mp-306.json"))
+        os.remove(os.path.join("tmp_folder1", "mp-886.json"))
+        os.remove(os.path.join("tmp_folder1", "mp-1788.json"))
+        os.remove(os.path.join("tmp_folder1", "mp-2605.json"))
+        os.remove(os.path.join("tmp_folder1", "mp-7000.json"))
+        os.remove(os.path.join("tmp_folder1", "mp-19359.json"))
+
+        os.remove(os.path.join("tmp_folder2", "mp-306.json"))
+        os.remove(os.path.join("tmp_folder2", "mp-886.json"))
+        os.remove(os.path.join("tmp_folder2", "mp-1788.json"))
+        os.remove(os.path.join("tmp_folder2", "mp-2605.json"))
+        os.remove(os.path.join("tmp_folder2", "mp-7000.json"))
+        os.remove(os.path.join("tmp_folder2", "mp-19359.json"))
+
+        if os.path.isdir("tmp_folder1"):
+            os.rmdir("tmp_folder1")
+
+        if os.path.isdir("tmp_folder2"):
+            os.rmdir("tmp_folder2")
 
 
 if __name__ == '__main__':

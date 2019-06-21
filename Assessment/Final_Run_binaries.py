@@ -1,8 +1,20 @@
 from Classes_for_statistics import Pauling1OverAllAnalysis, Pauling2OverAllAnalysis, Pauling3OverAllAnalysis, \
     Pauling4OverAllAnalysis, Pauling5OverAllAnalysis, Pauling1Entropy, AllPaulingOverAllAnalysis, \
-    AllPaulingOverAllAnalysis_Final_Summary
+    AllPaulingOverAllAnalysis_Final_Summary, HowMany
 
 print("Only binaries are analysed in the following:")
+print("Calculates how many environments of a certain element are present in the data set")
+newclass = HowMany(source='MP', onlybinaries=True, plot_element_dependend_analysis=True,
+                           lower_limit_plot=0., upper_limit_plot=150.0,lowest_number_of_environments_considered=0,upper_number_of_environments_considered=150.0 )
+newclass.run(start_from_results=False, save_result_data=True, path_to_save='Results/Results_Count_Compounds_binaries.json')
+
+
+newclass = HowMany(source='MP', onlybinaries=True, plot_element_dependend_analysis=True,
+                           lower_limit_plot=1250., upper_limit_plot=1500.0,lowest_number_of_environments_considered=1250,upper_number_of_environments_considered=1500.0 )
+newclass.run(start_from_results=True, save_result_data=True, path_to_save='Results/Results_Count_Compounds_binaries.json')
+
+
+
 print("Analysis of the first rule")
 print("Check with the help of the univalent radii")
 newclass = Pauling1OverAllAnalysis(source='MP', onlybinaries=True, plot_element_dependend_analysis=True,

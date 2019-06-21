@@ -1,6 +1,19 @@
 from Classes_for_statistics import Pauling1OverAllAnalysis, Pauling2OverAllAnalysis, Pauling3OverAllAnalysis, \
     Pauling4OverAllAnalysis, Pauling5OverAllAnalysis, Pauling1Entropy, AllPaulingOverAllAnalysis, \
-    AllPaulingOverAllAnalysis_Final_Summary
+    AllPaulingOverAllAnalysis_Final_Summary, HowMany
+
+
+print("Calculates how many environments of a certain element are present in the data set")
+newclass = HowMany(source='MP', onlybinaries=False, plot_element_dependend_analysis=True,
+                           lower_limit_plot=0., upper_limit_plot=2000.0,lowest_number_of_environments_considered=0,upper_number_of_environments_considered=2000.0 )
+newclass.run(start_from_results=False, save_result_data=True, path_to_save='Results/Results_Count_Compounds.json')
+
+print("Calculates how many environments of a certain element are present in the data set")
+newclass = HowMany(source='MP', onlybinaries=False, plot_element_dependend_analysis=True,
+                           lower_limit_plot=2000., upper_limit_plot=8500.0,lowest_number_of_environments_considered=2000,upper_number_of_environments_considered=8500 )
+newclass.run(start_from_results=True, save_result_data=True, path_to_save='Results/Results_Count_Compounds.json')
+
+
 
 print("Analysis of the first rule")
 print("Check with the help of the univalent radii")
@@ -37,6 +50,16 @@ newclass = Pauling3OverAllAnalysis(source='MP', onlybinaries=False, plot_element
 newclass.run(start_from_connections=True, save_connections=True, connections_folder='AnalysisConnections',
              start_from_results=False, save_result_data=True, restart_from_saved_structure_analysis=False,
              save_structure_analysis=True, path_to_save='Results/Results_Third_Rule.json')
+
+
+print("Analysis of third rule: all coordination numbers. In the elementwise analysis, also edges will be treated as exceptions.")
+newclass = Pauling3OverAllAnalysis(source='MP', onlybinaries=False, plot_element_dependend_analysis=True,
+                                   lowest_number_environments_for_plot=50, lower_limit_plot=0.45, upper_limit_plot=0.85,
+                                   analyse_structures=True, use_prematching=True)
+newclass.run(start_from_connections=True, save_connections=True, connections_folder='AnalysisConnections',
+             start_from_results=False, save_result_data=True, restart_from_saved_structure_analysis=False,
+             save_structure_analysis=False, path_to_save='Results/Results_Third_Rule_edges_as_exceptions_in_elementwise_analysis.json', EdgesAsAdditionalExceptions=True)
+
 
 print("Analysis of third rule: only coordination numbers smaller or equal to 8")
 newclass = Pauling3OverAllAnalysis(source='MP', onlybinaries=False, plot_element_dependend_analysis=True,

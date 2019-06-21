@@ -1,6 +1,19 @@
 from Classes_for_statistics import Pauling1OverAllAnalysis, Pauling2OverAllAnalysis, Pauling3OverAllAnalysis, \
     Pauling4OverAllAnalysis, Pauling5OverAllAnalysis, Pauling1Entropy, Pauling1Frequency, AllPaulingOverAllAnalysis, \
-    AllPaulingOverAllAnalysis_Final_Summary
+    AllPaulingOverAllAnalysis_Final_Summary, HowMany
+
+
+print("Calculates how many environments of a certain element are present in the data set")
+newclass = HowMany(source='experimental', onlybinaries=False, plot_element_dependend_analysis=True,
+                           lower_limit_plot=0., upper_limit_plot=2000.0,lowest_number_of_environments_considered=0,upper_number_of_environments_considered=2000.0 )
+newclass.run(start_from_results=False, save_result_data=True, path_to_save='Results/Results_Count_Compounds_exp.json')
+
+
+print("Calculates how many environments of a certain element are present in the data set")
+newclass = HowMany(source='experimental', onlybinaries=False, plot_element_dependend_analysis=True,
+                           lower_limit_plot=2000., upper_limit_plot=9000.0,lowest_number_of_environments_considered=2000,upper_number_of_environments_considered=9000 )
+newclass.run(start_from_results=True, save_result_data=True, path_to_save='Results/Results_Count_Compounds_exp.json')
+
 
 print("Analysis of the first rule")
 print("Check with the help of the univalent radii")
@@ -9,6 +22,7 @@ newclass = Pauling1OverAllAnalysis(source='experimental', onlybinaries=False, pl
                                    lowest_number_environments_for_plot=50)
 newclass.run(start_from_results=False, save_result_data=True, save_structure_analysis=True,
              restart_from_saved_structure_analysis=False, path_to_save="Results/Results_First_Rule_exp.json")
+
 
 print("Evaluation of Shannon entropy for the coordination environments of each element")
 newclass = Pauling1Entropy(source='experimental', onlybinaries=False, plot_element_dependend_analysis=True,

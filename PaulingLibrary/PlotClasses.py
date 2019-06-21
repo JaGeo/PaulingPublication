@@ -32,7 +32,7 @@ class PlotterPSE:
         okayperc = np.float(okay) / np.float(okay + notokay)
         return okayperc
 
-    def get_plot(self, xlim=[1, 18], ylim=[1, 9],lowest_number_of_environments_considered=50, lowerlimit=0.0,upperlimit=1.0):
+    def get_plot(self, xlim=[1, 18], ylim=[1, 9],lowest_number_of_environments_considered=50,upper_number_of_environments_considered=None, lowerlimit=0.0,upperlimit=1.0):
         import matplotlib
         # TODO: cleanup
         matplotlib.rcParams['pdf.fonttype'] = 42
@@ -52,19 +52,40 @@ class PlotterPSE:
             if not self.plot_directly_from_freq:
 
                 if self.counter_cations_env is None:
-                    if not self.valuestoplot[cat][0]+self.valuestoplot[cat][1]<lowest_number_of_environments_considered:
-                        if not (self.valuestoplot[cat][0] == 0 and self.valuestoplot[cat][1] == 0):
-                            PSE[Element(cat).row, Element(cat).group] = self._get_fulfilled(self.valuestoplot[cat][0],
-                                                                                            self.valuestoplot[cat][1])
+                    if not (self.valuestoplot[cat][0]+self.valuestoplot[cat][1])<lowest_number_of_environments_considered:
+                        if upper_number_of_environments_considered!=None:
+                            if not (self.valuestoplot[cat][0]+self.valuestoplot[cat][1])>upper_number_of_environments_considered:
+
+                                if not (self.valuestoplot[cat][0] == 0 and self.valuestoplot[cat][1] == 0):
+                                    PSE[Element(cat).row, Element(cat).group] = self._get_fulfilled(self.valuestoplot[cat][0],
+                                                                                                    self.valuestoplot[cat][1])
+                        else:
+                            if not (self.valuestoplot[cat][0] == 0 and self.valuestoplot[cat][1] == 0):
+                                PSE[Element(cat).row, Element(cat).group] = self._get_fulfilled(
+                                    self.valuestoplot[cat][0],
+                                    self.valuestoplot[cat][1])
+
                 else:
                     if not self.counter_cations_env[cat]<lowest_number_of_environments_considered:
-                        if not (self.valuestoplot[cat][0] == 0 and self.valuestoplot[cat][1] == 0):
-                            PSE[Element(cat).row, Element(cat).group] = self._get_fulfilled(self.valuestoplot[cat][0],
-                                                                                            self.valuestoplot[cat][1])
+                        if upper_number_of_environments_considered != None:
+                            if not self.counter_cations_env[cat] > upper_number_of_environments_considered:
+                                if not (self.valuestoplot[cat][0] == 0 and self.valuestoplot[cat][1] == 0):
+                                    PSE[Element(cat).row, Element(cat).group] = self._get_fulfilled(self.valuestoplot[cat][0],
+                                                                                                    self.valuestoplot[cat][1])
+                        else:
+                            if not (self.valuestoplot[cat][0] == 0 and self.valuestoplot[cat][1] == 0):
+                                PSE[Element(cat).row, Element(cat).group] = self._get_fulfilled(
+                                    self.valuestoplot[cat][0],
+                                    self.valuestoplot[cat][1])
+
             else:
                 if self.counter_cations_env is not None:
                     if not self.counter_cations_env[cat] < lowest_number_of_environments_considered:
-                        PSE[Element(cat).row, Element(cat).group] = self.valuestoplot[cat]
+                        if upper_number_of_environments_considered!=None:
+                            if not self.counter_cations_env[cat] > upper_number_of_environments_considered:
+                                PSE[Element(cat).row, Element(cat).group] = self.valuestoplot[cat]
+                        else:
+                            PSE[Element(cat).row, Element(cat).group] = self.valuestoplot[cat]
                 else:
                     PSE[Element(cat).row, Element(cat).group] = self.valuestoplot[cat]
 
@@ -77,19 +98,36 @@ class PlotterPSE:
 
                 if self.counter_cations_env is None:
                     if not (self.valuestoplot[cat][0] + self.valuestoplot[cat][1] < lowest_number_of_environments_considered):
-                        if not (self.valuestoplot[cat][0] == 0 and self.valuestoplot[cat][1] == 0):
-                            ax.text(Element(cat).group - 0.3, Element(cat).row + 0.15, cat)
+                        if upper_number_of_environments_considered!=None:
+                            if not (self.valuestoplot[cat][0] + self.valuestoplot[cat][
+                                1] > upper_number_of_environments_considered):
+
+                                if not (self.valuestoplot[cat][0] == 0 and self.valuestoplot[cat][1] == 0):
+                                    ax.text(Element(cat).group - 0.3, Element(cat).row + 0.15, cat)
+                        else:
+                            if not (self.valuestoplot[cat][0] == 0 and self.valuestoplot[cat][1] == 0):
+                                ax.text(Element(cat).group - 0.3, Element(cat).row + 0.15, cat)
+
                 else:
                     if not self.counter_cations_env[cat] < lowest_number_of_environments_considered:
-                        if not (self.valuestoplot[cat][0] == 0 and self.valuestoplot[cat][1] == 0):
-                            ax.text(Element(cat).group - 0.3, Element(cat).row + 0.15, cat)
+                        if upper_number_of_environments_considered!=None:
+                            if not self.counter_cations_env[cat] > upper_number_of_environments_considered:
+                                if not (self.valuestoplot[cat][0] == 0 and self.valuestoplot[cat][1] == 0):
+                                    ax.text(Element(cat).group - 0.3, Element(cat).row + 0.15, cat)
+                        else:
+                            if not (self.valuestoplot[cat][0] == 0 and self.valuestoplot[cat][1] == 0):
+                                ax.text(Element(cat).group - 0.3, Element(cat).row + 0.15, cat)
+
             else:
                 if self.counter_cations_env is None:
                     ax.text(Element(cat).group - 0.3, Element(cat).row + 0.15, cat)
                 else:
                     if not self.counter_cations_env[cat] < lowest_number_of_environments_considered:
-                        ax.text(Element(cat).group - 0.3, Element(cat).row + 0.15, cat)
-
+                        if upper_number_of_environments_considered!=None:
+                            if not self.counter_cations_env[cat]>upper_number_of_environments_considered:
+                                ax.text(Element(cat).group - 0.3, Element(cat).row + 0.15, cat)
+                        else:
+                            ax.text(Element(cat).group - 0.3, Element(cat).row + 0.15, cat)
         ax.set_ylim(np.float(ylim[1]) - 0.5, np.float(ylim[0] - 0.5))
         ax.set_xlim(np.float(xlim[0] - 0.5), np.float(xlim[1] - 0.5))
         ax.set_xticks(range(int(xlim[0]), int(xlim[1]), 1))

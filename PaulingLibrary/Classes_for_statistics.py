@@ -27,9 +27,6 @@ from PaulingRules import Pauling0, Pauling1, Pauling2, Pauling3, Pauling4, Pauli
 from PlotClasses import PlotterPSE
 
 
-
-
-
 class OverAllAnalysis:
 
     def __init__(self, source='MP', onlybinaries=False, plot_element_dependend_analysis=True,
@@ -173,13 +170,15 @@ class OverAllAnalysis:
         lse = LightStructureEnvironments.from_dict(data)
         return lse
 
-    def _plot_PSE(self, Dict_to_Plot: dict, lowest_number_of_environments_considered: int, xlim=[1, 18], ylim=[1, 10],
+    def _plot_PSE(self, Dict_to_Plot: dict, lowest_number_of_environments_considered: int,
+                  upper_number_of_environments_considered=None, xlim=[1, 18], ylim=[1, 10],
                   lowerlimit=0,
                   upperlimit=1, counter_cations_env=None, plot_directly_from_freq=False) -> plt:
         """
         will plot data in a periodic table
         :param Dict_to_Plot: dict that will be plotted
         :param lowest_number_of_environments_considered:
+        :param upper_number_of_environments_considered:
         :param xlim: xrange for periodic table
         :param ylim: yrange for periodic table
         :param lowerlimit: lower limit for plot
@@ -195,6 +194,7 @@ class OverAllAnalysis:
 
         plt = plotterpse.get_plot(xlim=xlim, ylim=ylim,
                                   lowest_number_of_environments_considered=lowest_number_of_environments_considered,
+                                  upper_number_of_environments_considered=upper_number_of_environments_considered,
                                   lowerlimit=lowerlimit, upperlimit=upperlimit)
         return plt
 
@@ -535,6 +535,82 @@ class OverAllAnalysis:
         vis.show()
 
 
+class HowMany(OverAllAnalysis):
+    """Class to analyse the largest frequency of a coordination environment for each cation"""
+
+    def __init__(self, source='MP', onlybinaries=False, plot_element_dependend_analysis=True,
+                 lower_limit_plot=0.0, upper_limit_plot=1.0,
+                 list_of_materials_to_investigate=None, start_material=None, stop_material=None,
+                 lowest_number_of_environments_considered=0, upper_number_of_environments_considered=None):
+        """
+            :param source: 'MP' (Materials Project), 'MP_very_symmetric' (only structures with very symmetric coordiation environments), or 'experimental' (structures from COD) can be used
+            :param onlybinaries: only binary structures will be analysed
+            :param save_result_data: all results will be saved so that results can easily be recreated
+            :return:
+        """
+
+        self.source = source
+        self.onlybinaries = onlybinaries
+        self.plot_element_dependend_analysis = plot_element_dependend_analysis
+        self.lower_limit_plot = lower_limit_plot
+        self.upper_limit_plot = upper_limit_plot
+        self.lowest_number_of_environments_considered = lowest_number_of_environments_considered
+        self.upper_number_of_environments_considered = upper_number_of_environments_considered
+        self.start_material = start_material
+        self.stop_material = stop_material
+        self.list_of_materials_to_investigate = list_of_materials_to_investigate
+
+    def run(self, start_from_results=False, save_result_data=True,
+            path_to_save='Results/Results_Number_Compounds.json'):
+        """
+        runs the analysis
+        :param start_from_results: if True, restart from Result file
+        :param save_result_data: if True, saves results in json file
+        :param path_to_save: path to save the files
+        :return:
+        """
+        if not start_from_results:
+
+            self._new_setup()
+
+        else:
+            inputdict = self._get_precomputed_results(path_to_save)
+            self.present_env = Counter(inputdict['Counter_cation'])
+
+        if self.plot_element_dependend_analysis:
+            # TODO put a parameter that can exclude certain elements!
+            # TODO: test this class
+            plt = self._plot_PSE(self.present_env,
+                                 plot_directly_from_freq=True, lowerlimit=self.lower_limit_plot,
+                                 lowest_number_of_environments_considered=self.lowest_number_of_environments_considered,
+                                 upperlimit=self.upper_limit_plot,
+                                 upper_number_of_environments_considered=self.upper_number_of_environments_considered,
+                                 counter_cations_env=self.present_env)
+            plt.show()
+
+        if save_result_data and not start_from_results:
+            outputdict = {}
+            outputdict['Counter_cation'] = dict(self.present_env)
+            self._save_results_to_file(outputdict, path_to_save)
+
+    def _new_setup(self):
+        """
+        could count the number of environments instead of structures?
+        will be done if results are not read from file
+        :return:
+        """
+        list_mat = self._get_list_materials(source=self.source, onlybinaries=self.onlybinaries,
+                                            start_material=self.start_material, stop_material=self.stop_material)
+        self.All_Details = {}
+        self.present_env = {}
+        for mat in list_mat:
+            # print(mat)
+            lse = self._get_lse_from_folder(mat, source=self.source)
+            pauling0 = Pauling0(lse)
+            self._add_dict_cat_dependency(self.present_env, pauling0.get_cations_in_structure(),
+                                          number_of_elements_to_add=1)
+
+
 class Pauling1Frequency(OverAllAnalysis):
     """Class to analyse the largest frequency of a coordination environment for each cation"""
 
@@ -765,7 +841,7 @@ class Pauling1OverAllAnalysis(OverAllAnalysis):
             all += value[0]
             all += value[1]
         print("Only " + str(float(fulfilling) / float(all)) + " of all environments fulfill the first rule.")
-
+        print("This many environments were considered in the analysis:"+ str(all))
         if self.plot_element_dependend_analysis:
             plt = self._plot_PSE(self.Plot_PSE_DICT,
                                  lowest_number_of_environments_considered=self.lowest_number_environments_for_plot)
@@ -837,7 +913,8 @@ class Pauling1OverAllAnalysis(OverAllAnalysis):
             # print(mat)
             lse = self._get_lse_from_folder(mat, source=self.source)
 
-            pauling1 = Pauling1(lse=lse, filenameradii='../Assessment/Should_not_be_changed/univalent_cat_radii.json', onlylowerlimit=False)
+            pauling1 = Pauling1(lse=lse, filenameradii='../Assessment/Should_not_be_changed/univalent_cat_radii.json',
+                                onlylowerlimit=False)
             try:
                 if pauling1.is_fulfilled():
                     self.structures_fulfillingrule.append(mat)
@@ -1047,8 +1124,8 @@ class Pauling2OverAllAnalysis(OverAllAnalysis):
         """
         list_mat = self._get_list_materials(source=self.source, onlybinaries=self.onlybinaries,
                                             start_material=self.start_material, stop_material=self.stop_material)
-        #print("Number of Materials")
-        #print(len(list_mat))
+        # print("Number of Materials")
+        # print(len(list_mat))
         self.structures_fulfillingrule = []
         self.structures_exceptions = []
         self.structures_cannot_be_evaluated = []
@@ -1059,7 +1136,7 @@ class Pauling2OverAllAnalysis(OverAllAnalysis):
         self.additional_info = {}
         # valence dependency can be introduced later
         for mat in list_mat:
-            #print(mat)
+            # print(mat)
 
             lse = self._get_lse_from_folder(mat, source=self.source)
             pauling2 = Pauling2(lse=lse)
@@ -1107,7 +1184,8 @@ class Pauling3OverAllAnalysis(OverAllAnalysis):
     def run(self, show_plot=True, start_from_connections=False, save_connections=True,
             connections_folder='AnalysisConnections', start_from_results=False, save_result_data=True,
             restart_from_saved_structure_analysis=False, save_structure_analysis=True,
-            path_to_save='Results/Results_Second_Rule.json', start_material=None, stop_material=None, maxCN=None):
+            path_to_save='Results/Results_Second_Rule.json', start_material=None, stop_material=None, maxCN=None,
+            EdgesAsAdditionalExceptions=False):
         """
 
         :param show_plot: if True, the pie plot, and the dependencies of the rule fulfillment on atomic radii and mean CN are shown
@@ -1122,6 +1200,7 @@ class Pauling3OverAllAnalysis(OverAllAnalysis):
         :param start_material: number of the material at which the analysis shall be started
         :param stop_material: number of the material before which the analysis shall be stopped
         :param maxCN: only polyhedra with this coordination number or lower will be considered in the analysis
+        :param EdgesAsAdditionalExceptions: Edges are also treated as exceptions in the elementwise analysis
         :return:
         """
 
@@ -1131,7 +1210,7 @@ class Pauling3OverAllAnalysis(OverAllAnalysis):
         self.start_from_connections = start_from_connections
         self.save_connections = save_connections
         self.maxCN = maxCN
-
+        self.EdgesAsAdditionalExceptions = EdgesAsAdditionalExceptions
         if not start_from_results:
             self._new_setup()
             # warum funktioniert das nicht?
@@ -1150,9 +1229,10 @@ class Pauling3OverAllAnalysis(OverAllAnalysis):
         if show_plot:
             # do the other plot here
             # print(self.Plot_PSE_numbers)
-            plot1 = self._plot_influence_mean_CN(self.Plot_PSE_DICT, self.Plot_PSE_numbers)
+            plot1 = self._plot_influence_mean_CN(self.Plot_PSE_DICT, self.Plot_PSE_numbers,
+                                                 self.EdgesAsAdditionalExceptions)
             plot1.show()
-            plot2 = self._plot_influence_atomic_radii(self.Plot_PSE_DICT)
+            plot2 = self._plot_influence_atomic_radii(self.Plot_PSE_DICT, self.EdgesAsAdditionalExceptions)
             plot2.show()
 
             plot = self._pieplot_connections(self.connections['corner'], self.connections['edge'],
@@ -1225,10 +1305,11 @@ class Pauling3OverAllAnalysis(OverAllAnalysis):
                                                        add_info=self.additional_info,
                                                        name_add_info='Connections of Cations with Valences')
 
-    def _plot_influence_atomic_radii(self, Plot_PSE_Dict: dict) -> plt:
+    def _plot_influence_atomic_radii(self, Plot_PSE_Dict: dict, EdgeAsAdditionalException = False) -> plt:
         """
         will plot number of connected polyhedra vs. atomic radii
         :param Plot_PSE_Dict: a dict with information on the rule fulfillment for each cation
+        :param EdgeAsAdditonalExceptions: Edges will also be treated as additional exceptions
         :return:
         """
         # oder histogramm
@@ -1242,14 +1323,24 @@ class Pauling3OverAllAnalysis(OverAllAnalysis):
 
         # TODO: make a statistical test and test for the different distributions
         # TODO: utilize a smilar plot for 4th rule
-        print("Mean CN for Corners and Edge Connected Polyhedra")
-        print(np.mean(corneredge_histo))
-        print("Standard Deviation CN for Corners and Edge Connected Polyhedra")
-        print(np.std(corneredge_histo, ddof=1))
-        print("Mean CN for Face Connected Polyhedra")
-        print(np.mean(face_histo))
-        print("Standard Deviation CN for Face Connected Polyhedra")
-        print(np.std(face_histo, ddof=1))
+        if not EdgeAsAdditionalException:
+            print("Mean CN for Corners and Edge Connected Polyhedra")
+            print(np.mean(corneredge_histo))
+            print("Standard Deviation CN for Corners and Edge Connected Polyhedra")
+            print(np.std(corneredge_histo, ddof=1))
+            print("Mean CN for Face Connected Polyhedra")
+            print(np.mean(face_histo))
+            print("Standard Deviation CN for Face Connected Polyhedra")
+            print(np.std(face_histo, ddof=1))
+        else:
+            print("Mean CN for Corners Connected Polyhedra")
+            print(np.mean(corneredge_histo))
+            print("Standard Deviation CN for Corners Connected Polyhedra")
+            print(np.std(corneredge_histo, ddof=1))
+            print("Mean CN for Edge and Face Connected Polyhedra")
+            print(np.mean(face_histo))
+            print("Standard Deviation CN for Edge and Face Connected Polyhedra")
+            print(np.std(face_histo, ddof=1))
 
         # range noch korrekt anpassen
         plt.subplot(2, 1, 1)
@@ -1258,7 +1349,10 @@ class Pauling3OverAllAnalysis(OverAllAnalysis):
                                                int(max([max(corneredge_histo), max(face_histo)]) * 1000) + 20, 20)],
                  align='mid', alpha=1)
         plt.axvline(np.mean(corneredge_histo), color='r')
-        plt.ylabel("Connections via corners and edges")
+        if not EdgeAsAdditionalException:
+            plt.ylabel("Connections via corners and edges")
+        else:
+            plt.ylabel("Connections via corners")
         # plt.plot([0, 1000], [np.mean(corneredge_histo), np.mean(corneredge_histo)], 'b-')
         # n,bins,patches=plt.hist(x=corneredge_histo,bins=len(range(int(min(corneredge_histo)*100),int(max(corneredge_histo)*100)+5)))
         # y =sp.stats.norm.pdf(bins,np.mean(corneredge_histo),np.std(corneredge_histo,ddof=1))
@@ -1272,16 +1366,21 @@ class Pauling3OverAllAnalysis(OverAllAnalysis):
                  align='mid',
                  alpha=1)
         plt.axvline(np.mean(face_histo), color='r')
-        plt.ylabel("Connections via faces")
+        if not EdgeAsAdditionalException:
+            plt.ylabel("Connections via faces")
+        else:
+            plt.ylabel("Connections via edges and faces")
+
         plt.xlabel("Atomic radius in Angstrom")
         # plt.plot([0,1000],[np.mean(face_histo),np.mean(face_histo)],'b-')
         return plt
 
-    def _plot_influence_mean_CN(self, Plot_PSE_Dict: dict, Plot_PSE_CN_Info: dict) -> plt:
+    def _plot_influence_mean_CN(self, Plot_PSE_Dict: dict, Plot_PSE_CN_Info: dict, EdgeAsAdditionalException = False) -> plt:
         """
         will plot number of conncted polyhedra vs. mean CN
         :param Plot_PSE_Dict: dict with info on the rule fulfillment for each cation
         :param Plot_PSE_CN_Info: dict with info for each cation on the mean CN
+        :param EdgeAsAdditonalExceptions: Edges will also be treated as additional exceptions
         :return: plot
         """
         # oder histogramm
@@ -1307,7 +1406,10 @@ class Pauling3OverAllAnalysis(OverAllAnalysis):
                                                int(max([max(corneredge_histo), max(face_histo)]) * 1000) + 20, 20)],
                  align='mid', alpha=1)
         plt.axvline(np.mean(corneredge_histo), color='r')
-        plt.ylabel("Connections via corners and edges")
+        if not EdgeAsAdditionalException:
+            plt.ylabel("Connections via corners and edges")
+        else:
+            plt.ylabel("Connections via corners")
         # plt.plot([0, 1000], [np.mean(corneredge_histo), np.mean(corneredge_histo)], 'b-')
         # n,bins,patches=plt.hist(x=corneredge_histo,bins=len(range(int(min(corneredge_histo)*100),int(max(corneredge_histo)*100)+5)))
         # y =sp.stats.norm.pdf(bins,np.mean(corneredge_histo),np.std(corneredge_histo,ddof=1))
@@ -1321,7 +1423,10 @@ class Pauling3OverAllAnalysis(OverAllAnalysis):
                  align='mid',
                  alpha=1)
         plt.axvline(np.mean(face_histo), color='r')
-        plt.ylabel("Connections via faces")
+        if not EdgeAsAdditionalException:
+            plt.ylabel("Connections via faces")
+        else:
+            plt.ylabel("Connections via edges and faces")
         plt.xlabel("Mean of the CN")
         # plt.plot([0,1000],[np.mean(face_histo),np.mean(face_histo)],'b-')
         return plt
@@ -1345,7 +1450,7 @@ class Pauling3OverAllAnalysis(OverAllAnalysis):
         self.All_Details = {}
 
         for mat in list_mat:
-            #print(mat)
+            # print(mat)
             lse = self._get_lse_from_folder(mat, source=self.source)
             pauling0 = Pauling0(lse)
             pauling1_limit = FrequencyEnvironmentPauling1(lse=lse)
@@ -1367,7 +1472,9 @@ class Pauling3OverAllAnalysis(OverAllAnalysis):
 
             Details = pauling3.get_details(maximumCN=self.maxCN)
             self.additional_info[mat] = Details["species"]
-            New_Details = self._reformat_details(Details['species'])
+
+            New_Details = self._reformat_details(Details['species'],
+                                                 EdgesAsAdditionalExceptions=self.EdgesAsAdditionalExceptions)
             self._add_dict_cat_dependency(self.Plot_PSE_DICT, New_Details)
 
             self._sum_connections(self.connections, Details)
@@ -1380,20 +1487,26 @@ class Pauling3OverAllAnalysis(OverAllAnalysis):
             self._add_dict_cat_dependency(start_dict=self.All_Details, dict_to_add=Details2,
                                           number_of_elements_to_add=4)
 
-    def _reformat_details(self, Details: dict) -> dict:
+    def _reformat_details(self, Details: dict, EdgesAsAdditionalExceptions=False) -> dict:
         """
+        #TODO: test this again!
         reformats dicts
         :param Details:
         :return:
         """
+
         New_Details = {}
         for key, item in Details.items():
             if not key in New_Details:
                 New_Details[key] = [0, 0]
             for item2 in item.values():
                 New_Details[key][0] += item2['corner']
-                New_Details[key][0] += item2['edge']
+                if not EdgesAsAdditionalExceptions:
+                    New_Details[key][0] += item2['edge']
+                else:
+                    New_Details[key][1] += item2['edge']
                 New_Details[key][1] += item2['face']
+                
         return New_Details
 
     def _sum_connections(self, start_dict: dict, Details: dict):
@@ -1454,6 +1567,8 @@ class Pauling4OverAllAnalysis(OverAllAnalysis):
             self.Dict_CN = inputdict['CN_dep_for_plot']
             self.additional_info = inputdict['additional_info']
 
+        print(str(len(self.structures_fulfillingrule)+len(self.structures_exceptions))+ " structures were considered.")
+        #print(str(len(self.structures_cannot_be_evaluated))+ ' were not considered')
         if show_plot:
             plot = self._fourthrule_plot(self.Dict_val, option='val', vmin=0.70, vmax=1.0)
             plot.show()
@@ -1880,6 +1995,9 @@ class Pauling5OverAllAnalysis(OverAllAnalysis):
             self.present_env = Counter(inputdict['Counter_cation'])
             self.list_to_remove = inputdict['elements_low_entropy']
 
+        print(str(len(self.structures_fulfillingrule)+len(self.structures_exceptions))+ " structures were considered.")
+        #print(str(len(self.structures_cannot_be_evaluated)) + ' were not considered')
+
         if show_plot:
             # print(len(self.structures_fulfillingrule))
             # print(len(self.structures_exceptions))
@@ -1964,7 +2082,7 @@ class Pauling5OverAllAnalysis(OverAllAnalysis):
         # valence dependency can be introduced later
         # counter_not_primitive=0
         for mat in list_mat:
-            #print(mat)
+            # print(mat)
             lse = self._get_lse_from_folder(mat, source=self.source)
             # prim_struct=lse.structure.get_primitive_structure()
             # print(prim_struct.composition)
@@ -2045,7 +2163,7 @@ class AllPaulingOverAllAnalysis(OverAllAnalysis):
     Class to analyse all 5 Pauling rules
     """
 
-    #TODO: overwrite init to avoid confusions
+    # TODO: overwrite init to avoid confusions
 
     def run(self, remove_elements_low_entropy=False, start_from_connections=False,
             save_connections=True, connections_folder34='AnalysisConnections',
@@ -2055,7 +2173,7 @@ class AllPaulingOverAllAnalysis(OverAllAnalysis):
             path_to_save='Results/Results_AllRules.json', threshold_remove_elements=0.95, start_material=None,
             stop_material=None, adapt_first_fourth_and_fifth_rules=False, ignore_first_rule=True,
             ignore_second_rule=False, ignore_third_rule=False, ignore_fourth_rule=False, ignore_fifth_rule=False,
-            remove_structures_with_CN_larger_8=False,compute_elementwise=False):
+            remove_structures_with_CN_larger_8=False, compute_elementwise=False):
         """
         will run the overall analysis
         :param remove_elements_low_entropy: will remove the elements with low shannon entropy
@@ -2171,30 +2289,35 @@ class AllPaulingOverAllAnalysis(OverAllAnalysis):
             print("Fulfilling")
             print(len(self.structures_fulfillingrule))
 
-        self.Plot_PSE={}
-        #Analyze the compositions and compute the fulfillment per element here
-        #TODO: test this part in test code
+        print(str(len(self.structures_fulfillingrule)+len(self.structures_exceptions))+ " structures were considered.")
+        #print(str(len(self.structures_cannot_be_evaluated)) + ' were not considered')
+
+        self.Plot_PSE = {}
+        # Analyze the compositions and compute the fulfillment per element here
+        # TODO: test this part in test code
         if self.plot_element_dependend_analysis or compute_elementwise:
             for mat in self.structures_fulfillingrule:
-                lse=self._get_lse_from_folder(mat,source=self.source)
-                elements=lse.structure.composition.elements
-                #print(elements)
+                lse = self._get_lse_from_folder(mat, source=self.source)
+                elements = lse.structure.composition.elements
+                # print(elements)
                 for element in elements:
-                    if str(element)!='O':
+                    if str(element) != 'O':
                         if not str(element) in self.Plot_PSE:
-                            self.Plot_PSE[str(element)]=[0,0]
-                        self.Plot_PSE[str(element)][0]+=1
+                            self.Plot_PSE[str(element)] = [0, 0]
+                        self.Plot_PSE[str(element)][0] += 1
             for mat in self.structures_exceptions:
                 lse = self._get_lse_from_folder(mat, source=self.source)
                 elements = lse.structure.composition.elements
-                #print(elements)
+                # print(elements)
                 for element in elements:
                     if str(element) != 'O':
                         if not str(element) in self.Plot_PSE:
                             self.Plot_PSE[str(element)] = [0, 0]
                         self.Plot_PSE[str(element)][1] += 1
         if self.plot_element_dependend_analysis:
-            plot=self._plot_PSE(self.Plot_PSE,lowest_number_of_environments_considered=self.lowest_number_environments_for_plot,lowerlimit=self.lower_limit_plot,upperlimit=self.upper_limit_plot)
+            plot = self._plot_PSE(self.Plot_PSE,
+                                  lowest_number_of_environments_considered=self.lowest_number_environments_for_plot,
+                                  lowerlimit=self.lower_limit_plot, upperlimit=self.upper_limit_plot)
             plot.show()
 
         if self.analyse_structures:
@@ -2250,7 +2373,8 @@ class AllPaulingOverAllAnalysis(OverAllAnalysis):
         # print(self.list_to_remove)
         for mat in list_mat:
             lse = self._get_lse_from_folder(mat, source=self.source)
-            pauling1 = Pauling1(lse, filenameradii='../Assessment/Should_not_be_changed/univalent_cat_radii.json', onlylowerlimit=False)
+            pauling1 = Pauling1(lse, filenameradii='../Assessment/Should_not_be_changed/univalent_cat_radii.json',
+                                onlylowerlimit=False)
             pauling2 = Pauling2(lse)
             pauling3 = Pauling3()
             pauling4 = Pauling4()
@@ -2293,7 +2417,6 @@ class AllPaulingOverAllAnalysis(OverAllAnalysis):
                         result5 = pauling5.is_fulfilled(leave_out_list=self.list_to_remove)
                     else:
                         result5 = True
-
 
                     if result1 and result2 and result3 and result4 and result5:
                         self.structures_fulfillingrule.append(mat)
@@ -2344,7 +2467,6 @@ class AllPaulingOverAllAnalysis(OverAllAnalysis):
                     else:
                         result5 = True
 
-
                     if result1 and result2 and result3 and result4 and result5:
                         self.structures_fulfillingrule.append(mat)
                     else:
@@ -2352,7 +2474,6 @@ class AllPaulingOverAllAnalysis(OverAllAnalysis):
 
                 except RuleCannotBeAnalyzedError:
                     self.structures_cannot_be_evaluated.append(mat)
-
 
 
 class AllPaulingOverAllAnalysis_Final_Summary(OverAllAnalysis):
@@ -2399,7 +2520,8 @@ class AllPaulingOverAllAnalysis_Final_Summary(OverAllAnalysis):
             self.means_CN_all = []
             self.means_CN_smaller9 = []
             newclass = AllPaulingOverAllAnalysis(source=self.source, onlybinaries=self.onlybinaries,
-                                                 analyse_structures=False, use_prematching=True,plot_element_dependend_analysis=self.plot_element_dependend_analysis,
+                                                 analyse_structures=False, use_prematching=True,
+                                                 plot_element_dependend_analysis=self.plot_element_dependend_analysis,
                                                  list_of_materials_to_investigate=self.list_of_materials_to_investigate)
 
             # all rules

@@ -48,50 +48,7 @@
         cations: [Pu, Pu, Pu, Pu, Pu, Pu, Pu, Pu, Pu, Pu, Pu, Pu, Pu, Pu, Pu, Pu]
         formula: Pu2O3
         valences: [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
-  - - mp-622497
-    - mp-556754:
-        CN: ['6', '6', '6', '6', '6', '6']
-        Connections depending on element, CN, and valence:
-          Ti:
-            val1:3:
-              val2:3:
-                CN1:6:
-                  CN2:6: {corner: 16, edge: 4, face: 4, 'no': 176}
-              val2:4:
-                CN1:6:
-                  CN2:6: {corner: 24, edge: 16, face: 0, 'no': 160}
-            val1:4:
-              val2:3:
-                CN1:6:
-                  CN2:6: {corner: 24, edge: 16, face: 0, 'no': 160}
-              val2:4:
-                CN1:6:
-                  CN2:6: {corner: 4, edge: 0, face: 0, 'no': 48}
-        cations: [Ti, Ti, Ti, Ti, Ti, Ti]
-        formula: Ti3O5
-        valences: [3, 3, 3, 3, 4, 4]
-      mp-622497:
-        CN: ['6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6']
-        Connections depending on element, CN, and valence:
-          V:
-            val1:3:
-              val2:3:
-                CN1:6:
-                  CN2:6: {corner: 40, edge: 20, face: 4, 'no': 328}
-              val2:4:
-                CN1:6:
-                  CN2:6: {corner: 40, edge: 16, face: 0, 'no': 352}
-            val1:4:
-              val2:3:
-                CN1:6:
-                  CN2:6: {corner: 40, edge: 16, face: 0, 'no': 352}
-              val2:4:
-                CN1:6:
-                  CN2:6: {corner: 8, edge: 4, face: 4, 'no': 72}
-        cations: [V, V, V, V, V, V, V, V, V, V, V, V]
-        formula: V3O5
-        valences: [4, 4, 4, 3, 3, 3, 3, 3, 4, 3, 3, 3]
-  - - mp-698
+  - - mp-19066
     - mp-19066:
         CN: ['7', '7', '6']
         Connections depending on element, CN, and valence:
@@ -188,6 +145,49 @@
         cations: [V, V, V, V, V, V, V, V, V, V, V, V, V, V, V, V, V, V]
         formula: V9O17
         valences: [4, 4, 4, 4, 4, 3, 4, 4, 4, 4, 4, 3, 4, 3, 4, 4, 4, 3]
+  - - mp-556754
+    - mp-556754:
+        CN: ['6', '6', '6', '6', '6', '6']
+        Connections depending on element, CN, and valence:
+          Ti:
+            val1:3:
+              val2:3:
+                CN1:6:
+                  CN2:6: {corner: 16, edge: 4, face: 4, 'no': 176}
+              val2:4:
+                CN1:6:
+                  CN2:6: {corner: 24, edge: 16, face: 0, 'no': 160}
+            val1:4:
+              val2:3:
+                CN1:6:
+                  CN2:6: {corner: 24, edge: 16, face: 0, 'no': 160}
+              val2:4:
+                CN1:6:
+                  CN2:6: {corner: 4, edge: 0, face: 0, 'no': 48}
+        cations: [Ti, Ti, Ti, Ti, Ti, Ti]
+        formula: Ti3O5
+        valences: [3, 3, 3, 3, 4, 4]
+      mp-622497:
+        CN: ['6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6']
+        Connections depending on element, CN, and valence:
+          V:
+            val1:3:
+              val2:3:
+                CN1:6:
+                  CN2:6: {corner: 40, edge: 20, face: 4, 'no': 328}
+              val2:4:
+                CN1:6:
+                  CN2:6: {corner: 40, edge: 16, face: 0, 'no': 352}
+            val1:4:
+              val2:3:
+                CN1:6:
+                  CN2:6: {corner: 40, edge: 16, face: 0, 'no': 352}
+              val2:4:
+                CN1:6:
+                  CN2:6: {corner: 8, edge: 4, face: 4, 'no': 72}
+        cations: [V, V, V, V, V, V, V, V, V, V, V, V]
+        formula: V3O5
+        valences: [4, 4, 4, 3, 3, 3, 3, 3, 4, 3, 3, 3]
   - - mp-7048
     - mp-7048:
         CN: ['4', '4', '6', '6']
@@ -219,6 +219,552 @@
         cations: [Ga, Ga, Ga, Ga]
         formula: Ga2O3
         valences: [3, 3, 3, 3]
+  - - mp-579377
+    - mp-579377:
+        CN: ['6', '6', '7', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6',
+          '7', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6',
+          '7', '7', '6']
+        Connections depending on element, CN, and valence:
+          W:
+            val1:5:
+              val2:5:
+                CN1:6:
+                  CN2:6: {corner: 96, edge: 0, face: 0, 'no': 428}
+                  CN2:7: {corner: 0, edge: 32, face: 0, 'no': 192}
+                CN1:7:
+                  CN2:6: {corner: 0, edge: 32, face: 0, 'no': 192}
+                  CN2:7: {corner: 8, edge: 0, face: 0, 'no': 8}
+              val2:6:
+                CN1:6:
+                  CN2:6: {corner: 56, edge: 8, face: 0, 'no': 328}
+                  CN2:7: {corner: 0, edge: 0, face: 0, 'no': 0}
+                CN1:7:
+                  CN2:6: {corner: 0, edge: 8, face: 0, 'no': 96}
+            val1:6:
+              val2:5:
+                CN1:6:
+                  CN2:6: {corner: 56, edge: 8, face: 0, 'no': 328}
+                  CN2:7: {corner: 0, edge: 8, face: 0, 'no': 96}
+                CN1:7:
+                  CN2:6: {corner: 0, edge: 0, face: 0, 'no': 0}
+              val2:6:
+                CN1:6:
+                  CN2:6: {corner: 24, edge: 0, face: 0, 'no': 60}
+        cations: [W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W,
+          W, W, W, W, W, W, W, W, W, W]
+        formula: W8O21
+        valences: [5, 5, 5, 5, 5, 6, 5, 6, 5, 5, 5, 6, 5, 5, 5, 5, 5, 6, 5, 5, 5,
+          6, 6, 5, 5, 6, 6, 5, 5, 5, 5, 5]
+  - - mp-23261
+    - mp-23261:
+        CN: ['5', '5', '5', '5', '6', '6', '6', '6']
+        Connections depending on element, CN, and valence:
+          I:
+            val1:5:
+              val2:5:
+                CN1:5:
+                  CN2:5: {corner: 8, edge: 0, face: 0, 'no': 48}
+                  CN2:6: {corner: 16, edge: 8, face: 0, 'no': 128}
+                CN1:6:
+                  CN2:5: {corner: 16, edge: 8, face: 0, 'no': 128}
+                  CN2:6: {corner: 8, edge: 4, face: 0, 'no': 48}
+        cations: [I, I, I, I, I, I, I, I]
+        formula: I2O5
+        valences: [5, 5, 5, 5, 5, 5, 5, 5]
+  - - mp-1470
+    - mp-1470:
+        CN: ['6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6',
+          '6', '6', '6', '6', '6', '6', '6', '6', '6', '6']
+        Connections depending on element, CN, and valence:
+          Nb:
+            val1:4:
+              val2:4:
+                CN1:6:
+                  CN2:6: {corner: 8, edge: 0, face: 0, 'no': 36}
+              val2:5:
+                CN1:6:
+                  CN2:6: {corner: 24, edge: 24, face: 0, 'no': 192}
+            val1:5:
+              val2:4:
+                CN1:6:
+                  CN2:6: {corner: 24, edge: 24, face: 0, 'no': 192}
+              val2:5:
+                CN1:6:
+                  CN2:6: {corner: 84, edge: 36, face: 0, 'no': 596}
+        cations: [Nb, Nb, Nb, Nb, Nb, Nb, Nb, Nb, Nb, Nb, Nb, Nb, Nb, Nb, Nb, Nb,
+          Nb, Nb, Nb, Nb, Nb, Nb, Nb, Nb]
+        formula: Nb12O29
+        valences: [5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 4, 4, 4, 4, 5,
+          5, 5, 5]
+  - - mp-565320
+    - mp-565320:
+        CN: ['6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6',
+          '6', '6']
+        Connections depending on element, CN, and valence:
+          V:
+            val1:3:
+              val2:3:
+                CN1:6:
+                  CN2:6: {corner: 0, edge: 4, face: 0, 'no': 72}
+              val2:4:
+                CN1:6:
+                  CN2:6: {corner: 64, edge: 12, face: 0, 'no': 328}
+            val1:4:
+              val2:3:
+                CN1:6:
+                  CN2:6: {corner: 64, edge: 12, face: 0, 'no': 328}
+              val2:4:
+                CN1:6:
+                  CN2:6: {corner: 60, edge: 24, face: 4, 'no': 544}
+        cations: [V, V, V, V, V, V, V, V, V, V, V, V, V, V, V, V]
+        formula: V8O15
+        valences: [4, 4, 4, 4, 4, 4, 3, 4, 4, 3, 4, 3, 4, 4, 3, 4]
+  - - mp-559964
+    - mp-559964:
+        CN: ['5', '6', '6', '6', '5', '5', '5', '5', '6', '5', '6', '6']
+        Connections depending on element, CN, and valence:
+          Ti:
+            val1:3:
+              val2:3:
+                CN1:5:
+                  CN2:5: {corner: 12, edge: 2, face: 0, 'no': 108}
+              val2:4:
+                CN1:5:
+                  CN2:5: {corner: 4, edge: 0, face: 0, 'no': 44}
+                  CN2:6: {corner: 28, edge: 12, face: 0, 'no': 168}
+                CN1:6:
+                  CN2:5: {corner: 0, edge: 0, face: 0, 'no': 0}
+            val1:4:
+              val2:3:
+                CN1:5:
+                  CN2:5: {corner: 4, edge: 0, face: 0, 'no': 44}
+                  CN2:6: {corner: 0, edge: 0, face: 0, 'no': 0}
+                CN1:6:
+                  CN2:5: {corner: 28, edge: 12, face: 0, 'no': 168}
+              val2:4:
+                CN1:5:
+                  CN2:5: {corner: 4, edge: 0, face: 0, 'no': 26}
+                  CN2:6: {corner: 12, edge: 8, face: 0, 'no': 124}
+                CN1:6:
+                  CN2:5: {corner: 12, edge: 8, face: 0, 'no': 124}
+                  CN2:6: {corner: 20, edge: 6, face: 0, 'no': 178}
+        cations: [Ti, Ti, Ti, Ti, Ti, Ti, Ti, Ti, Ti, Ti, Ti, Ti]
+        formula: Ti6O11
+        valences: [4, 4, 4, 4, 3, 3, 3, 4, 4, 3, 4, 4]
+  - - mp-557234
+    - mp-557234:
+        CN: ['6', '6', '6', '6', '6', '6', '6', '6', '7', '7', '7', '7', '6', '6',
+          '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6',
+          '6', '6', '6', '6', '6']
+        Connections depending on element, CN, and valence:
+          Mo:
+            val1:5:
+              val2:5:
+                CN1:6:
+                  CN2:6: {corner: 64, edge: 4, face: 0, 'no': 256}
+              val2:6:
+                CN1:6:
+                  CN2:6: {corner: 64, edge: 0, face: 0, 'no': 408}
+                  CN2:7: {corner: 0, edge: 24, face: 0, 'no': 136}
+                CN1:7:
+                  CN2:6: {corner: 0, edge: 0, face: 0, 'no': 0}
+            val1:6:
+              val2:5:
+                CN1:6:
+                  CN2:6: {corner: 64, edge: 0, face: 0, 'no': 408}
+                  CN2:7: {corner: 0, edge: 0, face: 0, 'no': 0}
+                CN1:7:
+                  CN2:6: {corner: 0, edge: 24, face: 0, 'no': 136}
+              val2:6:
+                CN1:6:
+                  CN2:6: {corner: 52, edge: 0, face: 0, 'no': 176}
+                  CN2:7: {corner: 0, edge: 16, face: 0, 'no': 96}
+                CN1:7:
+                  CN2:6: {corner: 0, edge: 16, face: 0, 'no': 96}
+                  CN2:7: {corner: 8, edge: 0, face: 0, 'no': 8}
+        cations: [Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo,
+          Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo]
+        formula: Mo17O47
+        valences: [5, 5, 5, 5, 5, 5, 5, 5, 6, 6, 6, 6, 5, 5, 5, 5, 6, 6, 6, 6, 5,
+          5, 5, 5, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6]
+  - - mp-2254
+    - mp-2254:
+        CN: ['4', '4', '6', '6', '6', '6', '6', '6', '6', '6', '6', '4', '4', '6',
+          '6', '6']
+        Connections depending on element, CN, and valence:
+          Al:
+            val1:3:
+              val2:3:
+                CN1:4:
+                  CN2:4: {corner: 8, edge: 0, face: 0, 'no': 80}
+                  CN2:6: {corner: 64, edge: 0, face: 0, 'no': 504}
+                CN1:6:
+                  CN2:4: {corner: 64, edge: 0, face: 0, 'no': 504}
+                  CN2:6: {corner: 48, edge: 64, face: 0, 'no': 752}
+        cations: [Al, Al, Al, Al, Al, Al, Al, Al, Al, Al, Al, Al, Al, Al, Al, Al]
+        formula: Al2O3
+        valences: [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+  - - mp-8057
+    - mp-8057:
+        CN: ['6', '6', '6', '6', '6', '6']
+        Connections depending on element, CN, and valence:
+          Ti:
+            val1:3:
+              val2:3:
+                CN1:6:
+                  CN2:6: {corner: 12, edge: 12, face: 0, 'no': 160}
+              val2:4:
+                CN1:6:
+                  CN2:6: {corner: 8, edge: 24, face: 0, 'no': 144}
+            val1:4:
+              val2:3:
+                CN1:6:
+                  CN2:6: {corner: 8, edge: 24, face: 0, 'no': 144}
+              val2:4:
+                CN1:6:
+                  CN2:6: {corner: 4, edge: 0, face: 0, 'no': 52}
+        cations: [Ti, Ti, Ti, Ti, Ti, Ti]
+        formula: Ti3O5
+        valences: [4, 4, 3, 3, 3, 3]
+  - - mp-1147
+    - mp-1147:
+        CN: ['6', '6', '6', '6', '6', '6']
+        Connections depending on element, CN, and valence:
+          Ti:
+            val1:3:
+              val2:3:
+                CN1:6:
+                  CN2:6: {corner: 12, edge: 12, face: 0, 'no': 180}
+              val2:4:
+                CN1:6:
+                  CN2:6: {corner: 8, edge: 24, face: 0, 'no': 168}
+            val1:4:
+              val2:3:
+                CN1:6:
+                  CN2:6: {corner: 8, edge: 24, face: 0, 'no': 168}
+              val2:4:
+                CN1:6:
+                  CN2:6: {corner: 4, edge: 0, face: 0, 'no': 52}
+        cations: [Ti, Ti, Ti, Ti, Ti, Ti]
+        formula: Ti3O5
+        valences: [3, 3, 3, 3, 4, 4]
+  - - mp-565489
+    - mp-565489:
+        CN: ['4', '6', '4', '4', '4', '6', '4', '4']
+        Connections depending on element, CN, and valence:
+          Cr:
+            val1:5:
+              val2:5:
+                CN1:4:
+                  CN2:4: {corner: 0, edge: 0, face: 0, 'no': 78}
+                  CN2:6: {corner: 24, edge: 0, face: 0, 'no': 60}
+                CN1:6:
+                  CN2:4: {corner: 24, edge: 0, face: 0, 'no': 60}
+                  CN2:6: {corner: 0, edge: 2, face: 0, 'no': 20}
+              val2:6:
+                CN1:4:
+                  CN2:4: {corner: 4, edge: 0, face: 0, 'no': 68}
+                  CN2:6: {corner: 0, edge: 0, face: 0, 'no': 0}
+                CN1:6:
+                  CN2:4: {corner: 0, edge: 0, face: 0, 'no': 32}
+            val1:6:
+              val2:5:
+                CN1:4:
+                  CN2:4: {corner: 4, edge: 0, face: 0, 'no': 68}
+                  CN2:6: {corner: 0, edge: 0, face: 0, 'no': 32}
+                CN1:6:
+                  CN2:4: {corner: 0, edge: 0, face: 0, 'no': 0}
+              val2:6:
+                CN1:4:
+                  CN2:4: {corner: 2, edge: 0, face: 0, 'no': 20}
+        cations: [Cr, Cr, Cr, Cr, Cr, Cr, Cr, Cr]
+        formula: Cr8O21
+        valences: [6, 5, 5, 5, 5, 5, 5, 6]
+  - - mp-510127
+    - mp-510127:
+        CN: ['6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6']
+        Connections depending on element, CN, and valence:
+          V:
+            val1:3:
+              val2:3:
+                CN1:6:
+                  CN2:6: {corner: 0, edge: 6, face: 0, 'no': 92}
+              val2:4:
+                CN1:6:
+                  CN2:6: {corner: 64, edge: 8, face: 0, 'no': 300}
+            val1:4:
+              val2:3:
+                CN1:6:
+                  CN2:6: {corner: 64, edge: 8, face: 0, 'no': 300}
+              val2:4:
+                CN1:6:
+                  CN2:6: {corner: 28, edge: 18, face: 4, 'no': 336}
+        cations: [V, V, V, V, V, V, V, V, V, V, V, V]
+        formula: V6O11
+        valences: [4, 4, 4, 4, 3, 3, 3, 3, 4, 4, 4, 4]
+  - - mp-510554
+    - mp-510554:
+        CN: ['6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6']
+        Connections depending on element, CN, and valence:
+          Nb:
+            val1:4:
+              val2:4:
+                CN1:6:
+                  CN2:6: {corner: 4, edge: 0, face: 0, 'no': 18}
+              val2:5:
+                CN1:6:
+                  CN2:6: {corner: 12, edge: 12, face: 0, 'no': 100}
+            val1:5:
+              val2:4:
+                CN1:6:
+                  CN2:6: {corner: 12, edge: 12, face: 0, 'no': 100}
+              val2:5:
+                CN1:6:
+                  CN2:6: {corner: 42, edge: 18, face: 0, 'no': 298}
+        cations: [Nb, Nb, Nb, Nb, Nb, Nb, Nb, Nb, Nb, Nb, Nb, Nb]
+        formula: Nb12O29
+        valences: [5, 5, 4, 5, 5, 5, 5, 5, 4, 5, 5, 5]
+  - - mp-642328
+    - mp-642328:
+        CN: ['7', '7', '7', '6', '7', '7', '6', '7', '7', '6', '7', '6', '7']
+        Connections depending on element, CN, and valence:
+          U:
+            val1:5:
+              val2:5:
+                CN1:6:
+                  CN2:6: {corner: 4, edge: 0, face: 0, 'no': 16}
+                  CN2:7: {corner: 16, edge: 8, face: 0, 'no': 84}
+                CN1:7:
+                  CN2:6: {corner: 16, edge: 8, face: 0, 'no': 84}
+                  CN2:7: {corner: 24, edge: 20, face: 0, 'no': 130}
+              val2:6:
+                CN1:6:
+                  CN2:6: {corner: 0, edge: 0, face: 0, 'no': 4}
+                  CN2:7: {corner: 0, edge: 0, face: 0, 'no': 0}
+                CN1:7:
+                  CN2:6: {corner: 8, edge: 4, face: 0, 'no': 64}
+                  CN2:7: {corner: 0, edge: 4, face: 0, 'no': 24}
+            val1:6:
+              val2:5:
+                CN1:6:
+                  CN2:6: {corner: 0, edge: 0, face: 0, 'no': 4}
+                  CN2:7: {corner: 8, edge: 4, face: 0, 'no': 64}
+                CN1:7:
+                  CN2:6: {corner: 0, edge: 0, face: 0, 'no': 0}
+                  CN2:7: {corner: 0, edge: 4, face: 0, 'no': 24}
+              val2:6:
+                CN1:6:
+                  CN2:6: {corner: 6, edge: 0, face: 0, 'no': 12}
+                  CN2:7: {corner: 4, edge: 4, face: 0, 'no': 16}
+                CN1:7:
+                  CN2:6: {corner: 4, edge: 4, face: 0, 'no': 16}
+                  CN2:7: {corner: 2, edge: 0, face: 0, 'no': 2}
+        cations: [U, U, U, U, U, U, U, U, U, U, U, U, U]
+        formula: U13O34
+        valences: [5, 5, 5, 6, 5, 5, 5, 6, 5, 6, 5, 5, 5]
+  - - mp-706490
+    - mp-706490:
+        CN: ['6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6',
+          '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6',
+          '6', '6', '6', '6', '6', '6', '6']
+        Connections depending on element, CN, and valence:
+          Mo:
+            val1:5:
+              val2:5:
+                CN1:6:
+                  CN2:6: {corner: 20, edge: 0, face: 0, 'no': 40}
+              val2:6:
+                CN1:6:
+                  CN2:6: {corner: 56, edge: 0, face: 0, 'no': 320}
+            val1:6:
+              val2:5:
+                CN1:6:
+                  CN2:6: {corner: 56, edge: 0, face: 0, 'no': 320}
+              val2:6:
+                CN1:6:
+                  CN2:6: {corner: 116, edge: 24, face: 0, 'no': 590}
+        cations: [Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo,
+          Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo,
+          Mo, Mo]
+        formula: Mo9O26
+        valences: [6, 5, 6, 6, 6, 5, 6, 6, 5, 5, 6, 6, 6, 6, 6, 5, 6, 6, 6, 6, 6,
+          6, 5, 6, 5, 5, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6]
+  - - mp-505619
+    - mp-505619:
+        CN: ['8', '8', '8', '7', '7', '7', '7', '7', '7', '7', '7']
+        Connections depending on element, CN, and valence:
+          Ce:
+            val1:3:
+              val2:3:
+                CN1:7:
+                  CN2:7: {corner: 0, edge: 4, face: 0, 'no': 12}
+                  CN2:8: {corner: 0, edge: 16, face: 0, 'no': 20}
+                CN1:8:
+                  CN2:7: {corner: 0, edge: 16, face: 0, 'no': 20}
+                  CN2:8: {corner: 0, edge: 2, face: 0, 'no': 16}
+              val2:4:
+                CN1:7:
+                  CN2:7: {corner: 12, edge: 12, face: 0, 'no': 96}
+                  CN2:8: {corner: 0, edge: 0, face: 0, 'no': 24}
+                CN1:8:
+                  CN2:7: {corner: 0, edge: 24, face: 0, 'no': 92}
+                  CN2:8: {corner: 0, edge: 4, face: 0, 'no': 16}
+            val1:4:
+              val2:3:
+                CN1:7:
+                  CN2:7: {corner: 12, edge: 12, face: 0, 'no': 96}
+                  CN2:8: {corner: 0, edge: 24, face: 0, 'no': 92}
+                CN1:8:
+                  CN2:7: {corner: 0, edge: 0, face: 0, 'no': 24}
+                  CN2:8: {corner: 0, edge: 4, face: 0, 'no': 16}
+              val2:4:
+                CN1:7:
+                  CN2:7: {corner: 12, edge: 26, face: 0, 'no': 126}
+                  CN2:8: {corner: 0, edge: 20, face: 0, 'no': 36}
+                CN1:8:
+                  CN2:7: {corner: 0, edge: 20, face: 0, 'no': 36}
+                  CN2:8: {corner: 0, edge: 0, face: 0, 'no': 4}
+        cations: [Ce, Ce, Ce, Ce, Ce, Ce, Ce, Ce, Ce, Ce, Ce]
+        formula: Ce11O20
+        valences: [4, 3, 3, 4, 4, 3, 3, 4, 4, 4, 4]
+  - - mp-19529
+    - mp-19529:
+        CN: ['6', '6', '6', '6', '6', '6', '6', '6', '7', '7', '6', '6', '6', '6',
+          '6', '6', '6', '6']
+        Connections depending on element, CN, and valence:
+          W:
+            val1:5:
+              val2:5:
+                CN1:6:
+                  CN2:6: {corner: 42, edge: 0, face: 0, 'no': 170}
+              val2:6:
+                CN1:6:
+                  CN2:6: {corner: 36, edge: 0, face: 0, 'no': 216}
+                  CN2:7: {corner: 0, edge: 12, face: 0, 'no': 72}
+                CN1:7:
+                  CN2:6: {corner: 0, edge: 0, face: 0, 'no': 0}
+            val1:6:
+              val2:5:
+                CN1:6:
+                  CN2:6: {corner: 36, edge: 0, face: 0, 'no': 216}
+                  CN2:7: {corner: 0, edge: 0, face: 0, 'no': 0}
+                CN1:7:
+                  CN2:6: {corner: 0, edge: 12, face: 0, 'no': 72}
+              val2:6:
+                CN1:6:
+                  CN2:6: {corner: 20, edge: 2, face: 0, 'no': 56}
+                  CN2:7: {corner: 0, edge: 8, face: 0, 'no': 64}
+                CN1:7:
+                  CN2:6: {corner: 0, edge: 8, face: 0, 'no': 64}
+                  CN2:7: {corner: 4, edge: 0, face: 0, 'no': 4}
+        cations: [W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W]
+        formula: W18O49
+        valences: [6, 6, 5, 5, 5, 5, 5, 5, 6, 6, 5, 5, 5, 5, 6, 6, 6, 6]
+  - - mp-748
+    - mp-748:
+        CN: ['6', '6', '6', '6', '6', '6', '6', '6', '6', '6']
+        Connections depending on element, CN, and valence:
+          Ti:
+            val1:3:
+              val2:3:
+                CN1:6:
+                  CN2:6: {corner: 12, edge: 0, face: 0, 'no': 100}
+              val2:4:
+                CN1:6:
+                  CN2:6: {corner: 40, edge: 24, face: 0, 'no': 288}
+            val1:4:
+              val2:3:
+                CN1:6:
+                  CN2:6: {corner: 40, edge: 24, face: 0, 'no': 288}
+              val2:4:
+                CN1:6:
+                  CN2:6: {corner: 24, edge: 4, face: 4, 'no': 216}
+        cations: [Ti, Ti, Ti, Ti, Ti, Ti, Ti, Ti, Ti, Ti]
+        formula: Ti5O9
+        valences: [4, 4, 4, 4, 3, 3, 3, 3, 4, 4]
+  - - mp-556724
+    - mp-556724:
+        CN: ['6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6']
+        Connections depending on element, CN, and valence:
+          Ti:
+            val1:3:
+              val2:3:
+                CN1:6:
+                  CN2:6: {corner: 12, edge: 2, face: 0, 'no': 66}
+              val2:4:
+                CN1:6:
+                  CN2:6: {corner: 36, edge: 20, face: 4, 'no': 348}
+            val1:4:
+              val2:3:
+                CN1:6:
+                  CN2:6: {corner: 36, edge: 20, face: 4, 'no': 348}
+              val2:4:
+                CN1:6:
+                  CN2:6: {corner: 60, edge: 14, face: 0, 'no': 434}
+        cations: [Ti, Ti, Ti, Ti, Ti, Ti, Ti, Ti, Ti, Ti, Ti, Ti, Ti, Ti]
+        formula: Ti7O13
+        valences: [3, 3, 4, 4, 4, 4, 3, 3, 4, 4, 4, 4, 4, 4]
+  - - mp-19540
+    - mp-19540:
+        CN: ['6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6',
+          '6', '6']
+        Connections depending on element, CN, and valence:
+          Mo:
+            val1:5:
+              val2:5:
+                CN1:6:
+                  CN2:6: {corner: 12, edge: 0, face: 0, 'no': 20}
+              val2:6:
+                CN1:6:
+                  CN2:6: {corner: 24, edge: 0, face: 0, 'no': 168}
+            val1:6:
+              val2:5:
+                CN1:6:
+                  CN2:6: {corner: 24, edge: 0, face: 0, 'no': 168}
+              val2:6:
+                CN1:6:
+                  CN2:6: {corner: 48, edge: 12, face: 0, 'no': 240}
+        cations: [Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo]
+        formula: Mo8O23
+        valences: [6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 5, 5, 5, 5]
+  - - mp-567080
+    - mp-567080:
+        CN: ['6', '6', '6', '6', '6', '6', '6', '6']
+        Connections depending on element, CN, and valence:
+          V:
+            val1:3:
+              val2:3:
+                CN1:6:
+                  CN2:6: {corner: 0, edge: 12, face: 0, 'no': 144}
+              val2:4:
+                CN1:6:
+                  CN2:6: {corner: 60, edge: 0, face: 4, 'no': 212}
+            val1:4:
+              val2:3:
+                CN1:6:
+                  CN2:6: {corner: 60, edge: 0, face: 4, 'no': 212}
+              val2:4:
+                CN1:6:
+                  CN2:6: {corner: 0, edge: 12, face: 0, 'no': 142}
+        cations: [V, V, V, V, V, V, V, V]
+        formula: V4O7
+        valences: [4, 4, 4, 3, 3, 3, 3, 4]
+  - - mp-562065
+    - mp-562065:
+        CN: ['4', '4', '3', '4', '3', '3', '3', '4']
+        Connections depending on element, CN, and valence:
+          P:
+            val1:4:
+              val2:4:
+                CN1:3:
+                  CN2:3: {corner: 4, edge: 0, face: 0, 'no': 92}
+                  CN2:4: {corner: 16, edge: 0, face: 0, 'no': 176}
+                CN1:4:
+                  CN2:3: {corner: 16, edge: 0, face: 0, 'no': 176}
+                  CN2:4: {corner: 4, edge: 0, face: 0, 'no': 84}
+        cations: [P, P, P, P, P, P, P, P]
+        formula: PO2
+        valences: [4, 4, 4, 4, 4, 4, 4, 4]
   - - mp-1605
     - mp-1605:
         CN: ['4', '4', '4', '4', '4', '4']
@@ -264,549 +810,3 @@
         cations: [W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W]
         formula: W10O29
         valences: [6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 5, 5, 5, 5]
-  - - mp-567080
-    - mp-567080:
-        CN: ['6', '6', '6', '6', '6', '6', '6', '6']
-        Connections depending on element, CN, and valence:
-          V:
-            val1:3:
-              val2:3:
-                CN1:6:
-                  CN2:6: {corner: 0, edge: 12, face: 0, 'no': 144}
-              val2:4:
-                CN1:6:
-                  CN2:6: {corner: 60, edge: 0, face: 4, 'no': 212}
-            val1:4:
-              val2:3:
-                CN1:6:
-                  CN2:6: {corner: 60, edge: 0, face: 4, 'no': 212}
-              val2:4:
-                CN1:6:
-                  CN2:6: {corner: 0, edge: 12, face: 0, 'no': 142}
-        cations: [V, V, V, V, V, V, V, V]
-        formula: V4O7
-        valences: [4, 4, 4, 3, 3, 3, 3, 4]
-  - - mp-8057
-    - mp-8057:
-        CN: ['6', '6', '6', '6', '6', '6']
-        Connections depending on element, CN, and valence:
-          Ti:
-            val1:3:
-              val2:3:
-                CN1:6:
-                  CN2:6: {corner: 12, edge: 12, face: 0, 'no': 160}
-              val2:4:
-                CN1:6:
-                  CN2:6: {corner: 8, edge: 24, face: 0, 'no': 144}
-            val1:4:
-              val2:3:
-                CN1:6:
-                  CN2:6: {corner: 8, edge: 24, face: 0, 'no': 144}
-              val2:4:
-                CN1:6:
-                  CN2:6: {corner: 4, edge: 0, face: 0, 'no': 52}
-        cations: [Ti, Ti, Ti, Ti, Ti, Ti]
-        formula: Ti3O5
-        valences: [4, 4, 3, 3, 3, 3]
-  - - mp-579377
-    - mp-579377:
-        CN: ['6', '6', '7', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6',
-          '7', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6',
-          '7', '7', '6']
-        Connections depending on element, CN, and valence:
-          W:
-            val1:5:
-              val2:5:
-                CN1:6:
-                  CN2:6: {corner: 96, edge: 0, face: 0, 'no': 428}
-                  CN2:7: {corner: 0, edge: 32, face: 0, 'no': 192}
-                CN1:7:
-                  CN2:6: {corner: 0, edge: 32, face: 0, 'no': 192}
-                  CN2:7: {corner: 8, edge: 0, face: 0, 'no': 8}
-              val2:6:
-                CN1:6:
-                  CN2:6: {corner: 56, edge: 8, face: 0, 'no': 328}
-                  CN2:7: {corner: 0, edge: 0, face: 0, 'no': 0}
-                CN1:7:
-                  CN2:6: {corner: 0, edge: 8, face: 0, 'no': 96}
-            val1:6:
-              val2:5:
-                CN1:6:
-                  CN2:6: {corner: 56, edge: 8, face: 0, 'no': 328}
-                  CN2:7: {corner: 0, edge: 8, face: 0, 'no': 96}
-                CN1:7:
-                  CN2:6: {corner: 0, edge: 0, face: 0, 'no': 0}
-              val2:6:
-                CN1:6:
-                  CN2:6: {corner: 24, edge: 0, face: 0, 'no': 60}
-        cations: [W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W,
-          W, W, W, W, W, W, W, W, W, W]
-        formula: W8O21
-        valences: [5, 5, 5, 5, 5, 6, 5, 6, 5, 5, 5, 6, 5, 5, 5, 5, 5, 6, 5, 5, 5,
-          6, 6, 5, 5, 6, 6, 5, 5, 5, 5, 5]
-  - - mp-565489
-    - mp-565489:
-        CN: ['4', '6', '4', '4', '4', '6', '4', '4']
-        Connections depending on element, CN, and valence:
-          Cr:
-            val1:5:
-              val2:5:
-                CN1:4:
-                  CN2:4: {corner: 0, edge: 0, face: 0, 'no': 78}
-                  CN2:6: {corner: 24, edge: 0, face: 0, 'no': 60}
-                CN1:6:
-                  CN2:4: {corner: 24, edge: 0, face: 0, 'no': 60}
-                  CN2:6: {corner: 0, edge: 2, face: 0, 'no': 20}
-              val2:6:
-                CN1:4:
-                  CN2:4: {corner: 4, edge: 0, face: 0, 'no': 68}
-                  CN2:6: {corner: 0, edge: 0, face: 0, 'no': 0}
-                CN1:6:
-                  CN2:4: {corner: 0, edge: 0, face: 0, 'no': 32}
-            val1:6:
-              val2:5:
-                CN1:4:
-                  CN2:4: {corner: 4, edge: 0, face: 0, 'no': 68}
-                  CN2:6: {corner: 0, edge: 0, face: 0, 'no': 32}
-                CN1:6:
-                  CN2:4: {corner: 0, edge: 0, face: 0, 'no': 0}
-              val2:6:
-                CN1:4:
-                  CN2:4: {corner: 2, edge: 0, face: 0, 'no': 20}
-        cations: [Cr, Cr, Cr, Cr, Cr, Cr, Cr, Cr]
-        formula: Cr8O21
-        valences: [6, 5, 5, 5, 5, 5, 5, 6]
-  - - mp-19540
-    - mp-19540:
-        CN: ['6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6',
-          '6', '6']
-        Connections depending on element, CN, and valence:
-          Mo:
-            val1:5:
-              val2:5:
-                CN1:6:
-                  CN2:6: {corner: 12, edge: 0, face: 0, 'no': 20}
-              val2:6:
-                CN1:6:
-                  CN2:6: {corner: 24, edge: 0, face: 0, 'no': 168}
-            val1:6:
-              val2:5:
-                CN1:6:
-                  CN2:6: {corner: 24, edge: 0, face: 0, 'no': 168}
-              val2:6:
-                CN1:6:
-                  CN2:6: {corner: 48, edge: 12, face: 0, 'no': 240}
-        cations: [Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo]
-        formula: Mo8O23
-        valences: [6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 5, 5, 5, 5]
-  - - mp-1147
-    - mp-1147:
-        CN: ['6', '6', '6', '6', '6', '6']
-        Connections depending on element, CN, and valence:
-          Ti:
-            val1:3:
-              val2:3:
-                CN1:6:
-                  CN2:6: {corner: 12, edge: 12, face: 0, 'no': 180}
-              val2:4:
-                CN1:6:
-                  CN2:6: {corner: 8, edge: 24, face: 0, 'no': 168}
-            val1:4:
-              val2:3:
-                CN1:6:
-                  CN2:6: {corner: 8, edge: 24, face: 0, 'no': 168}
-              val2:4:
-                CN1:6:
-                  CN2:6: {corner: 4, edge: 0, face: 0, 'no': 52}
-        cations: [Ti, Ti, Ti, Ti, Ti, Ti]
-        formula: Ti3O5
-        valences: [3, 3, 3, 3, 4, 4]
-  - - mp-2254
-    - mp-2254:
-        CN: ['4', '4', '6', '6', '6', '6', '6', '6', '6', '6', '6', '4', '4', '6',
-          '6', '6']
-        Connections depending on element, CN, and valence:
-          Al:
-            val1:3:
-              val2:3:
-                CN1:4:
-                  CN2:4: {corner: 8, edge: 0, face: 0, 'no': 80}
-                  CN2:6: {corner: 64, edge: 0, face: 0, 'no': 504}
-                CN1:6:
-                  CN2:4: {corner: 64, edge: 0, face: 0, 'no': 504}
-                  CN2:6: {corner: 48, edge: 64, face: 0, 'no': 752}
-        cations: [Al, Al, Al, Al, Al, Al, Al, Al, Al, Al, Al, Al, Al, Al, Al, Al]
-        formula: Al2O3
-        valences: [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
-  - - mp-642328
-    - mp-642328:
-        CN: ['7', '7', '7', '6', '7', '7', '6', '7', '7', '6', '7', '6', '7']
-        Connections depending on element, CN, and valence:
-          U:
-            val1:5:
-              val2:5:
-                CN1:6:
-                  CN2:6: {corner: 4, edge: 0, face: 0, 'no': 16}
-                  CN2:7: {corner: 16, edge: 8, face: 0, 'no': 84}
-                CN1:7:
-                  CN2:6: {corner: 16, edge: 8, face: 0, 'no': 84}
-                  CN2:7: {corner: 24, edge: 20, face: 0, 'no': 130}
-              val2:6:
-                CN1:6:
-                  CN2:6: {corner: 0, edge: 0, face: 0, 'no': 4}
-                  CN2:7: {corner: 0, edge: 0, face: 0, 'no': 0}
-                CN1:7:
-                  CN2:6: {corner: 8, edge: 4, face: 0, 'no': 64}
-                  CN2:7: {corner: 0, edge: 4, face: 0, 'no': 24}
-            val1:6:
-              val2:5:
-                CN1:6:
-                  CN2:6: {corner: 0, edge: 0, face: 0, 'no': 4}
-                  CN2:7: {corner: 8, edge: 4, face: 0, 'no': 64}
-                CN1:7:
-                  CN2:6: {corner: 0, edge: 0, face: 0, 'no': 0}
-                  CN2:7: {corner: 0, edge: 4, face: 0, 'no': 24}
-              val2:6:
-                CN1:6:
-                  CN2:6: {corner: 6, edge: 0, face: 0, 'no': 12}
-                  CN2:7: {corner: 4, edge: 4, face: 0, 'no': 16}
-                CN1:7:
-                  CN2:6: {corner: 4, edge: 4, face: 0, 'no': 16}
-                  CN2:7: {corner: 2, edge: 0, face: 0, 'no': 2}
-        cations: [U, U, U, U, U, U, U, U, U, U, U, U, U]
-        formula: U13O34
-        valences: [5, 5, 5, 6, 5, 5, 5, 6, 5, 6, 5, 5, 5]
-  - - mp-19529
-    - mp-19529:
-        CN: ['6', '6', '6', '6', '6', '6', '6', '6', '7', '7', '6', '6', '6', '6',
-          '6', '6', '6', '6']
-        Connections depending on element, CN, and valence:
-          W:
-            val1:5:
-              val2:5:
-                CN1:6:
-                  CN2:6: {corner: 42, edge: 0, face: 0, 'no': 170}
-              val2:6:
-                CN1:6:
-                  CN2:6: {corner: 36, edge: 0, face: 0, 'no': 216}
-                  CN2:7: {corner: 0, edge: 12, face: 0, 'no': 72}
-                CN1:7:
-                  CN2:6: {corner: 0, edge: 0, face: 0, 'no': 0}
-            val1:6:
-              val2:5:
-                CN1:6:
-                  CN2:6: {corner: 36, edge: 0, face: 0, 'no': 216}
-                  CN2:7: {corner: 0, edge: 0, face: 0, 'no': 0}
-                CN1:7:
-                  CN2:6: {corner: 0, edge: 12, face: 0, 'no': 72}
-              val2:6:
-                CN1:6:
-                  CN2:6: {corner: 20, edge: 2, face: 0, 'no': 56}
-                  CN2:7: {corner: 0, edge: 8, face: 0, 'no': 64}
-                CN1:7:
-                  CN2:6: {corner: 0, edge: 8, face: 0, 'no': 64}
-                  CN2:7: {corner: 4, edge: 0, face: 0, 'no': 4}
-        cations: [W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W]
-        formula: W18O49
-        valences: [6, 6, 5, 5, 5, 5, 5, 5, 6, 6, 5, 5, 5, 5, 6, 6, 6, 6]
-  - - mp-505619
-    - mp-505619:
-        CN: ['8', '8', '8', '7', '7', '7', '7', '7', '7', '7', '7']
-        Connections depending on element, CN, and valence:
-          Ce:
-            val1:3:
-              val2:3:
-                CN1:7:
-                  CN2:7: {corner: 0, edge: 4, face: 0, 'no': 12}
-                  CN2:8: {corner: 0, edge: 16, face: 0, 'no': 20}
-                CN1:8:
-                  CN2:7: {corner: 0, edge: 16, face: 0, 'no': 20}
-                  CN2:8: {corner: 0, edge: 2, face: 0, 'no': 16}
-              val2:4:
-                CN1:7:
-                  CN2:7: {corner: 12, edge: 12, face: 0, 'no': 96}
-                  CN2:8: {corner: 0, edge: 0, face: 0, 'no': 24}
-                CN1:8:
-                  CN2:7: {corner: 0, edge: 24, face: 0, 'no': 92}
-                  CN2:8: {corner: 0, edge: 4, face: 0, 'no': 16}
-            val1:4:
-              val2:3:
-                CN1:7:
-                  CN2:7: {corner: 12, edge: 12, face: 0, 'no': 96}
-                  CN2:8: {corner: 0, edge: 24, face: 0, 'no': 92}
-                CN1:8:
-                  CN2:7: {corner: 0, edge: 0, face: 0, 'no': 24}
-                  CN2:8: {corner: 0, edge: 4, face: 0, 'no': 16}
-              val2:4:
-                CN1:7:
-                  CN2:7: {corner: 12, edge: 26, face: 0, 'no': 126}
-                  CN2:8: {corner: 0, edge: 20, face: 0, 'no': 36}
-                CN1:8:
-                  CN2:7: {corner: 0, edge: 20, face: 0, 'no': 36}
-                  CN2:8: {corner: 0, edge: 0, face: 0, 'no': 4}
-        cations: [Ce, Ce, Ce, Ce, Ce, Ce, Ce, Ce, Ce, Ce, Ce]
-        formula: Ce11O20
-        valences: [4, 3, 3, 4, 4, 3, 3, 4, 4, 4, 4]
-  - - mp-23261
-    - mp-23261:
-        CN: ['5', '5', '5', '5', '6', '6', '6', '6']
-        Connections depending on element, CN, and valence:
-          I:
-            val1:5:
-              val2:5:
-                CN1:5:
-                  CN2:5: {corner: 8, edge: 0, face: 0, 'no': 48}
-                  CN2:6: {corner: 16, edge: 8, face: 0, 'no': 128}
-                CN1:6:
-                  CN2:5: {corner: 16, edge: 8, face: 0, 'no': 128}
-                  CN2:6: {corner: 8, edge: 4, face: 0, 'no': 48}
-        cations: [I, I, I, I, I, I, I, I]
-        formula: I2O5
-        valences: [5, 5, 5, 5, 5, 5, 5, 5]
-  - - mp-1470
-    - mp-1470:
-        CN: ['6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6',
-          '6', '6', '6', '6', '6', '6', '6', '6', '6', '6']
-        Connections depending on element, CN, and valence:
-          Nb:
-            val1:4:
-              val2:4:
-                CN1:6:
-                  CN2:6: {corner: 8, edge: 0, face: 0, 'no': 36}
-              val2:5:
-                CN1:6:
-                  CN2:6: {corner: 24, edge: 24, face: 0, 'no': 192}
-            val1:5:
-              val2:4:
-                CN1:6:
-                  CN2:6: {corner: 24, edge: 24, face: 0, 'no': 192}
-              val2:5:
-                CN1:6:
-                  CN2:6: {corner: 84, edge: 36, face: 0, 'no': 596}
-        cations: [Nb, Nb, Nb, Nb, Nb, Nb, Nb, Nb, Nb, Nb, Nb, Nb, Nb, Nb, Nb, Nb,
-          Nb, Nb, Nb, Nb, Nb, Nb, Nb, Nb]
-        formula: Nb12O29
-        valences: [5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 4, 4, 4, 4, 5,
-          5, 5, 5]
-  - - mp-510554
-    - mp-510554:
-        CN: ['6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6']
-        Connections depending on element, CN, and valence:
-          Nb:
-            val1:4:
-              val2:4:
-                CN1:6:
-                  CN2:6: {corner: 4, edge: 0, face: 0, 'no': 18}
-              val2:5:
-                CN1:6:
-                  CN2:6: {corner: 12, edge: 12, face: 0, 'no': 100}
-            val1:5:
-              val2:4:
-                CN1:6:
-                  CN2:6: {corner: 12, edge: 12, face: 0, 'no': 100}
-              val2:5:
-                CN1:6:
-                  CN2:6: {corner: 42, edge: 18, face: 0, 'no': 298}
-        cations: [Nb, Nb, Nb, Nb, Nb, Nb, Nb, Nb, Nb, Nb, Nb, Nb]
-        formula: Nb12O29
-        valences: [5, 5, 4, 5, 5, 5, 5, 5, 4, 5, 5, 5]
-  - - mp-559964
-    - mp-559964:
-        CN: ['5', '6', '6', '6', '5', '5', '5', '5', '6', '5', '6', '6']
-        Connections depending on element, CN, and valence:
-          Ti:
-            val1:3:
-              val2:3:
-                CN1:5:
-                  CN2:5: {corner: 12, edge: 2, face: 0, 'no': 108}
-              val2:4:
-                CN1:5:
-                  CN2:5: {corner: 4, edge: 0, face: 0, 'no': 44}
-                  CN2:6: {corner: 28, edge: 12, face: 0, 'no': 168}
-                CN1:6:
-                  CN2:5: {corner: 0, edge: 0, face: 0, 'no': 0}
-            val1:4:
-              val2:3:
-                CN1:5:
-                  CN2:5: {corner: 4, edge: 0, face: 0, 'no': 44}
-                  CN2:6: {corner: 0, edge: 0, face: 0, 'no': 0}
-                CN1:6:
-                  CN2:5: {corner: 28, edge: 12, face: 0, 'no': 168}
-              val2:4:
-                CN1:5:
-                  CN2:5: {corner: 4, edge: 0, face: 0, 'no': 26}
-                  CN2:6: {corner: 12, edge: 8, face: 0, 'no': 124}
-                CN1:6:
-                  CN2:5: {corner: 12, edge: 8, face: 0, 'no': 124}
-                  CN2:6: {corner: 20, edge: 6, face: 0, 'no': 178}
-        cations: [Ti, Ti, Ti, Ti, Ti, Ti, Ti, Ti, Ti, Ti, Ti, Ti]
-        formula: Ti6O11
-        valences: [4, 4, 4, 4, 3, 3, 3, 4, 4, 3, 4, 4]
-  - - mp-565320
-    - mp-565320:
-        CN: ['6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6',
-          '6', '6']
-        Connections depending on element, CN, and valence:
-          V:
-            val1:3:
-              val2:3:
-                CN1:6:
-                  CN2:6: {corner: 0, edge: 4, face: 0, 'no': 72}
-              val2:4:
-                CN1:6:
-                  CN2:6: {corner: 64, edge: 12, face: 0, 'no': 328}
-            val1:4:
-              val2:3:
-                CN1:6:
-                  CN2:6: {corner: 64, edge: 12, face: 0, 'no': 328}
-              val2:4:
-                CN1:6:
-                  CN2:6: {corner: 60, edge: 24, face: 4, 'no': 544}
-        cations: [V, V, V, V, V, V, V, V, V, V, V, V, V, V, V, V]
-        formula: V8O15
-        valences: [4, 4, 4, 4, 4, 4, 3, 4, 4, 3, 4, 3, 4, 4, 3, 4]
-  - - mp-557234
-    - mp-557234:
-        CN: ['6', '6', '6', '6', '6', '6', '6', '6', '7', '7', '7', '7', '6', '6',
-          '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6',
-          '6', '6', '6', '6', '6']
-        Connections depending on element, CN, and valence:
-          Mo:
-            val1:5:
-              val2:5:
-                CN1:6:
-                  CN2:6: {corner: 64, edge: 4, face: 0, 'no': 256}
-              val2:6:
-                CN1:6:
-                  CN2:6: {corner: 64, edge: 0, face: 0, 'no': 408}
-                  CN2:7: {corner: 0, edge: 24, face: 0, 'no': 136}
-                CN1:7:
-                  CN2:6: {corner: 0, edge: 0, face: 0, 'no': 0}
-            val1:6:
-              val2:5:
-                CN1:6:
-                  CN2:6: {corner: 64, edge: 0, face: 0, 'no': 408}
-                  CN2:7: {corner: 0, edge: 0, face: 0, 'no': 0}
-                CN1:7:
-                  CN2:6: {corner: 0, edge: 24, face: 0, 'no': 136}
-              val2:6:
-                CN1:6:
-                  CN2:6: {corner: 52, edge: 0, face: 0, 'no': 176}
-                  CN2:7: {corner: 0, edge: 16, face: 0, 'no': 96}
-                CN1:7:
-                  CN2:6: {corner: 0, edge: 16, face: 0, 'no': 96}
-                  CN2:7: {corner: 8, edge: 0, face: 0, 'no': 8}
-        cations: [Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo,
-          Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo]
-        formula: Mo17O47
-        valences: [5, 5, 5, 5, 5, 5, 5, 5, 6, 6, 6, 6, 5, 5, 5, 5, 6, 6, 6, 6, 5,
-          5, 5, 5, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6]
-  - - mp-706490
-    - mp-706490:
-        CN: ['6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6',
-          '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6',
-          '6', '6', '6', '6', '6', '6', '6']
-        Connections depending on element, CN, and valence:
-          Mo:
-            val1:5:
-              val2:5:
-                CN1:6:
-                  CN2:6: {corner: 20, edge: 0, face: 0, 'no': 40}
-              val2:6:
-                CN1:6:
-                  CN2:6: {corner: 56, edge: 0, face: 0, 'no': 320}
-            val1:6:
-              val2:5:
-                CN1:6:
-                  CN2:6: {corner: 56, edge: 0, face: 0, 'no': 320}
-              val2:6:
-                CN1:6:
-                  CN2:6: {corner: 116, edge: 24, face: 0, 'no': 590}
-        cations: [Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo,
-          Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo,
-          Mo, Mo]
-        formula: Mo9O26
-        valences: [6, 5, 6, 6, 6, 5, 6, 6, 5, 5, 6, 6, 6, 6, 6, 5, 6, 6, 6, 6, 6,
-          6, 5, 6, 5, 5, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6]
-  - - mp-748
-    - mp-748:
-        CN: ['6', '6', '6', '6', '6', '6', '6', '6', '6', '6']
-        Connections depending on element, CN, and valence:
-          Ti:
-            val1:3:
-              val2:3:
-                CN1:6:
-                  CN2:6: {corner: 12, edge: 0, face: 0, 'no': 100}
-              val2:4:
-                CN1:6:
-                  CN2:6: {corner: 40, edge: 24, face: 0, 'no': 288}
-            val1:4:
-              val2:3:
-                CN1:6:
-                  CN2:6: {corner: 40, edge: 24, face: 0, 'no': 288}
-              val2:4:
-                CN1:6:
-                  CN2:6: {corner: 24, edge: 4, face: 4, 'no': 216}
-        cations: [Ti, Ti, Ti, Ti, Ti, Ti, Ti, Ti, Ti, Ti]
-        formula: Ti5O9
-        valences: [4, 4, 4, 4, 3, 3, 3, 3, 4, 4]
-  - - mp-562065
-    - mp-562065:
-        CN: ['4', '4', '3', '4', '3', '3', '3', '4']
-        Connections depending on element, CN, and valence:
-          P:
-            val1:4:
-              val2:4:
-                CN1:3:
-                  CN2:3: {corner: 4, edge: 0, face: 0, 'no': 92}
-                  CN2:4: {corner: 16, edge: 0, face: 0, 'no': 176}
-                CN1:4:
-                  CN2:3: {corner: 16, edge: 0, face: 0, 'no': 176}
-                  CN2:4: {corner: 4, edge: 0, face: 0, 'no': 84}
-        cations: [P, P, P, P, P, P, P, P]
-        formula: PO2
-        valences: [4, 4, 4, 4, 4, 4, 4, 4]
-  - - mp-556724
-    - mp-556724:
-        CN: ['6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6']
-        Connections depending on element, CN, and valence:
-          Ti:
-            val1:3:
-              val2:3:
-                CN1:6:
-                  CN2:6: {corner: 12, edge: 2, face: 0, 'no': 66}
-              val2:4:
-                CN1:6:
-                  CN2:6: {corner: 36, edge: 20, face: 4, 'no': 348}
-            val1:4:
-              val2:3:
-                CN1:6:
-                  CN2:6: {corner: 36, edge: 20, face: 4, 'no': 348}
-              val2:4:
-                CN1:6:
-                  CN2:6: {corner: 60, edge: 14, face: 0, 'no': 434}
-        cations: [Ti, Ti, Ti, Ti, Ti, Ti, Ti, Ti, Ti, Ti, Ti, Ti, Ti, Ti]
-        formula: Ti7O13
-        valences: [3, 3, 4, 4, 4, 4, 3, 3, 4, 4, 4, 4, 4, 4]
-  - - mp-510127
-    - mp-510127:
-        CN: ['6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6']
-        Connections depending on element, CN, and valence:
-          V:
-            val1:3:
-              val2:3:
-                CN1:6:
-                  CN2:6: {corner: 0, edge: 6, face: 0, 'no': 92}
-              val2:4:
-                CN1:6:
-                  CN2:6: {corner: 64, edge: 8, face: 0, 'no': 300}
-            val1:4:
-              val2:3:
-                CN1:6:
-                  CN2:6: {corner: 64, edge: 8, face: 0, 'no': 300}
-              val2:4:
-                CN1:6:
-                  CN2:6: {corner: 28, edge: 18, face: 4, 'no': 336}
-        cations: [V, V, V, V, V, V, V, V, V, V, V, V]
-        formula: V6O11
-        valences: [4, 4, 4, 4, 3, 3, 3, 3, 4, 4, 4, 4]
