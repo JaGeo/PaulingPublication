@@ -678,9 +678,9 @@ class TestPauling4OverAllAnalysis(unittest.TestCase):
                                                       list_of_materials_to_investigate='test_list.json',
                                                       analyse_structures=True, use_prematching=True)
         self.pauling4normal2 = Pauling4OverAllAnalysis(source='my_own_list', onlybinaries=False,
-                                                      plot_element_dependend_analysis=False,
-                                                      list_of_materials_to_investigate='test_list_As2O5.json',
-                                                      analyse_structures=True, use_prematching=True)
+                                                       plot_element_dependend_analysis=False,
+                                                       list_of_materials_to_investigate='test_list_As2O5.json',
+                                                       analyse_structures=True, use_prematching=True)
         self.pauling4normal3 = Pauling4OverAllAnalysis(source='my_own_list', onlybinaries=False,
                                                        plot_element_dependend_analysis=False,
                                                        list_of_materials_to_investigate='test_list_NaFeO2.json',
@@ -690,35 +690,39 @@ class TestPauling4OverAllAnalysis(unittest.TestCase):
                                                        list_of_materials_to_investigate='test_list_BaTiO3.json',
                                                        analyse_structures=True, use_prematching=True)
 
-
     def test_run(self):
 
-        #the following three cases sum up to the correct number of connections if one leaves out the symmetric cases (only one of the 3,4 and 4,3 should be used)
+        # the following three cases sum up to the correct number of connections if one leaves out the symmetric cases (only one of the 3,4 and 4,3 should be used)
         self.pauling4normal4.run(show_plot=False, start_from_connections=False, save_connections=False,
-                                connections_folder='', start_from_results=False, save_result_data=False,
-                                restart_from_saved_structure_analysis=False, save_structure_analysis=False,
-                                path_to_save='')
+                                 connections_folder='', start_from_results=False, save_result_data=False,
+                                 restart_from_saved_structure_analysis=False, save_structure_analysis=False,
+                                 path_to_save='')
 
-        self.assertDictEqual(self.pauling4normal4.Dict_CN,{'6': {'6': [20, 6], '12': [48, 16]}, '12': {'6': [48, 16], '12': [8, 18]}})
-        self.assertDictEqual(self.pauling4normal4.Dict_val,{'4': {'4': [20, 6], '2': [48, 16]}, '2': {'4': [48, 16], '2': [8, 18]}})
+        self.assertDictEqual(self.pauling4normal4.Dict_CN,
+                             {'6': {'6': [20, 6], '12': [48, 16]}, '12': {'6': [48, 16], '12': [8, 18]}})
+        self.assertDictEqual(self.pauling4normal4.Dict_val,
+                             {'4': {'4': [20, 6], '2': [48, 16]}, '2': {'4': [48, 16], '2': [8, 18]}})
 
         self.pauling4normal2.run(show_plot=False, start_from_connections=False, save_connections=False,
-                                connections_folder='', start_from_results=False, save_result_data=False,
-                                restart_from_saved_structure_analysis=False, save_structure_analysis=False,
-                                path_to_save='')
+                                 connections_folder='', start_from_results=False, save_result_data=False,
+                                 restart_from_saved_structure_analysis=False, save_structure_analysis=False,
+                                 path_to_save='')
 
-        self.assertEqual(self.pauling4normal2.Dict_val["5"]["5"][1],self.pauling4normal2.Dict_CN["4"]["4"][1]+self.pauling4normal2.Dict_CN["4"]["6"][1]+self.pauling4normal2.Dict_CN["6"]["6"][1])
+        self.assertEqual(self.pauling4normal2.Dict_val["5"]["5"][1],
+                         self.pauling4normal2.Dict_CN["4"]["4"][1] + self.pauling4normal2.Dict_CN["4"]["6"][1] +
+                         self.pauling4normal2.Dict_CN["6"]["6"][1])
 
-        self.assertDictEqual(self.pauling4normal2.Dict_CN,{'4': {'4': [88, 0], '6': [192, 32]}, '6': {'4': [192, 32], '6': [96, 8]}})
-        self.assertDictEqual(self.pauling4normal2.Dict_val,{'5': {'5': [376, 40]}})
-
+        self.assertDictEqual(self.pauling4normal2.Dict_CN,
+                             {'4': {'4': [88, 0], '6': [192, 32]}, '6': {'4': [192, 32], '6': [96, 8]}})
+        self.assertDictEqual(self.pauling4normal2.Dict_val, {'5': {'5': [376, 40]}})
 
         self.pauling4normal3.run(show_plot=False, start_from_connections=False, save_connections=False,
-                                connections_folder='', start_from_results=False, save_result_data=False,
-                                restart_from_saved_structure_analysis=False, save_structure_analysis=False,
-                                path_to_save='')
-        self.assertDictEqual(self.pauling4normal3.Dict_CN,{'6': {'6': [132, 36]}})
-        self.assertDictEqual(self.pauling4normal3.Dict_val,{'1': {'1': [36, 6], '3': [60, 24]}, '3': {'1': [60, 24], '3': [36, 6]}})
+                                 connections_folder='', start_from_results=False, save_result_data=False,
+                                 restart_from_saved_structure_analysis=False, save_structure_analysis=False,
+                                 path_to_save='')
+        self.assertDictEqual(self.pauling4normal3.Dict_CN, {'6': {'6': [132, 36]}})
+        self.assertDictEqual(self.pauling4normal3.Dict_val,
+                             {'1': {'1': [36, 6], '3': [60, 24]}, '3': {'1': [60, 24], '3': [36, 6]}})
 
         self.pauling4normal.run(show_plot=False, start_from_connections=False, save_connections=False,
                                 connections_folder='', start_from_results=False, save_result_data=False,
@@ -808,18 +812,24 @@ class TestPauling4OverAllAnalysis(unittest.TestCase):
             {'1': {'1': [36, 6], '3': [60, 24]}, '3': {'1': [60, 24], '3': [36, 6]}})
 
         self.assertDictEqual(self.pauling4normal._reformat_details_CN({'val1:1': {
-            'val2:1': {'CN1:6': {'CN2:6': {'no': 18, 'corner': 0, 'edge': 3, 'face': 0}, 'CN2:3': {'no': 30, 'corner': 6, 'edge': 6, 'face': 0}}},
-            'val2:3': {'CN1:6': {'CN2:6': {'no': 30, 'corner': 6, 'edge': 6, 'face': 0}, 'CN2:3': {'no': 30, 'corner': 6, 'edge': 6, 'face': 0}}}}, 'val1:3': {
+            'val2:1': {'CN1:6': {'CN2:6': {'no': 18, 'corner': 0, 'edge': 3, 'face': 0},
+                                 'CN2:3': {'no': 30, 'corner': 6, 'edge': 6, 'face': 0}}},
+            'val2:3': {'CN1:6': {'CN2:6': {'no': 30, 'corner': 6, 'edge': 6, 'face': 0},
+                                 'CN2:3': {'no': 30, 'corner': 6, 'edge': 6, 'face': 0}}}}, 'val1:3': {
             'val2:1': {'CN1:6': {'CN2:6': {'no': 30, 'corner': 6, 'edge': 6, 'face': 0}}},
-            'val2:3': {'CN1:6': {'CN2:6': {'no': 18, 'corner': 0, 'edge': 3, 'face': 0}}}}}), {'6': {'6': [132, 36], '3': [60, 24]}, '3': {'6': [60, 24]}})
+            'val2:3': {'CN1:6': {'CN2:6': {'no': 18, 'corner': 0, 'edge': 3, 'face': 0}}}}}),
+            {'6': {'6': [132, 36], '3': [60, 24]}, '3': {'6': [60, 24]}})
 
         self.assertDictEqual(self.pauling4normal._reformat_details_val(
             {'val1:1': {
-            'val2:1': {'CN1:6': {'CN2:6': {'no': 18, 'corner': 0, 'edge': 3, 'face': 0}, 'CN2:3': {'no': 30, 'corner': 6, 'edge': 6, 'face': 0}}},
-            'val2:3': {'CN1:6': {'CN2:6': {'no': 30, 'corner': 6, 'edge': 6, 'face': 0}, 'CN2:3': {'no': 30, 'corner': 6, 'edge': 6, 'face': 0}}}},
-            'val1:3': {
-            'val2:1': {'CN1:6': {'CN2:6': {'no': 30, 'corner': 6, 'edge': 6, 'face': 0}}},
-            'val2:3': {'CN1:6': {'CN2:6': {'no': 18, 'corner': 0, 'edge': 3, 'face': 0}}}}}), {'1': {'1': [66, 18], '3': [90, 36]}, '3': {'1': [90, 36], '3': [36, 6]}})
+                'val2:1': {'CN1:6': {'CN2:6': {'no': 18, 'corner': 0, 'edge': 3, 'face': 0},
+                                     'CN2:3': {'no': 30, 'corner': 6, 'edge': 6, 'face': 0}}},
+                'val2:3': {'CN1:6': {'CN2:6': {'no': 30, 'corner': 6, 'edge': 6, 'face': 0},
+                                     'CN2:3': {'no': 30, 'corner': 6, 'edge': 6, 'face': 0}}}},
+                'val1:3': {
+                    'val2:1': {'CN1:6': {'CN2:6': {'no': 30, 'corner': 6, 'edge': 6, 'face': 0}}},
+                    'val2:3': {'CN1:6': {'CN2:6': {'no': 18, 'corner': 0, 'edge': 3, 'face': 0}}}}}),
+            {'1': {'1': [66, 18], '3': [90, 36]}, '3': {'1': [90, 36], '3': [36, 6]}})
 
         self.assertDictEqual(self.pauling4normal._reformat_details_elementwise({"maxval": 3, "minCN": 4,
                                                                                 "elementwise": {'Ga': {'val1:3': {

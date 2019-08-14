@@ -841,7 +841,7 @@ class Pauling1OverAllAnalysis(OverAllAnalysis):
             all += value[0]
             all += value[1]
         print("Only " + str(float(fulfilling) / float(all)) + " of all environments fulfill the first rule.")
-        print("This many environments were considered in the analysis:"+ str(all))
+        print("This many environments were considered in the analysis:" + str(all))
         if self.plot_element_dependend_analysis:
             plt = self._plot_PSE(self.Plot_PSE_DICT,
                                  lowest_number_of_environments_considered=self.lowest_number_environments_for_plot)
@@ -1259,7 +1259,8 @@ class Pauling3OverAllAnalysis(OverAllAnalysis):
             outputdict['additional_info'] = self.additional_info
             self._save_results_to_file(outputdict, path_to_save)
 
-        print(str(len(self.structures_fulfillingrule)/(len(self.structures_fulfillingrule)+len(self.structures_exceptions)))+" of all tested structures fulfill the rule.")
+        print(str(len(self.structures_fulfillingrule) / (len(self.structures_fulfillingrule) + len(
+            self.structures_exceptions))) + " of all tested structures fulfill the rule.")
 
         if self.analyse_structures:
             dict_similarstructures_exceptions = self._get_similar_structures(self.structures_exceptions,
@@ -1280,8 +1281,6 @@ class Pauling3OverAllAnalysis(OverAllAnalysis):
 
             self.dict_similarstructures_exceptions = dict_similarstructures_exceptions
             self.dict_similarstructures_fulfilling = dict_similarstructures_fulfilling
-
-
 
             if save_structure_analysis:
                 # self._print_to_screen_similar_structures(dict_similarstructures_fulfilling)
@@ -1309,7 +1308,7 @@ class Pauling3OverAllAnalysis(OverAllAnalysis):
                                                        add_info=self.additional_info,
                                                        name_add_info='Connections of Cations with Valences')
 
-    def _plot_influence_atomic_radii(self, Plot_PSE_Dict: dict, EdgeAsAdditionalException = False) -> plt:
+    def _plot_influence_atomic_radii(self, Plot_PSE_Dict: dict, EdgeAsAdditionalException=False) -> plt:
         """
         will plot number of connected polyhedra vs. atomic radii
         :param Plot_PSE_Dict: a dict with information on the rule fulfillment for each cation
@@ -1379,7 +1378,8 @@ class Pauling3OverAllAnalysis(OverAllAnalysis):
         # plt.plot([0,1000],[np.mean(face_histo),np.mean(face_histo)],'b-')
         return plt
 
-    def _plot_influence_mean_CN(self, Plot_PSE_Dict: dict, Plot_PSE_CN_Info: dict, EdgeAsAdditionalException = False) -> plt:
+    def _plot_influence_mean_CN(self, Plot_PSE_Dict: dict, Plot_PSE_CN_Info: dict,
+                                EdgeAsAdditionalException=False) -> plt:
         """
         will plot number of conncted polyhedra vs. mean CN
         :param Plot_PSE_Dict: dict with info on the rule fulfillment for each cation
@@ -1510,7 +1510,7 @@ class Pauling3OverAllAnalysis(OverAllAnalysis):
                 else:
                     New_Details[key][1] += item2['edge']
                 New_Details[key][1] += item2['face']
-                
+
         return New_Details
 
     def _sum_connections(self, start_dict: dict, Details: dict):
@@ -1571,8 +1571,9 @@ class Pauling4OverAllAnalysis(OverAllAnalysis):
             self.Dict_CN = inputdict['CN_dep_for_plot']
             self.additional_info = inputdict['additional_info']
 
-        print(str(len(self.structures_fulfillingrule)+len(self.structures_exceptions))+ " structures were considered.")
-        #print(str(len(self.structures_cannot_be_evaluated))+ ' were not considered')
+        print(
+            str(len(self.structures_fulfillingrule) + len(self.structures_exceptions)) + " structures were considered.")
+        # print(str(len(self.structures_cannot_be_evaluated))+ ' were not considered')
         if show_plot:
             plot = self._fourthrule_plot(self.Dict_val, option='val', vmin=0.7, vmax=1.0)
             plot.show()
@@ -1768,23 +1769,23 @@ class Pauling4OverAllAnalysis(OverAllAnalysis):
         :param Details:  dict
         :return: dict
         """
-        #do a simple copy
-        New={}
-        for key1,item1 in Details.items():
+        # do a simple copy
+        New = {}
+        for key1, item1 in Details.items():
             if "val1" in key1:
-                for key2,item2 in item1.items():
-                    for key3,item3 in item2.items():
-                        for key4,item4 in item3.items():
+                for key2, item2 in item1.items():
+                    for key3, item3 in item2.items():
+                        for key4, item4 in item3.items():
                             if not key4 in New:
-                                New[key4]={}
+                                New[key4] = {}
                             if not key3 in New[key4]:
-                                New[key4][key3]={}
+                                New[key4][key3] = {}
                             if not key2 in New[key4][key3]:
-                                New[key4][key3][key2]={}
+                                New[key4][key3][key2] = {}
                             if not key1 in New[key4][key3][key2]:
-                                New[key4][key3][key2][key1]=item4
+                                New[key4][key3][key2][key1] = item4
 
-        #similar to CN method
+        # similar to CN method
         New_Details = {}
         for key1, item1 in New.items():
             CN1 = key1.split(":")[1]
@@ -1809,8 +1810,8 @@ class Pauling4OverAllAnalysis(OverAllAnalysis):
                         New_Details[val1][val2][1] += item4["corner"]
                         New_Details[val1][val2][1] += item4["edge"]
                         New_Details[val1][val2][1] += item4["face"]
-                        #to arrive at a correct sum of the connections
-                        #typically this will result in the number of atoms that are connected, not in the number of connections
+                        # to arrive at a correct sum of the connections
+                        # typically this will result in the number of atoms that are connected, not in the number of connections
                         if not (val1 == val2 and CN1 != CN2):
                             New_Details[val2][val1][0] += item4["no"]
                             New_Details[val2][val1][1] += item4["corner"]
@@ -1850,15 +1851,14 @@ class Pauling4OverAllAnalysis(OverAllAnalysis):
                             New_Details[CN1][CN2][1] += item4["corner"]
                             New_Details[CN1][CN2][1] += item4["edge"]
                             New_Details[CN1][CN2][1] += item4["face"]
-                            #very similar to val method
-                            #make sure the number of connections is correct
-                            #also the dict has to be symmetric under exchange of CN
+                            # very similar to val method
+                            # make sure the number of connections is correct
+                            # also the dict has to be symmetric under exchange of CN
                             if not (CN1 == CN2 and val1 != val2):
                                 New_Details[CN2][CN1][0] += item4["no"]
                                 New_Details[CN2][CN1][1] += item4["corner"]
                                 New_Details[CN2][CN1][1] += item4["edge"]
                                 New_Details[CN2][CN1][1] += item4["face"]
-
 
         return New_Details
 
@@ -2026,8 +2026,9 @@ class Pauling5OverAllAnalysis(OverAllAnalysis):
             self.present_env = Counter(inputdict['Counter_cation'])
             self.list_to_remove = inputdict['elements_low_entropy']
 
-        print(str(len(self.structures_fulfillingrule)+len(self.structures_exceptions))+ " structures were considered.")
-        #print(str(len(self.structures_cannot_be_evaluated)) + ' were not considered')
+        print(
+            str(len(self.structures_fulfillingrule) + len(self.structures_exceptions)) + " structures were considered.")
+        # print(str(len(self.structures_cannot_be_evaluated)) + ' were not considered')
 
         if show_plot:
             # print(len(self.structures_fulfillingrule))
@@ -2320,8 +2321,9 @@ class AllPaulingOverAllAnalysis(OverAllAnalysis):
             print("Fulfilling")
             print(len(self.structures_fulfillingrule))
 
-        print(str(len(self.structures_fulfillingrule)+len(self.structures_exceptions))+ " structures were considered.")
-        #print(str(len(self.structures_cannot_be_evaluated)) + ' were not considered')
+        print(
+            str(len(self.structures_fulfillingrule) + len(self.structures_exceptions)) + " structures were considered.")
+        # print(str(len(self.structures_cannot_be_evaluated)) + ' were not considered')
 
         self.Plot_PSE = {}
         # Analyze the compositions and compute the fulfillment per element here

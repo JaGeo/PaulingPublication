@@ -173,8 +173,9 @@ class Pauling0:
         :return: dict of this type: {'As': 8}
         """
         elements = []
+        valences = self.lse.valences
         for isite, site in enumerate(self.lse.structure):
-            if self.lse.valences[isite] >= 0:
+            if valences[isite] >= 0:
                 elements.append(self.lse.structure[isite].species_string)
         return Counter(elements)
 
@@ -203,19 +204,19 @@ class Pauling1:
 
         with open(filenameradii) as dd:
             dict_radii = json.load(dd)
-
+        species = lse.structure.species
         for isite, site_envs in enumerate(lse.coordination_environments):
             # identifies cationic sites - only cations have site_envs
             if site_envs != None:
                 if len(site_envs) > 0:
                     try:
                         try:
-                            iratio = dict_radii[lse.structure.species[isite].symbol]['ratio_oxide']
+                            iratio = dict_radii[species[isite].symbol]['ratio_oxide']
                         except:
                             raise ValueError(
-                                lse.structure.species[isite].symbol + " not in the Pauling list")
+                                species[isite].symbol + " not in the Pauling list")
                         if self._first_rule(iratio, site_envs[0], onlylowerlimit=onlylowerlimit):
-                            cat_symbol = lse.structure.species[isite].symbol
+                            cat_symbol = species[isite].symbol
                             val = lse.valences[isite]
 
                             if not cat_symbol in self.cat_list:
@@ -231,7 +232,7 @@ class Pauling1:
                                 self.cat_valence_list[cat_symbol][lse.valences[isite]][0] + 1
                             self.mat_pauling_fulfilled += 1
                         else:
-                            cat_symbol = lse.structure.species[isite].symbol
+                            cat_symbol = species[isite].symbol
                             val = lse.valences[isite]
 
                             if not cat_symbol in self.cat_list:
@@ -241,10 +242,10 @@ class Pauling1:
                             if not val in self.cat_valence_list[cat_symbol]:
                                 self.cat_valence_list[cat_symbol][val] = [0, 0]
 
-                            self.cat_list[lse.structure.species[isite].symbol][1] = \
-                                self.cat_list[lse.structure.species[isite].symbol][1] + 1
-                            self.cat_valence_list[lse.structure.species[isite].symbol][lse.valences[isite]][1] = \
-                                self.cat_valence_list[lse.structure.species[isite].symbol][lse.valences[isite]][
+                            self.cat_list[species[isite].symbol][1] = \
+                                self.cat_list[species[isite].symbol][1] + 1
+                            self.cat_valence_list[species[isite].symbol][lse.valences[isite]][1] = \
+                                self.cat_valence_list[species[isite].symbol][lse.valences[isite]][
                                     1] + 1
 
                             self.env_not += 1
@@ -1046,8 +1047,8 @@ class Pauling4(Pauling3and4):
         """
         :return: more information connected pairs of polyhedra
         """
-        #TODO: make additional tests here
-        #TODO: there might be a small bug here
+        # TODO: make additional tests here
+        # TODO: there might be a small bug here
         inputdict = self.PolyhedronDict
 
         additionalinfo = inputdict['Additional']
@@ -1385,7 +1386,6 @@ class Pauling4(Pauling3and4):
         corner = 0
         edge = 0
         face = 0
-
 
         numberpolyhedra = 0
         for iinfo in additionalinfo:
