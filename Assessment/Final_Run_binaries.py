@@ -111,7 +111,7 @@ print(
     "Analyse Pauling rules 2-5 and test the influence of each of the rules. Adapt the criteria for structures to assess the fourth and fifth rule.")
 
 newclass = AllPaulingOverAllAnalysis_Final_Summary(source='MP', onlybinaries=True,
-                                                   plot_element_dependend_analysis=True,
+                                                   plot_element_dependend_analysis=False,
                                                    lowest_number_environments_for_plot=50, lower_limit_plot=0.6,
                                                    upper_limit_plot=1.0,
                                                    analyse_structures=False, use_prematching=True)

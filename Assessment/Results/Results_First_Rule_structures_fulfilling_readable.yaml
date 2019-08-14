@@ -1,5 +1,5 @@
 !!python/object/apply:collections.OrderedDict
-- - - mp-4967
+- - - mp-560670
     - mp-19077:
         CN: ['6', '6', '6', '6', '4', '4', '4', '4']
         cations: [Cr, Cr, Cr, Cr, As, As, As, As]
@@ -40,7 +40,7 @@
         cations: [Mg, Mg, Mg, Mg, Se, Se, Se, Se]
         formula: MgSeO4
         valences: [2, 2, 2, 2, 6, 6, 6, 6]
-  - - mp-6922
+  - - mp-5189
     - mp-10851:
         CN: ['4', '4', '4']
         cations: [Si, Si, Si]
@@ -76,7 +76,7 @@
         cations: [Si, Si, Si]
         formula: SiO2
         valences: [4, 4, 4]
-  - - mp-18835
+  - - mp-7566
     - mp-18835:
         CN: ['4', '4', '6', '6']
         cations: [P, P, V, V]
@@ -112,7 +112,7 @@
         cations: [Mg, Mg, S, S]
         formula: MgSO4
         valences: [2, 2, 6, 6]
-  - - mp-3771
+  - - mp-715514
     - mp-17841:
         CN: ['6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6']
         cations: [Mg, Mg, Mg, Mg, Mg, Mg, Mg, Mg, Nb, Nb, Nb, Nb]
@@ -148,7 +148,7 @@
         cations: [V, V, V, V]
         formula: V2O3
         valences: [3, 3, 3, 3]
-  - - mp-24917
+  - - mp-5831
     - mp-24917:
         CN: ['6', '6', '6', '6', '6', '6']
         cations: [Cr, Cr, Cr, Cr, Te, Te]
@@ -210,7 +210,7 @@
         cations: [Nb, Nb, In, In]
         formula: NbInO4
         valences: [5, 5, 3, 3]
-  - - mp-6945
+  - - mp-8059
     - mp-4051:
         CN: ['4', '4', '4', '4']
         cations: [Al, Al, P, P]
@@ -241,33 +241,7 @@
         cations: [Si, Si]
         formula: SiO2
         valences: [4, 4]
-  - - mp-856
-    - mp-19177:
-        CN: ['6', '6']
-        cations: [Cr, Cr]
-        formula: CrO2
-        valences: [4, 4]
-      mp-470:
-        CN: ['6', '6']
-        cations: [Ge, Ge]
-        formula: GeO2
-        valences: [4, 4]
-      mp-541567:
-        CN: ['6', '6', '6', '6']
-        cations: [V, V, Sb, Sb]
-        formula: VSbO4
-        valences: [3, 3, 5, 5]
-      mp-550172:
-        CN: ['6', '6']
-        cations: [Sn, Sn]
-        formula: SnO2
-        valences: [4, 4]
-      mp-856:
-        CN: ['6', '6']
-        cations: [Sn, Sn]
-        formula: SnO2
-        valences: [4, 4]
-  - - mp-559283
+  - - mp-5803
     - mp-542453:
         CN: ['6', '6', '6', '6', '6', '6', '6', '6', '4', '4', '4', '4', '4', '4',
           '4', '4']
@@ -298,6 +272,32 @@
         cations: [P, P, P, P, Nb, Nb, Nb, Nb]
         formula: NbPO5
         valences: [5, 5, 5, 5, 5, 5, 5, 5]
+  - - mp-19177
+    - mp-19177:
+        CN: ['6', '6']
+        cations: [Cr, Cr]
+        formula: CrO2
+        valences: [4, 4]
+      mp-470:
+        CN: ['6', '6']
+        cations: [Ge, Ge]
+        formula: GeO2
+        valences: [4, 4]
+      mp-541567:
+        CN: ['6', '6', '6', '6']
+        cations: [V, V, Sb, Sb]
+        formula: VSbO4
+        valences: [3, 3, 5, 5]
+      mp-550172:
+        CN: ['6', '6']
+        cations: [Sn, Sn]
+        formula: SnO2
+        valences: [4, 4]
+      mp-856:
+        CN: ['6', '6']
+        cations: [Sn, Sn]
+        formula: SnO2
+        valences: [4, 4]
   - - mp-566761
     - mp-25154:
         CN: ['4', '4', '4', '4', '4', '4', '6', '6']
@@ -319,7 +319,7 @@
         cations: [Cr, Cr, P, P, P, P, P, P]
         formula: Cr(PO3)3
         valences: [3, 3, 5, 5, 5, 5, 5, 5]
-  - - mp-24903
+  - - mp-16140
     - mp-14390:
         CN: ['6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '4', '4',
           '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
@@ -368,48 +368,6 @@
         valences: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 5, 5, 5, 5, 5, 5, 5, 5, 5,
           5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 3,
           3, 3, 3]
-  - - mp-2542
-    - mp-13725:
-        CN: ['4', '4', '4', '4', '4', '4', '4', '4']
-        cations: [Li, Li, Li, Li, Li, Li, P, P]
-        formula: Li3PO4
-        valences: [1, 1, 1, 1, 1, 1, 5, 5]
-      mp-2542:
-        CN: ['4', '4']
-        cations: [Be, Be]
-        formula: BeO
-        valences: [2, 2]
-      mp-8070:
-        CN: ['4', '4', '4', '4', '4', '4', '4', '4']
-        cations: [Li, Li, Li, Li, Be, Be, Si, Si]
-        formula: Li2BeSiO4
-        valences: [1, 1, 1, 1, 2, 2, 4, 4]
-      mp-9197:
-        CN: ['4', '4', '4', '4', '4', '4', '4', '4']
-        cations: [Li, Li, Li, Li, Li, Li, As, As]
-        formula: Li3AsO4
-        valences: [1, 1, 1, 1, 1, 1, 5, 5]
-  - - mp-2874
-    - mp-18721:
-        CN: ['4', '4', '6', '6']
-        cations: [P, P, Mn, Mn]
-        formula: Mn2P2O7
-        valences: [5, 5, 2, 2]
-      mp-19290:
-        CN: ['6', '6', '4', '4']
-        cations: [Mn, Mn, As, As]
-        formula: Mn2As2O7
-        valences: [2, 2, 5, 5]
-      mp-2874:
-        CN: ['4', '4', '6', '6']
-        cations: [Si, Si, In, In]
-        formula: In2Si2O7
-        valences: [4, 4, 3, 3]
-      mp-5427:
-        CN: ['6', '6', '4', '4']
-        cations: [Mg, Mg, P, P]
-        formula: Mg2P2O7
-        valences: [2, 2, 5, 5]
   - - mp-541532
     - mp-14535:
         CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
@@ -443,71 +401,49 @@
         formula: Mo(PO3)3
         valences: [5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 3, 3, 3,
           3, 3, 3]
-  - - mp-556754
-    - mp-19369:
-        CN: ['6', '6', '6', '6', '6', '6']
-        cations: [Ti, Ti, Ti, Ti, Cr, Cr]
-        formula: Ti2CrO5
-        valences: [4, 4, 4, 4, 2, 2]
-      mp-556754:
-        CN: ['6', '6', '6', '6', '6', '6']
-        cations: [Ti, Ti, Ti, Ti, Ti, Ti]
-        formula: Ti3O5
-        valences: [3, 3, 3, 3, 4, 4]
-      mp-622497:
-        CN: ['6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6']
-        cations: [V, V, V, V, V, V, V, V, V, V, V, V]
-        formula: V3O5
-        valences: [4, 4, 4, 3, 3, 3, 3, 3, 4, 3, 3, 3]
-  - - mp-5724
-    - mp-555891:
-        CN: ['4', '4', '4', '4']
-        cations: [Si, Si, Si, Si]
-        formula: SiO2
-        valences: [4, 4, 4, 4]
-      mp-5724:
-        CN: ['4', '4', '4', '4']
-        cations: [Al, Al, P, P]
-        formula: AlPO4
-        valences: [3, 3, 5, 5]
-      mp-7648:
-        CN: ['4', '4', '4', '4']
-        cations: [Si, Si, Si, Si]
-        formula: SiO2
-        valences: [4, 4, 4, 4]
-  - - mp-7404
-    - mp-1265:
-        CN: ['6']
-        cations: [Mg]
-        formula: MgO
-        valences: [2]
-      mp-27345:
-        CN: ['6', '6', '6', '6', '6', '6', '6', '6']
-        cations: [Na, Na, Na, Na, Na, Na, Bi, Bi]
-        formula: Na3BiO4
+  - - mp-8070
+    - mp-13725:
+        CN: ['4', '4', '4', '4', '4', '4', '4', '4']
+        cations: [Li, Li, Li, Li, Li, Li, P, P]
+        formula: Li3PO4
         valences: [1, 1, 1, 1, 1, 1, 5, 5]
-      mp-7404:
-        CN: ['6', '6', '6', '6', '6', '6', '6', '6']
-        cations: [Na, Na, Na, Na, Na, Na, Sb, Sb]
-        formula: Na3SbO4
+      mp-2542:
+        CN: ['4', '4']
+        cations: [Be, Be]
+        formula: BeO
+        valences: [2, 2]
+      mp-8070:
+        CN: ['4', '4', '4', '4', '4', '4', '4', '4']
+        cations: [Li, Li, Li, Li, Be, Be, Si, Si]
+        formula: Li2BeSiO4
+        valences: [1, 1, 1, 1, 2, 2, 4, 4]
+      mp-9197:
+        CN: ['4', '4', '4', '4', '4', '4', '4', '4']
+        cations: [Li, Li, Li, Li, Li, Li, As, As]
+        formula: Li3AsO4
         valences: [1, 1, 1, 1, 1, 1, 5, 5]
-  - - mp-545974
-    - mp-545974:
-        CN: ['4', '4', '4', '4']
-        cations: [P, Al, P, Al]
-        formula: AlPO4
-        valences: [5, 3, 5, 3]
-      mp-555235:
-        CN: ['4', '4', '4', '4']
-        cations: [Si, Si, Si, Si]
-        formula: SiO2
-        valences: [4, 4, 4, 4]
-      mp-7087:
-        CN: ['4', '4', '4', '4']
-        cations: [Si, Si, Si, Si]
-        formula: SiO2
-        valences: [4, 4, 4, 4]
-  - - mp-505436
+  - - mp-18721
+    - mp-18721:
+        CN: ['4', '4', '6', '6']
+        cations: [P, P, Mn, Mn]
+        formula: Mn2P2O7
+        valences: [5, 5, 2, 2]
+      mp-19290:
+        CN: ['6', '6', '4', '4']
+        cations: [Mn, Mn, As, As]
+        formula: Mn2As2O7
+        valences: [2, 2, 5, 5]
+      mp-2874:
+        CN: ['4', '4', '6', '6']
+        cations: [Si, Si, In, In]
+        formula: In2Si2O7
+        valences: [4, 4, 3, 3]
+      mp-5427:
+        CN: ['6', '6', '4', '4']
+        cations: [Mg, Mg, P, P]
+        formula: Mg2P2O7
+        valences: [2, 2, 5, 5]
+  - - mp-774868
     - mp-505436:
         CN: ['6', '6', '6', '6', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
           '4', '4', '4', '4', '4', '4']
@@ -526,6 +462,22 @@
         cations: [Zn, Zn, Zn, Zn, P, P, P, P, P, P, P, P, P, P, P, P, P, P, P, P]
         formula: ZnP4O11
         valences: [2, 2, 2, 2, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5]
+  - - mp-541450
+    - mp-19361:
+        CN: ['4', '4', '4', '4', '4', '4', '6', '6', '6', '6']
+        cations: [S, S, S, S, S, S, Cr, Cr, Cr, Cr]
+        formula: Cr2(SO4)3
+        valences: [6, 6, 6, 6, 6, 6, 3, 3, 3, 3]
+      mp-541450:
+        CN: ['6', '6', '6', '6', '4', '4', '4', '4', '4', '4']
+        cations: [In, In, In, In, S, S, S, S, S, S]
+        formula: In2(SO4)3
+        valences: [3, 3, 3, 3, 6, 6, 6, 6, 6, 6]
+      mp-541451:
+        CN: ['6', '6', '6', '6', '4', '4', '4', '4', '4', '4']
+        cations: [Ga, Ga, Ga, Ga, S, S, S, S, S, S]
+        formula: Ga2(SO4)3
+        valences: [3, 3, 3, 3, 6, 6, 6, 6, 6, 6]
   - - mp-9209
     - mp-32518:
         CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '6', '6',
@@ -547,23 +499,45 @@
           In]
         formula: In2(SO4)3
         valences: [6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 3, 3, 3, 3, 3, 3, 3, 3]
-  - - mp-541450
-    - mp-19361:
-        CN: ['4', '4', '4', '4', '4', '4', '6', '6', '6', '6']
-        cations: [S, S, S, S, S, S, Cr, Cr, Cr, Cr]
-        formula: Cr2(SO4)3
-        valences: [6, 6, 6, 6, 6, 6, 3, 3, 3, 3]
-      mp-541450:
-        CN: ['6', '6', '6', '6', '4', '4', '4', '4', '4', '4']
-        cations: [In, In, In, In, S, S, S, S, S, S]
-        formula: In2(SO4)3
-        valences: [3, 3, 3, 3, 6, 6, 6, 6, 6, 6]
-      mp-541451:
-        CN: ['6', '6', '6', '6', '4', '4', '4', '4', '4', '4']
-        cations: [Ga, Ga, Ga, Ga, S, S, S, S, S, S]
-        formula: Ga2(SO4)3
-        valences: [3, 3, 3, 3, 6, 6, 6, 6, 6, 6]
-  - - mp-559691
+  - - mp-3347
+    - mp-18220:
+        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
+          '4', '4', '4', '4']
+        cations: [Li, Li, Li, Li, Li, Li, Al, Al, Al, Al, Al, Al, Si, Si, Si, Si,
+          Si, Si]
+        formula: LiAlSiO4
+        valences: [1, 1, 1, 1, 1, 1, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4]
+      mp-3347:
+        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
+          '4', '4', '4', '4']
+        cations: [Be, Be, Be, Be, Be, Be, Be, Be, Be, Be, Be, Be, Si, Si, Si, Si,
+          Si, Si]
+        formula: Be2SiO4
+        valences: [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 4, 4, 4, 4, 4, 4]
+      mp-4855:
+        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
+          '4', '4', '4', '4']
+        cations: [Li, Li, Li, Li, Li, Li, Li, Li, Li, Li, Li, Li, Se, Se, Se, Se,
+          Se, Se]
+        formula: Li2SeO4
+        valences: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 6, 6, 6, 6, 6, 6]
+  - - mp-7404
+    - mp-1265:
+        CN: ['6']
+        cations: [Mg]
+        formula: MgO
+        valences: [2]
+      mp-27345:
+        CN: ['6', '6', '6', '6', '6', '6', '6', '6']
+        cations: [Na, Na, Na, Na, Na, Na, Bi, Bi]
+        formula: Na3BiO4
+        valences: [1, 1, 1, 1, 1, 1, 5, 5]
+      mp-7404:
+        CN: ['6', '6', '6', '6', '6', '6', '6', '6']
+        cations: [Na, Na, Na, Na, Na, Na, Sb, Sb]
+        formula: Na3SbO4
+        valences: [1, 1, 1, 1, 1, 1, 5, 5]
+  - - mp-6655
     - mp-559691:
         CN: ['8', '8', '8', '8', '4', '4', '4', '4', '4', '4']
         cations: [Ca, Ca, Ca, Ca, Al, Al, Al, Al, Si, Si]
@@ -579,7 +553,58 @@
         cations: [Be, Be, Be, Be, Si, Si, Y, Y, Y, Y]
         formula: Y2Be2SiO7
         valences: [2, 2, 2, 2, 4, 4, 3, 3, 3, 3]
-  - - mp-5859
+  - - mp-545974
+    - mp-545974:
+        CN: ['4', '4', '4', '4']
+        cations: [P, Al, P, Al]
+        formula: AlPO4
+        valences: [5, 3, 5, 3]
+      mp-555235:
+        CN: ['4', '4', '4', '4']
+        cations: [Si, Si, Si, Si]
+        formula: SiO2
+        valences: [4, 4, 4, 4]
+      mp-7087:
+        CN: ['4', '4', '4', '4']
+        cations: [Si, Si, Si, Si]
+        formula: SiO2
+        valences: [4, 4, 4, 4]
+  - - mp-555891
+    - mp-555891:
+        CN: ['4', '4', '4', '4']
+        cations: [Si, Si, Si, Si]
+        formula: SiO2
+        valences: [4, 4, 4, 4]
+      mp-5724:
+        CN: ['4', '4', '4', '4']
+        cations: [Al, Al, P, P]
+        formula: AlPO4
+        valences: [3, 3, 5, 5]
+      mp-7648:
+        CN: ['4', '4', '4', '4']
+        cations: [Si, Si, Si, Si]
+        formula: SiO2
+        valences: [4, 4, 4, 4]
+  - - mp-15438
+    - mp-15437:
+        CN: ['6', '6', '6', '6', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
+          '4', '4', '4', '4', '4', '4']
+        cations: [Mg, Mg, Mg, Mg, P, P, P, P, P, P, P, P, P, P, P, P, P, P, P, P]
+        formula: MgP4O11
+        valences: [2, 2, 2, 2, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5]
+      mp-15438:
+        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
+          '4', '4', '6', '6', '6', '6']
+        cations: [P, P, P, P, P, P, P, P, P, P, P, P, P, P, P, P, Zn, Zn, Zn, Zn]
+        formula: ZnP4O11
+        valences: [5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 2, 2, 2, 2]
+      mp-556495:
+        CN: ['6', '6', '6', '6', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
+          '4', '4', '4', '4', '4', '4']
+        cations: [Mn, Mn, Mn, Mn, P, P, P, P, P, P, P, P, P, P, P, P, P, P, P, P]
+        formula: MnP4O11
+        valences: [2, 2, 2, 2, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5]
+  - - mp-667363
     - mp-557362:
         CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
           '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
@@ -612,29 +637,23 @@
         valences: [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3,
           3, 3, 3, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5,
           5, 5, 5]
-  - - mp-4855
-    - mp-18220:
-        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
-          '4', '4', '4', '4']
-        cations: [Li, Li, Li, Li, Li, Li, Al, Al, Al, Al, Al, Al, Si, Si, Si, Si,
-          Si, Si]
-        formula: LiAlSiO4
-        valences: [1, 1, 1, 1, 1, 1, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4]
-      mp-3347:
-        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
-          '4', '4', '4', '4']
-        cations: [Be, Be, Be, Be, Be, Be, Be, Be, Be, Be, Be, Be, Si, Si, Si, Si,
-          Si, Si]
-        formula: Be2SiO4
-        valences: [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 4, 4, 4, 4, 4, 4]
-      mp-4855:
-        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
-          '4', '4', '4', '4']
-        cations: [Li, Li, Li, Li, Li, Li, Li, Li, Li, Li, Li, Li, Se, Se, Se, Se,
-          Se, Se]
-        formula: Li2SeO4
-        valences: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 6, 6, 6, 6, 6, 6]
-  - - mp-7601
+  - - mp-622497
+    - mp-19369:
+        CN: ['6', '6', '6', '6', '6', '6']
+        cations: [Ti, Ti, Ti, Ti, Cr, Cr]
+        formula: Ti2CrO5
+        valences: [4, 4, 4, 4, 2, 2]
+      mp-556754:
+        CN: ['6', '6', '6', '6', '6', '6']
+        cations: [Ti, Ti, Ti, Ti, Ti, Ti]
+        formula: Ti3O5
+        valences: [3, 3, 3, 3, 4, 4]
+      mp-622497:
+        CN: ['6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6']
+        cations: [V, V, V, V, V, V, V, V, V, V, V, V]
+        formula: V3O5
+        valences: [4, 4, 4, 3, 3, 3, 3, 3, 4, 3, 3, 3]
+  - - mp-561637
     - mp-554278:
         CN: ['6', '6', '6', '6']
         cations: [Ti, Ti, Ti, Ti]
@@ -650,47 +669,18 @@
         cations: [Ga, Ga, Nb, Nb]
         formula: NbGaO4
         valences: [3, 3, 5, 5]
-  - - mp-15438
-    - mp-15437:
-        CN: ['6', '6', '6', '6', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
-          '4', '4', '4', '4', '4', '4']
-        cations: [Mg, Mg, Mg, Mg, P, P, P, P, P, P, P, P, P, P, P, P, P, P, P, P]
-        formula: MgP4O11
-        valences: [2, 2, 2, 2, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5]
-      mp-15438:
-        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
-          '4', '4', '6', '6', '6', '6']
-        cations: [P, P, P, P, P, P, P, P, P, P, P, P, P, P, P, P, Zn, Zn, Zn, Zn]
-        formula: ZnP4O11
-        valences: [5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 2, 2, 2, 2]
-      mp-556495:
-        CN: ['6', '6', '6', '6', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
-          '4', '4', '4', '4', '4', '4']
-        cations: [Mn, Mn, Mn, Mn, P, P, P, P, P, P, P, P, P, P, P, P, P, P, P, P]
-        formula: MnP4O11
-        valences: [2, 2, 2, 2, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5]
-  - - mp-18620
-    - mp-18620:
-        CN: ['6', '6', '6', '6', '4', '4', '4', '4', '4', '4', '4', '4']
-        cations: [Mg, Mg, Mg, Mg, P, P, P, P, P, P, P, P]
-        formula: Mg(PO3)2
-        valences: [2, 2, 2, 2, 5, 5, 5, 5, 5, 5, 5, 5]
-      mp-558444:
-        CN: ['6', '6', '6', '6', '4', '4', '4', '4', '4', '4', '4', '4']
-        cations: [Mn, Mn, Mn, Mn, P, P, P, P, P, P, P, P]
-        formula: Mn(PO3)2
-        valences: [2, 2, 2, 2, 5, 5, 5, 5, 5, 5, 5, 5]
-  - - mp-19391
-    - mp-19391:
-        CN: ['6', '6']
-        cations: [Na, V]
-        formula: NaVO2
-        valences: [1, 3]
-      mp-5175:
-        CN: ['6', '6']
-        cations: [Na, In]
-        formula: NaInO2
-        valences: [1, 3]
+  - - mp-4321
+    - mp-3470:
+        CN: ['6', '6', '6', '6', '6', '6', '6', '6', '4', '4', '4', '4', '4', '4',
+          '4', '4']
+        cations: [Mg, Mg, Mg, Mg, Mg, Mg, Mg, Mg, Si, Si, Si, Si, Si, Si, Si, Si]
+        formula: MgSiO3
+        valences: [2, 2, 2, 2, 2, 2, 2, 2, 4, 4, 4, 4, 4, 4, 4, 4]
+      mp-4321:
+        CN: ['6', '6', '6', '6', '4', '4', '4', '4']
+        cations: [Mg, Mg, Mg, Mg, Si, Si, Si, Si]
+        formula: MgSiO3
+        valences: [2, 2, 2, 2, 4, 4, 4, 4]
   - - mp-1968
     - mp-19279:
         CN: ['4', '4', '6']
@@ -702,6 +692,118 @@
         cations: [La, La]
         formula: La2O3
         valences: [3, 3]
+  - - mp-18620
+    - mp-18620:
+        CN: ['6', '6', '6', '6', '4', '4', '4', '4', '4', '4', '4', '4']
+        cations: [Mg, Mg, Mg, Mg, P, P, P, P, P, P, P, P]
+        formula: Mg(PO3)2
+        valences: [2, 2, 2, 2, 5, 5, 5, 5, 5, 5, 5, 5]
+      mp-558444:
+        CN: ['6', '6', '6', '6', '4', '4', '4', '4', '4', '4', '4', '4']
+        cations: [Mn, Mn, Mn, Mn, P, P, P, P, P, P, P, P]
+        formula: Mn(PO3)2
+        valences: [2, 2, 2, 2, 5, 5, 5, 5, 5, 5, 5, 5]
+  - - mp-25043
+    - mp-25043:
+        CN: ['6', '6', '6', '6', '6', '6', '6', '6', '6']
+        cations: [Mn, Mn, Mn, Sb, Sb, Sb, Sb, Sb, Sb]
+        formula: Mn(SbO3)2
+        valences: [2, 2, 2, 5, 5, 5, 5, 5, 5]
+      mp-504908:
+        CN: ['6', '6', '6', '6', '6', '6', '6', '6', '6']
+        cations: [In, In, In, In, In, In, Te, Te, Te]
+        formula: In2TeO6
+        valences: [3, 3, 3, 3, 3, 3, 6, 6, 6]
+  - - mp-560998
+    - mp-558326:
+        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
+          '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
+          '4', '4', '4', '4', '4', '4', '4']
+        cations: [Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si,
+          Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si,
+          Si, Si]
+        formula: SiO2
+        valences: [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
+          4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]
+      mp-560998:
+        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
+          '4', '4', '4', '4']
+        cations: [Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si,
+          Si, Si]
+        formula: SiO2
+        valences: [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]
+  - - mp-554109
+    - mp-12630:
+        CN: ['6', '6', '4', '4']
+        cations: [Mg, Mg, Se, Se]
+        formula: MgSeO4
+        valences: [2, 2, 6, 6]
+      mp-554109:
+        CN: ['6', '6', '4', '4']
+        cations: [Cu, Cu, Se, Se]
+        formula: CuSeO4
+        valences: [2, 2, 6, 6]
+  - - mp-32486
+    - mp-25625:
+        CN: ['4', '4', '4', '4', '6', '6', '6', '6']
+        cations: [S, S, S, S, V, V, V, V]
+        formula: VSO5
+        valences: [6, 6, 6, 6, 4, 4, 4, 4]
+      mp-32486:
+        CN: ['4', '4', '4', '4', '6', '6', '6', '6']
+        cations: [P, P, P, P, V, V, V, V]
+        formula: VPO5
+        valences: [5, 5, 5, 5, 5, 5, 5, 5]
+  - - mp-2895
+    - mp-18928:
+        CN: ['4', '4', '4', '4', '6', '6', '6', '6', '6', '6', '6', '6']
+        cations: [Si, Si, Si, Si, Mn, Mn, Mn, Mn, Mn, Mn, Mn, Mn]
+        formula: Mn2SiO4
+        valences: [4, 4, 4, 4, 2, 2, 2, 2, 2, 2, 2, 2]
+      mp-2895:
+        CN: ['6', '6', '6', '6', '6', '6', '6', '6', '4', '4', '4', '4']
+        cations: [Mg, Mg, Mg, Mg, Mg, Mg, Mg, Mg, Si, Si, Si, Si]
+        formula: Mg2SiO4
+        valences: [2, 2, 2, 2, 2, 2, 2, 2, 4, 4, 4, 4]
+  - - mp-557881
+    - mp-557881:
+        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4']
+        cations: [Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si]
+        formula: SiO2
+        valences: [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]
+      mp-558351:
+        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4']
+        cations: [Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si]
+        formula: SiO2
+        valences: [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]
+  - - mp-5175
+    - mp-19391:
+        CN: ['6', '6']
+        cations: [Na, V]
+        formula: NaVO2
+        valences: [1, 3]
+      mp-5175:
+        CN: ['6', '6']
+        cations: [Na, In]
+        formula: NaInO2
+        valences: [1, 3]
+  - - mp-21947
+    - mp-21838:
+        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
+          '4', '4', '8', '8', '8', '8', '8', '8', '8', '8']
+        cations: [Se, Se, Se, Se, Se, Se, Se, Se, Se, Se, Se, Se, Se, Se, Se, Se,
+          Ce, Ce, Ce, Ce, Ce, Ce, Ce, Ce]
+        formula: Ce(SeO4)2
+        valences: [6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 4, 4, 4, 4, 4,
+          4, 4, 4]
+      mp-21947:
+        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
+          '4', '4', '8', '8', '8', '8', '8', '8', '8', '8']
+        cations: [S, S, S, S, S, S, S, S, S, S, S, S, S, S, S, S, Ce, Ce, Ce, Ce,
+          Ce, Ce, Ce, Ce]
+        formula: Ce(SO4)2
+        valences: [6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 4, 4, 4, 4, 4,
+          4, 4, 4]
   - - mp-6174
     - mp-19477:
         CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
@@ -744,68 +846,17 @@
         cations: [Nb, Nb, Nb, Nb, P, P, P, P, P, P, P, P]
         formula: Nb2P4O15
         valences: [5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5]
-  - - mp-18928
-    - mp-18928:
-        CN: ['4', '4', '4', '4', '6', '6', '6', '6', '6', '6', '6', '6']
-        cations: [Si, Si, Si, Si, Mn, Mn, Mn, Mn, Mn, Mn, Mn, Mn]
-        formula: Mn2SiO4
-        valences: [4, 4, 4, 4, 2, 2, 2, 2, 2, 2, 2, 2]
-      mp-2895:
-        CN: ['6', '6', '6', '6', '6', '6', '6', '6', '4', '4', '4', '4']
-        cations: [Mg, Mg, Mg, Mg, Mg, Mg, Mg, Mg, Si, Si, Si, Si]
-        formula: Mg2SiO4
-        valences: [2, 2, 2, 2, 2, 2, 2, 2, 4, 4, 4, 4]
-  - - mp-32486
-    - mp-25625:
-        CN: ['4', '4', '4', '4', '6', '6', '6', '6']
-        cations: [S, S, S, S, V, V, V, V]
-        formula: VSO5
-        valences: [6, 6, 6, 6, 4, 4, 4, 4]
-      mp-32486:
-        CN: ['4', '4', '4', '4', '6', '6', '6', '6']
-        cations: [P, P, P, P, V, V, V, V]
-        formula: VPO5
-        valences: [5, 5, 5, 5, 5, 5, 5, 5]
-  - - mp-554109
-    - mp-12630:
-        CN: ['6', '6', '4', '4']
-        cations: [Mg, Mg, Se, Se]
-        formula: MgSeO4
-        valences: [2, 2, 6, 6]
-      mp-554109:
-        CN: ['6', '6', '4', '4']
-        cations: [Cu, Cu, Se, Se]
-        formula: CuSeO4
-        valences: [2, 2, 6, 6]
-  - - mp-558351
-    - mp-557881:
-        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4']
-        cations: [Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si]
-        formula: SiO2
-        valences: [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]
-      mp-558351:
-        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4']
-        cations: [Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si]
-        formula: SiO2
-        valences: [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]
-  - - mp-560998
-    - mp-558326:
-        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
-          '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
-          '4', '4', '4', '4', '4', '4', '4']
-        cations: [Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si,
-          Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si,
-          Si, Si]
-        formula: SiO2
-        valences: [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
-          4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]
-      mp-560998:
-        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
-          '4', '4', '4', '4']
-        cations: [Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si,
-          Si, Si]
-        formula: SiO2
-        valences: [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]
+  - - mp-7599
+    - mp-554159:
+        CN: ['4', '4', '4', '4', '4', '4', '4', '4']
+        cations: [Li, Li, Li, Li, Be, Be, Si, Si]
+        formula: Li2BeSiO4
+        valences: [1, 1, 1, 1, 2, 2, 4, 4]
+      mp-7599:
+        CN: ['4', '4', '4', '4']
+        cations: [Be, Be, Be, Be]
+        formula: BeO
+        valences: [2, 2, 2, 2]
   - - mp-560826
     - mp-556218:
         CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4']
@@ -817,47 +868,7 @@
         cations: [Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si]
         formula: SiO2
         valences: [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]
-  - - mp-4321
-    - mp-3470:
-        CN: ['6', '6', '6', '6', '6', '6', '6', '6', '4', '4', '4', '4', '4', '4',
-          '4', '4']
-        cations: [Mg, Mg, Mg, Mg, Mg, Mg, Mg, Mg, Si, Si, Si, Si, Si, Si, Si, Si]
-        formula: MgSiO3
-        valences: [2, 2, 2, 2, 2, 2, 2, 2, 4, 4, 4, 4, 4, 4, 4, 4]
-      mp-4321:
-        CN: ['6', '6', '6', '6', '4', '4', '4', '4']
-        cations: [Mg, Mg, Mg, Mg, Si, Si, Si, Si]
-        formula: MgSiO3
-        valences: [2, 2, 2, 2, 4, 4, 4, 4]
-  - - mp-21947
-    - mp-21838:
-        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
-          '4', '4', '8', '8', '8', '8', '8', '8', '8', '8']
-        cations: [Se, Se, Se, Se, Se, Se, Se, Se, Se, Se, Se, Se, Se, Se, Se, Se,
-          Ce, Ce, Ce, Ce, Ce, Ce, Ce, Ce]
-        formula: Ce(SeO4)2
-        valences: [6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 4, 4, 4, 4, 4,
-          4, 4, 4]
-      mp-21947:
-        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
-          '4', '4', '8', '8', '8', '8', '8', '8', '8', '8']
-        cations: [S, S, S, S, S, S, S, S, S, S, S, S, S, S, S, S, Ce, Ce, Ce, Ce,
-          Ce, Ce, Ce, Ce]
-        formula: Ce(SO4)2
-        valences: [6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 4, 4, 4, 4, 4,
-          4, 4, 4]
-  - - mp-554159
-    - mp-554159:
-        CN: ['4', '4', '4', '4', '4', '4', '4', '4']
-        cations: [Li, Li, Li, Li, Be, Be, Si, Si]
-        formula: Li2BeSiO4
-        valences: [1, 1, 1, 1, 2, 2, 4, 4]
-      mp-7599:
-        CN: ['4', '4', '4', '4']
-        cations: [Be, Be, Be, Be]
-        formula: BeO
-        valences: [2, 2, 2, 2]
-  - - mp-560521
+  - - mp-559872
     - mp-559872:
         CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4']
         cations: [Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si]
@@ -868,32 +879,26 @@
         cations: [Be, Be, Be, Be, P, P, P, P, P, P, P, P]
         formula: Be(PO3)2
         valences: [2, 2, 2, 2, 5, 5, 5, 5, 5, 5, 5, 5]
-  - - mp-25043
-    - mp-25043:
-        CN: ['6', '6', '6', '6', '6', '6', '6', '6', '6']
-        cations: [Mn, Mn, Mn, Sb, Sb, Sb, Sb, Sb, Sb]
-        formula: Mn(SbO3)2
-        valences: [2, 2, 2, 5, 5, 5, 5, 5, 5]
-      mp-504908:
-        CN: ['6', '6', '6', '6', '6', '6', '6', '6', '6']
-        cations: [In, In, In, In, In, In, Te, Te, Te]
-        formula: In2TeO6
-        valences: [3, 3, 3, 3, 3, 3, 6, 6, 6]
-  - - mp-559145
-    - mp-559145:
-        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
-          '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
-          '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
-          '4', '4', '4', '4']
-        cations: [Al, Al, Al, Al, Al, Al, Al, Al, Al, Al, Al, Al, Al, Al, Al, Al,
-          Al, Al, Al, Al, Al, Al, Al, Al, P, P, P, P, P, P, P, P, P, P, P, P, P, P,
-          P, P, P, P, P, P, P, P, P, P]
-        formula: AlPO4
-        valences: [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3,
-          3, 3, 3, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5,
-          5, 5, 5]
-  - - mp-553945
-    - mp-553945:
+  - - mp-19395
+    - mp-19395:
+        CN: ['6', '6', '6', '6']
+        cations: [Mn, Mn, Mn, Mn]
+        formula: MnO2
+        valences: [4, 4, 4, 4]
+  - - mp-18856
+    - mp-18856:
+        CN: ['6', '6', '6', '6', '6', '6', '6', '6']
+        cations: [Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo]
+        formula: MoO3
+        valences: [6, 6, 6, 6, 6, 6, 6, 6]
+  - - mp-8230
+    - mp-8230:
+        CN: ['4', '4', '4', '4', '6', '6']
+        cations: [P, P, P, P, Zn, Zn]
+        formula: Zn(PO3)2
+        valences: [5, 5, 5, 5, 2, 2]
+  - - mp-667368
+    - mp-667368:
         CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
           '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
           '4', '4', '4']
@@ -902,19 +907,132 @@
         formula: SiO2
         valences: [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
           4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]
-  - - mp-567080
-    - mp-567080:
+  - - mp-27608
+    - mp-27608:
+        CN: ['4', '4', '4', '4', '6']
+        cations: [Be, Be, Be, Be, Te]
+        formula: Be4TeO7
+        valences: [2, 2, 2, 2, 6]
+  - - mp-556591
+    - mp-556591:
+        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
+          '4', '4', '4', '4']
+        cations: [Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si,
+          Si, Si]
+        formula: SiO2
+        valences: [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]
+  - - mp-560809
+    - mp-560809:
+        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
+          '4', '4', '4', '4', '4', '4', '4', '4', '4', '4']
+        cations: [Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si,
+          Si, Si, Si, Si, Si, Si, Si, Si]
+        formula: SiO2
+        valences: [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
+          4, 4, 4]
+  - - mp-18280
+    - mp-18280:
+        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4']
+        cations: [Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si]
+        formula: SiO2
+        valences: [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]
+  - - mp-4117
+    - mp-4117:
+        CN: ['4', '4', '4', '4', '4', '4', '4', '4']
+        cations: [Li, Li, Li, Li, Si, Si, Si, Si]
+        formula: Li2Si2O5
+        valences: [1, 1, 1, 1, 4, 4, 4, 4]
+  - - mp-17279
+    - mp-17279:
+        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
+          '4', '4']
+        cations: [Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si]
+        formula: SiO2
+        valences: [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]
+  - - mp-9750
+    - mp-9750:
+        CN: ['4', '4', '6', '6']
+        cations: [P, P, Sb, Sb]
+        formula: SbPO5
+        valences: [5, 5, 5, 5]
+  - - mp-579631
+    - mp-579631:
+        CN: ['6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6',
+          '6', '6', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
+          '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4']
+        cations: [V, V, V, V, V, V, V, V, V, V, V, V, V, V, V, V, P, P, P, P, P, P,
+          P, P, P, P, P, P, P, P, P, P, P, P, P, P, P, P, P, P]
+        formula: V4(P2O7)3
+        valences: [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 5, 5, 5, 5, 5,
+          5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5]
+  - - mp-585492
+    - mp-585492:
+        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '6', '6', '6', '6', '6', '6',
+          '6', '6', '6', '6', '6', '6', '6', '6', '6', '6']
+        cations: [Li, Li, Li, Li, Li, Li, Li, Li, Mg, Mg, Mg, Mg, Mn, Mn, Mn, Mn,
+          Mn, Mn, Mn, Mn, Mn, Mn, Mn, Mn]
+        formula: Li2MgMn3O8
+        valences: [1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 4, 4, 4, 4, 4, 4, 4, 4, 4,
+          4, 4, 4]
+  - - mp-505345
+    - mp-505345:
+        CN: ['4', '4', '4', '4', '6', '6', '8']
+        cations: [P, P, P, P, V, V, Sr]
+        formula: SrV2(P2O7)2
+        valences: [5, 5, 5, 5, 3, 3, 2]
+  - - mp-1840
+    - mp-1840:
         CN: ['6', '6', '6', '6', '6', '6', '6', '6']
-        cations: [V, V, V, V, V, V, V, V]
-        formula: V4O7
-        valences: [4, 4, 4, 3, 3, 3, 3, 4]
-  - - mp-567081
-    - mp-567081:
+        cations: [Ti, Ti, Ti, Ti, Ti, Ti, Ti, Ti]
+        formula: TiO2
+        valences: [4, 4, 4, 4, 4, 4, 4, 4]
+  - - mp-560545
+    - mp-560545:
+        CN: ['6', '6', '6', '6', '8', '8', '4', '4', '4', '4', '4', '4', '4', '4']
+        cations: [Na, Na, Na, Na, Ca, Ca, As, As, As, As, As, As, As, As]
+        formula: Na2Ca(AsO3)4
+        valences: [1, 1, 1, 1, 2, 2, 5, 5, 5, 5, 5, 5, 5, 5]
+  - - mp-559530
+    - mp-559530:
+        CN: ['6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6',
+          '6', '6', '6', '6', '6', '6', '4', '4', '4', '4', '4', '4', '4', '4', '4',
+          '4', '4', '4', '4', '4', '4', '4']
+        cations: [Ti, Ti, Ti, Ti, Ti, Ti, Ti, Ti, Ti, Ti, Ti, Ti, Ti, Ti, Ti, Ti,
+          Ti, Ti, Ti, Ti, P, P, P, P, P, P, P, P, P, P, P, P, P, P, P, P]
+        formula: Ti5(PO5)4
+        valences: [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 5,
+          5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5]
+  - - mp-680204
+    - mp-680204:
+        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
+          '4', '4', '4', '4', '4', '4', '4', '4']
+        cations: [Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si,
+          Si, Si, Si, Si, Si, Si]
+        formula: SiO2
+        valences: [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
+          4]
+  - - mp-566876
+    - mp-566876:
         CN: ['6', '6', '6', '6', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
-          '4', '4', '4', '4', '4', '4']
-        cations: [Mn, Mn, Mn, Mn, P, P, P, P, P, P, P, P, P, P, P, P, P, P, P, P]
-        formula: MnP4O11
-        valences: [2, 2, 2, 2, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5]
+          '4', '4']
+        cations: [Mn, Mn, Mn, Mn, P, P, P, P, P, P, P, P, P, P, P, P]
+        formula: Mn(PO3)3
+        valences: [3, 3, 3, 3, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5]
+  - - mp-561351
+    - mp-561351:
+        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
+          '4', '4', '4', '4', '4', '4', '4', '4', '4', '4']
+        cations: [Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si,
+          Si, Si, Si, Si, Si, Si, Si, Si]
+        formula: SiO2
+        valences: [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
+          4, 4, 4]
+  - - mp-3031
+    - mp-3031:
+        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '8', '8', '8', '8']
+        cations: [Si, Si, Si, Si, Si, Si, Si, Si, Ba, Ba, Ba, Ba]
+        formula: BaSi2O5
+        valences: [4, 4, 4, 4, 4, 4, 4, 4, 2, 2, 2, 2]
   - - mp-704102
     - mp-704102:
         CN: ['6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6',
@@ -928,58 +1046,223 @@
         valences: [6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6,
           6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6,
           6, 6, 6]
-  - - mp-4556
-    - mp-4556:
-        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4']
-        cations: [Li, Li, Li, Li, Li, Li, Li, Li, S, S, S, S]
-        formula: Li2SO4
-        valences: [1, 1, 1, 1, 1, 1, 1, 1, 6, 6, 6, 6]
+  - - mp-1147
+    - mp-1147:
+        CN: ['6', '6', '6', '6', '6', '6']
+        cations: [Ti, Ti, Ti, Ti, Ti, Ti]
+        formula: Ti3O5
+        valences: [3, 3, 3, 3, 4, 4]
+  - - mp-2878
+    - mp-2878:
+        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
+          '4', '4']
+        cations: [Li, Li, Li, Li, Li, Li, Li, Li, Li, Li, Li, Li, P, P, P, P]
+        formula: Li3PO4
+        valences: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 5, 5, 5, 5]
+  - - mp-3427
+    - mp-3427:
+        CN: ['4', '4', '4', '4', '4', '4', '4', '4']
+        cations: [Li, Li, Li, Li, Al, Al, Al, Al]
+        formula: LiAlO2
+        valences: [1, 1, 1, 1, 3, 3, 3, 3]
+  - - mp-8090
+    - mp-8090:
+        CN: ['4', '4', '6', '6']
+        cations: [P, P, Cu, Cu]
+        formula: Cu2P2O7
+        valences: [5, 5, 2, 2]
+  - - mp-555487
+    - mp-555487:
+        CN: ['6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6']
+        cations: [Sn, Sn, Sn, Sn, Sn, Sn, Sn, Sn, Sn, Sn, Sn, Sn]
+        formula: SnO2
+        valences: [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]
+  - - mp-19239
+    - mp-19239:
+        CN: ['6', '6', '6', '6', '6', '6', '6']
+        cations: [Mg, Mg, Mg, Mg, Mg, Mg, Mn]
+        formula: Mg6MnO8
+        valences: [2, 2, 2, 2, 2, 2, 4]
+  - - mp-653763
+    - mp-653763:
+        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
+          '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
+          '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
+          '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4']
+        cations: [Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si,
+          Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si,
+          Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si,
+          Si, Si, Si, Si]
+        formula: SiO2
+        valences: [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
+          4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
+          4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]
+  - - mp-541338
+    - mp-541338:
+        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
+          '4', '4', '4', '4', '4', '4', '4', '4', '4', '4']
+        cations: [Al, Al, Al, Al, Al, Al, Al, Al, Al, Al, Al, Al, P, P, P, P, P, P,
+          P, P, P, P, P, P]
+        formula: AlPO4
+        valences: [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 5, 5, 5, 5, 5, 5, 5, 5, 5,
+          5, 5, 5]
+  - - mp-555899
+    - mp-555899:
+        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
+          '4', '4', '4', '4', '4', '4']
+        cations: [Li, Li, Li, Li, Li, Li, Li, Li, Si, Si, Si, Si, Si, Si, Si, Si,
+          Si, Si, Si, Si]
+        formula: Li2Si3O7
+        valences: [1, 1, 1, 1, 1, 1, 1, 1, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]
+  - - mp-561090
+    - mp-561090:
+        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
+          '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
+          '4', '4', '4', '4', '4']
+        cations: [Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si,
+          Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si]
+        formula: SiO2
+        valences: [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
+          4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]
+  - - mp-558056
+    - mp-558056:
+        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
+          '4', '4', '4', '4', '4', '4']
+        cations: [Al, Al, Al, Al, Al, Al, Al, Al, Al, Al, P, P, P, P, P, P, P, P,
+          P, P]
+        formula: AlPO4
+        valences: [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5]
+  - - mp-14368
+    - mp-14368:
+        CN: ['6', '6', '6', '6', '4', '4', '4', '4']
+        cations: [Sb, Sb, Sb, Sb, As, As, As, As]
+        formula: SbAsO5
+        valences: [5, 5, 5, 5, 5, 5, 5, 5]
+  - - mp-560155
+    - mp-560155:
+        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
+          '4', '4', '4', '4']
+        cations: [Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si,
+          Si, Si]
+        formula: SiO2
+        valences: [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]
+  - - mp-646895
+    - mp-646895:
+        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
+          '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
+          '4', '4', '4']
+        cations: [Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si,
+          Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si]
+        formula: SiO2
+        valences: [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
+          4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]
+  - - mp-669426
+    - mp-669426:
+        CN: ['4', '4', '4', '4', '4', '4', '4', '4']
+        cations: [Si, Si, Si, Si, Si, Si, Si, Si]
+        formula: SiO2
+        valences: [4, 4, 4, 4, 4, 4, 4, 4]
   - - mp-510554
     - mp-510554:
         CN: ['6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6']
         cations: [Nb, Nb, Nb, Nb, Nb, Nb, Nb, Nb, Nb, Nb, Nb, Nb]
         formula: Nb12O29
         valences: [5, 5, 4, 5, 5, 5, 5, 5, 4, 5, 5, 5]
-  - - mp-667310
-    - mp-667310:
+  - - mp-16964
+    - mp-16964:
+        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4']
+        cations: [Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si]
+        formula: SiO2
+        valences: [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]
+  - - mp-19326
+    - mp-19326:
+        CN: ['6', '6', '6', '6']
+        cations: [Mn, Mn, Mn, Mn]
+        formula: MnO2
+        valences: [4, 4, 4, 4]
+  - - mp-4086
+    - mp-4086:
+        CN: ['6', '6', '6', '6', '8', '8', '8', '8']
+        cations: [Sn, Sn, Sn, Sn, La, La, La, La]
+        formula: La2Sn2O7
+        valences: [4, 4, 4, 4, 3, 3, 3, 3]
+  - - mp-556469
+    - mp-556469:
         CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
-          '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
-          '4', '4', '4', '4', '4', '4', '4']
-        cations: [Al, Al, Al, Al, Al, Al, Al, Al, Al, Al, Al, Al, Al, Al, Al, Al,
-          Al, Al, P, P, P, P, P, P, P, P, P, P, P, P, P, P, P, P, P, P]
-        formula: AlPO4
-        valences: [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 5, 5, 5,
-          5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5]
-  - - mp-565320
-    - mp-565320:
-        CN: ['6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6',
-          '6', '6']
-        cations: [V, V, V, V, V, V, V, V, V, V, V, V, V, V, V, V]
-        formula: V8O15
-        valences: [4, 4, 4, 4, 4, 4, 3, 4, 4, 3, 4, 3, 4, 4, 3, 4]
-  - - mp-558115
-    - mp-558115:
+          '4', '4']
+        cations: [Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si]
+        formula: SiO2
+        valences: [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]
+  - - mp-27519
+    - mp-27519:
+        CN: ['4', '4', '4', '4', '4', '4', '4', '4']
+        cations: [Se, Se, Se, Se, Se, Se, Se, Se]
+        formula: SeO3
+        valences: [6, 6, 6, 6, 6, 6, 6, 6]
+  - - mp-542814
+    - mp-542814:
         CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
-          '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
-          '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4']
+          '4', '4', '4', '4', '4', '4', '4', '4', '4', '4']
         cations: [Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si,
-          Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si,
-          Si, Si, Si, Si, Si, Si]
+          Si, Si, Si, Si, Si, Si, Si, Si]
         formula: SiO2
         valences: [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
+          4, 4, 4]
+  - - mp-600054
+    - mp-600054:
+        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
+          '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
+          '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
+          '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
+          '4', '4', '4', '4', '4']
+        cations: [Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si,
+          Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si,
+          Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si,
+          Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si]
+        formula: SiO2
+        valences: [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
+          4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
           4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]
-  - - mp-561397
-    - mp-561397:
-        CN: ['4', '4', '4', '4']
-        cations: [S, S, S, S]
-        formula: SO3
-        valences: [6, 6, 6, 6]
-  - - mp-27588
-    - mp-27588:
-        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4']
-        cations: [Be, Be, Be, Be, P, P, P, P, P, P, P, P]
-        formula: Be(PO3)2
-        valences: [2, 2, 2, 2, 5, 5, 5, 5, 5, 5, 5, 5]
+  - - mp-555521
+    - mp-555521:
+        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
+          '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
+          '4', '4', '4']
+        cations: [Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si,
+          Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si]
+        formula: SiO2
+        valences: [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
+          4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]
+  - - mp-654301
+    - mp-654301:
+        CN: ['6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '4', '4', '4', '4',
+          '4', '4', '4', '4', '4', '4', '4', '4', '4', '4']
+        cations: [Nb, Nb, Nb, Nb, Nb, Nb, Nb, Nb, Nb, Nb, P, P, P, P, P, P, P, P,
+          P, P, P, P, P, P]
+        formula: Nb5P7O30
+        valences: [5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5,
+          5, 5, 5]
+  - - mp-554185
+    - mp-554185:
+        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
+          '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
+          '4', '4', '4']
+        cations: [Al, Al, Al, Al, Al, Al, Al, Al, Al, Al, Al, Al, Al, Al, Al, Al,
+          P, P, P, P, P, P, P, P, P, P, P, P, P, P, P, P]
+        formula: AlPO4
+        valences: [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 5, 5, 5, 5, 5,
+          5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5]
+  - - mp-706490
+    - mp-706490:
+        CN: ['6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6',
+          '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6',
+          '6', '6', '6', '6', '6', '6', '6']
+        cations: [Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo,
+          Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo,
+          Mo, Mo]
+        formula: Mo9O26
+        valences: [6, 5, 6, 6, 6, 5, 6, 6, 5, 5, 6, 6, 6, 6, 6, 5, 6, 6, 6, 6, 6,
+          6, 5, 6, 5, 5, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6]
   - - mp-558065
     - mp-558065:
         CN: ['6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6',
@@ -1000,27 +1283,60 @@
         formula: V2Cu(PO5)2
         valences: [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 2, 2, 2, 2, 2,
           2, 2, 2, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5]
-  - - mp-9750
-    - mp-9750:
-        CN: ['4', '4', '6', '6']
-        cations: [P, P, Sb, Sb]
-        formula: SbPO5
-        valences: [5, 5, 5, 5]
-  - - mp-557933
-    - mp-557933:
+  - - mp-1470
+    - mp-1470:
+        CN: ['6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6',
+          '6', '6', '6', '6', '6', '6', '6', '6', '6', '6']
+        cations: [Nb, Nb, Nb, Nb, Nb, Nb, Nb, Nb, Nb, Nb, Nb, Nb, Nb, Nb, Nb, Nb,
+          Nb, Nb, Nb, Nb, Nb, Nb, Nb, Nb]
+        formula: Nb12O29
+        valences: [5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 4, 4, 4, 4, 5,
+          5, 5, 5]
+  - - mp-628951
+    - mp-628951:
+        CN: ['6', '6', '6', '6', '6', '6', '6', '6', '4', '4', '4', '4', '4', '4',
+          '4', '4']
+        cations: [V, V, V, V, V, V, V, V, P, P, P, P, P, P, P, P]
+        formula: V2P2O9
+        valences: [4, 4, 4, 4, 4, 4, 4, 4, 5, 5, 5, 5, 5, 5, 5, 5]
+  - - mp-560064
+    - mp-560064:
         CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
-          '4', '4', '4', '4', '4', '4', '4', '4', '4', '4']
+          '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
+          '4', '4', '4']
         cations: [Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si,
-          Si, Si, Si, Si, Si, Si, Si, Si]
+          Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si]
         formula: SiO2
         valences: [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
-          4, 4, 4]
-  - - mp-559550
-    - mp-559550:
-        CN: ['4', '4', '4', '4', '4', '4']
-        cations: [Si, Si, Si, Si, Si, Si]
+          4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]
+  - - mp-637201
+    - mp-637201:
+        CN: ['6', '6', '6', '6', '6', '6', '6', '6', '4', '4', '4', '4', '4', '4',
+          '4', '4']
+        cations: [Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, P, P, P, P, P, P, P, P]
+        formula: Mo2P2O11
+        valences: [6, 6, 6, 6, 6, 6, 6, 6, 5, 5, 5, 5, 5, 5, 5, 5]
+  - - mp-615993
+    - mp-615993:
+        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4']
+        cations: [Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si]
         formula: SiO2
-        valences: [4, 4, 4, 4, 4, 4]
+        valences: [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]
+  - - mp-565247
+    - mp-565247:
+        CN: ['8', '8', '8', '8', '6', '6', '6', '6', '6', '6', '4', '4', '4', '4',
+          '4', '4', '4', '4']
+        cations: [K, K, K, K, Mo, Mo, Mo, Mo, Mo, Mo, As, As, As, As, As, As, As,
+          As]
+        formula: K2Mo3(AsO5)4
+        valences: [1, 1, 1, 1, 6, 6, 6, 6, 6, 6, 5, 5, 5, 5, 5, 5, 5, 5]
+  - - mp-821
+    - mp-821:
+        CN: ['6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6',
+          '6', '6']
+        cations: [Nb, Nb, Nb, Nb, Nb, Nb, Nb, Nb, Nb, Nb, Nb, Nb, Nb, Nb, Nb, Nb]
+        formula: NbO2
+        valences: [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]
   - - mp-557189
     - mp-557189:
         CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
@@ -1032,197 +1348,14 @@
         formula: LiPO3
         valences: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 5,
           5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5]
-  - - mp-733790
-    - mp-733790:
-        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
-          '4', '4', '4', '4', '4', '4', '4', '4', '4', '4']
-        cations: [Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si,
-          Si, Si, Si, Si, Si, Si, Si, Si]
-        formula: SiO2
-        valences: [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
-          4, 4, 4]
-  - - mp-558056
-    - mp-558056:
-        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
-          '4', '4', '4', '4', '4', '4']
-        cations: [Al, Al, Al, Al, Al, Al, Al, Al, Al, Al, P, P, P, P, P, P, P, P,
-          P, P]
-        formula: AlPO4
-        valences: [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5]
-  - - mp-1470
-    - mp-1470:
-        CN: ['6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6',
-          '6', '6', '6', '6', '6', '6', '6', '6', '6', '6']
-        cations: [Nb, Nb, Nb, Nb, Nb, Nb, Nb, Nb, Nb, Nb, Nb, Nb, Nb, Nb, Nb, Nb,
-          Nb, Nb, Nb, Nb, Nb, Nb, Nb, Nb]
-        formula: Nb12O29
-        valences: [5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 4, 4, 4, 4, 5,
-          5, 5, 5]
-  - - mp-3031
-    - mp-3031:
-        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '8', '8', '8', '8']
-        cations: [Si, Si, Si, Si, Si, Si, Si, Si, Ba, Ba, Ba, Ba]
-        formula: BaSi2O5
-        valences: [4, 4, 4, 4, 4, 4, 4, 4, 2, 2, 2, 2]
-  - - mp-556591
-    - mp-556591:
-        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
-          '4', '4', '4', '4']
-        cations: [Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si,
-          Si, Si]
-        formula: SiO2
-        valences: [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]
-  - - mp-1705
-    - mp-1705:
-        CN: ['6', '6', '6', '6']
-        cations: [Sb, Sb, Sb, Sb]
-        formula: Sb2O5
+  - - mp-566179
+    - mp-566179:
+        CN: ['6', '6', '4', '4']
+        cations: [V, V, P, P]
+        formula: VPO5
         valences: [5, 5, 5, 5]
-  - - mp-8090
-    - mp-8090:
-        CN: ['4', '4', '6', '6']
-        cations: [P, P, Cu, Cu]
-        formula: Cu2P2O7
-        valences: [5, 5, 2, 2]
-  - - mp-505177
-    - mp-505177:
-        CN: ['6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6']
-        cations: [In, In, In, In, In, In, In, In, Ti, Ti, Ti, Ti]
-        formula: TiIn2O5
-        valences: [3, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4]
-  - - mp-3427
-    - mp-3427:
-        CN: ['4', '4', '4', '4', '4', '4', '4', '4']
-        cations: [Li, Li, Li, Li, Al, Al, Al, Al]
-        formula: LiAlO2
-        valences: [1, 1, 1, 1, 3, 3, 3, 3]
-  - - mp-5834
-    - mp-5834:
-        CN: ['6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6',
-          '6', '6', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
-          '4', '4', '4']
-        cations: [Mg, Mg, Mg, Mg, Mg, Mg, Mg, Mg, Mg, Mg, Mg, Mg, Mg, Mg, Mg, Mg,
-          Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si]
-        formula: MgSiO3
-        valences: [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 4, 4, 4, 4, 4,
-          4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]
-  - - mp-2878
-    - mp-2878:
-        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
-          '4', '4']
-        cations: [Li, Li, Li, Li, Li, Li, Li, Li, Li, Li, Li, Li, P, P, P, P]
-        formula: Li3PO4
-        valences: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 5, 5, 5, 5]
-  - - mp-12787
-    - mp-12787:
-        CN: ['4', '4', '4', '4', '4', '4']
-        cations: [Si, Si, Si, Si, Si, Si]
-        formula: SiO2
-        valences: [4, 4, 4, 4, 4, 4]
-  - - mp-621864
-    - mp-621864:
-        CN: ['4', '4', '4', '4', '6', '6', '4', '4', '4', '4']
-        cations: [Si, Si, Si, Si, Mo, Mo, P, P, P, P]
-        formula: Si4Mo2P4O23
-        valences: [4, 4, 4, 4, 5, 5, 5, 5, 5, 5]
-  - - mp-554267
-    - mp-554267:
-        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
-          '4', '4']
-        cations: [Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si]
-        formula: SiO2
-        valences: [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]
-  - - mp-4117
-    - mp-4117:
-        CN: ['4', '4', '4', '4', '4', '4', '4', '4']
-        cations: [Li, Li, Li, Li, Si, Si, Si, Si]
-        formula: Li2Si2O5
-        valences: [1, 1, 1, 1, 4, 4, 4, 4]
-  - - mp-14646
-    - mp-14646:
-        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '6', '6', '6', '6', '6', '6',
-          '6', '6', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4']
-        cations: [Li, Li, Li, Li, Li, Li, Li, Li, Mg, Mg, Mg, Mg, Mg, Mg, Mg, Mg,
-          S, S, S, S, S, S, S, S, S, S, S, S]
-        formula: Li2Mg2(SO4)3
-        valences: [1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 6, 6, 6, 6, 6,
-          6, 6, 6, 6, 6, 6, 6]
-  - - mp-562181
-    - mp-562181:
-        CN: ['6', '6', '6', '6', '6', '6', '6', '6', '4', '4', '4', '4', '4', '4',
-          '4', '4', '4', '4', '4', '4', '4', '4', '4', '4']
-        cations: [Cr, Cr, Cr, Cr, Cr, Cr, Cr, Cr, P, P, P, P, P, P, P, P, P, P, P,
-          P, P, P, P, P]
-        formula: Cr2P4O13
-        valences: [3, 3, 3, 3, 3, 3, 3, 3, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5,
-          5, 5, 5]
-  - - mp-553897
-    - mp-553897:
-        CN: ['8', '8', '8', '8', '8', '8', '8', '8', '4', '4', '4', '4', '4', '4',
-          '4', '4', '4', '4', '4', '4']
-        cations: [Ba, Ba, Ba, Ba, Ba, Ba, Ba, Ba, Si, Si, Si, Si, Si, Si, Si, Si,
-          Si, Si, Si, Si]
-        formula: Ba2Si3O8
-        valences: [2, 2, 2, 2, 2, 2, 2, 2, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]
-  - - mp-19401
-    - mp-19401:
-        CN: ['4', '4', '4', '4', '4', '4', '6', '6', '6', '6', '6', '6']
-        cations: [P, P, P, P, P, P, Cr, Cr, Cr, Cr, Cr, Cr]
-        formula: CrPO4
-        valences: [5, 5, 5, 5, 5, 5, 3, 3, 3, 3, 3, 3]
-  - - mp-18856
-    - mp-18856:
-        CN: ['6', '6', '6', '6', '6', '6', '6', '6']
-        cations: [Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo]
-        formula: MoO3
-        valences: [6, 6, 6, 6, 6, 6, 6, 6]
-  - - mp-555554
-    - mp-555554:
-        CN: ['8', '8', '6', '6', '4', '4', '4', '4', '4', '4', '4', '4']
-        cations: [K, K, Ga, Ga, P, P, P, P, P, P, P, P]
-        formula: KGa(PO3)4
-        valences: [1, 1, 3, 3, 5, 5, 5, 5, 5, 5, 5, 5]
-  - - mp-556262
-    - mp-556262:
-        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
-          '4', '4']
-        cations: [Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si]
-        formula: SiO2
-        valences: [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]
-  - - mp-558025
-    - mp-558025:
-        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
-          '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
-          '4', '4', '4', '4', '4', '4', '4']
-        cations: [Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si,
-          Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si,
-          Si, Si]
-        formula: SiO2
-        valences: [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
-          4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]
-  - - mp-505270
-    - mp-505270:
-        CN: ['6', '6', '6', '6', '4', '4', '4', '4']
-        cations: [Ti, Ti, Ti, Ti, S, S, S, S]
-        formula: TiSO5
-        valences: [4, 4, 4, 4, 6, 6, 6, 6]
-  - - mp-651707
-    - mp-651707:
-        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
-          '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4']
-        cations: [Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si,
-          Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si]
-        formula: SiO2
-        valences: [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
-          4, 4, 4, 4, 4, 4, 4]
-  - - mp-972384
-    - mp-972384:
-        CN: ['6', '6', '6', '6', '4', '4', '4', '4']
-        cations: [V, V, V, V, Se, Se, Se, Se]
-        formula: V2Se2O11
-        valences: [5, 5, 5, 5, 6, 6, 6, 6]
-  - - mp-557894
-    - mp-557894:
+  - - mp-560920
+    - mp-560920:
         CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
           '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
           '4', '4', '4']
@@ -1231,163 +1364,12 @@
         formula: SiO2
         valences: [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
           4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]
-  - - mp-560336
-    - mp-560336:
-        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
-          '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
-          '4', '4', '4']
-        cations: [Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si,
-          Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si]
-        formula: SiO2
-        valences: [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
-          4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]
-  - - mp-31050
-    - mp-31050:
+  - - mp-559091
+    - mp-559091:
         CN: ['4', '4', '4', '4']
-        cations: [Cl, Cl, Cl, Cl]
-        formula: Cl2O7
-        valences: [7, 7, 7, 7]
-  - - mp-554755
-    - mp-554755:
-        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
-          '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
-          '4', '4', '4']
-        cations: [Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si,
-          Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si]
+        cations: [Si, Si, Si, Si]
         formula: SiO2
-        valences: [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
-          4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]
-  - - mp-560064
-    - mp-560064:
-        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
-          '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
-          '4', '4', '4']
-        cations: [Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si,
-          Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si]
-        formula: SiO2
-        valences: [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
-          4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]
-  - - mp-628951
-    - mp-628951:
-        CN: ['6', '6', '6', '6', '6', '6', '6', '6', '4', '4', '4', '4', '4', '4',
-          '4', '4']
-        cations: [V, V, V, V, V, V, V, V, P, P, P, P, P, P, P, P]
-        formula: V2P2O9
-        valences: [4, 4, 4, 4, 4, 4, 4, 4, 5, 5, 5, 5, 5, 5, 5, 5]
-  - - mp-556469
-    - mp-556469:
-        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
-          '4', '4']
-        cations: [Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si]
-        formula: SiO2
-        valences: [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]
-  - - mp-669426
-    - mp-669426:
-        CN: ['4', '4', '4', '4', '4', '4', '4', '4']
-        cations: [Si, Si, Si, Si, Si, Si, Si, Si]
-        formula: SiO2
-        valences: [4, 4, 4, 4, 4, 4, 4, 4]
-  - - mp-32895
-    - mp-32895:
-        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
-          '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
-          '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
-          '4', '4', '4', '4']
-        cations: [Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si,
-          Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si,
-          Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si]
-        formula: SiO2
-        valences: [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
-          4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
-          4, 4, 4]
-  - - mp-19326
-    - mp-19326:
-        CN: ['6', '6', '6', '6']
-        cations: [Mn, Mn, Mn, Mn]
-        formula: MnO2
         valences: [4, 4, 4, 4]
-  - - mp-505345
-    - mp-505345:
-        CN: ['4', '4', '4', '4', '6', '6', '8']
-        cations: [P, P, P, P, V, V, Sr]
-        formula: SrV2(P2O7)2
-        valences: [5, 5, 5, 5, 3, 3, 2]
-  - - mp-560809
-    - mp-560809:
-        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
-          '4', '4', '4', '4', '4', '4', '4', '4', '4', '4']
-        cations: [Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si,
-          Si, Si, Si, Si, Si, Si, Si, Si]
-        formula: SiO2
-        valences: [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
-          4, 4, 4]
-  - - mp-28883
-    - mp-28883:
-        CN: ['4', '4', '4', '4', '6', '6']
-        cations: [P, P, P, P, Ge, Ge]
-        formula: GeP2O7
-        valences: [5, 5, 5, 5, 4, 4]
-  - - mp-555899
-    - mp-555899:
-        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
-          '4', '4', '4', '4', '4', '4']
-        cations: [Li, Li, Li, Li, Li, Li, Li, Li, Si, Si, Si, Si, Si, Si, Si, Si,
-          Si, Si, Si, Si]
-        formula: Li2Si3O7
-        valences: [1, 1, 1, 1, 1, 1, 1, 1, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]
-  - - mp-558088
-    - mp-558088:
-        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
-          '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
-          '4', '4', '4', '4', '4', '4', '4']
-        cations: [Al, Al, Al, Al, Al, Al, Al, Al, Al, Al, Al, Al, Al, Al, Al, Al,
-          Al, Al, P, P, P, P, P, P, P, P, P, P, P, P, P, P, P, P, P, P]
-        formula: AlPO4
-        valences: [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 5, 5, 5,
-          5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5]
-  - - mp-821
-    - mp-821:
-        CN: ['6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6',
-          '6', '6']
-        cations: [Nb, Nb, Nb, Nb, Nb, Nb, Nb, Nb, Nb, Nb, Nb, Nb, Nb, Nb, Nb, Nb]
-        formula: NbO2
-        valences: [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]
-  - - mp-554185
-    - mp-554185:
-        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
-          '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
-          '4', '4', '4']
-        cations: [Al, Al, Al, Al, Al, Al, Al, Al, Al, Al, Al, Al, Al, Al, Al, Al,
-          P, P, P, P, P, P, P, P, P, P, P, P, P, P, P, P]
-        formula: AlPO4
-        valences: [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 5, 5, 5, 5, 5,
-          5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5]
-  - - mp-555521
-    - mp-555521:
-        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
-          '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
-          '4', '4', '4']
-        cations: [Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si,
-          Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si]
-        formula: SiO2
-        valences: [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
-          4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]
-  - - mp-646895
-    - mp-646895:
-        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
-          '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
-          '4', '4', '4']
-        cations: [Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si,
-          Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si]
-        formula: SiO2
-        valences: [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
-          4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]
-  - - mp-644514
-    - mp-644514:
-        CN: ['6', '6', '6']
-        cations: [Mn, Mn, Mn]
-        formula: MnO2
-        valences: [4, 4, 4]
   - - mp-29222
     - mp-29222:
         CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '8', '8',
@@ -1396,389 +1378,21 @@
           Ba, Ba, Ba, Ba]
         formula: Ba2Si3O8
         valences: [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 2, 2, 2, 2, 2, 2, 2, 2]
-  - - mp-557915
-    - mp-557915:
-        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4']
-        cations: [Al, Al, Al, Al, Al, Al, P, P, P, P, P, P]
-        formula: AlPO4
-        valences: [3, 3, 3, 3, 3, 3, 5, 5, 5, 5, 5, 5]
   - - mp-748
     - mp-748:
         CN: ['6', '6', '6', '6', '6', '6', '6', '6', '6', '6']
         cations: [Ti, Ti, Ti, Ti, Ti, Ti, Ti, Ti, Ti, Ti]
         formula: Ti5O9
         valences: [4, 4, 4, 4, 3, 3, 3, 3, 4, 4]
-  - - mp-390
-    - mp-390:
-        CN: ['6', '6']
-        cations: [Ti, Ti]
-        formula: TiO2
-        valences: [4, 4]
-  - - mp-560941
-    - mp-560941:
+  - - mp-561181
+    - mp-561181:
         CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
-          '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
-          '4', '4', '4']
+          '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4']
         cations: [Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si,
-          Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si]
+          Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si]
         formula: SiO2
         valences: [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
-          4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]
-  - - mp-14368
-    - mp-14368:
-        CN: ['6', '6', '6', '6', '4', '4', '4', '4']
-        cations: [Sb, Sb, Sb, Sb, As, As, As, As]
-        formula: SbAsO5
-        valences: [5, 5, 5, 5, 5, 5, 5, 5]
-  - - mp-556454
-    - mp-556454:
-        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
-          '4', '4']
-        cations: [Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si]
-        formula: SiO2
-        valences: [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]
-  - - mp-32447
-    - mp-32447:
-        CN: ['6', '6', '6', '6', '4', '4']
-        cations: [V, V, V, V, As, As]
-        formula: V4As2O13
-        valences: [4, 4, 4, 4, 5, 5]
-  - - mp-6425
-    - mp-6425:
-        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '6', '6',
-          '6', '6']
-        cations: [Li, Li, Li, Li, Li, Li, P, P, P, P, P, P, In, In, In, In]
-        formula: Li3In2(PO4)3
-        valences: [1, 1, 1, 1, 1, 1, 5, 5, 5, 5, 5, 5, 3, 3, 3, 3]
-  - - mp-556724
-    - mp-556724:
-        CN: ['6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6']
-        cations: [Ti, Ti, Ti, Ti, Ti, Ti, Ti, Ti, Ti, Ti, Ti, Ti, Ti, Ti]
-        formula: Ti7O13
-        valences: [3, 3, 4, 4, 4, 4, 3, 3, 4, 4, 4, 4, 4, 4]
-  - - mp-557803
-    - mp-557803:
-        CN: ['6', '6', '6', '6', '6', '6', '6', '6', '4', '4', '4', '4', '4', '4',
-          '4', '4']
-        cations: [Mg, Mg, Mg, Mg, Mg, Mg, Mg, Mg, Si, Si, Si, Si, Si, Si, Si, Si]
-        formula: MgSiO3
-        valences: [2, 2, 2, 2, 2, 2, 2, 2, 4, 4, 4, 4, 4, 4, 4, 4]
-  - - mp-547956
-    - mp-547956:
-        CN: ['6', '6', '6']
-        cations: [Mn, V, V]
-        formula: MnV2O6
-        valences: [2, 5, 5]
-  - - mp-561065
-    - mp-561065:
-        CN: ['6', '6', '6', '6', '6', '6', '4', '4', '4', '4']
-        cations: [Mg, Mg, Ti, Ti, Ti, Ti, P, P, P, P]
-        formula: MgTi2(PO5)2
-        valences: [2, 2, 4, 4, 4, 4, 5, 5, 5, 5]
-  - - mp-559091
-    - mp-559091:
-        CN: ['4', '4', '4', '4']
-        cations: [Si, Si, Si, Si]
-        formula: SiO2
-        valences: [4, 4, 4, 4]
-  - - mp-25631
-    - mp-25631:
-        CN: ['4', '4', '4', '4', '6', '6']
-        cations: [P, P, P, P, V, V]
-        formula: VP2O7
-        valences: [5, 5, 5, 5, 4, 4]
-  - - mp-5440
-    - mp-5440:
-        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
-          '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
-          '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
-          '4', '4', '4', '4']
-        cations: [Al, Al, Al, Al, Al, Al, Al, Al, Al, Al, Al, Al, Al, Al, Al, Al,
-          Al, Al, Al, Al, Al, Al, Al, Al, P, P, P, P, P, P, P, P, P, P, P, P, P, P,
-          P, P, P, P, P, P, P, P, P, P]
-        formula: AlPO4
-        valences: [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3,
-          3, 3, 3, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5,
-          5, 5, 5]
-  - - mp-561090
-    - mp-561090:
-        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
-          '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
-          '4', '4', '4', '4', '4']
-        cations: [Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si,
-          Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si]
-        formula: SiO2
-        valences: [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
-          4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]
-  - - mp-542814
-    - mp-542814:
-        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
-          '4', '4', '4', '4', '4', '4', '4', '4', '4', '4']
-        cations: [Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si,
-          Si, Si, Si, Si, Si, Si, Si, Si]
-        formula: SiO2
-        valences: [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
-          4, 4, 4]
-  - - mp-2173
-    - mp-2173:
-        CN: ['4', '4', '4', '4', '4', '4', '4', '4']
-        cations: [P, P, P, P, P, P, P, P]
-        formula: P2O5
-        valences: [5, 5, 5, 5, 5, 5, 5, 5]
-  - - mp-19395
-    - mp-19395:
-        CN: ['6', '6', '6', '6']
-        cations: [Mn, Mn, Mn, Mn]
-        formula: MnO2
-        valences: [4, 4, 4, 4]
-  - - mp-555982
-    - mp-555982:
-        CN: ['4', '4', '4', '4', '6', '6', '6', '6', '6', '6', '4', '4', '4', '4',
-          '4', '4', '4', '4', '4', '4', '4', '4']
-        cations: [Si, Si, Si, Si, Ge, Ge, Ge, Ge, Ge, Ge, P, P, P, P, P, P, P, P,
-          P, P, P, P]
-        formula: Si2Ge3P6O25
-        valences: [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5,
-          5]
-  - - mp-19540
-    - mp-19540:
-        CN: ['6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6',
-          '6', '6']
-        cations: [Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo]
-        formula: Mo8O23
-        valences: [6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 5, 5, 5, 5]
-  - - mp-555487
-    - mp-555487:
-        CN: ['6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6']
-        cations: [Sn, Sn, Sn, Sn, Sn, Sn, Sn, Sn, Sn, Sn, Sn, Sn]
-        formula: SnO2
-        valences: [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]
-  - - mp-559530
-    - mp-559530:
-        CN: ['6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6',
-          '6', '6', '6', '6', '6', '6', '4', '4', '4', '4', '4', '4', '4', '4', '4',
-          '4', '4', '4', '4', '4', '4', '4']
-        cations: [Ti, Ti, Ti, Ti, Ti, Ti, Ti, Ti, Ti, Ti, Ti, Ti, Ti, Ti, Ti, Ti,
-          Ti, Ti, Ti, Ti, P, P, P, P, P, P, P, P, P, P, P, P, P, P, P, P]
-        formula: Ti5(PO5)4
-        valences: [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 5,
-          5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5]
-  - - mp-8602
-    - mp-8602:
-        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
-          '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
-          '4', '4', '4', '4', '4']
-        cations: [Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si,
-          Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si]
-        formula: SiO2
-        valences: [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
-          4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]
-  - - mp-554273
-    - mp-554273:
-        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
-          '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
-          '4', '4', '4']
-        cations: [Al, Al, Al, Al, Al, Al, Al, Al, Al, Al, Al, Al, Al, Al, Al, Al,
-          P, P, P, P, P, P, P, P, P, P, P, P, P, P, P, P]
-        formula: AlPO4
-        valences: [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 5, 5, 5, 5, 5,
-          5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5]
-  - - mp-615993
-    - mp-615993:
-        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4']
-        cations: [Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si]
-        formula: SiO2
-        valences: [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]
-  - - mp-17196
-    - mp-17196:
-        CN: ['6', '6', '6', '6', '4', '4', '4', '4', '4', '4', '4', '4']
-        cations: [Ti, Ti, Ti, Ti, As, As, As, As, As, As, As, As]
-        formula: TiAs2O7
-        valences: [4, 4, 4, 4, 5, 5, 5, 5, 5, 5, 5, 5]
-  - - mp-579631
-    - mp-579631:
-        CN: ['6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6',
-          '6', '6', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
-          '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4']
-        cations: [V, V, V, V, V, V, V, V, V, V, V, V, V, V, V, V, P, P, P, P, P, P,
-          P, P, P, P, P, P, P, P, P, P, P, P, P, P, P, P, P, P]
-        formula: V4(P2O7)3
-        valences: [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 5, 5, 5, 5, 5,
-          5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5]
-  - - mp-680204
-    - mp-680204:
-        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
-          '4', '4', '4', '4', '4', '4', '4', '4']
-        cations: [Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si,
-          Si, Si, Si, Si, Si, Si]
-        formula: SiO2
-        valences: [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
-          4]
-  - - mp-560623
-    - mp-560623:
-        CN: ['6', '6', '6', '6', '6', '6', '4', '4', '4', '4']
-        cations: [Mg, Mg, Mg, Mg, Mg, Mg, P, P, P, P]
-        formula: Mg3(PO4)2
-        valences: [2, 2, 2, 2, 2, 2, 5, 5, 5, 5]
-  - - mp-16964
-    - mp-16964:
-        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4']
-        cations: [Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si]
-        formula: SiO2
-        valences: [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]
-  - - mp-5285
-    - mp-5285:
-        CN: ['4', '4', '4', '4', '9', '9', '9', '9']
-        cations: [S, S, S, S, Sr, Sr, Sr, Sr]
-        formula: SrSO4
-        valences: [6, 6, 6, 6, 2, 2, 2, 2]
-  - - mp-667368
-    - mp-667368:
-        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
-          '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
-          '4', '4', '4']
-        cations: [Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si,
-          Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si]
-        formula: SiO2
-        valences: [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
-          4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]
-  - - mp-566111
-    - mp-566111:
-        CN: ['6', '6', '4', '4']
-        cations: [V, V, P, P]
-        formula: VPO5
-        valences: [5, 5, 5, 5]
-  - - mp-557057
-    - mp-557057:
-        CN: ['6', '6', '6', '6', '6', '6', '6', '6']
-        cations: [Nb, Nb, Nb, Nb, Nb, Nb, Nb, Nb]
-        formula: NbO2
-        valences: [4, 4, 4, 4, 4, 4, 4, 4]
-  - - mp-27608
-    - mp-27608:
-        CN: ['4', '4', '4', '4', '6']
-        cations: [Be, Be, Be, Be, Te]
-        formula: Be4TeO7
-        valences: [2, 2, 2, 2, 6]
-  - - mp-637201
-    - mp-637201:
-        CN: ['6', '6', '6', '6', '6', '6', '6', '6', '4', '4', '4', '4', '4', '4',
-          '4', '4']
-        cations: [Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, P, P, P, P, P, P, P, P]
-        formula: Mo2P2O11
-        valences: [6, 6, 6, 6, 6, 6, 6, 6, 5, 5, 5, 5, 5, 5, 5, 5]
-  - - mp-557842
-    - mp-557842:
-        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
-          '4', '4', '4', '4', '4', '4']
-        cations: [Al, Al, Al, Al, Al, Al, Al, Al, Al, Al, P, P, P, P, P, P, P, P,
-          P, P]
-        formula: AlPO4
-        valences: [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5]
-  - - mp-566845
-    - mp-566845:
-        CN: ['6', '6', '6', '6', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
-          '4', '4']
-        cations: [Cr, Cr, Cr, Cr, P, P, P, P, P, P, P, P, P, P, P, P]
-        formula: Cr(PO3)3
-        valences: [3, 3, 3, 3, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5]
-  - - mp-3552
-    - mp-3552:
-        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
-          '4', '4']
-        cations: [Li, Li, Li, Li, Li, Li, Li, Li, Si, Si, Si, Si, Si, Si, Si, Si]
-        formula: Li2Si2O5
-        valences: [1, 1, 1, 1, 1, 1, 1, 1, 4, 4, 4, 4, 4, 4, 4, 4]
-  - - mp-2452
-    - mp-2452:
-        CN: ['4', '4', '4', '4']
-        cations: [P, P, P, P]
-        formula: P2O5
-        valences: [5, 5, 5, 5]
-  - - mp-542478
-    - mp-542478:
-        CN: ['6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6']
-        cations: [Sb, Sb, Sb, Sb, Mn, Mn, Mn, Mn, V, V, V, V]
-        formula: MnVSbO6
-        valences: [5, 5, 5, 5, 2, 2, 2, 2, 5, 5, 5, 5]
-  - - mp-6442
-    - mp-6442:
-        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4']
-        cations: [Li, Li, Al, Al, Si, Si, Si, Si, Si, Si, Si, Si]
-        formula: LiAl(Si2O5)2
-        valences: [1, 1, 3, 3, 4, 4, 4, 4, 4, 4, 4, 4]
-  - - mp-647391
-    - mp-647391:
-        CN: ['8', '8', '8', '8', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
-          '4', '4', '4', '4', '4', '4', '4', '4', '4', '4']
-        cations: [Ce, Ce, Ce, Ce, P, P, P, P, P, P, P, P, P, P, P, P, P, P, P, P,
-          P, P, P, P]
-        formula: CeP5O14
-        valences: [3, 3, 3, 3, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5,
-          5, 5, 5]
-  - - mp-707977
-    - mp-707977:
-        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4']
-        cations: [Al, Al, Al, Al, Al, Al, P, P, P, P, P, P]
-        formula: AlPO4
-        valences: [3, 3, 3, 3, 3, 3, 5, 5, 5, 5, 5, 5]
-  - - mp-644923
-    - mp-644923:
-        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
-          '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
-          '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
-          '4', '4', '4', '4']
-        cations: [Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si,
-          Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si,
-          Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si]
-        formula: SiO2
-        valences: [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
-          4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
-          4, 4, 4]
-  - - mp-653763
-    - mp-653763:
-        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
-          '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
-          '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
-          '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4']
-        cations: [Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si,
-          Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si,
-          Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si,
-          Si, Si, Si, Si]
-        formula: SiO2
-        valences: [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
-          4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
-          4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]
-  - - mp-578793
-    - mp-578793:
-        CN: ['6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6',
-          '6', '6', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
-          '4', '4', '4']
-        cations: [V, V, V, V, V, V, V, V, V, V, V, V, V, V, V, V, P, P, P, P, P, P,
-          P, P, P, P, P, P, P, P, P, P]
-        formula: V2P2O9
-        valences: [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 5, 5, 5, 5, 5,
-          5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5]
-  - - mp-28549
-    - mp-28549:
-        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
-          '4', '4', '4', '4']
-        cations: [Li, Li, Li, Li, Li, Li, Li, Li, Li, Li, Li, Li, Li, Li, Li, Li,
-          Si, Si]
-        formula: Li8SiO6
-        valences: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 4, 4]
-  - - mp-4888
-    - mp-4888:
-        CN: ['4', '4', '6', '6']
-        cations: [P, P, Nb, Nb]
-        formula: NbPO5
-        valences: [5, 5, 5, 5]
-  - - mp-11623
-    - mp-11623:
-        CN: ['6', '6', '6', '6', '9', '9', '9', '9']
-        cations: [In, In, In, In, La, La, La, La]
-        formula: LaInO3
-        valences: [3, 3, 3, 3, 3, 3, 3, 3]
+          4, 4, 4, 4, 4, 4, 4]
   - - mp-683883
     - mp-683883:
         CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
@@ -1794,31 +1408,119 @@
         valences: [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3,
           3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5,
           5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5]
+  - - mp-5440
+    - mp-5440:
+        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
+          '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
+          '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
+          '4', '4', '4', '4']
+        cations: [Al, Al, Al, Al, Al, Al, Al, Al, Al, Al, Al, Al, Al, Al, Al, Al,
+          Al, Al, Al, Al, Al, Al, Al, Al, P, P, P, P, P, P, P, P, P, P, P, P, P, P,
+          P, P, P, P, P, P, P, P, P, P]
+        formula: AlPO4
+        valences: [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3,
+          3, 3, 3, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5,
+          5, 5, 5]
+  - - mp-558025
+    - mp-558025:
+        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
+          '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
+          '4', '4', '4', '4', '4', '4', '4']
+        cations: [Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si,
+          Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si,
+          Si, Si]
+        formula: SiO2
+        valences: [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
+          4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]
+  - - mp-562181
+    - mp-562181:
+        CN: ['6', '6', '6', '6', '6', '6', '6', '6', '4', '4', '4', '4', '4', '4',
+          '4', '4', '4', '4', '4', '4', '4', '4', '4', '4']
+        cations: [Cr, Cr, Cr, Cr, Cr, Cr, Cr, Cr, P, P, P, P, P, P, P, P, P, P, P,
+          P, P, P, P, P]
+        formula: Cr2P4O13
+        valences: [3, 3, 3, 3, 3, 3, 3, 3, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5,
+          5, 5, 5]
+  - - mp-25023
+    - mp-25023:
+        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '6', '6', '6', '6']
+        cations: [Si, Si, P, P, P, P, P, P, P, P, Mn, Mn, Mn, Mn]
+        formula: Mn2Si(P2O7)2
+        valences: [4, 4, 5, 5, 5, 5, 5, 5, 5, 5, 2, 2, 2, 2]
+  - - mp-540688
+    - mp-540688:
+        CN: ['9', '9', '9', '9', '6', '6', '6', '6', '6', '6', '6', '6']
+        cations: [Sr, Sr, Sr, Sr, In, In, In, In, In, In, In, In]
+        formula: SrIn2O4
+        valences: [2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3]
+  - - mp-5285
+    - mp-5285:
+        CN: ['4', '4', '4', '4', '9', '9', '9', '9']
+        cations: [S, S, S, S, Sr, Sr, Sr, Sr]
+        formula: SrSO4
+        valences: [6, 6, 6, 6, 2, 2, 2, 2]
+  - - mp-2452
+    - mp-2452:
+        CN: ['4', '4', '4', '4']
+        cations: [P, P, P, P]
+        formula: P2O5
+        valences: [5, 5, 5, 5]
+  - - mp-556262
+    - mp-556262:
+        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
+          '4', '4']
+        cations: [Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si]
+        formula: SiO2
+        valences: [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]
+  - - mp-553945
+    - mp-553945:
+        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
+          '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
+          '4', '4', '4']
+        cations: [Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si,
+          Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si]
+        formula: SiO2
+        valences: [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
+          4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]
+  - - mp-621864
+    - mp-621864:
+        CN: ['4', '4', '4', '4', '6', '6', '4', '4', '4', '4']
+        cations: [Si, Si, Si, Si, Mo, Mo, P, P, P, P]
+        formula: Si4Mo2P4O23
+        valences: [4, 4, 4, 4, 5, 5, 5, 5, 5, 5]
+  - - mp-11623
+    - mp-11623:
+        CN: ['6', '6', '6', '6', '9', '9', '9', '9']
+        cations: [In, In, In, In, La, La, La, La]
+        formula: LaInO3
+        valences: [3, 3, 3, 3, 3, 3, 3, 3]
   - - mp-8057
     - mp-8057:
         CN: ['6', '6', '6', '6', '6', '6']
         cations: [Ti, Ti, Ti, Ti, Ti, Ti]
         formula: Ti3O5
         valences: [4, 4, 3, 3, 3, 3]
-  - - mp-566179
-    - mp-566179:
-        CN: ['6', '6', '4', '4']
-        cations: [V, V, P, P]
-        formula: VPO5
-        valences: [5, 5, 5, 5]
-  - - mp-17279
-    - mp-17279:
+  - - mp-17196
+    - mp-17196:
+        CN: ['6', '6', '6', '6', '4', '4', '4', '4', '4', '4', '4', '4']
+        cations: [Ti, Ti, Ti, Ti, As, As, As, As, As, As, As, As]
+        formula: TiAs2O7
+        valences: [4, 4, 4, 4, 5, 5, 5, 5, 5, 5, 5, 5]
+  - - mp-557915
+    - mp-557915:
+        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4']
+        cations: [Al, Al, Al, Al, Al, Al, P, P, P, P, P, P]
+        formula: AlPO4
+        valences: [3, 3, 3, 3, 3, 3, 5, 5, 5, 5, 5, 5]
+  - - mp-651707
+    - mp-651707:
         CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
-          '4', '4']
-        cations: [Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si]
+          '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4']
+        cations: [Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si,
+          Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si]
         formula: SiO2
-        valences: [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]
-  - - mp-510127
-    - mp-510127:
-        CN: ['6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6']
-        cations: [V, V, V, V, V, V, V, V, V, V, V, V]
-        formula: V6O11
-        valences: [4, 4, 4, 4, 3, 3, 3, 3, 4, 4, 4, 4]
+        valences: [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
+          4, 4, 4, 4, 4, 4, 4]
   - - mp-585483
     - mp-585483:
         CN: ['4', '4', '4', '4', '6', '6', '6', '6', '4', '4', '4', '4', '4', '4',
@@ -1827,6 +1529,87 @@
           P]
         formula: SiMoP3O11
         valences: [4, 4, 4, 4, 3, 3, 3, 3, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5]
+  - - mp-15960
+    - mp-15960:
+        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
+          '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
+          '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
+          '4', '4', '4', '4']
+        cations: [Li, Li, Li, Li, Li, Li, Li, Li, Li, Li, Li, Li, Li, Li, Li, Li,
+          Li, Li, Li, Li, Li, Li, Li, Li, Li, Li, Li, Li, Li, Li, Li, Li, Li, Li,
+          Li, Li, Li, Li, Li, Li, Al, Al, Al, Al, Al, Al, Al, Al]
+        formula: Li5AlO4
+        valences: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+          1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 3, 3, 3, 3,
+          3, 3, 3]
+  - - mp-561065
+    - mp-561065:
+        CN: ['6', '6', '6', '6', '6', '6', '4', '4', '4', '4']
+        cations: [Mg, Mg, Ti, Ti, Ti, Ti, P, P, P, P]
+        formula: MgTi2(PO5)2
+        valences: [2, 2, 4, 4, 4, 4, 5, 5, 5, 5]
+  - - mp-560623
+    - mp-560623:
+        CN: ['6', '6', '6', '6', '6', '6', '4', '4', '4', '4']
+        cations: [Mg, Mg, Mg, Mg, Mg, Mg, P, P, P, P]
+        formula: Mg3(PO4)2
+        valences: [2, 2, 2, 2, 2, 2, 5, 5, 5, 5]
+  - - mp-3552
+    - mp-3552:
+        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
+          '4', '4']
+        cations: [Li, Li, Li, Li, Li, Li, Li, Li, Si, Si, Si, Si, Si, Si, Si, Si]
+        formula: Li2Si2O5
+        valences: [1, 1, 1, 1, 1, 1, 1, 1, 4, 4, 4, 4, 4, 4, 4, 4]
+  - - mp-2173
+    - mp-2173:
+        CN: ['4', '4', '4', '4', '4', '4', '4', '4']
+        cations: [P, P, P, P, P, P, P, P]
+        formula: P2O5
+        valences: [5, 5, 5, 5, 5, 5, 5, 5]
+  - - mp-547956
+    - mp-547956:
+        CN: ['6', '6', '6']
+        cations: [Mn, V, V]
+        formula: MnV2O6
+        valences: [2, 5, 5]
+  - - mp-558088
+    - mp-558088:
+        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
+          '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
+          '4', '4', '4', '4', '4', '4', '4']
+        cations: [Al, Al, Al, Al, Al, Al, Al, Al, Al, Al, Al, Al, Al, Al, Al, Al,
+          Al, Al, P, P, P, P, P, P, P, P, P, P, P, P, P, P, P, P, P, P]
+        formula: AlPO4
+        valences: [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 5, 5, 5,
+          5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5]
+  - - mp-28549
+    - mp-28549:
+        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
+          '4', '4', '4', '4']
+        cations: [Li, Li, Li, Li, Li, Li, Li, Li, Li, Li, Li, Li, Li, Li, Li, Li,
+          Si, Si]
+        formula: Li8SiO6
+        valences: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 4, 4]
+  - - mp-2414
+    - mp-2414:
+        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4']
+        cations: [S, S, S, S, S, S, S, S, S, S, S, S]
+        formula: SO3
+        valences: [6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6]
+  - - mp-390
+    - mp-390:
+        CN: ['6', '6']
+        cations: [Ti, Ti]
+        formula: TiO2
+        valences: [4, 4]
+  - - mp-6425
+    - mp-6425:
+        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '6', '6',
+          '6', '6']
+        cations: [Li, Li, Li, Li, Li, Li, P, P, P, P, P, P, In, In, In, In]
+        formula: Li3In2(PO4)3
+        valences: [1, 1, 1, 1, 1, 1, 5, 5, 5, 5, 5, 5, 3, 3, 3, 3]
   - - mp-600080
     - mp-600080:
         CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
@@ -1842,8 +1625,134 @@
         valences: [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
           4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
           4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]
-  - - mp-560920
-    - mp-560920:
+  - - mp-28883
+    - mp-28883:
+        CN: ['4', '4', '4', '4', '6', '6']
+        cations: [P, P, P, P, Ge, Ge]
+        formula: GeP2O7
+        valences: [5, 5, 5, 5, 4, 4]
+  - - mp-19401
+    - mp-19401:
+        CN: ['4', '4', '4', '4', '4', '4', '6', '6', '6', '6', '6', '6']
+        cations: [P, P, P, P, P, P, Cr, Cr, Cr, Cr, Cr, Cr]
+        formula: CrPO4
+        valences: [5, 5, 5, 5, 5, 5, 3, 3, 3, 3, 3, 3]
+  - - mp-578793
+    - mp-578793:
+        CN: ['6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6',
+          '6', '6', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
+          '4', '4', '4']
+        cations: [V, V, V, V, V, V, V, V, V, V, V, V, V, V, V, V, P, P, P, P, P, P,
+          P, P, P, P, P, P, P, P, P, P]
+        formula: V2P2O9
+        valences: [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 5, 5, 5, 5, 5,
+          5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5]
+  - - mp-566111
+    - mp-566111:
+        CN: ['6', '6', '4', '4']
+        cations: [V, V, P, P]
+        formula: VPO5
+        valences: [5, 5, 5, 5]
+  - - mp-32895
+    - mp-32895:
+        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
+          '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
+          '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
+          '4', '4', '4', '4']
+        cations: [Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si,
+          Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si,
+          Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si]
+        formula: SiO2
+        valences: [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
+          4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
+          4, 4, 4]
+  - - mp-557933
+    - mp-557933:
+        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
+          '4', '4', '4', '4', '4', '4', '4', '4', '4', '4']
+        cations: [Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si,
+          Si, Si, Si, Si, Si, Si, Si, Si]
+        formula: SiO2
+        valences: [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
+          4, 4, 4]
+  - - mp-5834
+    - mp-5834:
+        CN: ['6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6',
+          '6', '6', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
+          '4', '4', '4']
+        cations: [Mg, Mg, Mg, Mg, Mg, Mg, Mg, Mg, Mg, Mg, Mg, Mg, Mg, Mg, Mg, Mg,
+          Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si]
+        formula: MgSiO3
+        valences: [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 4, 4, 4, 4, 4,
+          4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]
+  - - mp-559145
+    - mp-559145:
+        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
+          '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
+          '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
+          '4', '4', '4', '4']
+        cations: [Al, Al, Al, Al, Al, Al, Al, Al, Al, Al, Al, Al, Al, Al, Al, Al,
+          Al, Al, Al, Al, Al, Al, Al, Al, P, P, P, P, P, P, P, P, P, P, P, P, P, P,
+          P, P, P, P, P, P, P, P, P, P]
+        formula: AlPO4
+        valences: [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3,
+          3, 3, 3, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5,
+          5, 5, 5]
+  - - mp-556724
+    - mp-556724:
+        CN: ['6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6']
+        cations: [Ti, Ti, Ti, Ti, Ti, Ti, Ti, Ti, Ti, Ti, Ti, Ti, Ti, Ti]
+        formula: Ti7O13
+        valences: [3, 3, 4, 4, 4, 4, 3, 3, 4, 4, 4, 4, 4, 4]
+  - - mp-14646
+    - mp-14646:
+        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '6', '6', '6', '6', '6', '6',
+          '6', '6', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4']
+        cations: [Li, Li, Li, Li, Li, Li, Li, Li, Mg, Mg, Mg, Mg, Mg, Mg, Mg, Mg,
+          S, S, S, S, S, S, S, S, S, S, S, S]
+        formula: Li2Mg2(SO4)3
+        valences: [1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 6, 6, 6, 6, 6,
+          6, 6, 6, 6, 6, 6, 6]
+  - - mp-557842
+    - mp-557842:
+        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
+          '4', '4', '4', '4', '4', '4']
+        cations: [Al, Al, Al, Al, Al, Al, Al, Al, Al, Al, P, P, P, P, P, P, P, P,
+          P, P]
+        formula: AlPO4
+        valences: [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5]
+  - - mp-12787
+    - mp-12787:
+        CN: ['4', '4', '4', '4', '4', '4']
+        cations: [Si, Si, Si, Si, Si, Si]
+        formula: SiO2
+        valences: [4, 4, 4, 4, 4, 4]
+  - - mp-4556
+    - mp-4556:
+        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4']
+        cations: [Li, Li, Li, Li, Li, Li, Li, Li, S, S, S, S]
+        formula: Li2SO4
+        valences: [1, 1, 1, 1, 1, 1, 1, 1, 6, 6, 6, 6]
+  - - mp-561397
+    - mp-561397:
+        CN: ['4', '4', '4', '4']
+        cations: [S, S, S, S]
+        formula: SO3
+        valences: [6, 6, 6, 6]
+  - - mp-4591
+    - mp-4591:
+        CN: ['9', '9', '9', '9', '6', '6', '6', '6', '6', '6', '6', '6']
+        cations: [Sr, Sr, Sr, Sr, Nb, Nb, Nb, Nb, Nb, Nb, Nb, Nb]
+        formula: SrNb2O6
+        valences: [2, 2, 2, 2, 5, 5, 5, 5, 5, 5, 5, 5]
+  - - mp-29164
+    - mp-29164:
+        CN: ['9', '9', '9', '9', '6', '6', '6', '6']
+        cations: [Sr, Sr, Sr, Sr, Bi, Bi, Bi, Bi]
+        formula: SrBiO3
+        valences: [2, 2, 2, 2, 3, 3, 5, 5]
+  - - mp-560941
+    - mp-560941:
         CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
           '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
           '4', '4', '4']
@@ -1852,98 +1761,136 @@
         formula: SiO2
         valences: [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
           4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]
-  - - mp-566876
-    - mp-566876:
-        CN: ['6', '6', '6', '6', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
-          '4', '4']
-        cations: [Mn, Mn, Mn, Mn, P, P, P, P, P, P, P, P, P, P, P, P]
-        formula: Mn(PO3)3
-        valences: [3, 3, 3, 3, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5]
-  - - mp-25023
-    - mp-25023:
-        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '6', '6', '6', '6']
-        cations: [Si, Si, P, P, P, P, P, P, P, P, Mn, Mn, Mn, Mn]
-        formula: Mn2Si(P2O7)2
-        valences: [4, 4, 5, 5, 5, 5, 5, 5, 5, 5, 2, 2, 2, 2]
-  - - mp-585492
-    - mp-585492:
-        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '6', '6', '6', '6', '6', '6',
-          '6', '6', '6', '6', '6', '6', '6', '6', '6', '6']
-        cations: [Li, Li, Li, Li, Li, Li, Li, Li, Mg, Mg, Mg, Mg, Mn, Mn, Mn, Mn,
-          Mn, Mn, Mn, Mn, Mn, Mn, Mn, Mn]
-        formula: Li2MgMn3O8
-        valences: [1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 4, 4, 4, 4, 4, 4, 4, 4, 4,
-          4, 4, 4]
-  - - mp-565247
-    - mp-565247:
-        CN: ['8', '8', '8', '8', '6', '6', '6', '6', '6', '6', '4', '4', '4', '4',
-          '4', '4', '4', '4']
-        cations: [K, K, K, K, Mo, Mo, Mo, Mo, Mo, Mo, As, As, As, As, As, As, As,
-          As]
-        formula: K2Mo3(AsO5)4
-        valences: [1, 1, 1, 1, 6, 6, 6, 6, 6, 6, 5, 5, 5, 5, 5, 5, 5, 5]
-  - - mp-7535
-    - mp-7535:
+  - - mp-27588
+    - mp-27588:
         CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4']
-        cations: [Li, Li, Li, Li, Li, Li, Li, Li, Li, Li, Al, Al]
-        formula: Li5AlO4
-        valences: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 3]
-  - - mp-541338
-    - mp-541338:
+        cations: [Be, Be, Be, Be, P, P, P, P, P, P, P, P]
+        formula: Be(PO3)2
+        valences: [2, 2, 2, 2, 5, 5, 5, 5, 5, 5, 5, 5]
+  - - mp-557057
+    - mp-557057:
+        CN: ['6', '6', '6', '6', '6', '6', '6', '6']
+        cations: [Nb, Nb, Nb, Nb, Nb, Nb, Nb, Nb]
+        formula: NbO2
+        valences: [4, 4, 4, 4, 4, 4, 4, 4]
+  - - mp-640556
+    - mp-640556:
         CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
           '4', '4', '4', '4', '4', '4', '4', '4', '4', '4']
-        cations: [Al, Al, Al, Al, Al, Al, Al, Al, Al, Al, Al, Al, P, P, P, P, P, P,
-          P, P, P, P, P, P]
-        formula: AlPO4
-        valences: [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 5, 5, 5, 5, 5, 5, 5, 5, 5,
-          5, 5, 5]
-  - - mp-600054
-    - mp-600054:
-        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
-          '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
-          '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
-          '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
-          '4', '4', '4', '4', '4']
         cations: [Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si,
-          Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si,
-          Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si,
-          Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si]
+          Si, Si, Si, Si, Si, Si, Si, Si]
         formula: SiO2
         valences: [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
-          4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
-          4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]
-  - - mp-557146
-    - mp-557146:
-        CN: ['6', '6', '4', '4', '4', '4']
-        cations: [Ti, Ti, As, As, As, As]
-        formula: TiAs2O7
-        valences: [4, 4, 5, 5, 5, 5]
-  - - mp-560155
-    - mp-560155:
+          4, 4, 4]
+  - - mp-565320
+    - mp-565320:
+        CN: ['6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6',
+          '6', '6']
+        cations: [V, V, V, V, V, V, V, V, V, V, V, V, V, V, V, V]
+        formula: V8O15
+        valences: [4, 4, 4, 4, 4, 4, 3, 4, 4, 3, 4, 3, 4, 4, 3, 4]
+  - - mp-566845
+    - mp-566845:
+        CN: ['6', '6', '6', '6', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
+          '4', '4']
+        cations: [Cr, Cr, Cr, Cr, P, P, P, P, P, P, P, P, P, P, P, P]
+        formula: Cr(PO3)3
+        valences: [3, 3, 3, 3, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5]
+  - - mp-567080
+    - mp-567080:
+        CN: ['6', '6', '6', '6', '6', '6', '6', '6']
+        cations: [V, V, V, V, V, V, V, V]
+        formula: V4O7
+        valences: [4, 4, 4, 3, 3, 3, 3, 4]
+  - - mp-557894
+    - mp-557894:
         CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
-          '4', '4', '4', '4']
+          '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
+          '4', '4', '4']
         cations: [Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si,
-          Si, Si]
+          Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si]
         formula: SiO2
-        valences: [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]
-  - - mp-1147
-    - mp-1147:
-        CN: ['6', '6', '6', '6', '6', '6']
-        cations: [Ti, Ti, Ti, Ti, Ti, Ti]
-        formula: Ti3O5
-        valences: [3, 3, 3, 3, 4, 4]
-  - - mp-540688
-    - mp-540688:
-        CN: ['9', '9', '9', '9', '6', '6', '6', '6', '6', '6', '6', '6']
-        cations: [Sr, Sr, Sr, Sr, In, In, In, In, In, In, In, In]
-        formula: SrIn2O4
-        valences: [2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3]
-  - - mp-2552
-    - mp-2552:
-        CN: ['6', '6']
-        cations: [Te, Te]
-        formula: TeO3
-        valences: [6, 6]
+        valences: [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
+          4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]
+  - - mp-505177
+    - mp-505177:
+        CN: ['6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6']
+        cations: [In, In, In, In, In, In, In, In, Ti, Ti, Ti, Ti]
+        formula: TiIn2O5
+        valences: [3, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4]
+  - - mp-19540
+    - mp-19540:
+        CN: ['6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6',
+          '6', '6']
+        cations: [Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo]
+        formula: Mo8O23
+        valences: [6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 5, 5, 5, 5]
+  - - mp-567081
+    - mp-567081:
+        CN: ['6', '6', '6', '6', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
+          '4', '4', '4', '4', '4', '4']
+        cations: [Mn, Mn, Mn, Mn, P, P, P, P, P, P, P, P, P, P, P, P, P, P, P, P]
+        formula: MnP4O11
+        valences: [2, 2, 2, 2, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5]
+  - - mp-554755
+    - mp-554755:
+        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
+          '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
+          '4', '4', '4']
+        cations: [Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si,
+          Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si]
+        formula: SiO2
+        valences: [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
+          4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]
+  - - mp-510127
+    - mp-510127:
+        CN: ['6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6']
+        cations: [V, V, V, V, V, V, V, V, V, V, V, V]
+        formula: V6O11
+        valences: [4, 4, 4, 4, 3, 3, 3, 3, 4, 4, 4, 4]
+  - - mp-555982
+    - mp-555982:
+        CN: ['4', '4', '4', '4', '6', '6', '6', '6', '6', '6', '4', '4', '4', '4',
+          '4', '4', '4', '4', '4', '4', '4', '4']
+        cations: [Si, Si, Si, Si, Ge, Ge, Ge, Ge, Ge, Ge, P, P, P, P, P, P, P, P,
+          P, P, P, P]
+        formula: Si2Ge3P6O25
+        valences: [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5,
+          5]
+  - - mp-557604
+    - mp-557604:
+        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4']
+        cations: [Al, Al, Al, Al, Al, Al, P, P, P, P, P, P]
+        formula: AlPO4
+        valences: [3, 3, 3, 3, 3, 3, 5, 5, 5, 5, 5, 5]
+  - - mp-667310
+    - mp-667310:
+        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
+          '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
+          '4', '4', '4', '4', '4', '4', '4']
+        cations: [Al, Al, Al, Al, Al, Al, Al, Al, Al, Al, Al, Al, Al, Al, Al, Al,
+          Al, Al, P, P, P, P, P, P, P, P, P, P, P, P, P, P, P, P, P, P]
+        formula: AlPO4
+        valences: [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 5, 5, 5,
+          5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5]
+  - - mp-25631
+    - mp-25631:
+        CN: ['4', '4', '4', '4', '6', '6']
+        cations: [P, P, P, P, V, V]
+        formula: VP2O7
+        valences: [5, 5, 5, 5, 4, 4]
+  - - mp-505270
+    - mp-505270:
+        CN: ['6', '6', '6', '6', '4', '4', '4', '4']
+        cations: [Ti, Ti, Ti, Ti, S, S, S, S]
+        formula: TiSO5
+        valences: [4, 4, 4, 4, 6, 6, 6, 6]
+  - - mp-555554
+    - mp-555554:
+        CN: ['8', '8', '6', '6', '4', '4', '4', '4', '4', '4', '4', '4']
+        cations: [K, K, Ga, Ga, P, P, P, P, P, P, P, P]
+        formula: KGa(PO3)4
+        valences: [1, 1, 3, 3, 5, 5, 5, 5, 5, 5, 5, 5]
   - - mp-579128
     - mp-579128:
         CN: ['6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '4', '4',
@@ -1953,25 +1900,20 @@
         formula: MoSO6
         valences: [6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6,
           6, 6, 6]
-  - - mp-22420
-    - mp-22420:
-        CN: ['6', '6', '6', '6', '6', '6', '6', '6']
-        cations: [Cu, Cu, Cu, Cu, Te, Te, Te, Te]
-        formula: CuTeO4
-        valences: [2, 2, 2, 2, 6, 6, 6, 6]
-  - - mp-17909
-    - mp-17909:
-        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4']
-        cations: [Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si]
-        formula: SiO2
-        valences: [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]
-  - - mp-504870
-    - mp-504870:
-        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '6', '6', '6', '6', '6', '6',
-          '6', '6']
-        cations: [S, S, S, S, S, S, S, S, V, V, V, V, V, V, V, V]
-        formula: V2S2O11
-        valences: [6, 6, 6, 6, 6, 6, 6, 6, 5, 5, 5, 5, 5, 5, 5, 5]
+  - - mp-542478
+    - mp-542478:
+        CN: ['6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6']
+        cations: [Sb, Sb, Sb, Sb, Mn, Mn, Mn, Mn, V, V, V, V]
+        formula: MnVSbO6
+        valences: [5, 5, 5, 5, 2, 2, 2, 2, 5, 5, 5, 5]
+  - - mp-553897
+    - mp-553897:
+        CN: ['8', '8', '8', '8', '8', '8', '8', '8', '4', '4', '4', '4', '4', '4',
+          '4', '4', '4', '4', '4', '4']
+        cations: [Ba, Ba, Ba, Ba, Ba, Ba, Ba, Ba, Si, Si, Si, Si, Si, Si, Si, Si,
+          Si, Si, Si, Si]
+        formula: Ba2Si3O8
+        valences: [2, 2, 2, 2, 2, 2, 2, 2, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]
   - - mp-561027
     - mp-561027:
         CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
@@ -1982,104 +1924,78 @@
         formula: AlPO4
         valences: [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 5, 5, 5, 5, 5,
           5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5]
+  - - mp-707977
+    - mp-707977:
+        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4']
+        cations: [Al, Al, Al, Al, Al, Al, P, P, P, P, P, P]
+        formula: AlPO4
+        valences: [3, 3, 3, 3, 3, 3, 5, 5, 5, 5, 5, 5]
+  - - mp-558115
+    - mp-558115:
+        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
+          '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
+          '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4']
+        cations: [Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si,
+          Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si,
+          Si, Si, Si, Si, Si, Si]
+        formula: SiO2
+        valences: [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
+          4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]
+  - - mp-644923
+    - mp-644923:
+        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
+          '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
+          '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
+          '4', '4', '4', '4']
+        cations: [Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si,
+          Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si,
+          Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si]
+        formula: SiO2
+        valences: [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
+          4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
+          4, 4, 4]
+  - - mp-31050
+    - mp-31050:
+        CN: ['4', '4', '4', '4']
+        cations: [Cl, Cl, Cl, Cl]
+        formula: Cl2O7
+        valences: [7, 7, 7, 7]
   - - mp-562613
     - mp-562613:
         CN: ['4', '4', '4', '4', '4', '4', '4', '4']
         cations: [P, P, P, P, P, P, P, P]
         formula: P2O5
         valences: [5, 5, 5, 5, 5, 5, 5, 5]
-  - - mp-2414
-    - mp-2414:
-        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4']
-        cations: [S, S, S, S, S, S, S, S, S, S, S, S]
-        formula: SO3
-        valences: [6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6]
-  - - mp-19239
-    - mp-19239:
-        CN: ['6', '6', '6', '6', '6', '6', '6']
-        cations: [Mg, Mg, Mg, Mg, Mg, Mg, Mn]
-        formula: Mg6MnO8
-        valences: [2, 2, 2, 2, 2, 2, 4]
-  - - mp-561181
-    - mp-561181:
+  - - mp-554267
+    - mp-554267:
         CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
-          '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4']
-        cations: [Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si,
-          Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si]
+          '4', '4']
+        cations: [Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si]
         formula: SiO2
-        valences: [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
-          4, 4, 4, 4, 4, 4, 4]
-  - - mp-15960
-    - mp-15960:
-        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
-          '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
-          '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
-          '4', '4', '4', '4']
-        cations: [Li, Li, Li, Li, Li, Li, Li, Li, Li, Li, Li, Li, Li, Li, Li, Li,
-          Li, Li, Li, Li, Li, Li, Li, Li, Li, Li, Li, Li, Li, Li, Li, Li, Li, Li,
-          Li, Li, Li, Li, Li, Li, Al, Al, Al, Al, Al, Al, Al, Al]
-        formula: Li5AlO4
-        valences: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-          1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 3, 3, 3, 3,
-          3, 3, 3]
-  - - mp-15397
-    - mp-15397:
-        CN: ['4', '4', '6', '6', '6', '6', '6', '6', '6']
-        cations: [Al, Al, Ti, Ti, Ti, Ti, Ti, Ti, Ti]
-        formula: Ti7Al2O15
-        valences: [3, 3, 3, 3, 3, 3, 4, 4, 4]
-  - - mp-29164
-    - mp-29164:
-        CN: ['9', '9', '9', '9', '6', '6', '6', '6']
-        cations: [Sr, Sr, Sr, Sr, Bi, Bi, Bi, Bi]
-        formula: SrBiO3
-        valences: [2, 2, 2, 2, 3, 3, 5, 5]
-  - - mp-706490
-    - mp-706490:
-        CN: ['6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6',
-          '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6',
-          '6', '6', '6', '6', '6', '6', '6']
-        cations: [Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo,
-          Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo,
-          Mo, Mo]
-        formula: Mo9O26
-        valences: [6, 5, 6, 6, 6, 5, 6, 6, 5, 5, 6, 6, 6, 6, 6, 5, 6, 6, 6, 6, 6,
-          6, 5, 6, 5, 5, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6]
-  - - mp-18280
-    - mp-18280:
-        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4']
-        cations: [Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si]
-        formula: SiO2
-        valences: [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]
-  - - mp-4591
-    - mp-4591:
-        CN: ['9', '9', '9', '9', '6', '6', '6', '6', '6', '6', '6', '6']
-        cations: [Sr, Sr, Sr, Sr, Nb, Nb, Nb, Nb, Nb, Nb, Nb, Nb]
-        formula: SrNb2O6
-        valences: [2, 2, 2, 2, 5, 5, 5, 5, 5, 5, 5, 5]
-  - - mp-557604
-    - mp-557604:
-        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4']
-        cations: [Al, Al, Al, Al, Al, Al, P, P, P, P, P, P]
-        formula: AlPO4
-        valences: [3, 3, 3, 3, 3, 3, 5, 5, 5, 5, 5, 5]
-  - - mp-654301
-    - mp-654301:
-        CN: ['6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '4', '4', '4', '4',
+        valences: [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]
+  - - mp-557146
+    - mp-557146:
+        CN: ['6', '6', '4', '4', '4', '4']
+        cations: [Ti, Ti, As, As, As, As]
+        formula: TiAs2O7
+        valences: [4, 4, 5, 5, 5, 5]
+  - - mp-647391
+    - mp-647391:
+        CN: ['8', '8', '8', '8', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
           '4', '4', '4', '4', '4', '4', '4', '4', '4', '4']
-        cations: [Nb, Nb, Nb, Nb, Nb, Nb, Nb, Nb, Nb, Nb, P, P, P, P, P, P, P, P,
-          P, P, P, P, P, P]
-        formula: Nb5P7O30
-        valences: [5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5,
+        cations: [Ce, Ce, Ce, Ce, P, P, P, P, P, P, P, P, P, P, P, P, P, P, P, P,
+          P, P, P, P]
+        formula: CeP5O14
+        valences: [3, 3, 3, 3, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5,
           5, 5, 5]
-  - - mp-560545
-    - mp-560545:
-        CN: ['6', '6', '6', '6', '8', '8', '4', '4', '4', '4', '4', '4', '4', '4']
-        cations: [Na, Na, Na, Na, Ca, Ca, As, As, As, As, As, As, As, As]
-        formula: Na2Ca(AsO3)4
-        valences: [1, 1, 1, 1, 2, 2, 5, 5, 5, 5, 5, 5, 5, 5]
-  - - mp-561351
-    - mp-561351:
+  - - mp-6442
+    - mp-6442:
+        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4']
+        cations: [Li, Li, Al, Al, Si, Si, Si, Si, Si, Si, Si, Si]
+        formula: LiAl(Si2O5)2
+        valences: [1, 1, 3, 3, 4, 4, 4, 4, 4, 4, 4, 4]
+  - - mp-733790
+    - mp-733790:
         CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
           '4', '4', '4', '4', '4', '4', '4', '4', '4', '4']
         cations: [Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si,
@@ -2087,51 +2003,61 @@
         formula: SiO2
         valences: [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
           4, 4, 4]
-  - - mp-640556
-    - mp-640556:
+  - - mp-560336
+    - mp-560336:
         CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
-          '4', '4', '4', '4', '4', '4', '4', '4', '4', '4']
+          '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
+          '4', '4', '4']
         cations: [Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si,
-          Si, Si, Si, Si, Si, Si, Si, Si]
+          Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si]
         formula: SiO2
         valences: [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
-          4, 4, 4]
-  - - mp-27519
-    - mp-27519:
-        CN: ['4', '4', '4', '4', '4', '4', '4', '4']
-        cations: [Se, Se, Se, Se, Se, Se, Se, Se]
-        formula: SeO3
-        valences: [6, 6, 6, 6, 6, 6, 6, 6]
-  - - mp-1840
-    - mp-1840:
-        CN: ['6', '6', '6', '6', '6', '6', '6', '6']
-        cations: [Ti, Ti, Ti, Ti, Ti, Ti, Ti, Ti]
-        formula: TiO2
-        valences: [4, 4, 4, 4, 4, 4, 4, 4]
-  - - mp-8230
-    - mp-8230:
-        CN: ['4', '4', '4', '4', '6', '6']
-        cations: [P, P, P, P, Zn, Zn]
-        formula: Zn(PO3)2
-        valences: [5, 5, 5, 5, 2, 2]
-  - - mp-551283
-    - mp-551283:
-        CN: ['6', '6', '6', '6', '6']
-        cations: [Cu, Na, Na, Cu, Te]
-        formula: Na2Cu2TeO6
-        valences: [2, 1, 1, 2, 6]
-  - - mp-4086
-    - mp-4086:
-        CN: ['6', '6', '6', '6', '8', '8', '8', '8']
-        cations: [Sn, Sn, Sn, Sn, La, La, La, La]
-        formula: La2Sn2O7
-        valences: [4, 4, 4, 4, 3, 3, 3, 3]
-  - - mp-558713
-    - mp-558713:
-        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4']
-        cations: [Li, Li, Li, Al, Al, Al, Si, Si, Si]
-        formula: LiAlSiO4
-        valences: [1, 1, 1, 3, 3, 3, 4, 4, 4]
+          4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]
+  - - mp-2552
+    - mp-2552:
+        CN: ['6', '6']
+        cations: [Te, Te]
+        formula: TeO3
+        valences: [6, 6]
+  - - mp-8602
+    - mp-8602:
+        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
+          '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
+          '4', '4', '4', '4', '4']
+        cations: [Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si,
+          Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si]
+        formula: SiO2
+        valences: [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
+          4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]
+  - - mp-504870
+    - mp-504870:
+        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '6', '6', '6', '6', '6', '6',
+          '6', '6']
+        cations: [S, S, S, S, S, S, S, S, V, V, V, V, V, V, V, V]
+        formula: V2S2O11
+        valences: [6, 6, 6, 6, 6, 6, 6, 6, 5, 5, 5, 5, 5, 5, 5, 5]
+  - - mp-554273
+    - mp-554273:
+        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
+          '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
+          '4', '4', '4']
+        cations: [Al, Al, Al, Al, Al, Al, Al, Al, Al, Al, Al, Al, Al, Al, Al, Al,
+          P, P, P, P, P, P, P, P, P, P, P, P, P, P, P, P]
+        formula: AlPO4
+        valences: [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 5, 5, 5, 5, 5,
+          5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5]
+  - - mp-32447
+    - mp-32447:
+        CN: ['6', '6', '6', '6', '4', '4']
+        cations: [V, V, V, V, As, As]
+        formula: V4As2O13
+        valences: [4, 4, 4, 4, 5, 5]
+  - - mp-4888
+    - mp-4888:
+        CN: ['4', '4', '6', '6']
+        cations: [P, P, Nb, Nb]
+        formula: NbPO5
+        valences: [5, 5, 5, 5]
   - - mp-556654
     - mp-556654:
         CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
@@ -2141,3 +2067,77 @@
         formula: SiO2
         valences: [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
           4, 4, 4]
+  - - mp-559550
+    - mp-559550:
+        CN: ['4', '4', '4', '4', '4', '4']
+        cations: [Si, Si, Si, Si, Si, Si]
+        formula: SiO2
+        valences: [4, 4, 4, 4, 4, 4]
+  - - mp-7535
+    - mp-7535:
+        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4']
+        cations: [Li, Li, Li, Li, Li, Li, Li, Li, Li, Li, Al, Al]
+        formula: Li5AlO4
+        valences: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 3]
+  - - mp-17909
+    - mp-17909:
+        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4']
+        cations: [Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si]
+        formula: SiO2
+        valences: [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]
+  - - mp-557803
+    - mp-557803:
+        CN: ['6', '6', '6', '6', '6', '6', '6', '6', '4', '4', '4', '4', '4', '4',
+          '4', '4']
+        cations: [Mg, Mg, Mg, Mg, Mg, Mg, Mg, Mg, Si, Si, Si, Si, Si, Si, Si, Si]
+        formula: MgSiO3
+        valences: [2, 2, 2, 2, 2, 2, 2, 2, 4, 4, 4, 4, 4, 4, 4, 4]
+  - - mp-644514
+    - mp-644514:
+        CN: ['6', '6', '6']
+        cations: [Mn, Mn, Mn]
+        formula: MnO2
+        valences: [4, 4, 4]
+  - - mp-1705
+    - mp-1705:
+        CN: ['6', '6', '6', '6']
+        cations: [Sb, Sb, Sb, Sb]
+        formula: Sb2O5
+        valences: [5, 5, 5, 5]
+  - - mp-15397
+    - mp-15397:
+        CN: ['4', '4', '6', '6', '6', '6', '6', '6', '6']
+        cations: [Al, Al, Ti, Ti, Ti, Ti, Ti, Ti, Ti]
+        formula: Ti7Al2O15
+        valences: [3, 3, 3, 3, 3, 3, 4, 4, 4]
+  - - mp-556454
+    - mp-556454:
+        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
+          '4', '4']
+        cations: [Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si, Si]
+        formula: SiO2
+        valences: [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]
+  - - mp-551283
+    - mp-551283:
+        CN: ['6', '6', '6', '6', '6']
+        cations: [Cu, Na, Na, Cu, Te]
+        formula: Na2Cu2TeO6
+        valences: [2, 1, 1, 2, 6]
+  - - mp-972384
+    - mp-972384:
+        CN: ['6', '6', '6', '6', '4', '4', '4', '4']
+        cations: [V, V, V, V, Se, Se, Se, Se]
+        formula: V2Se2O11
+        valences: [5, 5, 5, 5, 6, 6, 6, 6]
+  - - mp-22420
+    - mp-22420:
+        CN: ['6', '6', '6', '6', '6', '6', '6', '6']
+        cations: [Cu, Cu, Cu, Cu, Te, Te, Te, Te]
+        formula: CuTeO4
+        valences: [2, 2, 2, 2, 6, 6, 6, 6]
+  - - mp-558713
+    - mp-558713:
+        CN: ['4', '4', '4', '4', '4', '4', '4', '4', '4']
+        cations: [Li, Li, Li, Al, Al, Al, Si, Si, Si]
+        formula: LiAlSiO4
+        valences: [1, 1, 1, 3, 3, 3, 4, 4, 4]

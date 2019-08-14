@@ -1259,6 +1259,8 @@ class Pauling3OverAllAnalysis(OverAllAnalysis):
             outputdict['additional_info'] = self.additional_info
             self._save_results_to_file(outputdict, path_to_save)
 
+        print(str(len(self.structures_fulfillingrule)/(len(self.structures_fulfillingrule)+len(self.structures_exceptions)))+" of all tested structures fulfill the rule.")
+
         if self.analyse_structures:
             dict_similarstructures_exceptions = self._get_similar_structures(self.structures_exceptions,
                                                                              source=self.source,
@@ -1278,6 +1280,8 @@ class Pauling3OverAllAnalysis(OverAllAnalysis):
 
             self.dict_similarstructures_exceptions = dict_similarstructures_exceptions
             self.dict_similarstructures_fulfilling = dict_similarstructures_fulfilling
+
+
 
             if save_structure_analysis:
                 # self._print_to_screen_similar_structures(dict_similarstructures_fulfilling)
@@ -1570,7 +1574,7 @@ class Pauling4OverAllAnalysis(OverAllAnalysis):
         print(str(len(self.structures_fulfillingrule)+len(self.structures_exceptions))+ " structures were considered.")
         #print(str(len(self.structures_cannot_be_evaluated))+ ' were not considered')
         if show_plot:
-            plot = self._fourthrule_plot(self.Dict_val, option='val', vmin=0.70, vmax=1.0)
+            plot = self._fourthrule_plot(self.Dict_val, option='val', vmin=0.7, vmax=1.0)
             plot.show()
             plot = self._fourthrule_plot(self.Dict_CN, option='CN', vmin=0.4, vmax=1.0)
             plot.show()
@@ -1680,7 +1684,7 @@ class Pauling4OverAllAnalysis(OverAllAnalysis):
             try:
                 Details = pauling4.get_details()
                 self.additional_info[mat] = Details['elementwise']
-                # print(Details)
+
                 # think about symmetry - there might be something wrong here
                 New_Details_val = self._reformat_details_val(Details)
                 New_Details_CN = self._reformat_details_CN(Details)
@@ -1764,34 +1768,54 @@ class Pauling4OverAllAnalysis(OverAllAnalysis):
         :param Details:  dict
         :return: dict
         """
-        New_Details = {}
-
-        for key1, item1 in Details.items():
-
+        #do a simple copy
+        New={}
+        for key1,item1 in Details.items():
             if "val1" in key1:
-                val1 = key1.split(":")[1]
-                if val1 not in New_Details:
-                    New_Details[val1] = {}
-                for key2, item2 in item1.items():
-                    val2 = key2.split(":")[1]
-                    if val2 not in New_Details[val1]:
-                        New_Details[val1][val2] = [0, 0]
-                    if val2 not in New_Details:
-                        New_Details[val2] = {}
-                    if val1 not in New_Details[val2]:
-                        New_Details[val2][val1] = [0, 0]
-                    for key3, item3 in item2.items():
-                        for key4, item4 in item3.items():
-                            New_Details[val1][val2][0] += item4["no"]
-                            New_Details[val1][val2][1] += item4["corner"]
-                            New_Details[val1][val2][1] += item4["edge"]
-                            New_Details[val1][val2][1] += item4["face"]
-                            if val1 != val2:
-                                New_Details[val2][val1][0] += item4["no"]
-                                New_Details[val2][val1][1] += item4["corner"]
-                                New_Details[val2][val1][1] += item4["edge"]
-                                New_Details[val2][val1][1] += item4["face"]
+                for key2,item2 in item1.items():
+                    for key3,item3 in item2.items():
+                        for key4,item4 in item3.items():
+                            if not key4 in New:
+                                New[key4]={}
+                            if not key3 in New[key4]:
+                                New[key4][key3]={}
+                            if not key2 in New[key4][key3]:
+                                New[key4][key3][key2]={}
+                            if not key1 in New[key4][key3][key2]:
+                                New[key4][key3][key2][key1]=item4
 
+        #similar to CN method
+        New_Details = {}
+        for key1, item1 in New.items():
+            CN1 = key1.split(":")[1]
+            for key2, item2 in item1.items():
+
+                CN2 = key2.split(":")[1]
+                for key3, item3 in item2.items():
+                    val1 = key3.split(":")[1]
+                    if val1 not in New_Details:
+                        New_Details[val1] = {}
+
+                    for key4, item4 in item3.items():
+                        val2 = key4.split(":")[1]
+                        if val2 not in New_Details[val1]:
+                            New_Details[val1][val2] = [0, 0]
+                        if val2 not in New_Details:
+                            New_Details[val2] = {}
+                        if val1 not in New_Details[val2]:
+                            New_Details[val2][val1] = [0, 0]
+
+                        New_Details[val1][val2][0] += item4["no"]
+                        New_Details[val1][val2][1] += item4["corner"]
+                        New_Details[val1][val2][1] += item4["edge"]
+                        New_Details[val1][val2][1] += item4["face"]
+                        #to arrive at a correct sum of the connections
+                        #typically this will result in the number of atoms that are connected, not in the number of connections
+                        if not (val1 == val2 and CN1 != CN2):
+                            New_Details[val2][val1][0] += item4["no"]
+                            New_Details[val2][val1][1] += item4["corner"]
+                            New_Details[val2][val1][1] += item4["edge"]
+                            New_Details[val2][val1][1] += item4["face"]
         return New_Details
 
     def _reformat_details_CN(self, Details: dict) -> dict:
@@ -1805,7 +1829,9 @@ class Pauling4OverAllAnalysis(OverAllAnalysis):
         for key1, item1 in Details.items():
 
             if "val1" in key1:
+                val1 = key1.split(":")[1]
                 for key2, item2 in item1.items():
+                    val2 = key2.split(":")[1]
                     for key3, item3 in item2.items():
                         CN1 = key3.split(":")[1]
                         if CN1 not in New_Details:
@@ -1819,15 +1845,20 @@ class Pauling4OverAllAnalysis(OverAllAnalysis):
                                 New_Details[CN2] = {}
                             if CN1 not in New_Details[CN2]:
                                 New_Details[CN2][CN1] = [0, 0]
+
                             New_Details[CN1][CN2][0] += item4["no"]
                             New_Details[CN1][CN2][1] += item4["corner"]
                             New_Details[CN1][CN2][1] += item4["edge"]
                             New_Details[CN1][CN2][1] += item4["face"]
-                            if CN1 != CN2:
+                            #very similar to val method
+                            #make sure the number of connections is correct
+                            #also the dict has to be symmetric under exchange of CN
+                            if not (CN1 == CN2 and val1 != val2):
                                 New_Details[CN2][CN1][0] += item4["no"]
                                 New_Details[CN2][CN1][1] += item4["corner"]
                                 New_Details[CN2][CN1][1] += item4["edge"]
                                 New_Details[CN2][CN1][1] += item4["face"]
+
 
         return New_Details
 

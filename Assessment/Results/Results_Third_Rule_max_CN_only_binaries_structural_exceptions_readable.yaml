@@ -1,5 +1,5 @@
 !!python/object/apply:collections.OrderedDict
-- - - mp-19399
+- - - mp-715514
     - mp-1143:
         CN: ['6', '6', '6', '6']
         Connections of Cations with Valences:
@@ -70,23 +70,6 @@
         cations: [V, V, V, V, V, V, V, V, V, V, V, V, V, V, V, V, V, V]
         formula: V9O17
         valences: [4, 4, 4, 4, 4, 3, 4, 4, 4, 4, 4, 3, 4, 3, 4, 4, 4, 3]
-  - - mp-11107
-    - mp-11107:
-        CN: ['8', '8']
-        Connections of Cations with Valences:
-          Ac:
-            3: {corner: 10, edge: 18, face: 6, 'no': 66}
-        cations: [Ac, Ac]
-        formula: Ac2O3
-        valences: [3, 3]
-      mp-1968:
-        CN: ['8', '8']
-        Connections of Cations with Valences:
-          La:
-            3: {corner: 10, edge: 18, face: 6, 'no': 78}
-        cations: [La, La]
-        formula: La2O3
-        valences: [3, 3]
   - - mp-556754
     - mp-556754:
         CN: ['6', '6', '6', '6', '6', '6']
@@ -106,6 +89,43 @@
         cations: [V, V, V, V, V, V, V, V, V, V, V, V]
         formula: V3O5
         valences: [4, 4, 4, 3, 3, 3, 3, 3, 4, 3, 3, 3]
+  - - mp-11107
+    - mp-11107:
+        CN: ['8', '8']
+        Connections of Cations with Valences:
+          Ac:
+            3: {corner: 10, edge: 18, face: 6, 'no': 66}
+        cations: [Ac, Ac]
+        formula: Ac2O3
+        valences: [3, 3]
+      mp-1968:
+        CN: ['8', '8']
+        Connections of Cations with Valences:
+          La:
+            3: {corner: 10, edge: 18, face: 6, 'no': 78}
+        cations: [La, La]
+        formula: La2O3
+        valences: [3, 3]
+  - - mp-748
+    - mp-748:
+        CN: ['6', '6', '6', '6', '6', '6', '6', '6', '6', '6']
+        Connections of Cations with Valences:
+          Ti:
+            3: {corner: 32, edge: 12, face: 0, 'no': 244}
+            4: {corner: 44, edge: 16, face: 4, 'no': 360}
+        cations: [Ti, Ti, Ti, Ti, Ti, Ti, Ti, Ti, Ti, Ti]
+        formula: Ti5O9
+        valences: [4, 4, 4, 4, 3, 3, 3, 3, 4, 4]
+  - - mp-510127
+    - mp-510127:
+        CN: ['6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6']
+        Connections of Cations with Valences:
+          V:
+            3: {corner: 32, edge: 10, face: 0, 'no': 242}
+            4: {corner: 60, edge: 22, face: 4, 'no': 486}
+        cations: [V, V, V, V, V, V, V, V, V, V, V, V]
+        formula: V6O11
+        valences: [4, 4, 4, 4, 3, 3, 3, 3, 4, 4, 4, 4]
   - - mp-565320
     - mp-565320:
         CN: ['6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6',
@@ -117,36 +137,6 @@
         cations: [V, V, V, V, V, V, V, V, V, V, V, V, V, V, V, V]
         formula: V8O15
         valences: [4, 4, 4, 4, 4, 4, 3, 4, 4, 3, 4, 3, 4, 4, 3, 4]
-  - - mp-510127
-    - mp-510127:
-        CN: ['6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6']
-        Connections of Cations with Valences:
-          V:
-            3: {corner: 32, edge: 10, face: 0, 'no': 242}
-            4: {corner: 60, edge: 22, face: 4, 'no': 486}
-        cations: [V, V, V, V, V, V, V, V, V, V, V, V]
-        formula: V6O11
-        valences: [4, 4, 4, 4, 3, 3, 3, 3, 4, 4, 4, 4]
-  - - mp-748
-    - mp-748:
-        CN: ['6', '6', '6', '6', '6', '6', '6', '6', '6', '6']
-        Connections of Cations with Valences:
-          Ti:
-            3: {corner: 32, edge: 12, face: 0, 'no': 244}
-            4: {corner: 44, edge: 16, face: 4, 'no': 360}
-        cations: [Ti, Ti, Ti, Ti, Ti, Ti, Ti, Ti, Ti, Ti]
-        formula: Ti5O9
-        valences: [4, 4, 4, 4, 3, 3, 3, 3, 4, 4]
-  - - mp-556724
-    - mp-556724:
-        CN: ['6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6']
-        Connections of Cations with Valences:
-          Ti:
-            3: {corner: 30, edge: 12, face: 2, 'no': 240}
-            4: {corner: 78, edge: 24, face: 2, 'no': 608}
-        cations: [Ti, Ti, Ti, Ti, Ti, Ti, Ti, Ti, Ti, Ti, Ti, Ti, Ti, Ti]
-        formula: Ti7O13
-        valences: [3, 3, 4, 4, 4, 4, 3, 3, 4, 4, 4, 4, 4, 4]
   - - mp-567080
     - mp-567080:
         CN: ['6', '6', '6', '6', '6', '6', '6', '6']
@@ -157,3 +147,13 @@
         cations: [V, V, V, V, V, V, V, V]
         formula: V4O7
         valences: [4, 4, 4, 3, 3, 3, 3, 4]
+  - - mp-556724
+    - mp-556724:
+        CN: ['6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6']
+        Connections of Cations with Valences:
+          Ti:
+            3: {corner: 30, edge: 12, face: 2, 'no': 240}
+            4: {corner: 78, edge: 24, face: 2, 'no': 608}
+        cations: [Ti, Ti, Ti, Ti, Ti, Ti, Ti, Ti, Ti, Ti, Ti, Ti, Ti, Ti]
+        formula: Ti7O13
+        valences: [3, 3, 4, 4, 4, 4, 3, 3, 4, 4, 4, 4, 4, 4]

@@ -1046,7 +1046,8 @@ class Pauling4(Pauling3and4):
         """
         :return: more information connected pairs of polyhedra
         """
-
+        #TODO: make additional tests here
+        #TODO: there might be a small bug here
         inputdict = self.PolyhedronDict
 
         additionalinfo = inputdict['Additional']
@@ -1384,6 +1385,7 @@ class Pauling4(Pauling3and4):
         corner = 0
         edge = 0
         face = 0
+
 
         numberpolyhedra = 0
         for iinfo in additionalinfo:
