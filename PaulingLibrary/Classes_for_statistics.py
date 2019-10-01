@@ -31,7 +31,7 @@ class OverAllAnalysis:
 
     def __init__(self, source='MP', onlybinaries=False, plot_element_dependend_analysis=True,
                  lowest_number_environments_for_plot=50, lower_limit_plot=0.0, upper_limit_plot=1.0,
-                 analyse_structures=True, use_prematching=True, list_of_materials_to_investigate=None):
+                 analyse_structures=True, use_prematching=True, list_of_materials_to_investigate=None,print_structure_matching=True):
         """
 
         :param source: 'MP' (Materials Project), 'MP_very_symmetric' (only structures with very symmetric coordiation environments), or 'experimental' (structures from COD) can be used
@@ -54,6 +54,7 @@ class OverAllAnalysis:
         self.upper_limit_plot = upper_limit_plot
         self.use_prematching = use_prematching
         self.list_of_materials_to_investigate = list_of_materials_to_investigate
+        self.print_structure_matching=print_structure_matching
         # could include a function that starts plotting from saved data?
         # how should one do this in the best way
 
@@ -66,7 +67,6 @@ class OverAllAnalysis:
         :param stop_material: number that cuts the list of all materials
         :return: list of materials
         """
-        # TODO: test this part
         if source == 'MP':
             with open("../Assessment/Should_not_be_changed/allmaterials.json", "r") as f:
                 list_compound_dict = json.load(f)
@@ -271,7 +271,8 @@ class OverAllAnalysis:
                 if len(dictstructures.keys()) != 0:
 
                     Matcher = StructureMatcher(attempt_supercell=True, comparator=FrameworkComparator())
-
+                    # TODO: check if this is okay! maybe a different algorithm is needed to do so?
+                    # TODO: maybe test function from pymatgen
                     found = False
                     foundmat = ''
                     for mat2 in dictstructures:
@@ -384,84 +385,171 @@ class OverAllAnalysis:
         :param name_add_info: how is the external output called
 
         """
-        if fmt == 'yml':
-            new_dict_to_print = OrderedDict()
-            for key, items in OrderedDict(
-                    sorted(dict_to_print['structure_matching'].items(), key=lambda t: len(t[1]), reverse=True)).items():
 
-                new_dict_to_print[key] = {}
+        if self.print_structure_matching:
+            if fmt == 'yml':
+                new_dict_to_print = OrderedDict()
+                for key, items in OrderedDict(
+                        sorted(dict_to_print['structure_matching'].items(), key=lambda t: len(t[1]), reverse=True)).items():
 
-                for item in items:
+                    new_dict_to_print[key] = {}
 
-                    lse = self._get_lse_from_folder(mat=item, source=source)
-                    valence = [i for i in lse.valences if i > 0]
-                    # get CN:
-                    cat = []
-                    CN = []
-                    for isite, site_envs in enumerate(lse.coordination_environments):
+                    for item in items:
 
-                        if site_envs != None:
-                            if len(site_envs) > 0:
-                                CN.append(site_envs[0]['ce_symbol'].split(':')[1])
-                                cat.append(lse.structure[isite].species_string)
+                        lse = self._get_lse_from_folder(mat=item, source=source)
+                        valence = [i for i in lse.valences if i > 0]
+                        # get CN:
+                        cat = []
+                        CN = []
+                        for isite, site_envs in enumerate(lse.coordination_environments):
 
-                    if add_info is None:
-                        new_dict_to_print[key][item] = {"formula": dict_to_print['additional_info'][item], "CN": CN,
-                                                        "valences": valence, "cations": cat}
-                    else:
-                        new_dict_to_print[key][item] = {"formula": dict_to_print['additional_info'][item], "CN": CN,
-                                                        "valences": valence, "cations": cat,
-                                                        name_add_info: add_info[item]}
+                            if site_envs != None:
+                                if len(site_envs) > 0:
+                                    CN.append(site_envs[0]['ce_symbol'].split(':')[1])
+                                    cat.append(lse.structure[isite].species_string)
 
-            with open(filename, 'w') as f:
-                dump(OrderedDict(new_dict_to_print), f)
+                        if add_info is None:
+                            new_dict_to_print[key][item] = {"formula": dict_to_print['additional_info'][item], "CN": CN,
+                                                            "valences": valence, "cations": cat}
+                        else:
+                            new_dict_to_print[key][item] = {"formula": dict_to_print['additional_info'][item], "CN": CN,
+                                                            "valences": valence, "cations": cat,
+                                                            name_add_info: add_info[item]}
 
-        elif fmt == 'csv':
-            new_dict_to_print = []
-            for key, items in OrderedDict(
-                    sorted(dict_to_print['structure_matching'].items(), key=lambda t: len(t[1]), reverse=True)).items():
+                with open(filename, 'w') as f:
+                    dump(OrderedDict(new_dict_to_print), f)
 
-                for item in items:
+            elif fmt == 'csv':
+                new_dict_to_print = []
+                for key, items in OrderedDict(
+                        sorted(dict_to_print['structure_matching'].items(), key=lambda t: len(t[1]), reverse=True)).items():
 
-                    lse = self._get_lse_from_folder(mat=item, source=source)
-                    valence = [i for i in lse.valences if i > 0]
-                    # get CN:
-                    cat = []
-                    CN = []
-                    for isite, site_envs in enumerate(lse.coordination_environments):
+                    for item in items:
 
-                        if site_envs != None:
-                            if len(site_envs) > 0:
-                                CN.append(site_envs[0]['ce_symbol'].split(':')[1])
-                                cat.append(lse.structure[isite].species_string)
-                    if add_info is None:
-                        new_dict_to_print.append(
-                            {"mpid": str(item), "formula": dict_to_print['additional_info'][item], "CN": CN,
-                             "valences": valence, "cations": cat, "structure_type": key})
-                    else:
-                        new_dict_to_print.append(
-                            {"mpid": str(item), "formula": dict_to_print['additional_info'][item], "CN": CN,
-                             "valences": valence, "cations": cat, "structure_type": key, name_add_info: add_info[item]})
+                        lse = self._get_lse_from_folder(mat=item, source=source)
+                        valence = [i for i in lse.valences if i > 0]
+                        # get CN:
+                        cat = []
+                        CN = []
+                        for isite, site_envs in enumerate(lse.coordination_environments):
 
-            if add_info is None:
-                with open(filename, 'w') as csvfile:
-                    filewriter = csv.writer(csvfile, delimiter=';',
-                                            quotechar='|', quoting=csv.QUOTE_MINIMAL)
-                    filewriter.writerow(['mp-id', 'formula', 'structure_type', 'cations', 'valences', 'CNs'])
-                    for line in new_dict_to_print:
+                            if site_envs != None:
+                                if len(site_envs) > 0:
+                                    CN.append(site_envs[0]['ce_symbol'].split(':')[1])
+                                    cat.append(lse.structure[isite].species_string)
+                        if add_info is None:
+                            new_dict_to_print.append(
+                                {"mpid": str(item), "formula": dict_to_print['additional_info'][item], "CN": CN,
+                                 "valences": valence, "cations": cat, "structure_type": key})
+                        else:
+                            new_dict_to_print.append(
+                                {"mpid": str(item), "formula": dict_to_print['additional_info'][item], "CN": CN,
+                                 "valences": valence, "cations": cat, "structure_type": key, name_add_info: add_info[item]})
+
+                if add_info is None:
+                    with open(filename, 'w') as csvfile:
+                        filewriter = csv.writer(csvfile, delimiter=';',
+                                                quotechar='|', quoting=csv.QUOTE_MINIMAL)
+                        filewriter.writerow(['mp-id', 'formula', 'structure_type', 'cations', 'valences', 'CNs'])
+                        for line in new_dict_to_print:
+                            filewriter.writerow(
+                                [str(line["mpid"]), str(line["formula"]), str(line["structure_type"]), str(line["cations"]),
+                                 str(line["valences"]), str(line["CN"])])
+                else:
+                    with open(filename, 'w') as csvfile:
+                        filewriter = csv.writer(csvfile, delimiter=';',
+                                                quotechar='|', quoting=csv.QUOTE_MINIMAL)
                         filewriter.writerow(
-                            [str(line["mpid"]), str(line["formula"]), str(line["structure_type"]), str(line["cations"]),
-                             str(line["valences"]), str(line["CN"])])
-            else:
-                with open(filename, 'w') as csvfile:
-                    filewriter = csv.writer(csvfile, delimiter=';',
-                                            quotechar='|', quoting=csv.QUOTE_MINIMAL)
-                    filewriter.writerow(
-                        ['mp-id', 'formula', 'structure_type', 'cations', 'valences', 'CNs', name_add_info])
-                    for line in new_dict_to_print:
+                            ['mp-id', 'formula', 'structure_type', 'cations', 'valences', 'CNs', name_add_info])
+                        for line in new_dict_to_print:
+                            filewriter.writerow(
+                                [str(line["mpid"]), str(line["formula"]), str(line["structure_type"]), str(line["cations"]),
+                                 str(line["valences"]), str(line["CN"]), str(line[name_add_info])])
+
+        else:
+            if fmt == 'yml':
+                new_dict_to_print = OrderedDict()
+                for key, items in OrderedDict(
+                        sorted(dict_to_print['structure_matching'].items(), key=lambda t: len(t[1]),
+                               reverse=True)).items():
+
+                    new_dict_to_print[key] = {}
+
+                    for item in items:
+
+                        lse = self._get_lse_from_folder(mat=item, source=source)
+                        valence = [i for i in lse.valences if i > 0]
+                        # get CN:
+                        cat = []
+                        CN = []
+                        for isite, site_envs in enumerate(lse.coordination_environments):
+
+                            if site_envs != None:
+                                if len(site_envs) > 0:
+                                    CN.append(site_envs[0]['ce_symbol'].split(':')[1])
+                                    cat.append(lse.structure[isite].species_string)
+
+                        if add_info is None:
+                            new_dict_to_print[key][item] = {"formula": dict_to_print['additional_info'][item], "CN": CN,
+                                                            "valences": valence, "cations": cat}
+                        else:
+                            new_dict_to_print[key][item] = {"formula": dict_to_print['additional_info'][item], "CN": CN,
+                                                            "valences": valence, "cations": cat,
+                                                            name_add_info: add_info[item]}
+
+                with open(filename, 'w') as f:
+                    dump(OrderedDict(new_dict_to_print), f)
+
+            elif fmt == 'csv':
+                new_dict_to_print = []
+                for key, items in OrderedDict(
+                        sorted(dict_to_print['structure_matching'].items(), key=lambda t: len(t[1]),
+                               reverse=True)).items():
+
+                    for item in items:
+
+                        lse = self._get_lse_from_folder(mat=item, source=source)
+                        valence = [i for i in lse.valences if i > 0]
+                        # get CN:
+                        cat = []
+                        CN = []
+                        for isite, site_envs in enumerate(lse.coordination_environments):
+
+                            if site_envs != None:
+                                if len(site_envs) > 0:
+                                    CN.append(site_envs[0]['ce_symbol'].split(':')[1])
+                                    cat.append(lse.structure[isite].species_string)
+                        if add_info is None:
+                            new_dict_to_print.append(
+                                {"mpid": str(item), "formula": dict_to_print['additional_info'][item], "CN": CN,
+                                 "valences": valence, "cations": cat})
+                        else:
+                            new_dict_to_print.append(
+                                {"mpid": str(item), "formula": dict_to_print['additional_info'][item], "CN": CN,
+                                 "valences": valence, "cations": cat,
+                                 name_add_info: add_info[item]})
+
+                if add_info is None:
+                    with open(filename, 'w') as csvfile:
+                        filewriter = csv.writer(csvfile, delimiter=';',
+                                                quotechar='|', quoting=csv.QUOTE_MINIMAL)
+                        filewriter.writerow(['mp-id', 'formula', 'cations', 'valences', 'CNs'])
+                        for line in new_dict_to_print:
+                            filewriter.writerow(
+                                [str(line["mpid"]), str(line["formula"]),
+                                 str(line["cations"]),
+                                 str(line["valences"]), str(line["CN"])])
+                else:
+                    with open(filename, 'w') as csvfile:
+                        filewriter = csv.writer(csvfile, delimiter=';',
+                                                quotechar='|', quoting=csv.QUOTE_MINIMAL)
                         filewriter.writerow(
-                            [str(line["mpid"]), str(line["formula"]), str(line["structure_type"]), str(line["cations"]),
-                             str(line["valences"]), str(line["CN"]), str(line[name_add_info])])
+                            ['mp-id', 'formula', 'cations', 'valences', 'CNs', name_add_info])
+                        for line in new_dict_to_print:
+                            filewriter.writerow(
+                                [str(line["mpid"]), str(line["formula"]),
+                                 str(line["cations"]),
+                                 str(line["valences"]), str(line["CN"]), str(line[name_add_info])])
 
     def _pieplot_connections(self, corner: int, edge: int, face: int, title="All") -> plt:
         """
@@ -929,6 +1017,112 @@ class Pauling1OverAllAnalysis(OverAllAnalysis):
             self._add_dict_cat_dependency(self.Plot_PSE_DICT, Details)
 
 
+class EntropyDeviationFrom2ndRuleDiagram(OverAllAnalysis):
+    """
+    Class to find explanation for bad performance of the second rule
+
+    """
+
+    def run(self, show_plot=True, start_from_results=False, save_result_data=True,
+            restart_from_saved_structure_analysis=False,
+            save_structure_analysis=True,
+            path_to_save='Results/Results_Second_Rule_Entropy_vs_Deviation.json', start_material=None,
+            stop_material=None):
+        # TODO: will start first second rule and combine both to make a plot
+        # several options should be considered: avg, min, max entropy and av, min, max deviation
+        #get additional_info from 2nd rule
+        #get entropies from first rule
+
+        #then loop over all  materials get avg, min, max entropy, and avg, min, max deviation
+
+        #make 9 plots and check if there is any correlation
+        self.start_material=start_material
+        self.stop_material=stop_material
+
+        newclass = Pauling1Entropy(source=self.source, onlybinaries=self.onlybinaries,
+                                   plot_element_dependend_analysis=False,
+                                   list_of_materials_to_investigate=None,
+                                   start_material=self.start_material, stop_material=self.stop_material)
+        newclass.run(start_from_results=False, save_result_data=False)
+        entropy=newclass.Plot_PSE_entropy
+
+        newclass2 = Pauling2OverAllAnalysis(source='MP', onlybinaries=False, plot_element_dependend_analysis=False,
+                                           lowest_number_environments_for_plot=50, lower_limit_plot=0.1, upper_limit_plot=0.8,
+                                           analyse_structures=False, use_prematching=True)
+        newclass2.run(start_from_results=False, save_result_data=False, path_to_save='Results/Results_Second_Rule.json',
+                     save_structure_analysis=True, restart_from_saved_structure_analysis=False, show_histogram=False, stepsize_histogram=0.1,show_plot=False)
+
+        self.additional_info=newclass2.additional_info
+
+        #brauche composition der struktur
+        #daraus dann ermitteln, was die entropie ist (avg, min,max)
+        #gegen alle moeglichen deviations (avg,min,max) plotten
+
+
+        #TODO: laufe ueber alle mps und strukturen und sammle alle
+        min_dev=[]
+        max_dev=[]
+        mean_dev=[] #think of another way, will always be zero
+        min_entropy_list=[]
+        max_entropy_list=[]
+        avg_entropy_list=[]
+        for key,value in self.additional_info.items():
+            min_dev.append(min([abs(x-2.0) for x in value]))
+            max_dev.append(max([abs(x-2.0) for x in value]))
+            mean_dev.append(np.mean([abs(x-2.0) for x in value]))
+
+            lse = self._get_lse_from_folder(mat=key, source=self.source)
+            composition=lse.structure.composition
+            # print(composition)
+
+            elements=composition.elements
+            minentropy=1.0
+            maxentropy=0.0
+            avgenentropy_sum=0.0
+            nb_cations=0
+            for el in elements:
+                #print(el)
+                if str(el)!='O':
+                    test=entropy[str(el)]
+                    nb_cations+=1
+                    avgenentropy_sum+=test
+                    #print(test)
+                    if test <= minentropy:
+                        minentropy=test
+                    if test >= maxentropy:
+                        maxentropy=test
+                    #print(minentropy)
+                    #print(maxentropy)
+            #exit()
+
+            max_entropy_list.append(maxentropy)
+            min_entropy_list.append(minentropy)
+            avg_entropy_list.append(avgenentropy_sum/nb_cations)
+
+        plt.plot(max_entropy_list,min_dev,'x')
+        plt.show()
+        plt.plot(max_entropy_list,max_dev,'x')
+        plt.show()
+        plt.plot(max_entropy_list,mean_dev,'x')
+        plt.show()
+
+
+        plt.plot(min_entropy_list,min_dev,'x')
+        plt.show()
+        plt.plot(min_entropy_list,max_dev,'x')
+        plt.show()
+        plt.plot(min_entropy_list,mean_dev,'x')
+        plt.show()
+
+        plt.plot(avg_entropy_list,min_dev,'x')
+        plt.show()
+        plt.plot(avg_entropy_list,max_dev,'x')
+        plt.show()
+        plt.plot(avg_entropy_list,mean_dev,'x')
+        plt.show()
+
+
+
 class Pauling2OverAllAnalysis(OverAllAnalysis):
     """
     Class to analyse second rule
@@ -937,7 +1131,8 @@ class Pauling2OverAllAnalysis(OverAllAnalysis):
     def run(self, show_plot=True, start_from_results=False, save_result_data=True,
             restart_from_saved_structure_analysis=False,
             save_structure_analysis=True,
-            path_to_save='Results/Results_Second_Rule.json', start_material=None, stop_material=None):
+            path_to_save='Results/Results_Second_Rule.json', start_material=None, stop_material=None,
+            show_histogram=False, stepsize_histogram=0.1):
         """
         :param show_plot: will show the main analysis plot from the second rule
         :param start_from_results: if True,   restart from saved results
@@ -947,12 +1142,15 @@ class Pauling2OverAllAnalysis(OverAllAnalysis):
         :param path_to_save: path to save normal results, structure analysis will saved in an adapted path
         :param start_material: number of material at which the analysis starts
         :param stop_material: number of material before which the analysis stops
+        :param show_histogram: if True, shows histogram with +- deviations for second rule
+        :param stepsize_histogram: how large are the charge steps for the histogram
         :return:
         """
 
         if not start_from_results:
             self.start_material = start_material
             self.stop_material = stop_material
+            self.stepsize_histogram = stepsize_histogram
             self._new_setup()
         else:
             inputdict = self._get_precomputed_results(path_to_save)
@@ -966,6 +1164,10 @@ class Pauling2OverAllAnalysis(OverAllAnalysis):
             self.bs_sum_mean = inputdict['Mean_bvs']
             self.tot_stddev = np.array(inputdict['rel_std_dev_bvs'])
             self.additional_info = inputdict["additional_info"]
+            self.arraydev_share_plus_minus = np.array(inputdict['arraydev_share_plus_minus'])
+            self.relativefrequency_plus_minus = np.array(inputdict['relativefrequency_plus_minus'])
+            self.stepsize_histogram = inputdict['stepsize_histogram']
+            self.extreme_exceptions = inputdict['list_extreme_exceptions']
 
         if show_plot:
             plot = self._secondrule_plot(arraydev=self.arraydev_share * 100.0,
@@ -973,12 +1175,21 @@ class Pauling2OverAllAnalysis(OverAllAnalysis):
                                          tot_stddev=self.tot_stddev * 100.0)
             plot.show()
 
+        if show_histogram:
+            plt2 = self._secondrule_plot_histogram(self.arraydev_share_plus_minus * 100.0,
+                                                   self.relativefrequency_plus_minus * 100.0)
+            plt2.show()
+
         if self.plot_element_dependend_analysis:
             plt = self._plot_PSE(self.Plot_PSE_DICT, xlim=[1, 18], ylim=[1, 10],
                                  lowest_number_of_environments_considered=self.lowest_number_environments_for_plot,
                                  lowerlimit=self.lower_limit_plot, upperlimit=self.upper_limit_plot,
                                  counter_cations_env=self.present_env)
             plt.show()
+
+        # TODO: test this part!
+        self.extreme_exceptions = self._get_extreme_exceptions(self.additional_info, perc_std=self.tot_stddev[0],
+                                                               ideal_value=2, larger_how_many_std=3)
 
         if save_result_data and not start_from_results:
             outputdict = {}
@@ -992,6 +1203,11 @@ class Pauling2OverAllAnalysis(OverAllAnalysis):
             outputdict['Mean_bvs'] = self.bs_sum_mean
             outputdict['rel_std_dev_bvs'] = list(self.tot_stddev)
             outputdict['additional_info'] = self.additional_info
+            outputdict['arraydev_share_plus_minus'] = list(self.arraydev_share_plus_minus)
+            outputdict['relativefrequency_plus_minus'] = list(self.relativefrequency_plus_minus)
+            outputdict['stepsize_histogram'] = self.stepsize_histogram
+            outputdict['list_extreme_exceptions'] = self.extreme_exceptions
+
             self._save_results_to_file(outputdict, path_to_save)
 
         if self.analyse_structures:
@@ -1011,8 +1227,18 @@ class Pauling2OverAllAnalysis(OverAllAnalysis):
                                                                              start_from_Matching=self.use_prematching,
                                                                              fetch_results_only=restart_from_saved_structure_analysis)
 
+            dict_similarstructures_extreme_exceptions = self._get_similar_structures(self.extreme_exceptions,
+                                                                                     source=self.source,
+                                                                                     save_to_file=save_structure_analysis,
+                                                                                     path_to_save=
+                                                                                     path_to_save.split('.')[
+                                                                                         0] + "_structural_extreme_exceptions.json",
+                                                                                     start_from_Matching=self.use_prematching,
+                                                                                     fetch_results_only=restart_from_saved_structure_analysis)
+
             self.dict_similarstructures_exceptions = dict_similarstructures_exceptions
             self.dict_similarstructures_fulfilling = dict_similarstructures_fulfilling
+            self.dict_similarstructures_extreme_exceptions = dict_similarstructures_extreme_exceptions
 
             if save_structure_analysis:
                 self._print_to_file_similar_structures(dict_similarstructures_exceptions,
@@ -1030,10 +1256,33 @@ class Pauling2OverAllAnalysis(OverAllAnalysis):
                                                                     0] + "_structural_exceptions_readable.csv",
                                                        add_info=self.additional_info, name_add_info="Bond valence sum")
 
+                self._print_to_file_similar_structures(dict_similarstructures_extreme_exceptions, fmt='csv',
+                                                       filename=path_to_save.split('.')[
+                                                                    0] + "_structural_extreme_exceptions_readable.csv",
+                                                       add_info=self.additional_info, name_add_info="Bond valence sum")
+
                 self._print_to_file_similar_structures(dict_similarstructures_fulfilling, fmt='csv',
                                                        filename=path_to_save.split('.')[
                                                                     0] + "_structures_fulfilling_readable.csv",
                                                        add_info=self.additional_info, name_add_info="Bond valence sum")
+
+    def _get_extreme_exceptions(self, additional_info: dict, perc_std: float, ideal_value: float,
+                                larger_how_many_std=2.0) -> list:
+        """
+        filters for materials names with extreme exceptions
+        :param additional_info: dict {"materialname":[2.3,2,0.8]
+        :param perc_std: value between 0 and 1
+        :param ideal_value: usually 2 for oxides
+        :param larger_how_many_std: how many std deviations should be considered
+        :return:
+        """
+
+        new_list = []
+        for key, value in additional_info.items():
+            if (max([abs(float(ideal_value) - float(x)) for x in value]) - float(larger_how_many_std) * float(
+                    perc_std) * float(ideal_value)) > 10e-8:
+                new_list.append(key)
+        return new_list
 
     def _stddev(self, lst: list, mean: float) -> list:
         """
@@ -1051,7 +1300,7 @@ class Pauling2OverAllAnalysis(OverAllAnalysis):
             sum += pow((lst[i] - mn), 2)
         return np.sqrt([sum / (len(lst) - 1)]) / mn
 
-    def _get_deviation_from_ideal_value(self, inputarray: list, ideal: float) -> list:
+    def _get_absolute_deviation_from_ideal_value(self, inputarray: list, ideal: float) -> list:
         """
         calculates the deviation from an ideal value for a whole list
         :param inputarray:
@@ -1059,6 +1308,16 @@ class Pauling2OverAllAnalysis(OverAllAnalysis):
         :return:
         """
         return [abs(float(x) - float(ideal)) for x in inputarray]
+
+    def _get_deviation_from_ideal_value(self, inputarray: list, ideal: float) -> list:
+        """
+        calculates the deviation from an ideal value for a whole list
+        :param inputarray:
+        :param ideal:
+        :return:
+        """
+        # TODO: test
+        return [(float(x) - float(ideal)) for x in inputarray]
 
     def _get_frequency_of_values(self, arraydeviations: list, stepsize: float) -> tuple:
         """
@@ -1078,6 +1337,26 @@ class Pauling2OverAllAnalysis(OverAllAnalysis):
 
         return dev_array, frequency
 
+    def _get_frequency_bs_for_plus_minus_deviation(self, arraydeviations: list, stepsize: float) -> tuple:
+        """
+        will get the frequencies of values lower a certain step size
+        :param arraydeviations: array of the deviations from ideal value
+        :param stepsize: stepsize as a float
+        :return:
+        """
+        frequency = []
+        dev_array = np.arange(min(arraydeviations), max(arraydeviations) + stepsize, stepsize)
+
+        for step in dev_array:
+            frequency.append(
+                len([x for x in arraydeviations if x <= step + 0.5 * stepsize and x > (step - 0.5 * stepsize)]))
+
+        # print(dev_array)
+        # print(frequency)
+        # print(sum(frequency))
+        # print(len(arraydeviations))
+        return dev_array, frequency
+
     def _list_to_np_array_and_divide_by_value(self, inputarray: list, valuetodivide: float) -> np.array:
         """
         will divide each element of a whole array by a value
@@ -1086,6 +1365,18 @@ class Pauling2OverAllAnalysis(OverAllAnalysis):
         :return: numpy.array
         """
         return (np.array(inputarray) / float(valuetodivide))
+
+    def _secondrule_plot_histogram(self, arraydev, relativefreq):
+        matplotlib.rcParams['pdf.fonttype'] = 42
+        matplotlib.rcParams['ps.fonttype'] = 42
+        font = {'size': 22}
+
+        matplotlib.rc('font', **font)
+        plt.bar(self.arraydev_share_plus_minus * 100, height=self.relativefrequency_plus_minus * 100)
+        plt.xlabel("Deviation (%) from the ideal valence -2")
+        plt.ylabel("Oxygen Atoms (%)")
+
+        return plt
 
     def _secondrule_plot(self, arraydev: np.array, relativefreqarray: np.array, tot_stddev: float, maxpercentage=70,
                          save_plot=False,
@@ -1167,13 +1458,27 @@ class Pauling2OverAllAnalysis(OverAllAnalysis):
 
         self.tot_stddev = self._stddev(array_bvs, np.mean(array_bvs))
         ideal_bs = 2.0
-        bs_dev = self._get_deviation_from_ideal_value(inputarray=array_bvs, ideal=ideal_bs)
+        self.ideal_bs = 2.0
+        bs_dev = self._get_absolute_deviation_from_ideal_value(inputarray=array_bvs, ideal=ideal_bs)
         self.bs_dev = bs_dev
+        self.bs_dev_plus_minus = self._get_deviation_from_ideal_value(inputarray=self.array_bvs, ideal=ideal_bs)
         dev_array, self.frequency = self._get_frequency_of_values(arraydeviations=bs_dev, stepsize=0.01)
-
+        dev_array_plus_minus, self.frequency_plus_minus = self._get_frequency_bs_for_plus_minus_deviation(
+            self.bs_dev_plus_minus, stepsize=self.stepsize_histogram)
         self.arraydev_share = self._list_to_np_array_and_divide_by_value(np.array(dev_array), ideal_bs)
         self.relativefrequency = self._list_to_np_array_and_divide_by_value(np.array(self.frequency),
                                                                             float(len(array_bvs)))
+
+        self.arraydev_share_plus_minus = self._list_to_np_array_and_divide_by_value(np.array(dev_array_plus_minus),
+                                                                                    ideal_bs)
+
+        self.relativefrequency_plus_minus = self._list_to_np_array_and_divide_by_value(
+            np.array(self.frequency_plus_minus),
+            float(len(array_bvs)))
+        # TODO: iclude new functions to calculate positive and neg deviation + histogram
+        # TODO: safe this
+        # TODO: transform it into a bar chart
+        # TODO: bin this correctly +- stepsize etc
 
 
 class Pauling3OverAllAnalysis(OverAllAnalysis):
