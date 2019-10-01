@@ -710,13 +710,13 @@ class Pauling2_optimized_environments(Pauling2):
         index=0
         for ilistel,list_el in enumerate(bvs_list):
             new_abs_dev=np.mean([abs(i-2.0) for i in list_el])
-            print(new_abs_dev)
+            #print(new_abs_dev)
             if new_abs_dev<abs_dev:
                 #keep < because this will prefer more probable environments
                 abs_dev=new_abs_dev
                 #print(abs_dev)
                 index=ilistel
-        print(bvs_list)
+        #print(bvs_list)
 
         return bvs_list[index]
 
@@ -742,7 +742,7 @@ class Pauling2_optimized_environments(Pauling2):
         index=0
         for ilistel,list_el in enumerate(bvs_list):
             new_abs_dev=np.mean([abs(i-2.0) for i in list_el])
-            print(new_abs_dev)
+            #print(new_abs_dev)
             if new_abs_dev<abs_dev:
                 #keep < because this will prefer more probable environments
                 abs_dev=new_abs_dev
@@ -1837,7 +1837,6 @@ class Pauling5(PaulingConnection):
         details = self.get_details(options=options, leave_out_list=leave_out_list)
 
         for key, items in details.items():
-            # print(key)
             if items['not_fulfilled'] > 0:
                 return False
         return True

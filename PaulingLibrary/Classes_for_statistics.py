@@ -23,7 +23,7 @@ from pymatgen.core.periodic_table import Element
 
 from PaulingRules import Pauling0, Pauling1, Pauling2, Pauling3, Pauling4, Pauling5, RuleCannotBeAnalyzedError, \
     FrequencyEnvironmentPauling1, get_entropy_from_frequencies, get_most_frequent_environment, \
-    get_mean_CN_from_frequencies
+    get_mean_CN_from_frequencies, Pauling2_optimized_environments
 from PlotClasses import PlotterPSE
 
 
@@ -1430,7 +1430,7 @@ class Pauling2OverAllAnalysis(OverAllAnalysis):
             # print(mat)
 
             lse = self._get_lse_from_folder(mat, source=self.source)
-            pauling2 = Pauling2(lse=lse)
+            pauling2 = Pauling2_optimized_environments(lse=lse)
 
             # one could also put this in a method!
             if pauling2.is_fulfilled():

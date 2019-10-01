@@ -3,7 +3,7 @@ from Classes_for_statistics import OverAllAnalysis
 from pymatgen.symmetry.analyzer import SpacegroupAnalyzer
 from pymatgen.analysis.chemenv.coordination_environments.coordination_geometry_finder import LocalGeometryFinder
 from pymatgen.analysis.chemenv.coordination_environments.structure_environments import LightStructureEnvironments
-
+import json
 # def test_recursive(list1,list2):
 #     new_list=[]
 #     for el in list1:
@@ -22,42 +22,51 @@ from pymatgen.analysis.chemenv.coordination_environments.structure_environments 
 #
 
 # print(test_recursive(list1,list2))
-
-# #TODO: search for a well-suited example
+#
+# # #TODO: search for a well-suited example
 analysis = OverAllAnalysis()
-for mat in ['mp-17304', 'mp-557970', 'mp-20546', 'mp-15472']:
-    #
-    lse = analysis._get_lse_from_folder(mat)
-    # print(lse.structure)
-    # print(lse.structure)
-    spanalyzer = SpacegroupAnalyzer(structure=lse.structure)
-    equivalent_indices = spanalyzer.get_symmetrized_structure().equivalent_indices
-    print(equivalent_indices)
+#set of materials that shows problems in analysis of second rule
+list_lse = analysis._get_list_materials()
+# new_lse_list=[]
+# for mat in list_lse:
+#     if mat not in ['mp-559234', 'mp-558239', 'mp-559460', 'mp-555131', 'mp-565811', 'mp-31358', 'mp-558128', 'mp-32131', 'mp-652260', 'mp-561433', 'mp-18136', 'mp-21099', 'mp-560516', 'mp-19035', 'mp-510281', 'mp-656144', 'mp-19560', 'mp-541454', 'mp-680384', 'mp-566937', 'mp-579382', 'mp-17605', 'mp-550579', 'mp-18977', 'mp-6760', 'mp-645568', 'mp-554929', 'mp-19093', 'mp-555387', 'mp-6702', 'mp-19442', 'mp-561689', 'mp-10417', 'mp-23352', 'mp-28708', 'mp-4112', 'mp-18992', 'mp-560605', 'mp-541436', 'mp-505110', 'mp-543034', 'mp-561634', 'mp-15379', 'mp-19400', 'mp-561055', 'mp-565692', 'mp-31624', 'mp-555515', 'mp-24854', 'mp-9480', 'mp-566311', 'mp-568561', 'mp-17770', 'mp-19470', 'mp-566249', 'mp-653182', 'mp-25053', 'mp-25152', 'mp-6318', 'mp-545735', 'mp-554603', 'mp-559373', 'mp-4396', 'mp-3919', 'mp-631631', 'mp-19586', 'mp-510624', 'mp-18986', 'mp-557382', 'mp-554962', 'mp-557997', 'mp-18750', 'mp-647385', 'mp-616597', 'mp-557372']:
+#         new_lse_list.append(mat)
+#
+# with open("allmaterials.json",'w') as f:
+#     json.dump({"is_clear_materials":new_lse_list},f)
 
-    lgf = LocalGeometryFinder()
-
-    lgf.setup_structure(structure=lse.structure)
-    se = lgf.compute_structure_environments(only_cations=True,valences=lse.valences)
-
-    from pymatgen.analysis.chemenv.coordination_environments.chemenv_strategies import MultiWeightsChemenvStrategy
-    strategy = MultiWeightsChemenvStrategy.stats_article_weights_parameters()
-
-    lse2 = LightStructureEnvironments.from_structure_environments(strategy=strategy, structure_environments=se)
-
-
-    #for ice,ce in enumerate(lse.coordination_environments):
-    for equi in equivalent_indices:
-        print("Set1")
-        for i in equi:
-            if lse.coordination_environments[i]!=None:
-                print(lse.coordination_environments[i][0]['ce_symbol'])
-        print("Set2")
-        for i in equi:
-            if lse2.coordination_environments[i] != None:
-                print(lse2.coordination_environments[i][0]['ce_symbol'])
-
-
-exit()
+#     #
+#     lse = analysis._get_lse_from_folder(mat)
+#     # print(lse.structure)
+#     # print(lse.structure)
+#     spanalyzer = SpacegroupAnalyzer(structure=lse.structure)
+#     equivalent_indices = spanalyzer.get_symmetrized_structure().equivalent_indices
+#     print(equivalent_indices)
+#
+#     lgf = LocalGeometryFinder()
+#
+#     lgf.setup_structure(structure=lse.structure)
+#     se = lgf.compute_structure_environments(only_cations=True,valences=lse.valences)
+#
+#     from pymatgen.analysis.chemenv.coordination_environments.chemenv_strategies import MultiWeightsChemenvStrategy
+#     strategy = MultiWeightsChemenvStrategy.stats_article_weights_parameters()
+#
+#     lse2 = LightStructureEnvironments.from_structure_environments(strategy=strategy, structure_environments=se)
+#
+#
+#     #for ice,ce in enumerate(lse.coordination_environments):
+#     for equi in equivalent_indices:
+#         print("Set1")
+#         for i in equi:
+#             if lse.coordination_environments[i]!=None:
+#                 print(lse.coordination_environments[i][0]['ce_symbol'])
+#         print("Set2")
+#         for i in equi:
+#             if lse2.coordination_environments[i] != None:
+#                 print(lse2.coordination_environments[i][0]['ce_symbol'])
+#
+#
+# exit()
 #
 # lgf = LocalGeometryFinder()
 #
