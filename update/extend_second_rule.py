@@ -91,13 +91,16 @@ list_lse = analysis._get_list_materials()
 fulfilled = 0
 all = 0
 exceptions = []
+list_lse=["mp-4056"]
 for mat in list_lse:
     try:
     # if not mat in ["mp-17304","mp-15472","mp-581229","mp-680384","mp-706588","mp-581345","mp-680432","mp-561374",'mp-557970', 'mp-5637', 'mp-645568', 'mp-19128', 'mp-554219', 'mp-556195', 'mp-653973', 'mp-20546', 'mp-565522', 'mp-12010', 'mp-19660', 'mp-560919','mp-557970', 'mp-5637', 'mp-645568', 'mp-19128', 'mp-554219','mp-566537', 'mp-10444',"mp-581644", 'mp-556195', 'mp-653973', 'mp-20546', 'mp-565522', 'mp-12010', 'mp-19660', 'mp-560919',"mp-3974"]:
         print(mat)
         # try:
         lse = analysis._get_lse_from_folder(mat=mat, source="MP")
-        pauling2 = Pauling2_optimized_environments(lse=lse, perc=0.3)
+        pauling2 = Pauling2_optimized_environments(lse=lse, perc=0.2)
+        #print(pauling2.anions_bond_strengths)
+        pauling2.get_details(10e-2)
         if (pauling2.is_fulfilled()):
             fulfilled += 1
         all += 1

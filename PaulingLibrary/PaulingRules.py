@@ -498,76 +498,99 @@ class Pauling2_optimized_environments(Pauling2):
         Class to test the electrostatic valence rule, not only most frequent environment
     """
 
-    def __init__(self, lse: LightStructureEnvironments, perc: float = 0.1):
+    def __init__(self, lse: LightStructureEnvironments, perc: float = 0.3):
         """
+
         :param lse: LightStructureEnvironment, only cations should have an coordination environment
+        :param perc: decides which ce are considered. The one with the highest fraction is always considered, then the ones with fraction larger or equal to perc are also considered
         """
+        structure = lse.structure
+        valences = lse.valences
+        neighbors_set = lse.neighbors_sets
+        coordination_environments = lse.coordination_environments
+        self.lse = lse
+        self.structure = structure
+        self.valences = valences
+
         is_an_oxide_and_no_env_for_O(lse)
-        # TODO: write a test, e.g. with mp-4930, mp-7000
-        equivalent_indices = self._get_symmetry_eq_indices(structure=lse.structure)
-        max_sites = len(lse.structure)
-        # print(equivalent_indices)
-
-        env_indices = self._get_env_indices(lse=lse, perc=perc, equivalent_indices=equivalent_indices,
-                                            max_sites=max_sites)
-        # print(env_indices)
-
+        equivalent_indices = self._get_symmetry_eq_indices(structure=structure)
+        env_indices = self._get_env_indices(coordination_environments=coordination_environments, valences=valences,
+                                            perc=perc, equivalent_indices=equivalent_indices)
         combination_array_only_cations = self._get_combinations_cations(equivalent_indices=equivalent_indices,
-                                                                        env_indices=env_indices, lse=lse)
-        # print(combination_array_only_cations)
+                                                                        env_indices=env_indices, valences=valences)
+        combinations_all_ions_list = self._get_combinations_all_ions(
+            combination_array_only_cations=combination_array_only_cations, equivalent_indices=equivalent_indices,
+            valences=valences)
+        self._calculate_anion_bond_strengths(combinations_all_ions_list=combinations_all_ions_list, structure=structure,
+                                             valences=valences, neighbors_sets=neighbors_set)
 
-        combinations_all_ions_list = self._get_combinations_all_ions(combination_array_only_cations, equivalent_indices,
-                                                                     lse, max_sites)
-        # print(combinations_all_ions_list)
-        # exit()
-        # TODO: refactor as well
-        self.electrostatic_bond_strengths = []
-        self.anions_bond_strengths = []
-        for icombination_list, combination_list in enumerate(combinations_all_ions_list):
-            # print(combination_list)
-            self.electrostatic_bond_strengths.append({})
-            self.anions_bond_strengths.append([])
-            # for neighborsets in combinations_all_ions_list:
-            for isite, site in enumerate(lse.structure):
-                # print(isite)
-                if lse.valences[isite] >= 0:
-                    # print(site)
-                    # print(lse.coordination_environments[isite])
-                    # print(combination_list[isite])
-                    # print(lse.neighbors_sets[isite][0])
-                    nb_set = lse.neighbors_sets[isite][combination_list[isite]]
-                    cn = float(len(nb_set))
-                    for nb_dict in nb_set.neighb_sites_and_indices:
-                        # print(nb_dict)
-                        nb_isite = nb_dict['index']
-                        if nb_isite not in self.electrostatic_bond_strengths[icombination_list]:
-                            self.electrostatic_bond_strengths[icombination_list][nb_isite] = []
-                        self.electrostatic_bond_strengths[icombination_list][nb_isite].append({'cation_isite': isite,
-                                                                                               'bond_strength': float(
-                                                                                                   lse.valences[
-                                                                                                       isite]) / cn})
+    def _get_symmetry_eq_indices(self, structure: Structure) -> list:
+        """
+        will return the indices that are equivalent within a structure
+        :param structure: Structure object without symmetry
+        :return: list
+        """
+        spanalyzer = SpacegroupAnalyzer(structure=structure)
+        equivalent_indices = spanalyzer.get_symmetrized_structure().equivalent_indices
+        return equivalent_indices
 
-            self.lse = lse
-            for isite, site in enumerate(lse.structure):
-                if lse.valences[isite] < 0:
-                    if isite in self.electrostatic_bond_strengths[icombination_list]:
-                        bond_strengths = [nb['bond_strength']
-                                          for nb in self.electrostatic_bond_strengths[icombination_list][isite]]
-                        cations_isites = [nb['cation_isite']
-                                          for nb in self.electrostatic_bond_strengths[icombination_list][isite]]
-                    else:
-                        bond_strengths = []
-                        cations_isites = []
-                    bond_strengths_sum = sum(bond_strengths)
-                    self.anions_bond_strengths[icombination_list].append({'anion_isite': isite,
-                                                                          'bond_strengths': bond_strengths,
-                                                                          'cations_isites': cations_isites,
-                                                                          'nominal_oxidation_state': lse.valences[
-                                                                              isite],
-                                                                          'bond_strengths_sum': bond_strengths_sum}
-                                                                         )
 
-    def _get_combinations_all_ions(self, combination_array_only_cations, equivalent_indices, lse, max_sites):
+    def _get_env_indices(self, coordination_environments: list, valences: list, perc: float,
+                         equivalent_indices: list) -> list:
+        """
+        #gets all indices of relevant environments with a fraction larger perc, if there is none larger perc it will always get at least the environment with the larges fraction
+        :param coordination_environments: list of coordination environments from lse
+        :param valences: valences
+        :param perc: only the ce with the highest fraction are included + the ones that have a fraction equal or larger to perc
+        :param equivalent_indices:
+        :return:
+        """
+        env_indices = []
+        for number in range(0, len(valences)):
+            env_indices.append([])
+        for list_index in equivalent_indices:
+            if valences[list_index[0]] > 0:
+                for same, sameenv in enumerate(list_index):
+                    env_indices_local = []
+                    env_indices_local.append(0)
+                    for ienv, env in enumerate(coordination_environments[list_index[0]][1:], 1):
+                        if env['ce_fraction'] >= perc:
+                            env_indices_local.append(ienv)
+                    env_indices[sameenv] = env_indices_local
+            else:
+                for same, sameenv in enumerate(list_index):
+                    env_indices[sameenv] = [None]
+        return env_indices
+
+    def _get_combinations_cations(self, equivalent_indices: list, env_indices: list, valences: list) -> list:
+        """
+        will get relevant combinations of neighbor_sets for the cations
+        :param equivalent_indices: which indices in the structure are equivalent
+        :param env_indices: indices of the environments
+        :param valences: list of valences
+        :return:
+        """
+        combination_array_only_cations = []
+        for list_index in equivalent_indices:
+            if valences[list_index[0]] >= 0:
+                if len(combination_array_only_cations) == 0:
+                    for el in env_indices[list_index[0]]:
+                        combination_array_only_cations.append([el])
+                else:
+                    combination_array_only_cations = self._list_combi_recursive(combination_array_only_cations,
+                                                                                env_indices[list_index[0]])
+        return combination_array_only_cations
+
+    def _get_combinations_all_ions(self, combination_array_only_cations: list, equivalent_indices: list,
+                                   valences: list) -> list:
+        """
+        will produce a list which includes lists with the numbers of the neighbors_sets for each site
+        :param combination_array_only_cations: list which indicates the relevant neighbors_sets for the cations only
+        :param equivalent_indices: list of equivalent indices
+        :param valences: list of valences
+        :return: list with all relevant combinations
+        """
+        max_sites = len(valences)
         combinations_all_ions_list = []
 
         for number_combi, combi in enumerate(combination_array_only_cations):
@@ -576,7 +599,7 @@ class Pauling2_optimized_environments(Pauling2):
                 combinations_all_ions.append([])
             ilist_index = 0
             for list_index in equivalent_indices:
-                if lse.valences[list_index[0]] > 0:
+                if valences[list_index[0]] > 0:
                     for index in list_index:
                         combinations_all_ions[index] = combi[ilist_index]
                     ilist_index += 1
@@ -587,59 +610,7 @@ class Pauling2_optimized_environments(Pauling2):
             combinations_all_ions_list.append(combinations_all_ions)
         return combinations_all_ions_list
 
-    def _get_combinations_cations(self, equivalent_indices, env_indices, lse):
-        # TODO: correct error
-        # problem if more than one element in first array!
-        combination_array_only_cations = []
-        for list_index in equivalent_indices:
-            if lse.valences[list_index[0]] >= 0:
-                if len(combination_array_only_cations) == 0:
-                    for el in env_indices[list_index[0]]:
-                        combination_array_only_cations.append([el])
-                else:
-                    # print(env_indices[list_index[0]])
-                    combination_array_only_cations = self.list_combi_recursive(combination_array_only_cations,
-                                                                               env_indices[list_index[0]])
-                # print(combination_array_only_cations)
-        return combination_array_only_cations
-
-    def _get_env_indices(self, lse: LightStructureEnvironments, perc: float, equivalent_indices: list,
-                         max_sites: int) -> list:
-        """
-        #gets all indices of relevant environments with a fraction larger perc, if there is none larger perc it will always get at least the environment with the larges fraction
-        :param lse: light structure environment
-        :param perc: fraction of the environments that will be considered
-        :param equivalent_indices: array for each symmetry equivalent cation that will be considered
-        :return: list of list with numbers for the environments that will be considered
-        """
-        env_indices = []
-        for number in range(0, max_sites):
-            env_indices.append([])
-        for list_index in equivalent_indices:
-            if lse.valences[list_index[0]] > 0:
-                for same, sameenv in enumerate(list_index):
-                    env_indices_local = []
-                    env_indices_local.append(0)
-                    for ienv, env in enumerate(lse.coordination_environments[list_index[0]][1:], 1):
-                        if env['ce_fraction'] > perc:
-                            env_indices_local.append(ienv)
-                    env_indices[sameenv] = env_indices_local
-            else:
-                for same, sameenv in enumerate(list_index):
-                    env_indices[sameenv] = [None]
-        return env_indices
-
-    def _get_symmetry_eq_indices(self, structure: Structure) ->list:
-        """
-        will return the indices that are equivalent within a structure
-        :param structure: Structure object without symmetry
-        :return: list
-        """
-        spanalyzer = SpacegroupAnalyzer(structure=structure)
-        equivalent_indices = spanalyzer.get_symmetrized_structure().equivalent_indices
-        return equivalent_indices
-
-    def list_combi_recursive(self, list1: list, list2: list) -> list:
+    def _list_combi_recursive(self, list1: list, list2: list) -> list:
         """
         will combine two lists like this: [[0]] + [0,1] -> [[0,0],[0,1]] and so on
         :param list1: list of list
@@ -654,6 +625,53 @@ class Pauling2_optimized_environments(Pauling2):
                 new_list.append(new)
         return new_list
 
+    def _calculate_anion_bond_strengths(self, combinations_all_ions_list: list, structure: Structure, valences: list,
+                                        neighbors_sets: list):
+        """
+        will calculate the anion_bond_strengths for all combinations of environments that are given
+        :param combinations_all_ions_list: list which includes lists with the numbers of the neighbors_sets for each site
+        :param structure: Structure object
+        :param valences: list of valences
+        :param neighbors_sets: neighbors_sets from the LightStructureEnvironment
+        :return:
+        """
+        self.electrostatic_bond_strengths = []
+        self.anions_bond_strengths = []
+        for icombination_list, combination_list in enumerate(combinations_all_ions_list):
+            self.electrostatic_bond_strengths.append({})
+            self.anions_bond_strengths.append([])
+            for isite, site in enumerate(structure):
+                if valences[isite] >= 0:
+                    nb_set = neighbors_sets[isite][combination_list[isite]]
+                    cn = float(len(nb_set))
+                    for nb_dict in nb_set.neighb_sites_and_indices:
+                        nb_isite = nb_dict['index']
+                        if nb_isite not in self.electrostatic_bond_strengths[icombination_list]:
+                            self.electrostatic_bond_strengths[icombination_list][nb_isite] = []
+                        self.electrostatic_bond_strengths[icombination_list][nb_isite].append({'cation_isite': isite,
+                                                                                               'bond_strength': float(
+                                                                                                   valences[
+                                                                                                       isite]) / cn})
+
+            for isite, site in enumerate(structure):
+                if valences[isite] < 0:
+                    if isite in self.electrostatic_bond_strengths[icombination_list]:
+                        bond_strengths = [nb['bond_strength']
+                                          for nb in self.electrostatic_bond_strengths[icombination_list][isite]]
+                        cations_isites = [nb['cation_isite']
+                                          for nb in self.electrostatic_bond_strengths[icombination_list][isite]]
+                    else:
+                        bond_strengths = []
+                        cations_isites = []
+                    bond_strengths_sum = sum(bond_strengths)
+                    self.anions_bond_strengths[icombination_list].append({'anion_isite': isite,
+                                                                          'bond_strengths': bond_strengths,
+                                                                          'cations_isites': cations_isites,
+                                                                          'nominal_oxidation_state': valences[
+                                                                              isite],
+                                                                          'bond_strengths_sum': bond_strengths_sum}
+                                                                         )
+
     def is_fulfilled(self, tolerance=1e-2) -> bool:
         """
         Tells you if rule is fulfilled for the whole structure
@@ -663,14 +681,12 @@ class Pauling2_optimized_environments(Pauling2):
         self.satisfied = [True] * len(self.anions_bond_strengths)
         for ianion, anion_bond_strength in enumerate(self.anions_bond_strengths):
             ianionsite = 0
-            for isite, site in enumerate(self.lse.structure):
-                if self.lse.valences[isite] < 0:
+            for isite, site in enumerate(self.structure):
+                if self.valences[isite] < 0:
                     if (abs(anion_bond_strength[ianionsite]['bond_strengths_sum'] - 2.0)) > tolerance:
                         self.satisfied[ianion] = False
                     ianionsite = ianionsite + 1
         return (True in self.satisfied)
-
-
 
     def get_details(self, tolerance=10e-2) -> dict:
         """
@@ -679,7 +695,7 @@ class Pauling2_optimized_environments(Pauling2):
         :return: OutputDict with information on each anion
         """
         # TODO: update, only info of best environments
-        #TODO: get best anions around neighbors
+        # TODO: get best anions around neighbors
 
         OutputDict = {}
         OutputDict["bvs_for_each_anion"] = self._get_anions_bvs()
@@ -694,30 +710,25 @@ class Pauling2_optimized_environments(Pauling2):
         TODO: update
         :return: list of bvs
         """
-        #find the bvs for all anion_bond_strenghts and return the one with the lowest mean deviation
-        bvs_list=[]
+        # find the bvs for all anion_bond_strenghts and return the one with the lowest mean deviation
+        bvs_list = []
         for anion_bond_strength in self.anions_bond_strengths:
             bvs = []
             ianionsite = 0
-            for isite, site in enumerate(self.lse.structure):
-                if self.lse.valences[isite] < 0:
+            for isite, site in enumerate(self.structure):
+                if self.valences[isite] < 0:
                     bvs.append(
                         anion_bond_strength[ianionsite]['bond_strengths_sum'])
                     ianionsite = ianionsite + 1
             bvs_list.append(bvs)
-
-        abs_dev=1000.0
-        index=0
-        for ilistel,list_el in enumerate(bvs_list):
-            new_abs_dev=np.mean([abs(i-2.0) for i in list_el])
-            #print(new_abs_dev)
-            if new_abs_dev<abs_dev:
-                #keep < because this will prefer more probable environments
-                abs_dev=new_abs_dev
-                #print(abs_dev)
-                index=ilistel
-        #print(bvs_list)
-
+        abs_dev = 1000.0
+        index = 0
+        for ilistel, list_el in enumerate(bvs_list):
+            new_abs_dev = np.mean([abs(i - 2.0) for i in list_el])
+            if new_abs_dev < abs_dev:
+                # keep < because this will prefer more probable environments
+                abs_dev = new_abs_dev
+                index = ilistel
         return bvs_list[index]
 
     def _get_index_anion_combi_lowest_bvs(self) -> int:
@@ -726,8 +737,8 @@ class Pauling2_optimized_environments(Pauling2):
         TODO: update
         :return: index
         """
-        #find the bvs for all anion_bond_strenghts and return the one with the lowest mean deviation
-        bvs_list=[]
+        # find the bvs for all anion_bond_strengths and return the one with the lowest mean deviation
+        bvs_list = []
         for anion_bond_strength in self.anions_bond_strengths:
             bvs = []
             ianionsite = 0
@@ -738,16 +749,16 @@ class Pauling2_optimized_environments(Pauling2):
                     ianionsite = ianionsite + 1
             bvs_list.append(bvs)
 
-        abs_dev=1000.0
-        index=0
-        for ilistel,list_el in enumerate(bvs_list):
-            new_abs_dev=np.mean([abs(i-2.0) for i in list_el])
-            #print(new_abs_dev)
-            if new_abs_dev<abs_dev:
-                #keep < because this will prefer more probable environments
-                abs_dev=new_abs_dev
-                #print(abs_dev)
-                index=ilistel
+        abs_dev = 1000.0
+        index = 0
+        for ilistel, list_el in enumerate(bvs_list):
+            new_abs_dev = np.mean([abs(i - 2.0) for i in list_el])
+            # print(new_abs_dev)
+            if new_abs_dev < abs_dev:
+                # keep < because this will prefer more probable environments
+                abs_dev = new_abs_dev
+                # print(abs_dev)
+                index = ilistel
         return index
 
     def _get_cations_around_anion(self) -> list:
@@ -755,18 +766,19 @@ class Pauling2_optimized_environments(Pauling2):
         :return: list of list with elements around anion
         """
 
-        #get correct anions around
+        # get correct anions around
         ianionsite = 0
         elements = []
-        for isite, site in enumerate(self.lse.structure):
-            if self.lse.valences[isite] < 0:
-                elements_around = [self.lse.structure[icat].species_string for icat in
-                                   self.anions_bond_strengths[self._get_index_anion_combi_lowest_bvs()][ianionsite]['cations_isites']]
+        for isite, site in enumerate(self.structure):
+            if self.valences[isite] < 0:
+                elements_around = [self.structure[icat].species_string for icat in
+                                   self.anions_bond_strengths[self._get_index_anion_combi_lowest_bvs()][ianionsite][
+                                       'cations_isites']]
                 elements.append(elements_around)
                 ianionsite = ianionsite + 1
         return elements
 
-    def _get_elementwise_fulfillment(self, tolerance=10e-2) -> dict:
+    def _get_elementwise_fulfillment(self, tolerance: float = 10e-2) -> dict:
         """
         will calculate an elementwise fulfillment
         will count cations as fulfilling if they are around an anion that fulfills the rule
@@ -775,8 +787,6 @@ class Pauling2_optimized_environments(Pauling2):
         :param tolerance:
         :return: dict including information for each cation
         """
-        # TODO: think about the tolerance!
-        #TODO: has to be changed!
         cations_around_anion = self._get_cations_around_anion()
         Elementwise_fulfillment = {}
         for ibvs, bvs in enumerate(self._get_anions_bvs()):

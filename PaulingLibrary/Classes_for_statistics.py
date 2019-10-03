@@ -31,10 +31,11 @@ class OverAllAnalysis:
 
     def __init__(self, source='MP', onlybinaries=False, plot_element_dependend_analysis=True,
                  lowest_number_environments_for_plot=50, lower_limit_plot=0.0, upper_limit_plot=1.0,
-                 analyse_structures=True, use_prematching=True, list_of_materials_to_investigate=None,print_structure_matching=True):
+                 analyse_structures=True, use_prematching=True, list_of_materials_to_investigate=None,
+                 print_structure_matching=True):
         """
 
-        :param source: 'MP' (Materials Project), 'MP_very_symmetric' (only structures with very symmetric coordiation environments), or 'experimental' (structures from COD) can be used
+        :param source: 'MP' (Materials Project), 'MP_very_symmetric' (only structures with very symmetric coordination environments), or 'experimental' (structures from COD) can be used
         :param onlybinaries: only binary structures will be analysed
         :param plot_element_dependend_analysis: will plot element dependent anlysis
         :param lowest_number_environments_for_plot: decides which elements will be considered in element dependent plot with the help of the lowest number of environments
@@ -54,7 +55,7 @@ class OverAllAnalysis:
         self.upper_limit_plot = upper_limit_plot
         self.use_prematching = use_prematching
         self.list_of_materials_to_investigate = list_of_materials_to_investigate
-        self.print_structure_matching=print_structure_matching
+        self.print_structure_matching = print_structure_matching
         # could include a function that starts plotting from saved data?
         # how should one do this in the best way
 
@@ -84,10 +85,20 @@ class OverAllAnalysis:
                     list_compound = list_compound_dict["is_clear_compounds"]
 
         elif source == 'MP_very_symmetric':
-            with open(
-                    "../Assessment/Should_not_be_changed/ce_fraction_0.95plus_csm_0.1plus_eabovehull0.025plus_discardS1.json",
-                    "r") as f:
+
+            with open("../Assessment/Should_not_be_changed/allmaterials.json") as f:
+                # with open(
+                #         "../Assessment/Should_not_be_changed/ce_fraction_0.95plus_csm_0.1plus_eabovehull0.025plus_discardS1.json",
+                #         "r") as f:
                 list_compound_dict = json.load(f)
+                new_list = []
+                conditions = [{"target": "ce_fraction", "minvalue": 0.95}, {"target": "csm", "maxvalue": 0.1}]
+                # TODO: include search for only very symmetric cases
+                for mat in list_compound_dict["is_clear_compounds"]:
+                    lse = self._get_lse_from_folder(mat, source="MP")
+                    if lse.structure_has_clear_environments(conditions=conditions):
+                        new_list.append(mat)
+                list_compound_dict["is_clear_compounds"] = new_list
                 if not onlybinaries:
                     if start_material is None and stop_material is None:
                         list_compound = list_compound_dict["is_clear_compounds"]
@@ -239,8 +250,8 @@ class OverAllAnalysis:
     def _get_similar_structures(self, list_mat_id: list, source='MP', save_to_file=True,
                                 path_to_save='Similar_Structures.json', fetch_results_only=False,
                                 start_from_Matching=False,
-                                path_to_precomputed_matching="Should_not_be_changed/Matching_All_Structures.json",
-                                restart_from_matching=False) -> dict:
+                                path_to_precomputed_matching="Should_not_be_changed",
+                                restart_from_matching=False, tight=True) -> dict:
         """
         will match materials ids according to structures
         :param list_mat_id: list of materials ids
@@ -250,9 +261,10 @@ class OverAllAnalysis:
         :param fetch_results_only:
         :param start_from_Matching: matches with the help of existing matching
         :param restart_from_matching: continues a matching from a file, e.g. to continue it later when interrupted
+        :param tight: will do a tighter structure matching than the default values
         :return: dict including the matching
         """
-
+        # TODO: complete this!
         if not start_from_Matching and not fetch_results_only:
             if not restart_from_matching:
                 dictstructures = {}
@@ -269,8 +281,11 @@ class OverAllAnalysis:
                 if mat not in information_mat:
                     information_mat[mat] = lse.structure.composition.reduced_formula
                 if len(dictstructures.keys()) != 0:
-
-                    Matcher = StructureMatcher(attempt_supercell=True, comparator=FrameworkComparator())
+                    if not tight:
+                        Matcher = StructureMatcher(attempt_supercell=True, comparator=FrameworkComparator())
+                    else:
+                        Matcher = StructureMatcher(ltol=0.10, stol=0.2, angle_tol=4, attempt_supercell=True,
+                                                   comparator=FrameworkComparator())
                     # TODO: check if this is okay! maybe a different algorithm is needed to do so?
                     # TODO: maybe test function from pymatgen
                     found = False
@@ -301,7 +316,12 @@ class OverAllAnalysis:
                 pass
         elif start_from_Matching:
             if source == 'MP' or source == 'MP_very_symmetric' or source == 'my_own_list':
-                prematching = self._get_precomputed_results(path_to_precomputed_matching)
+                if not tight:
+                    prematching = self._get_precomputed_results(
+                        os.path.join(path_to_precomputed_matching, 'Matching_All_Structures.json'))
+                else:
+                    prematching = self._get_precomputed_results(
+                        os.path.join(path_to_precomputed_matching, 'Matching_All_Structures_tight.json'))
             elif source == 'experimental':
                 Warning.warns("No pre-matching exists")
             information_mat = {}
@@ -390,7 +410,8 @@ class OverAllAnalysis:
             if fmt == 'yml':
                 new_dict_to_print = OrderedDict()
                 for key, items in OrderedDict(
-                        sorted(dict_to_print['structure_matching'].items(), key=lambda t: len(t[1]), reverse=True)).items():
+                        sorted(dict_to_print['structure_matching'].items(), key=lambda t: len(t[1]),
+                               reverse=True)).items():
 
                     new_dict_to_print[key] = {}
 
@@ -422,7 +443,8 @@ class OverAllAnalysis:
             elif fmt == 'csv':
                 new_dict_to_print = []
                 for key, items in OrderedDict(
-                        sorted(dict_to_print['structure_matching'].items(), key=lambda t: len(t[1]), reverse=True)).items():
+                        sorted(dict_to_print['structure_matching'].items(), key=lambda t: len(t[1]),
+                               reverse=True)).items():
 
                     for item in items:
 
@@ -444,7 +466,8 @@ class OverAllAnalysis:
                         else:
                             new_dict_to_print.append(
                                 {"mpid": str(item), "formula": dict_to_print['additional_info'][item], "CN": CN,
-                                 "valences": valence, "cations": cat, "structure_type": key, name_add_info: add_info[item]})
+                                 "valences": valence, "cations": cat, "structure_type": key,
+                                 name_add_info: add_info[item]})
 
                 if add_info is None:
                     with open(filename, 'w') as csvfile:
@@ -453,7 +476,8 @@ class OverAllAnalysis:
                         filewriter.writerow(['mp-id', 'formula', 'structure_type', 'cations', 'valences', 'CNs'])
                         for line in new_dict_to_print:
                             filewriter.writerow(
-                                [str(line["mpid"]), str(line["formula"]), str(line["structure_type"]), str(line["cations"]),
+                                [str(line["mpid"]), str(line["formula"]), str(line["structure_type"]),
+                                 str(line["cations"]),
                                  str(line["valences"]), str(line["CN"])])
                 else:
                     with open(filename, 'w') as csvfile:
@@ -463,7 +487,8 @@ class OverAllAnalysis:
                             ['mp-id', 'formula', 'structure_type', 'cations', 'valences', 'CNs', name_add_info])
                         for line in new_dict_to_print:
                             filewriter.writerow(
-                                [str(line["mpid"]), str(line["formula"]), str(line["structure_type"]), str(line["cations"]),
+                                [str(line["mpid"]), str(line["formula"]), str(line["structure_type"]),
+                                 str(line["cations"]),
                                  str(line["valences"]), str(line["CN"]), str(line[name_add_info])])
 
         else:
@@ -1030,97 +1055,96 @@ class EntropyDeviationFrom2ndRuleDiagram(OverAllAnalysis):
             stop_material=None):
         # TODO: will start first second rule and combine both to make a plot
         # several options should be considered: avg, min, max entropy and av, min, max deviation
-        #get additional_info from 2nd rule
-        #get entropies from first rule
+        # get additional_info from 2nd rule
+        # get entropies from first rule
 
-        #then loop over all  materials get avg, min, max entropy, and avg, min, max deviation
+        # then loop over all  materials get avg, min, max entropy, and avg, min, max deviation
 
-        #make 9 plots and check if there is any correlation
-        self.start_material=start_material
-        self.stop_material=stop_material
+        # make 9 plots and check if there is any correlation
+        self.start_material = start_material
+        self.stop_material = stop_material
 
         newclass = Pauling1Entropy(source=self.source, onlybinaries=self.onlybinaries,
                                    plot_element_dependend_analysis=False,
                                    list_of_materials_to_investigate=None,
                                    start_material=self.start_material, stop_material=self.stop_material)
         newclass.run(start_from_results=False, save_result_data=False)
-        entropy=newclass.Plot_PSE_entropy
+        entropy = newclass.Plot_PSE_entropy
 
         newclass2 = Pauling2OverAllAnalysis(source='MP', onlybinaries=False, plot_element_dependend_analysis=False,
-                                           lowest_number_environments_for_plot=50, lower_limit_plot=0.1, upper_limit_plot=0.8,
-                                           analyse_structures=False, use_prematching=True)
+                                            lowest_number_environments_for_plot=50, lower_limit_plot=0.1,
+                                            upper_limit_plot=0.8,
+                                            analyse_structures=False, use_prematching=True)
         newclass2.run(start_from_results=False, save_result_data=False, path_to_save='Results/Results_Second_Rule.json',
-                     save_structure_analysis=True, restart_from_saved_structure_analysis=False, show_histogram=False, stepsize_histogram=0.1,show_plot=False)
+                      save_structure_analysis=True, restart_from_saved_structure_analysis=False, show_histogram=False,
+                      stepsize_histogram=0.1, show_plot=False)
 
-        self.additional_info=newclass2.additional_info
+        self.additional_info = newclass2.additional_info
 
-        #brauche composition der struktur
-        #daraus dann ermitteln, was die entropie ist (avg, min,max)
-        #gegen alle moeglichen deviations (avg,min,max) plotten
+        # brauche composition der struktur
+        # daraus dann ermitteln, was die entropie ist (avg, min,max)
+        # gegen alle moeglichen deviations (avg,min,max) plotten
 
-
-        #TODO: laufe ueber alle mps und strukturen und sammle alle
-        min_dev=[]
-        max_dev=[]
-        mean_dev=[] #think of another way, will always be zero
-        min_entropy_list=[]
-        max_entropy_list=[]
-        avg_entropy_list=[]
-        for key,value in self.additional_info.items():
-            min_dev.append(min([abs(x-2.0) for x in value]))
-            max_dev.append(max([abs(x-2.0) for x in value]))
-            mean_dev.append(np.mean([abs(x-2.0) for x in value]))
+        # TODO: laufe ueber alle mps und strukturen und sammle alle
+        min_dev = []
+        max_dev = []
+        mean_dev = []  # think of another way, will always be zero
+        min_entropy_list = []
+        max_entropy_list = []
+        avg_entropy_list = []
+        for key, value in self.additional_info.items():
+            min_dev.append(min([abs(x - 2.0) for x in value]))
+            max_dev.append(max([abs(x - 2.0) for x in value]))
+            mean_dev.append(np.mean([abs(x - 2.0) for x in value]))
 
             lse = self._get_lse_from_folder(mat=key, source=self.source)
-            composition=lse.structure.composition
+            composition = lse.structure.composition
             # print(composition)
 
-            elements=composition.elements
-            minentropy=1.0
-            maxentropy=0.0
-            avgenentropy_sum=0.0
-            nb_cations=0
+            elements = composition.elements
+            minentropy = 1.0
+            maxentropy = 0.0
+            avgenentropy_sum = 0.0
+            nb_cations = 0
             for el in elements:
-                #print(el)
-                if str(el)!='O':
-                    test=entropy[str(el)]
-                    nb_cations+=1
-                    avgenentropy_sum+=test
-                    #print(test)
+                # print(el)
+                if str(el) != 'O':
+                    test = entropy[str(el)]
+                    nb_cations += 1
+                    avgenentropy_sum += test
+                    # print(test)
                     if test <= minentropy:
-                        minentropy=test
+                        minentropy = test
                     if test >= maxentropy:
-                        maxentropy=test
-                    #print(minentropy)
-                    #print(maxentropy)
-            #exit()
+                        maxentropy = test
+                    # print(minentropy)
+                    # print(maxentropy)
+            # exit()
 
             max_entropy_list.append(maxentropy)
             min_entropy_list.append(minentropy)
-            avg_entropy_list.append(avgenentropy_sum/nb_cations)
+            avg_entropy_list.append(avgenentropy_sum / nb_cations)
 
-        plt.plot(max_entropy_list,min_dev,'x')
+        plt.plot(max_entropy_list, min_dev, 'x')
         plt.show()
-        plt.plot(max_entropy_list,max_dev,'x')
+        plt.plot(max_entropy_list, max_dev, 'x')
         plt.show()
-        plt.plot(max_entropy_list,mean_dev,'x')
-        plt.show()
-
-
-        plt.plot(min_entropy_list,min_dev,'x')
-        plt.show()
-        plt.plot(min_entropy_list,max_dev,'x')
-        plt.show()
-        plt.plot(min_entropy_list,mean_dev,'x')
+        plt.plot(max_entropy_list, mean_dev, 'x')
         plt.show()
 
-        plt.plot(avg_entropy_list,min_dev,'x')
+        plt.plot(min_entropy_list, min_dev, 'x')
         plt.show()
-        plt.plot(avg_entropy_list,max_dev,'x')
+        plt.plot(min_entropy_list, max_dev, 'x')
         plt.show()
-        plt.plot(avg_entropy_list,mean_dev,'x')
+        plt.plot(min_entropy_list, mean_dev, 'x')
         plt.show()
 
+        plt.plot(avg_entropy_list, min_dev, 'x')
+        plt.show()
+        plt.plot(avg_entropy_list, max_dev, 'x')
+        plt.show()
+        plt.plot(avg_entropy_list, mean_dev, 'x')
+        plt.show()
 
 
 class Pauling2OverAllAnalysis(OverAllAnalysis):
@@ -1132,7 +1156,8 @@ class Pauling2OverAllAnalysis(OverAllAnalysis):
             restart_from_saved_structure_analysis=False,
             save_structure_analysis=True,
             path_to_save='Results/Results_Second_Rule.json', start_material=None, stop_material=None,
-            show_histogram=False, stepsize_histogram=0.1):
+            show_histogram=False, stepsize_histogram: float = 0.1, optimized_environments: bool = False,
+            fraction_environment: float = 0.3):
         """
         :param show_plot: will show the main analysis plot from the second rule
         :param start_from_results: if True,   restart from saved results
@@ -1144,6 +1169,8 @@ class Pauling2OverAllAnalysis(OverAllAnalysis):
         :param stop_material: number of material before which the analysis stops
         :param show_histogram: if True, shows histogram with +- deviations for second rule
         :param stepsize_histogram: how large are the charge steps for the histogram
+        :param optimized_environments: if True, Pauling2_optimized_environments will be used instead of Pauling2
+        :param fraction_environment: the environments with the hightest fraction will be considered + all environments with fractions equal or larger than fraction, only fractions between 0.3 and 1.0 are allowed
         :return:
         """
 
@@ -1151,6 +1178,12 @@ class Pauling2OverAllAnalysis(OverAllAnalysis):
             self.start_material = start_material
             self.stop_material = stop_material
             self.stepsize_histogram = stepsize_histogram
+            self.optimized_environments = optimized_environments
+            if fraction_environment >= 0.3:
+                self.fraction_environment = fraction_environment
+            else:
+                raise ValueError(
+                    "The fraction_environment is too low. Please set it larger or equal to 0.3 and lower or equal to 1.0")
             self._new_setup()
         else:
             inputdict = self._get_precomputed_results(path_to_save)
@@ -1170,6 +1203,8 @@ class Pauling2OverAllAnalysis(OverAllAnalysis):
             self.extreme_exceptions = inputdict['list_extreme_exceptions']
 
         if show_plot:
+            print("Standard dev")
+            print(self.tot_stddev * 100.0)
             plot = self._secondrule_plot(arraydev=self.arraydev_share * 100.0,
                                          relativefreqarray=self.relativefrequency * 100.0,
                                          tot_stddev=self.tot_stddev * 100.0)
@@ -1366,13 +1401,18 @@ class Pauling2OverAllAnalysis(OverAllAnalysis):
         """
         return (np.array(inputarray) / float(valuetodivide))
 
-    def _secondrule_plot_histogram(self, arraydev, relativefreq):
+    def _secondrule_plot_histogram(self, arraydev: list, relativefreq: list) -> plt:
+        """
+        plots a histogram
+        :param arraydev: will be plotted in x direction
+        :param relativefreq: will be plotted in y direction
+        :return: plot
+        """
         matplotlib.rcParams['pdf.fonttype'] = 42
         matplotlib.rcParams['ps.fonttype'] = 42
         font = {'size': 22}
-
         matplotlib.rc('font', **font)
-        plt.bar(self.arraydev_share_plus_minus * 100, height=self.relativefrequency_plus_minus * 100)
+        plt.bar(arraydev, height=relativefreq)
         plt.xlabel("Deviation (%) from the ideal valence -2")
         plt.ylabel("Oxygen Atoms (%)")
 
@@ -1427,11 +1467,13 @@ class Pauling2OverAllAnalysis(OverAllAnalysis):
         self.additional_info = {}
         # valence dependency can be introduced later
         for mat in list_mat:
-            # print(mat)
+            print(mat)
 
             lse = self._get_lse_from_folder(mat, source=self.source)
-            pauling2 = Pauling2_optimized_environments(lse=lse)
-
+            if self.optimized_environments:
+                pauling2 = Pauling2_optimized_environments(lse=lse, perc=self.fraction_environment)
+            else:
+                pauling2 = Pauling2(lse=lse)
             # one could also put this in a method!
             if pauling2.is_fulfilled():
                 self.structures_fulfillingrule.append(mat)
@@ -1759,7 +1801,7 @@ class Pauling3OverAllAnalysis(OverAllAnalysis):
         self.All_Details = {}
 
         for mat in list_mat:
-            # print(mat)
+            print(mat)
             lse = self._get_lse_from_folder(mat, source=self.source)
             pauling0 = Pauling0(lse)
             pauling1_limit = FrequencyEnvironmentPauling1(lse=lse)
@@ -1882,7 +1924,10 @@ class Pauling4OverAllAnalysis(OverAllAnalysis):
         if show_plot:
             plot = self._fourthrule_plot(self.Dict_val, option='val', vmin=0.7, vmax=1.0)
             plot.show()
-            plot = self._fourthrule_plot(self.Dict_CN, option='CN', vmin=0.4, vmax=1.0)
+            if self.source=='experimental':
+                plot = self._fourthrule_plot(self.Dict_CN, option='CN', vmin=0.4, vmax=1.0)
+            else:
+                plot = self._fourthrule_plot(self.Dict_CN, option='CN', vmin=0.35, vmax=1.0)
             plot.show()
 
         if self.plot_element_dependend_analysis:
