@@ -28,5 +28,6 @@ jobs:
       run: |
         pip install pytest
         export PYTHONPATH="${PYTHONPATH}:PaulingLibrary"
-        pytest tests/test_Classes_for_statistics.py
-        pytest tests/test_PaulingRules.py
+        cd tests
+        pytest test_Classes_for_statistics.py
+        pytest test_PaulingRules.py
