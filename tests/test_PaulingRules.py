@@ -1,18 +1,19 @@
+import json
+import math
+import os
+import tempfile
+import unittest
+from collections import Counter
+
+from pymatgen.analysis.bond_valence import BVAnalyzer
+from pymatgen.analysis.chemenv.coordination_environments.chemenv_strategies import MultiWeightsChemenvStrategy
+from pymatgen.analysis.chemenv.coordination_environments.coordination_geometry_finder import LocalGeometryFinder
+from pymatgen.analysis.chemenv.coordination_environments.structure_environments import LightStructureEnvironments
+
 from PaulingRules import Pauling1, Pauling2, PaulingConnection, Pauling3and4, Pauling3, Pauling4, Pauling5, \
     RuleCannotBeAnalyzedError, is_an_oxide_and_no_env_for_O, FrequencyEnvironmentPauling1, Pauling0, \
     get_entropy_from_frequencies, get_most_frequent_environment, get_mean_CN_from_frequencies, \
     Pauling2_optimized_environments
-from pymatgen.analysis.chemenv.coordination_environments.coordination_geometry_finder import LocalGeometryFinder
-from pymatgen.analysis.chemenv.coordination_environments.chemenv_strategies import MultiWeightsChemenvStrategy
-from pymatgen.analysis.chemenv.coordination_environments.structure_environments import LightStructureEnvironments
-from pymatgen.analysis.bond_valence import BVAnalyzer
-from collections import Counter
-import unittest
-import json
-import math
-import tempfile
-import os
-
 
 
 class is_an_oxide_and_no_env_for_O_Test(unittest.TestCase):

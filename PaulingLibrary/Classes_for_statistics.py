@@ -1,11 +1,12 @@
+import csv
 import json
-import numpy as np
+import os
 from collections import OrderedDict, Counter
+
 import matplotlib
 import matplotlib.pyplot as plt
-import os
+import numpy as np
 from yaml import dump
-import csv
 
 try:
     from yaml import CLoader as Loader, CDumper as Dumper
@@ -159,9 +160,11 @@ class OverAllAnalysis:
             else:
                 list_compound = list_compound_binaries[start_material:stop_material]
 
+
             return list_compound
 
         else:
+            #print(len(list_compound))
             return list_compound
 
     def _get_lse_from_folder(self, mat: str, source='MP') -> LightStructureEnvironments:
@@ -386,7 +389,6 @@ class OverAllAnalysis:
 
         if save_to_file and (not fetch_results_only) and (path_to_save is not None):
             self._save_results_to_file(outputdict, path_to_save)
-        # TODO: test valueerror -> use another list before loading (start and stop_material nutzen)
         if fetch_results_only:
             outputdict = self._get_precomputed_results(path_to_save)
             if not set(outputdict['list_mat_id']) == set(list_mat_id):
@@ -1467,7 +1469,7 @@ class Pauling2OverAllAnalysis(OverAllAnalysis):
         self.additional_info = {}
         # valence dependency can be introduced later
         for mat in list_mat:
-            print(mat)
+            #print(mat)
 
             lse = self._get_lse_from_folder(mat, source=self.source)
             if self.optimized_environments:
@@ -1920,6 +1922,7 @@ class Pauling4OverAllAnalysis(OverAllAnalysis):
 
         print(
             str(len(self.structures_fulfillingrule) + len(self.structures_exceptions)) + " structures were considered.")
+        print(str(float(len(self.structures_fulfillingrule))/(float(len(self.structures_fulfillingrule)+len(self.structures_exceptions)))))
         # print(str(len(self.structures_cannot_be_evaluated))+ ' were not considered')
         if show_plot:
             plot = self._fourthrule_plot(self.Dict_val, option='val', vmin=0.7, vmax=1.0)

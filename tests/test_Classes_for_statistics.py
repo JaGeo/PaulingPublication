@@ -1,12 +1,13 @@
+import os
+import tempfile
+import unittest
+from collections import OrderedDict
+
+import numpy as np
+
 from Classes_for_statistics import OverAllAnalysis, Pauling1Frequency, Pauling1Entropy, Pauling1OverAllAnalysis, \
     Pauling2OverAllAnalysis, Pauling3OverAllAnalysis, Pauling4OverAllAnalysis, Pauling5OverAllAnalysis, \
     AllPaulingOverAllAnalysis, Pauling1MeanCoordinationNumber, AllPaulingOverAllAnalysis_Final_Summary, HowMany
-from collections import OrderedDict
-import unittest
-import os
-import tempfile
-import numpy as np
-
 
 
 class TestOverallAnalysis(unittest.TestCase):

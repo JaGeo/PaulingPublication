@@ -1,8 +1,9 @@
 # classes for plotting
 import os
+
+import matplotlib as mpl
 import matplotlib.pyplot as plt
 import numpy as np
-import matplotlib as mpl
 from pymatgen.core.periodic_table import Element
 
 mpl.rcParams["savefig.directory"] = os.chdir(os.getcwd())

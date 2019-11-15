@@ -1,14 +1,14 @@
 import json
-import numpy as np
-from pymatgen.core import PeriodicSite
-from pymatgen.core.structure import Structure
+import math
 import os
 from collections import Counter
 from collections import OrderedDict
-import math
+
+import numpy as np
 from pymatgen.analysis.chemenv.coordination_environments.structure_environments import LightStructureEnvironments
+from pymatgen.core import PeriodicSite
+from pymatgen.core.structure import Structure
 from pymatgen.symmetry.analyzer import SpacegroupAnalyzer
-import itertools
 
 
 class RuleCannotBeAnalyzedError(Exception):
