@@ -94,7 +94,7 @@ class OverAllAnalysis:
                 list_compound_dict = json.load(f)
                 new_list = []
                 conditions = [{"target": "ce_fraction", "minvalue": 0.95}, {"target": "csm", "maxvalue": 0.1}]
-                # TODO: include search for only very symmetric cases
+
                 for mat in list_compound_dict["is_clear_compounds"]:
                     lse = self._get_lse_from_folder(mat, source="MP")
                     if lse.structure_has_clear_environments(conditions=conditions):
@@ -127,7 +127,7 @@ class OverAllAnalysis:
                 list_compound = list_compound
 
         elif source == 'experimental':
-            # TODO: update
+
             list_compound = self._get_precomputed_results(
                 "../Assessment/Should_not_be_changed/List_experimental_oxides.json")
             if not onlybinaries:
@@ -160,11 +160,10 @@ class OverAllAnalysis:
             else:
                 list_compound = list_compound_binaries[start_material:stop_material]
 
-
             return list_compound
 
         else:
-            #print(len(list_compound))
+            # print(len(list_compound))
             return list_compound
 
     def _get_lse_from_folder(self, mat: str, source='MP') -> LightStructureEnvironments:
@@ -267,7 +266,7 @@ class OverAllAnalysis:
         :param tight: will do a tighter structure matching than the default values
         :return: dict including the matching
         """
-        # TODO: complete this!
+
         if not start_from_Matching and not fetch_results_only:
             if not restart_from_matching:
                 dictstructures = {}
@@ -289,8 +288,6 @@ class OverAllAnalysis:
                     else:
                         Matcher = StructureMatcher(ltol=0.10, stol=0.2, angle_tol=4, attempt_supercell=True,
                                                    comparator=FrameworkComparator())
-                    # TODO: check if this is okay! maybe a different algorithm is needed to do so?
-                    # TODO: maybe test function from pymatgen
                     found = False
                     foundmat = ''
                     for mat2 in dictstructures:
@@ -359,7 +356,6 @@ class OverAllAnalysis:
                             foundmat = mat2
                             break;
                     if found:
-                        # TODO: check if this can ever happen
                         if not foundmat in new_dict:
                             new_dict[foundmat] = []
                         if mat not in new_dict[foundmat]:
@@ -604,7 +600,6 @@ class OverAllAnalysis:
         :param supercell: list of additional cells that are considered in each direction
         :return:
         """
-        # TODO: rethink supercell implementation
         # get information on the supercell to neigbors
 
         lse = self._get_lse_from_folder(mat, source=self.source)
@@ -693,8 +688,6 @@ class HowMany(OverAllAnalysis):
             self.present_env = Counter(inputdict['Counter_cation'])
 
         if self.plot_element_dependend_analysis:
-            # TODO put a parameter that can exclude certain elements!
-            # TODO: test this class
             plt = self._plot_PSE(self.present_env,
                                  plot_directly_from_freq=True, lowerlimit=self.lower_limit_plot,
                                  lowest_number_of_environments_considered=self.lowest_number_of_environments_considered,
@@ -1044,109 +1037,110 @@ class Pauling1OverAllAnalysis(OverAllAnalysis):
             self._add_dict_cat_dependency(self.Plot_PSE_DICT, Details)
 
 
-class EntropyDeviationFrom2ndRuleDiagram(OverAllAnalysis):
-    """
-    Class to find explanation for bad performance of the second rule
-
-    """
-
-    def run(self, show_plot=True, start_from_results=False, save_result_data=True,
-            restart_from_saved_structure_analysis=False,
-            save_structure_analysis=True,
-            path_to_save='Results/Results_Second_Rule_Entropy_vs_Deviation.json', start_material=None,
-            stop_material=None):
-        # TODO: will start first second rule and combine both to make a plot
-        # several options should be considered: avg, min, max entropy and av, min, max deviation
-        # get additional_info from 2nd rule
-        # get entropies from first rule
-
-        # then loop over all  materials get avg, min, max entropy, and avg, min, max deviation
-
-        # make 9 plots and check if there is any correlation
-        self.start_material = start_material
-        self.stop_material = stop_material
-
-        newclass = Pauling1Entropy(source=self.source, onlybinaries=self.onlybinaries,
-                                   plot_element_dependend_analysis=False,
-                                   list_of_materials_to_investigate=None,
-                                   start_material=self.start_material, stop_material=self.stop_material)
-        newclass.run(start_from_results=False, save_result_data=False)
-        entropy = newclass.Plot_PSE_entropy
-
-        newclass2 = Pauling2OverAllAnalysis(source='MP', onlybinaries=False, plot_element_dependend_analysis=False,
-                                            lowest_number_environments_for_plot=50, lower_limit_plot=0.1,
-                                            upper_limit_plot=0.8,
-                                            analyse_structures=False, use_prematching=True)
-        newclass2.run(start_from_results=False, save_result_data=False, path_to_save='Results/Results_Second_Rule.json',
-                      save_structure_analysis=True, restart_from_saved_structure_analysis=False, show_histogram=False,
-                      stepsize_histogram=0.1, show_plot=False)
-
-        self.additional_info = newclass2.additional_info
-
-        # brauche composition der struktur
-        # daraus dann ermitteln, was die entropie ist (avg, min,max)
-        # gegen alle moeglichen deviations (avg,min,max) plotten
-
-        # TODO: laufe ueber alle mps und strukturen und sammle alle
-        min_dev = []
-        max_dev = []
-        mean_dev = []  # think of another way, will always be zero
-        min_entropy_list = []
-        max_entropy_list = []
-        avg_entropy_list = []
-        for key, value in self.additional_info.items():
-            min_dev.append(min([abs(x - 2.0) for x in value]))
-            max_dev.append(max([abs(x - 2.0) for x in value]))
-            mean_dev.append(np.mean([abs(x - 2.0) for x in value]))
-
-            lse = self._get_lse_from_folder(mat=key, source=self.source)
-            composition = lse.structure.composition
-            # print(composition)
-
-            elements = composition.elements
-            minentropy = 1.0
-            maxentropy = 0.0
-            avgenentropy_sum = 0.0
-            nb_cations = 0
-            for el in elements:
-                # print(el)
-                if str(el) != 'O':
-                    test = entropy[str(el)]
-                    nb_cations += 1
-                    avgenentropy_sum += test
-                    # print(test)
-                    if test <= minentropy:
-                        minentropy = test
-                    if test >= maxentropy:
-                        maxentropy = test
-                    # print(minentropy)
-                    # print(maxentropy)
-            # exit()
-
-            max_entropy_list.append(maxentropy)
-            min_entropy_list.append(minentropy)
-            avg_entropy_list.append(avgenentropy_sum / nb_cations)
-
-        plt.plot(max_entropy_list, min_dev, 'x')
-        plt.show()
-        plt.plot(max_entropy_list, max_dev, 'x')
-        plt.show()
-        plt.plot(max_entropy_list, mean_dev, 'x')
-        plt.show()
-
-        plt.plot(min_entropy_list, min_dev, 'x')
-        plt.show()
-        plt.plot(min_entropy_list, max_dev, 'x')
-        plt.show()
-        plt.plot(min_entropy_list, mean_dev, 'x')
-        plt.show()
-
-        plt.plot(avg_entropy_list, min_dev, 'x')
-        plt.show()
-        plt.plot(avg_entropy_list, max_dev, 'x')
-        plt.show()
-        plt.plot(avg_entropy_list, mean_dev, 'x')
-        plt.show()
+# excluded
+# class EntropyDeviationFrom2ndRuleDiagram(OverAllAnalysis):
+#     """
+#     Class to find explanation for bad performance of the second rule
+#
+#     """
+#
+#     def run(self, show_plot=True, start_from_results=False, save_result_data=True,
+#             restart_from_saved_structure_analysis=False,
+#             save_structure_analysis=True,
+#             path_to_save='Results/Results_Second_Rule_Entropy_vs_Deviation.json', start_material=None,
+#             stop_material=None):
+#         # TODO: will start first second rule and combine both to make a plot
+#         # several options should be considered: avg, min, max entropy and av, min, max deviation
+#         # get additional_info from 2nd rule
+#         # get entropies from first rule
+#
+#         # then loop over all  materials get avg, min, max entropy, and avg, min, max deviation
+#
+#         # make 9 plots and check if there is any correlation
+#         self.start_material = start_material
+#         self.stop_material = stop_material
+#
+#         newclass = Pauling1Entropy(source=self.source, onlybinaries=self.onlybinaries,
+#                                    plot_element_dependend_analysis=False,
+#                                    list_of_materials_to_investigate=None,
+#                                    start_material=self.start_material, stop_material=self.stop_material)
+#         newclass.run(start_from_results=False, save_result_data=False)
+#         entropy = newclass.Plot_PSE_entropy
+#
+#         newclass2 = Pauling2OverAllAnalysis(source='MP', onlybinaries=False, plot_element_dependend_analysis=False,
+#                                             lowest_number_environments_for_plot=50, lower_limit_plot=0.1,
+#                                             upper_limit_plot=0.8,
+#                                             analyse_structures=False, use_prematching=True)
+#         newclass2.run(start_from_results=False, save_result_data=False, path_to_save='Results/Results_Second_Rule.json',
+#                       save_structure_analysis=True, restart_from_saved_structure_analysis=False, show_histogram=False,
+#                       stepsize_histogram=0.1, show_plot=False)
+#
+#         self.additional_info = newclass2.additional_info
+#
+#         # brauche composition der struktur
+#         # daraus dann ermitteln, was die entropie ist (avg, min,max)
+#         # gegen alle moeglichen deviations (avg,min,max) plotten
+#
+#         # TODO: laufe ueber alle mps und strukturen und sammle alle
+#         min_dev = []
+#         max_dev = []
+#         mean_dev = []  # think of another way, will always be zero
+#         min_entropy_list = []
+#         max_entropy_list = []
+#         avg_entropy_list = []
+#         for key, value in self.additional_info.items():
+#             min_dev.append(min([abs(x - 2.0) for x in value]))
+#             max_dev.append(max([abs(x - 2.0) for x in value]))
+#             mean_dev.append(np.mean([abs(x - 2.0) for x in value]))
+#
+#             lse = self._get_lse_from_folder(mat=key, source=self.source)
+#             composition = lse.structure.composition
+#             # print(composition)
+#
+#             elements = composition.elements
+#             minentropy = 1.0
+#             maxentropy = 0.0
+#             avgenentropy_sum = 0.0
+#             nb_cations = 0
+#             for el in elements:
+#                 # print(el)
+#                 if str(el) != 'O':
+#                     test = entropy[str(el)]
+#                     nb_cations += 1
+#                     avgenentropy_sum += test
+#                     # print(test)
+#                     if test <= minentropy:
+#                         minentropy = test
+#                     if test >= maxentropy:
+#                         maxentropy = test
+#                     # print(minentropy)
+#                     # print(maxentropy)
+#             # exit()
+#
+#             max_entropy_list.append(maxentropy)
+#             min_entropy_list.append(minentropy)
+#             avg_entropy_list.append(avgenentropy_sum / nb_cations)
+#
+#         plt.plot(max_entropy_list, min_dev, 'x')
+#         plt.show()
+#         plt.plot(max_entropy_list, max_dev, 'x')
+#         plt.show()
+#         plt.plot(max_entropy_list, mean_dev, 'x')
+#         plt.show()
+#
+#         plt.plot(min_entropy_list, min_dev, 'x')
+#         plt.show()
+#         plt.plot(min_entropy_list, max_dev, 'x')
+#         plt.show()
+#         plt.plot(min_entropy_list, mean_dev, 'x')
+#         plt.show()
+#
+#         plt.plot(avg_entropy_list, min_dev, 'x')
+#         plt.show()
+#         plt.plot(avg_entropy_list, max_dev, 'x')
+#         plt.show()
+#         plt.plot(avg_entropy_list, mean_dev, 'x')
+#         plt.show()
 
 
 class Pauling2OverAllAnalysis(OverAllAnalysis):
@@ -1469,7 +1463,7 @@ class Pauling2OverAllAnalysis(OverAllAnalysis):
         self.additional_info = {}
         # valence dependency can be introduced later
         for mat in list_mat:
-            #print(mat)
+            # print(mat)
 
             lse = self._get_lse_from_folder(mat, source=self.source)
             if self.optimized_environments:
@@ -1803,7 +1797,7 @@ class Pauling3OverAllAnalysis(OverAllAnalysis):
         self.All_Details = {}
 
         for mat in list_mat:
-            print(mat)
+            # print(mat)
             lse = self._get_lse_from_folder(mat, source=self.source)
             pauling0 = Pauling0(lse)
             pauling1_limit = FrequencyEnvironmentPauling1(lse=lse)
@@ -1922,12 +1916,13 @@ class Pauling4OverAllAnalysis(OverAllAnalysis):
 
         print(
             str(len(self.structures_fulfillingrule) + len(self.structures_exceptions)) + " structures were considered.")
-        print(str(float(len(self.structures_fulfillingrule))/(float(len(self.structures_fulfillingrule)+len(self.structures_exceptions)))))
+        print(str(float(len(self.structures_fulfillingrule)) / (
+            float(len(self.structures_fulfillingrule) + len(self.structures_exceptions)))))
         # print(str(len(self.structures_cannot_be_evaluated))+ ' were not considered')
         if show_plot:
             plot = self._fourthrule_plot(self.Dict_val, option='val', vmin=0.7, vmax=1.0)
             plot.show()
-            if self.source=='experimental':
+            if self.source == 'experimental':
                 plot = self._fourthrule_plot(self.Dict_CN, option='CN', vmin=0.4, vmax=1.0)
             else:
                 plot = self._fourthrule_plot(self.Dict_CN, option='CN', vmin=0.35, vmax=1.0)

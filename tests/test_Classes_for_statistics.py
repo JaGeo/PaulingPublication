@@ -609,8 +609,6 @@ class TestPauling2OverAllAnalysis(unittest.TestCase):
             os.remove("Results_structures_fulfilling.json")
 
 
-
-
 class TestPauling3OverAllAnalysis(unittest.TestCase):
     def setUp(self):
         self.pauling3normal = Pauling3OverAllAnalysis(source='my_own_list', onlybinaries=False,

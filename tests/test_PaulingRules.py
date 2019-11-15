@@ -232,19 +232,18 @@ class PaulingRule2_Test(unittest.TestCase):
         self.assertTrue(self.Pauling_dict["mp-19418.json"].is_fulfilled(tolerance=1))
 
 
-
 class PaulingRule2_optimized_environments_Test(unittest.TestCase):
     """Tests class PaulingRule2_optimized_environments """
 
     # TODO: finish the tests and check the test coverage
     def setUp(self):
-        #TODO: initilaize normal pauling as well
-        self.matlist = ["mp-7000.json", "mp-566090.json","mp-2605.json","mp-4056.json"]
+        # TODO: initilaize normal pauling as well
+        self.matlist = ["mp-7000.json", "mp-566090.json", "mp-2605.json", "mp-4056.json"]
         self.lse_dict = {}
         self.Pauling_dict = {}
-        self.Pauling_dict_perc1={}
-        self.Pauling_dict_perc02={}
-        self.Pauling_dict_realtwo={}
+        self.Pauling_dict_perc1 = {}
+        self.Pauling_dict_perc02 = {}
+        self.Pauling_dict_realtwo = {}
 
         for mat in self.matlist:
             with open(mat, "r") as f:
@@ -346,28 +345,34 @@ class PaulingRule2_optimized_environments_Test(unittest.TestCase):
             [[0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 1, 0, 0, 0]])
 
     def test_get_combinations_all_ions(self):
-        self.Pauling_dict["mp-7000.json"]._get_combinations_all_ions(combination_array_only_cations=[[0]], equivalent_indices=[[0, 1, 2, 3, 4, 5], [6, 7, 8]], valences=[-2, -2, -2, -2, -2, -2, 4, 4, 4])
+        self.Pauling_dict["mp-7000.json"]._get_combinations_all_ions(combination_array_only_cations=[[0]],
+                                                                     equivalent_indices=[[0, 1, 2, 3, 4, 5], [6, 7, 8]],
+                                                                     valences=[-2, -2, -2, -2, -2, -2, 4, 4, 4])
 
     def test_list_combi_recursive(self):
-        self.assertListEqual(self.Pauling_dict["mp-7000.json"]._list_combi_recursive([[0]],[0,1]),[[0,0],[0,1]])
-        self.assertListEqual(self.Pauling_dict["mp-7000.json"]._list_combi_recursive([[0,1]],[0,1]),[[0,1,0],[0,1,1]])
-        self.assertListEqual(self.Pauling_dict["mp-7000.json"]._list_combi_recursive([[0],[1]],[0,1]),[[0,0],[0,1],[1,0],[1,1]])
+        self.assertListEqual(self.Pauling_dict["mp-7000.json"]._list_combi_recursive([[0]], [0, 1]), [[0, 0], [0, 1]])
+        self.assertListEqual(self.Pauling_dict["mp-7000.json"]._list_combi_recursive([[0, 1]], [0, 1]),
+                             [[0, 1, 0], [0, 1, 1]])
+        self.assertListEqual(self.Pauling_dict["mp-7000.json"]._list_combi_recursive([[0], [1]], [0, 1]),
+                             [[0, 0], [0, 1], [1, 0], [1, 1]])
 
     def test_get_anion_bvs(self):
-        self.assertListEqual(self.Pauling_dict["mp-7000.json"]._get_anions_bvs(),[2.0, 2.0, 2.0, 2.0, 2.0, 2.0])
-        self.assertListEqual(self.Pauling_dict_perc1["mp-566090.json"]._get_anions_bvs(),self.Pauling_dict_realtwo["mp-566090.json"]._get_anions_bvs())
+        self.assertListEqual(self.Pauling_dict["mp-7000.json"]._get_anions_bvs(), [2.0, 2.0, 2.0, 2.0, 2.0, 2.0])
+        self.assertListEqual(self.Pauling_dict_perc1["mp-566090.json"]._get_anions_bvs(),
+                             self.Pauling_dict_realtwo["mp-566090.json"]._get_anions_bvs())
 
     def test_get_details(self):
-        self.assertDictEqual(self.Pauling_dict["mp-7000.json"].get_details(10e-2),self.Pauling_dict_realtwo["mp-7000.json"].get_details(10e-2))
-        self.assertDictEqual(self.Pauling_dict_perc1["mp-566090.json"].get_details(10e-2),self.Pauling_dict_realtwo["mp-566090.json"].get_details(10e-2))
-        self.assertDictEqual(self.Pauling_dict_perc1["mp-4056.json"].get_details(),self.Pauling_dict_perc02["mp-4056.json"].get_details())
-
+        self.assertDictEqual(self.Pauling_dict["mp-7000.json"].get_details(10e-2),
+                             self.Pauling_dict_realtwo["mp-7000.json"].get_details(10e-2))
+        self.assertDictEqual(self.Pauling_dict_perc1["mp-566090.json"].get_details(10e-2),
+                             self.Pauling_dict_realtwo["mp-566090.json"].get_details(10e-2))
+        self.assertDictEqual(self.Pauling_dict_perc1["mp-4056.json"].get_details(),
+                             self.Pauling_dict_perc02["mp-4056.json"].get_details())
 
     def test_is_fulfilled(self):
         self.assertTrue(self.Pauling_dict["mp-7000.json"].is_fulfilled())
         self.assertFalse(self.Pauling_dict_perc1["mp-566090.json"].is_fulfilled())
         self.assertFalse(self.Pauling_dict["mp-566090.json"].is_fulfilled())
-
 
 
 class PaulingConnection_Test(unittest.TestCase):

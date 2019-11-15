@@ -1,5 +1,5 @@
 !!python/object/apply:collections.OrderedDict
-- - - mp-10688
+- - - mp-2472
     - mp-10688:
         CN: ['6']
         cations: [Ce]
@@ -25,7 +25,7 @@
         cations: [Ca]
         formula: CaO
         valences: [2]
-  - - mp-971
+  - - mp-2352
     - mp-1394:
         CN: ['4', '4']
         cations: [Rb, Rb]
@@ -36,11 +36,6 @@
         cations: [Ce]
         formula: CeO2
         valences: [4]
-      mp-20633:
-        CN: ['6', '6', '6', '6']
-        cations: [Pb, Pb, Pb, Pb]
-        formula: PbO2
-        valences: [4, 4, 4, 4]
       mp-2352:
         CN: ['4', '4']
         cations: [Na, Na]
@@ -62,6 +57,17 @@
         cations: [Ga, Ga, Ga, Ga]
         formula: Ga2O3
         valences: [3, 3, 3, 3]
+  - - mp-223
+    - mp-223:
+        CN: ['4', '4', '4']
+        cations: [Ge, Ge, Ge]
+        formula: GeO2
+        valences: [4, 4, 4]
+      mp-733:
+        CN: ['4', '4', '4']
+        cations: [Ge, Ge, Ge]
+        formula: GeO2
+        valences: [4, 4, 4]
   - - mp-1788
     - mp-1788:
         CN: ['4', '4', '4', '4', '6', '6', '6', '6']
@@ -73,75 +79,6 @@
         cations: [As, As, As, As, As, As, As, As]
         formula: As2O5
         valences: [5, 5, 5, 5, 5, 5, 5, 5]
-  - - mp-733
-    - mp-223:
-        CN: ['4', '4', '4']
-        cations: [Ge, Ge, Ge]
-        formula: GeO2
-        valences: [4, 4, 4]
-      mp-733:
-        CN: ['4', '4', '4']
-        cations: [Ge, Ge, Ge]
-        formula: GeO2
-        valences: [4, 4, 4]
-  - - mp-1986
-    - mp-1986:
-        CN: ['4']
-        cations: [Zn]
-        formula: ZnO
-        valences: [2]
-  - - mp-7812
-    - mp-7812:
-        CN: ['4', '4', '4', '4']
-        cations: [Ge, Ge, Ge, Ge]
-        formula: GeO2
-        valences: [4, 4, 4, 4]
-  - - mp-20725
-    - mp-20725:
-        CN: ['6', '6']
-        cations: [Pb, Pb]
-        formula: PbO2
-        valences: [4, 4]
-  - - mp-561240
-    - mp-561240:
-        CN: ['6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6',
-          '6', '6', '4', '4', '4', '4']
-        cations: [Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo,
-          Mo, Mo, Mo, Mo]
-        formula: Mo5O14
-        valences: [5, 5, 5, 5, 5, 5, 5, 5, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6]
-  - - mp-2133
-    - mp-2133:
-        CN: ['4', '4']
-        cations: [Zn, Zn]
-        formula: ZnO
-        valences: [2, 2]
-  - - mp-542313
-    - mp-542313:
-        CN: ['6', '6', '6', '6', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
-          '4', '4']
-        cations: [Ce, Ce, Ce, Ce, Ce, Ce, Ce, Ce, Ce, Ce, Ce, Ce, Ce, Ce, Ce, Ce]
-        formula: Ce2O3
-        valences: [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
-  - - mp-1143
-    - mp-1143:
-        CN: ['6', '6', '6', '6']
-        cations: [Al, Al, Al, Al]
-        formula: Al2O3
-        valences: [3, 3, 3, 3]
-  - - mp-565489
-    - mp-565489:
-        CN: ['4', '6', '4', '4', '4', '6', '4', '4']
-        cations: [Cr, Cr, Cr, Cr, Cr, Cr, Cr, Cr]
-        formula: Cr8O21
-        valences: [6, 5, 5, 5, 5, 5, 5, 6]
-  - - mp-622101
-    - mp-622101:
-        CN: ['4', '4', '4', '4', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6',
-          '6', '6']
-        cations: [Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo]
-        formula: Mo4O11
-        valences: [6, 6, 6, 6, 6, 6, 6, 6, 5, 5, 5, 5, 5, 5, 5, 5]
   - - mp-2254
     - mp-2254:
         CN: ['4', '4', '6', '6', '6', '6', '6', '6', '6', '6', '6', '4', '4', '6',
@@ -155,3 +92,73 @@
         cations: [Mn, Mn, Mn, Mn, Mn, Mn]
         formula: Mn3O4
         valences: [2, 2, 3, 3, 3, 3]
+  - - mp-542313
+    - mp-542313:
+        CN: ['6', '6', '6', '6', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
+          '4', '4']
+        cations: [Ce, Ce, Ce, Ce, Ce, Ce, Ce, Ce, Ce, Ce, Ce, Ce, Ce, Ce, Ce, Ce]
+        formula: Ce2O3
+        valences: [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+  - - mp-556605
+    - mp-556605:
+        CN: ['8', '8', '8', '8']
+        cations: [Zr, Zr, Zr, Zr]
+        formula: ZrO2
+        valences: [4, 4, 4, 4]
+  - - mp-20633
+    - mp-20633:
+        CN: ['6', '6', '6', '6']
+        cations: [Pb, Pb, Pb, Pb]
+        formula: PbO2
+        valences: [4, 4, 4, 4]
+  - - mp-2133
+    - mp-2133:
+        CN: ['4', '4']
+        cations: [Zn, Zn]
+        formula: ZnO
+        valences: [2, 2]
+  - - mp-7812
+    - mp-7812:
+        CN: ['4', '4', '4', '4']
+        cations: [Ge, Ge, Ge, Ge]
+        formula: GeO2
+        valences: [4, 4, 4, 4]
+  - - mp-1986
+    - mp-1986:
+        CN: ['4']
+        cations: [Zn]
+        formula: ZnO
+        valences: [2]
+  - - mp-1143
+    - mp-1143:
+        CN: ['6', '6', '6', '6']
+        cations: [Al, Al, Al, Al]
+        formula: Al2O3
+        valences: [3, 3, 3, 3]
+  - - mp-561240
+    - mp-561240:
+        CN: ['6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6',
+          '6', '6', '4', '4', '4', '4']
+        cations: [Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo,
+          Mo, Mo, Mo, Mo]
+        formula: Mo5O14
+        valences: [5, 5, 5, 5, 5, 5, 5, 5, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6]
+  - - mp-20725
+    - mp-20725:
+        CN: ['6', '6']
+        cations: [Pb, Pb]
+        formula: PbO2
+        valences: [4, 4]
+  - - mp-622101
+    - mp-622101:
+        CN: ['4', '4', '4', '4', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6',
+          '6', '6']
+        cations: [Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo, Mo]
+        formula: Mo4O11
+        valences: [6, 6, 6, 6, 6, 6, 6, 6, 5, 5, 5, 5, 5, 5, 5, 5]
+  - - mp-565489
+    - mp-565489:
+        CN: ['4', '6', '4', '4', '4', '6', '4', '4']
+        cations: [Cr, Cr, Cr, Cr, Cr, Cr, Cr, Cr]
+        formula: Cr8O21
+        valences: [6, 5, 5, 5, 5, 5, 5, 6]
