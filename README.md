@@ -1,4 +1,4 @@
-# Github Repositorium to Reproduce "The Limited Predictive Power of the Pauling Rules"
+# Github Repository to Reproduce "The Limited Predictive Power of the Pauling Rules"
 
 This is the github repository for our publication that assesses the Pauling rules on around 5000 experimental oxides from the [Materials Project](http://materialsproject.org/) and around 5000 experimental oxides from the [Crystal Open Database](http://www.crystallography.net/cod/). This code has been written by J. George with contributions and ideas from D. Waroquiers, D. Di Stefano, G. Petretto, G.-M. Rignanese, and G. Hautier.
 
