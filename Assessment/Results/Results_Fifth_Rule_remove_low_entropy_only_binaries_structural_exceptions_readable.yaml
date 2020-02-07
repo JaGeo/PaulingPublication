@@ -1,5 +1,5 @@
 !!python/object/apply:collections.OrderedDict
-- - - mp-542313
+- - - mp-542877
     - mp-542313:
         CN: ['6', '6', '6', '6', '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
           '4', '4']
@@ -18,7 +18,7 @@
         cations: [Pu, Pu, Pu, Pu, Pu, Pu, Pu, Pu, Pu, Pu, Pu, Pu, Pu, Pu, Pu, Pu]
         formula: Pu2O3
         valences: [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
-  - - mp-886
+  - - mp-7048
     - mp-7048:
         CN: ['4', '4', '6', '6']
         cations: [Al, Al, Al, Al]
@@ -29,7 +29,7 @@
         cations: [Ga, Ga, Ga, Ga]
         formula: Ga2O3
         valences: [3, 3, 3, 3]
-  - - mp-1788
+  - - mp-555434
     - mp-1788:
         CN: ['4', '4', '4', '4', '6', '6', '6', '6']
         cations: [As, As, As, As, As, As, As, As]
@@ -40,12 +40,18 @@
         cations: [As, As, As, As, As, As, As, As]
         formula: As2O5
         valences: [5, 5, 5, 5, 5, 5, 5, 5]
-  - - mp-25643
-    - mp-25643:
-        CN: ['6', '6', '6', '6', '5', '5', '5', '5']
-        cations: [V, V, V, V, V, V, V, V]
-        formula: V2O5
-        valences: [5, 5, 5, 5, 5, 5, 5, 5]
+  - - mp-23262
+    - mp-23262:
+        CN: ['5', '5', '5', '5', '8', '8', '8', '8']
+        cations: [Bi, Bi, Bi, Bi, Bi, Bi, Bi, Bi]
+        formula: Bi2O3
+        valences: [3, 3, 3, 3, 3, 3, 3, 3]
+  - - mp-30303
+    - mp-30303:
+        CN: ['6', '5', '5', '6', '7', '7', '8', '8']
+        cations: [Bi, Bi, Bi, Bi, Bi, Bi, Bi, Bi]
+        formula: Bi4O7
+        valences: [5, 3, 3, 5, 3, 3, 3, 3]
   - - mp-2254
     - mp-2254:
         CN: ['4', '4', '6', '6', '6', '6', '6', '6', '6', '6', '6', '4', '4', '6',
@@ -53,6 +59,36 @@
         cations: [Al, Al, Al, Al, Al, Al, Al, Al, Al, Al, Al, Al, Al, Al, Al, Al]
         formula: Al2O3
         valences: [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+  - - mp-562065
+    - mp-562065:
+        CN: ['4', '4', '3', '4', '3', '3', '3', '4']
+        cations: [P, P, P, P, P, P, P, P]
+        formula: PO2
+        valences: [4, 4, 4, 4, 4, 4, 4, 4]
+  - - mp-565489
+    - mp-565489:
+        CN: ['4', '6', '4', '4', '4', '6', '4', '4']
+        cations: [Cr, Cr, Cr, Cr, Cr, Cr, Cr, Cr]
+        formula: Cr8O21
+        valences: [6, 5, 5, 5, 5, 5, 5, 6]
+  - - mp-505619
+    - mp-505619:
+        CN: ['8', '8', '8', '7', '7', '7', '7', '7', '7', '7', '7']
+        cations: [Ce, Ce, Ce, Ce, Ce, Ce, Ce, Ce, Ce, Ce, Ce]
+        formula: Ce11O20
+        valences: [4, 3, 3, 4, 4, 3, 3, 4, 4, 4, 4]
+  - - mp-504769
+    - mp-504769:
+        CN: ['2', '3', '2', '3']
+        cations: [N, N, N, N]
+        formula: N2O5
+        valences: [5, 5, 5, 5]
+  - - mp-642328
+    - mp-642328:
+        CN: ['7', '7', '7', '6', '7', '7', '6', '7', '7', '6', '7', '6', '7']
+        cations: [U, U, U, U, U, U, U, U, U, U, U, U, U]
+        formula: U13O34
+        valences: [5, 5, 5, 6, 5, 5, 5, 6, 5, 6, 5, 5, 5]
   - - mp-622640
     - mp-622640:
         CN: ['2', '2', '6', '2', '2', '2', '6', '6', '6', '2', '6', '2', '2', '6',
@@ -60,30 +96,6 @@
         cations: [V, V, V, V, V, V, V, V, V, V, V, V, V, V, V, V, V, V]
         formula: V3O7
         valences: [5, 5, 4, 5, 5, 5, 4, 5, 4, 5, 5, 5, 5, 4, 4, 5, 4, 5]
-  - - mp-504769
-    - mp-504769:
-        CN: ['2', '3', '2', '3']
-        cations: [N, N, N, N]
-        formula: N2O5
-        valences: [5, 5, 5, 5]
-  - - mp-562065
-    - mp-562065:
-        CN: ['4', '4', '3', '4', '3', '3', '3', '4']
-        cations: [P, P, P, P, P, P, P, P]
-        formula: PO2
-        valences: [4, 4, 4, 4, 4, 4, 4, 4]
-  - - mp-642328
-    - mp-642328:
-        CN: ['7', '7', '7', '6', '7', '7', '6', '7', '7', '6', '7', '6', '7']
-        cations: [U, U, U, U, U, U, U, U, U, U, U, U, U]
-        formula: U13O34
-        valences: [5, 5, 5, 6, 5, 5, 5, 6, 5, 6, 5, 5, 5]
-  - - mp-505619
-    - mp-505619:
-        CN: ['8', '8', '8', '7', '7', '7', '7', '7', '7', '7', '7']
-        cations: [Ce, Ce, Ce, Ce, Ce, Ce, Ce, Ce, Ce, Ce, Ce]
-        formula: Ce11O20
-        valences: [4, 3, 3, 4, 4, 3, 3, 4, 4, 4, 4]
   - - mp-560402
     - mp-560402:
         CN: ['7', '7', '6', '7', '7', '6']
@@ -96,21 +108,9 @@
         cations: [Fe, Fe, Fe, Fe, Fe, Fe]
         formula: Fe3O4
         valences: [2, 2, 3, 3, 3, 3]
-  - - mp-30303
-    - mp-30303:
-        CN: ['6', '5', '5', '6', '7', '7', '8', '8']
-        cations: [Bi, Bi, Bi, Bi, Bi, Bi, Bi, Bi]
-        formula: Bi4O7
-        valences: [5, 3, 3, 5, 3, 3, 3, 3]
-  - - mp-23262
-    - mp-23262:
-        CN: ['5', '5', '5', '5', '8', '8', '8', '8']
-        cations: [Bi, Bi, Bi, Bi, Bi, Bi, Bi, Bi]
-        formula: Bi2O3
-        valences: [3, 3, 3, 3, 3, 3, 3, 3]
-  - - mp-565489
-    - mp-565489:
-        CN: ['4', '6', '4', '4', '4', '6', '4', '4']
-        cations: [Cr, Cr, Cr, Cr, Cr, Cr, Cr, Cr]
-        formula: Cr8O21
-        valences: [6, 5, 5, 5, 5, 5, 5, 6]
+  - - mp-25643
+    - mp-25643:
+        CN: ['6', '6', '6', '6', '5', '5', '5', '5']
+        cations: [V, V, V, V, V, V, V, V]
+        formula: V2O5
+        valences: [5, 5, 5, 5, 5, 5, 5, 5]

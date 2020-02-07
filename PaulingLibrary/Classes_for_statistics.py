@@ -102,6 +102,7 @@ class OverAllAnalysis:
                 list_compound_dict["is_clear_compounds"] = new_list
                 if not onlybinaries:
                     if start_material is None and stop_material is None:
+                        print(len(list_compound_dict["is_clear_compounds"]))
                         list_compound = list_compound_dict["is_clear_compounds"]
                     elif start_material is None and stop_material is not None:
                         list_compound = list_compound_dict["is_clear_compounds"][0:stop_material]
@@ -110,6 +111,7 @@ class OverAllAnalysis:
                     else:
                         list_compound = list_compound_dict["is_clear_compounds"][start_material:stop_material]
                 else:
+                    #print(len(list_compound_dict["is_clear_compounds"]))
                     list_compound = list_compound_dict["is_clear_compounds"]
 
         elif source == 'my_own_list':
@@ -1463,7 +1465,7 @@ class Pauling2OverAllAnalysis(OverAllAnalysis):
         self.additional_info = {}
         # valence dependency can be introduced later
         for mat in list_mat:
-            # print(mat)
+            #print(mat)
 
             lse = self._get_lse_from_folder(mat, source=self.source)
             if self.optimized_environments:
@@ -1797,7 +1799,7 @@ class Pauling3OverAllAnalysis(OverAllAnalysis):
         self.All_Details = {}
 
         for mat in list_mat:
-            # print(mat)
+            #print(mat)
             lse = self._get_lse_from_folder(mat, source=self.source)
             pauling0 = Pauling0(lse)
             pauling1_limit = FrequencyEnvironmentPauling1(lse=lse)
