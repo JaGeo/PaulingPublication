@@ -1,0 +1,1 @@
+This dataset was created with pymatgen v2019.12.22 and it is licensed under a CC BY 4.0 license. The structures can be identified with the COD identifier. The valences were assigned with the BondValenceAnalyser in pymatgen. 
